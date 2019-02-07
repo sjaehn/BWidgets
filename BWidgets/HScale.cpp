@@ -90,7 +90,7 @@ void HScale::onButtonPressed (BEvents::PointerEvent* event)
 		{
 			double frac = (event->getX () - scaleX0) / scaleWidth;
 			if (getStep () < 0) frac = 1 - frac;
-			hardValue = min + frac * (max - min);
+			double hardValue = min + frac * (max - min);
 			softValue = 0;
 			setValue (hardValue);
 		}
@@ -100,17 +100,28 @@ void HScale::onButtonPressed (BEvents::PointerEvent* event)
 			{
 				double deltaFrac = event->getDeltaX () / scaleWidth;
 				if (getStep () < 0) deltaFrac = -deltaFrac;
-				softValue = deltaFrac * (max - min);
+				softValue += deltaFrac * (max - min);
 				setValue (getValue() + softValue);
 			}
 		}
 	}
 }
 
-void HScale::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) {}
-
 void HScale::onPointerDragged (BEvents::PointerEvent* event) {onButtonPressed (event);}
 
+void HScale::onWheelScrolled (BEvents::WheelEvent* event)
+{
+	double min = getMin ();
+	double max = getMax ();
+
+	if (min != max)
+	{
+		double deltaFrac = event->getDeltaY () / scaleWidth;
+		if (getStep () < 0) deltaFrac = -deltaFrac;
+		softValue += deltaFrac * (max - min);
+		setValue (getValue() + softValue);
+	}
+}
 void HScale::updateCoords ()
 {
 	scaleX0 = getXOffset ();

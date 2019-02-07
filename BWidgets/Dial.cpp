@@ -161,14 +161,28 @@ void Dial::onButtonPressed (BEvents::PointerEvent* event)
 			{
 				double deltaFrac = -event->getDeltaY () / (dialRadius * 1.5 * PI);
 				if (getStep () < 0) deltaFrac = -deltaFrac;
-				softValue = deltaFrac * (max - min);
+				softValue += deltaFrac * (max - min);
 				setValue (getValue() + softValue);
 			}
 		}
 	}
 }
 
-void Dial::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) {onButtonPressed (event);}
+void Dial::onPointerDragged (BEvents::PointerEvent* event) {onButtonPressed (event);}
+
+void Dial::onWheelScrolled (BEvents::WheelEvent* event)
+{
+	double min = getMin ();
+	double max = getMax ();
+
+	if ((min != max) && (dialRadius >= 1))
+	{
+		double deltaFrac = event->getDeltaY () / (dialRadius * 1.5 * PI);
+		if (getStep () < 0) deltaFrac = -deltaFrac;
+		softValue += deltaFrac * (max - min);
+		setValue (getValue() + softValue);
+	}
+}
 
 void Dial::drawDot ()
 {

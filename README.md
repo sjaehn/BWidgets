@@ -53,6 +53,7 @@ namespace BEvents
  ╰── Event
       ├── ExposeEvent
       ├── PointerEvent
+      ├── WheelEvent
       ╰── ValueChangedEvent
        
 namespace BItems

@@ -431,7 +431,13 @@ public:
 	 */
 	virtual void onButtonReleased (BEvents::PointerEvent* event);
 
-	//TODO onButtonClicked
+	/**
+	 * Predefined empty method to handle a
+	 * BEvents::EventType::BUTTON_CLICK_EVENT. This event is emitted i a button
+	 * is pressed and released over the same widget.
+	 * @param event Pointer event
+	 */
+	virtual void onButtonClicked (BEvents::PointerEvent* event);
 
 	/**
 	 * Predefined empty method to handle a
@@ -441,22 +447,18 @@ public:
 	virtual void onPointerMotion (BEvents::PointerEvent* event);
 
 	/**
-	 * Deprecated
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT.
-	 * By default linked to dragAndDropCallback.
-	 * @param event Pointer event
-	 */
-	virtual void onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event);
-
-	/**
 	 * Predefined empty method to handle a
 	 * BEvents::EventType::POINTER_DRAG_EVENT.
 	 * @param event Pointer event
 	 */
 	virtual void onPointerDragged (BEvents::PointerEvent* event);
 
-	// TODO onWheelScrolled
+	/**
+	 * Predefined empty method to handle a
+	 * BEvents::EventType::WHEEL_SCROLL_EVENT.
+	 * @param event Value changed event
+	 */
+	virtual void onWheelScrolled (BEvents::WheelEvent* event);
 
 	/**
 	 * Predefined empty method to handle a
@@ -510,6 +512,7 @@ protected:
 	bool visible;
 	bool clickable;
 	bool dragable;
+	bool scrollable;
 	Window* main_;
 	Widget* parent_;
 	std::vector <Widget*> children_;

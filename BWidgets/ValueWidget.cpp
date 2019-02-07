@@ -22,10 +22,10 @@ namespace BWidgets
 ValueWidget::ValueWidget () : ValueWidget (0, 0, BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT, "valuewidget", BWIDGETS_DEFAULT_VALUE) {}
 
 ValueWidget::ValueWidget (const double  x, const double y, const double width, const double height, const std::string& name, const double value) :
-		Widget (x, y, width, height, name), value (value), hardChangeable (true), hardValue (value), softValue (0.0) {}
+		Widget (x, y, width, height, name), value (value), hardChangeable (true), softValue (0.0) {}
 
 ValueWidget::ValueWidget (const ValueWidget& that) :
-		Widget (that), value (that.value), hardChangeable (that.hardChangeable), hardValue (that.hardValue), softValue (that.softValue) {}
+		Widget (that), value (that.value), hardChangeable (that.hardChangeable), softValue (that.softValue) {}
 
 ValueWidget::~ValueWidget () {}
 
@@ -33,7 +33,6 @@ ValueWidget& ValueWidget::operator= (const ValueWidget& that)
 {
 	Widget::operator= (that);
 	hardChangeable = that.hardChangeable;
-	hardValue = that.hardValue;
 	softValue = that.softValue;
 	setValue (that.value);
 	return *this;
@@ -44,6 +43,7 @@ void ValueWidget::setValue (const double val)
 	if (val != value)
 	{
 		value = val;
+		softValue = 0.0;
 		update ();
 		postValueChanged ();
 	}

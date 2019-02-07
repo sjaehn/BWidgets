@@ -85,7 +85,6 @@ protected:
 	void postValueChanged ();
 	double value;
 	bool hardChangeable;
-	double hardValue;
 	double softValue;
 };
 

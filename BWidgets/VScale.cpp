@@ -89,7 +89,7 @@ void VScale::onButtonPressed (BEvents::PointerEvent* event)
 		{
 			double frac = (scaleY0 + scaleHeight - event->getY ()) / scaleHeight;
 			if (getStep () < 0) frac = 1 - frac;
-			hardValue = min + frac * (max - min);
+			double hardValue = min + frac * (max - min);
 			softValue = 0;
 			setValue (hardValue);
 		}
@@ -99,14 +99,28 @@ void VScale::onButtonPressed (BEvents::PointerEvent* event)
 			{
 				double deltaFrac = -event->getDeltaY () / scaleHeight;
 				if (getStep () < 0) deltaFrac = -deltaFrac;
-				softValue = deltaFrac * (max - min);
+				softValue += deltaFrac * (max - min);
 				setValue (getValue() + softValue);
 			}
 		}
 	}
 }
 
-void VScale::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) {onButtonPressed (event);}
+void VScale::onPointerDragged (BEvents::PointerEvent* event) {onButtonPressed (event);}
+
+void VScale::onWheelScrolled (BEvents::WheelEvent* event)
+{
+	double min = getMin ();
+	double max = getMax ();
+
+	if (min != max)
+	{
+		double deltaFrac = event->getDeltaY () / scaleHeight;
+		if (getStep () < 0) deltaFrac = -deltaFrac;
+		softValue += deltaFrac * (max - min);
+		setValue (getValue() + softValue);
+	}
+}
 
 void VScale::updateCoords ()
 {

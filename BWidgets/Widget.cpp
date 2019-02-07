@@ -27,18 +27,19 @@ Widget::Widget (const double x, const double y, const double width, const double
 
 Widget::Widget(const double x, const double y, const double width, const double height, const std::string& name) :
 		extensionData (nullptr), x_ (x), y_ (y), width_ (width), height_ (height), visible (true), clickable (true), dragable (false),
+		scrollable (false),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (BWIDGETS_DEFAULT_BORDER), background_ (BWIDGETS_DEFAULT_BACKGROUND),
 		name_ (name), widgetState (BWIDGETS_DEFAULT_STATE)
 {
 	cbfunction.fill (Widget::defaultCallback);
-	cbfunction[BEvents::EventType::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT] = Widget::dragAndDropCallback;
+	cbfunction[BEvents::EventType::POINTER_DRAG_EVENT] = Widget::dragAndDropCallback;
 	widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 	id = (long) this;
 }
 
 Widget::Widget (const Widget& that) :
 		extensionData (that.extensionData), x_ (that.x_), y_ (that.y_), width_ (that.width_), height_ (that.height_),
-		visible (that.visible), clickable (that.clickable), dragable (that.dragable),
+		visible (that.visible), clickable (that.clickable), dragable (that.dragable), scrollable (that.scrollable),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (that.border_), background_ (that.background_), name_ (that.name_),
 		cbfunction (that.cbfunction), widgetState (that.widgetState)
 {
@@ -74,6 +75,7 @@ Widget& Widget::operator= (const Widget& that)
 	visible = that.visible;
 	clickable = that.clickable;
 	dragable = that.dragable;
+	scrollable = that.scrollable;
 	border_ = that.border_;
 	background_ = that.background_;
 	cbfunction = that.cbfunction;
@@ -419,19 +421,14 @@ void Widget::onExpose (BEvents::ExposeEvent* event) {} // Empty, only Windows ha
 void Widget::onClose () {} // Empty, only Windows handle close events
 void Widget::onButtonPressed (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::BUTTON_PRESS_EVENT] (event);}
 void Widget::onButtonReleased (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::BUTTON_RELEASE_EVENT] (event);}
-//TODO onButtonClicked
+void Widget::onButtonClicked (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::BUTTON_CLICK_EVENT] (event);}
 void Widget::onPointerMotion (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::POINTER_MOTION_EVENT] (event);}
-void Widget::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT] (event);}
 void Widget::onPointerDragged (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::POINTER_DRAG_EVENT] (event);}
-//TODO onWheelScrolled
-
+void Widget::onWheelScrolled (BEvents::WheelEvent* event){cbfunction[BEvents::EventType::WHEEL_SCROLL_EVENT] (event);}
 void Widget::onValueChanged (BEvents::ValueChangedEvent* event) {cbfunction[BEvents::EventType::VALUE_CHANGED_EVENT] (event);}
 
 void Widget::defaultCallback (BEvents::Event* event) {}
 
-// TODO Adapt dragAndDropCallback to POINTER_DRAG_EVENT (instead of deprecated
-// POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT) and change default settings of
-// cbfunction.
 void Widget::dragAndDropCallback (BEvents::Event* event)
 {
 	if (event && event->getWidget())
@@ -797,16 +794,24 @@ void Window::handleEvents ()
 					}
 					break;
 
+				case BEvents::BUTTON_CLICK_EVENT:
+					{
+						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
+						setInput (be->getButton (), nullptr, 0.0, 0.0);
+						widget->onButtonClicked (be);
+					}
+					break;
+
 				case BEvents::POINTER_MOTION_EVENT:
 					widget->onPointerMotion((BEvents::PointerEvent*) event);
 					break;
 
-				case BEvents::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT: // deprecated
-					widget->onPointerMotionWhileButtonPressed((BEvents::PointerEvent*) event);
+				case BEvents::POINTER_DRAG_EVENT:
+					widget->onPointerDragged((BEvents::PointerEvent*) event);
 					break;
 
-				case BEvents::POINTER_DRAG_EVENT: // deprecated
-					widget->onPointerDragged((BEvents::PointerEvent*) event);
+				case BEvents::WHEEL_SCROLL_EVENT:
+					widget->onWheelScrolled((BEvents::WheelEvent*) event);
 					break;
 
 				case BEvents::VALUE_CHANGED_EVENT:
@@ -864,6 +869,21 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 															  yorigin,
 															  0, 0,
 															  device));
+
+
+				// Also emit BUTTON_CLICK_EVENT ?
+				Widget* widget2 = w->getWidgetAt (event->button.x, event->button.y, true, true, false);
+				if (widget == widget2)
+				{
+					w->addEventToQueue (new BEvents::PointerEvent (widget,
+																  BEvents::BUTTON_CLICK_EVENT,
+																  event->button.x - widget->getOriginX (),
+																  event->button.y - widget->getOriginY (),
+																  xorigin,
+																  yorigin,
+																  0, 0,
+																  device));
+				}
 			}
 
 			w->pointerX = event->button.x;
@@ -886,16 +906,6 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 					{
 						double xorigin = w->getInputX (device);
 						double yorigin = w->getInputY (device);
-
-						// deprecated
-						w->addEventToQueue (new BEvents::PointerEvent (widget,
-																	   BEvents::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT,
-																	   event->motion.x - widget->getOriginX (),
-																	   event->motion.y - widget->getOriginY (),
-																	   0, 0,
-																	   event->motion.x - w->pointerX,
-																	   event->motion.y - w->pointerY,
-																	   device));
 
 						// new
 						w->addEventToQueue (new BEvents::PointerEvent (widget,
@@ -934,7 +944,20 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 		}
 		break;
 
-	// TODO WheelEvent
+	case PUGL_SCROLL:
+		{
+			Widget* widget = w->getWidgetAt (event->button.x, event->button.y, true, true, false);
+			if (widget)
+			{
+				w->addEventToQueue(new BEvents::WheelEvent (widget,
+															BEvents::WHEEL_SCROLL_EVENT,
+															event->scroll.x,
+															event->scroll.y,
+															event->scroll.dx,
+															event->scroll.dy));
+			}
+		}
+		break;
 
 	case PUGL_CONFIGURE:
 		w->addEventToQueue (new BEvents::ExposeEvent (w,

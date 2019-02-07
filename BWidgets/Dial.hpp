@@ -89,11 +89,18 @@ public:
 	virtual void onButtonPressed (BEvents::PointerEvent* event) override;
 
 	/**
-	 * Handles the BEvents::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT to turn
+	 * Handles the BEvents::POINTER_DRAG_EVENT to turn
 	 * the dial.
 	 * @param event Pointer to a pointer event emitted by the same widget.
 	 */
-	virtual void onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) override;
+	virtual void onPointerDragged (BEvents::PointerEvent* event) override;
+
+	/**
+	 * Handles the BEvents::WHEEL_SCROLL_EVENT to turn
+	 * the dial.
+	 * @param event Pointer to a wheel event emitted by the same widget.
+	 */
+	virtual void onWheelScrolled (BEvents::WheelEvent* event) override;
 
 
 protected:

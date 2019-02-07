@@ -66,13 +66,40 @@ void PointerEvent::setX (const double x) {xpos = x;}
 double PointerEvent::getX () const {return xpos;}
 void PointerEvent::setY (const double y) {ypos = y;}
 double PointerEvent::getY () const {return ypos;}
+void PointerEvent::setXOrigin (const double xOrigin) {this->xOrigin = xOrigin;}
+double PointerEvent::getXOrigin () const {return xOrigin;}
+void PointerEvent::setYOrigin (const double yOrigin) {this->yOrigin = yOrigin;}
+double PointerEvent::getYOrigin () const {return yOrigin;}
+void PointerEvent::setDeltaX (const double deltaX) {this->deltaX = deltaX;}
 double PointerEvent::getDeltaX () const {return deltaX;}
+void PointerEvent::setDeltaY (const double deltaY) {this->deltaY = deltaY;}
 double PointerEvent::getDeltaY () const {return deltaY;}
 void PointerEvent::setButton (const InputDevice button) {buttonNr = button;}
 InputDevice PointerEvent::getButton () const {return buttonNr;}
 
 /*
  * End of class BEvents::PointerEvent
+ *****************************************************************************/
+
+
+/*****************************************************************************
+ * Class BEvents::WheelEvent
+ *****************************************************************************/
+
+WheelEvent::WheelEvent () : WheelEvent ((void*) nullptr, NO_EVENT, 0, 0, 0, 0) {}
+WheelEvent::WheelEvent (void* widget, const EventType type, const double x, const double y, const double deltaX, const double deltaY) :
+		Event (widget, type), xpos (x), ypos (y),deltaX (deltaX), deltaY (deltaY) {}
+void WheelEvent::setX (const double x) {xpos = x;}
+double WheelEvent::getX () const {return xpos;}
+void WheelEvent::setY (const double y) {ypos = y;}
+double WheelEvent::getY () const {return ypos;}
+void WheelEvent::setDeltaX (const double deltaX) {this->deltaX = deltaX;}
+double WheelEvent::getDeltaX () const {return deltaX;}
+void WheelEvent::setDeltaY (const double deltaY) {this->deltaY = deltaY;}
+double WheelEvent::getDeltaY () const {return deltaY;}
+
+/*
+ * End of class BEvents::WheelEvent
  *****************************************************************************/
 
 
