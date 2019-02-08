@@ -29,7 +29,8 @@ VScale::VScale (const double  x, const double y, const double width, const doubl
 		scaleX0 (0), scaleY0 (0), scaleWidth (width), scaleHeight (height), scaleYValue (0)
 {
 	setClickable (true);
-	setDragable (true);
+	setDraggable (true);
+	setScrollable (true);
 }
 
 VScale::VScale (const VScale& that) :
@@ -108,6 +109,7 @@ void VScale::onButtonPressed (BEvents::PointerEvent* event)
 
 void VScale::onPointerDragged (BEvents::PointerEvent* event) {onButtonPressed (event);}
 
+// TODO Try out direction, steps
 void VScale::onWheelScrolled (BEvents::WheelEvent* event)
 {
 	double min = getMin ();

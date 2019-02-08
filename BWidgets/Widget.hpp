@@ -345,18 +345,36 @@ public:
 
 	/**
 	 * Defines whether the widget may emit
-	 * BEvents::POINER_MOTION_WHILE_BUTTON_PRESSED_EVENT's following a host
-	 * button event.
-	 * @param status TRUE if widget is clickable, otherwise false
+	 * BEvents::POINER_DRAG_EVENT's following a host pointer event.
+	 * By default, "draggable" widgets can be dragged over the window as
+	 * result of calling the default dragAndDropCallback method from the
+	 * onPointerDragged method. This behavior can be changed by overriding the
+	 * onPointerDragged method or by setting a callback function different from
+	 * dragAndDropCallback.
+	 * @param status TRUE if widget is draggable, otherwise false
 	 */
-	void setDragable (const bool status);
+	void setDraggable (const bool status);
 
 	/**
-	 * Gets whether the widget may emit BEvents::BUTTON_PRESS_EVENT's or
-	 * BEvents::BUTTON_RELEASE_Event's following a host button event.
-	 * @return TRUE if widget is clickable, otherwise false
+	 * Gets whether the widget may emit BEvents::POINTER_DRAG_EVENT's following
+	 * a host pointer event.
+	 * @return TRUE if widget is draggable, otherwise false
 	 */
-	bool isDragable () const;
+	bool isDraggable () const;
+
+	/**
+	 * Defines whether the widget may emit
+	 * BEvents::WHEEL_SCROLL_EVENT's following a host (mouse) wheel event.
+	 * @param status TRUE if widget is scrollable, otherwise false
+	 */
+	void setScrollable (const bool status);
+
+	/**
+	 * Gets whether the widget may emit BEvents::WHEEL_SCROLL_EVENT's following
+	 * a host (mouse) wheel event.
+	 * @return TRUE if widget is scrollable, otherwise false
+	 */
+	bool isScrollable () const;
 
 	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the
@@ -498,7 +516,8 @@ protected:
 	std::vector <Widget*> getChildrenAsQueue (std::vector <Widget*> queue = {}) const;
 
 	bool isPointInWidget (const double x, const double y) const;
-	Widget* getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability, const bool checkDragability);
+	Widget* getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability,
+						 const bool checkDraggability, const bool checkScrollability);
 
 	void postRedisplay (const double x, const double y, const double width, const double height);
 	void redisplay (cairo_surface_t* surface, double x, double y, double width, double height);
@@ -511,7 +530,7 @@ protected:
 	double x_, y_, width_, height_;
 	bool visible;
 	bool clickable;
-	bool dragable;
+	bool draggable;
 	bool scrollable;
 	Window* main_;
 	Widget* parent_;

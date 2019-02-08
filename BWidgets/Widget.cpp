@@ -26,7 +26,7 @@ Widget::Widget () : Widget (0.0, 0.0, BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_H
 Widget::Widget (const double x, const double y, const double width, const double height) : Widget (x, y, width, height, "widget") {}
 
 Widget::Widget(const double x, const double y, const double width, const double height, const std::string& name) :
-		extensionData (nullptr), x_ (x), y_ (y), width_ (width), height_ (height), visible (true), clickable (true), dragable (false),
+		extensionData (nullptr), x_ (x), y_ (y), width_ (width), height_ (height), visible (true), clickable (true), draggable (false),
 		scrollable (false),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (BWIDGETS_DEFAULT_BORDER), background_ (BWIDGETS_DEFAULT_BACKGROUND),
 		name_ (name), widgetState (BWIDGETS_DEFAULT_STATE)
@@ -39,7 +39,7 @@ Widget::Widget(const double x, const double y, const double width, const double 
 
 Widget::Widget (const Widget& that) :
 		extensionData (that.extensionData), x_ (that.x_), y_ (that.y_), width_ (that.width_), height_ (that.height_),
-		visible (that.visible), clickable (that.clickable), dragable (that.dragable), scrollable (that.scrollable),
+		visible (that.visible), clickable (that.clickable), draggable (that.draggable), scrollable (that.scrollable),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (that.border_), background_ (that.background_), name_ (that.name_),
 		cbfunction (that.cbfunction), widgetState (that.widgetState)
 {
@@ -74,7 +74,7 @@ Widget& Widget::operator= (const Widget& that)
 	height_ = that.height_;
 	visible = that.visible;
 	clickable = that.clickable;
-	dragable = that.dragable;
+	draggable = that.draggable;
 	scrollable = that.scrollable;
 	border_ = that.border_;
 	background_ = that.background_;
@@ -365,9 +365,13 @@ void Widget::setClickable (const bool status) {clickable = status;}
 
 bool Widget::isClickable () const {return clickable;}
 
-void Widget::setDragable (const bool status) {dragable = status;}
+void Widget::setDraggable (const bool status) {draggable = status;}
 
-bool Widget::isDragable () const {return dragable;}
+bool Widget::isDraggable () const {return draggable;}
+
+void Widget::setScrollable (const bool status) {scrollable = status;}
+
+bool Widget::isScrollable () const {return scrollable;}
 
 void Widget::update ()
 {
@@ -377,16 +381,22 @@ void Widget::update ()
 
 bool Widget::isPointInWidget (const double x, const double y) const {return ((x >= 0.0) && (x <= width_) && (y >= 0.0) && (y <= height_));}
 
-Widget* Widget::getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability, const bool checkDragability)
+Widget* Widget::getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability,
+							 const bool checkDraggability, const bool checkScrollability)
 {
 	if (main_ && isPointInWidget (x, y) && ((!checkVisibility) || visible))
 	{
-		Widget* finalw = ((!checkClickability) || clickable ? this : nullptr);
+		Widget* finalw = ((((!checkVisibility) || visible) &&
+						   ((!checkClickability) || clickable) &&
+						   ((!checkDraggability) || draggable) &&
+						   ((!checkScrollability) || scrollable)) ?
+						  this :
+						  nullptr);
 		for (Widget* w : children_)
 		{
 			double xNew = x - w->x_;
 			double yNew = y - w->y_;
-			Widget* nextw = w->getWidgetAt (xNew, yNew, checkVisibility, checkClickability, checkDragability);
+			Widget* nextw = w->getWidgetAt (xNew, yNew, checkVisibility, checkClickability, checkDraggability, checkScrollability);
 			if (nextw)
 			{
 				finalw = nextw;
@@ -835,7 +845,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 	switch (event->type) {
 	case PUGL_BUTTON_PRESS:
 		{
-			Widget* widget = w->getWidgetAt (event->button.x, event->button.y, true, true, false);
+			Widget* widget = w->getWidgetAt (event->button.x, event->button.y, true, true, false, false);
 			if (widget)
 			{
 				w->addEventToQueue (new BEvents::PointerEvent (widget,
@@ -872,7 +882,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 
 
 				// Also emit BUTTON_CLICK_EVENT ?
-				Widget* widget2 = w->getWidgetAt (event->button.x, event->button.y, true, true, false);
+				Widget* widget2 = w->getWidgetAt (event->button.x, event->button.y, true, true, false, false);
 				if (widget == widget2)
 				{
 					w->addEventToQueue (new BEvents::PointerEvent (widget,
@@ -902,7 +912,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 				{
 					device = (BEvents::InputDevice) i;
 					Widget* widget = w->getInputWidget (device);
-					if (widget->isDragable ())
+					if (widget->isDraggable ())
 					{
 						double xorigin = w->getInputX (device);
 						double yorigin = w->getInputY (device);
@@ -924,7 +934,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 			// No button associated with a widget? Only POINTER_MOTION_EVENT
 			if (device == BEvents::NO_BUTTON)
 			{
-				Widget* widget = w->getWidgetAt (event->motion.x, event->motion.y, true, false, false);
+				Widget* widget = w->getWidgetAt (event->motion.x, event->motion.y, true, false, false, false);
 				if (widget)
 				{
 					w->addEventToQueue (new BEvents::PointerEvent (widget,
@@ -946,7 +956,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 
 	case PUGL_SCROLL:
 		{
-			Widget* widget = w->getWidgetAt (event->button.x, event->button.y, true, true, false);
+			Widget* widget = w->getWidgetAt (event->button.x, event->button.y, true, false, false, true);
 			if (widget)
 			{
 				w->addEventToQueue(new BEvents::WheelEvent (widget,

@@ -115,12 +115,12 @@ int main ()
 	Widget2.setBackground (BStyles::Fill (BColors::darkdarkgrey));
 	BWidgets::Widget Widget3 = BWidgets::Widget (80, 10, 500, 300, "Frame");
 	Widget3.applyTheme (defaultTheme);
-	Widget3.setDragable (true);
+	Widget3.setDraggable (true);
 	BWidgets::Widget Widget = BWidgets::Widget (20, 40, 500, 300, "Frame");
 	Widget.applyTheme (defaultTheme);
 	Widget.setBackground(bgPicture);
 	Widget.setClickable (true);
-	Widget.setDragable (true);
+	Widget.setDraggable (true);
 
 
 	// Label and text widgets
@@ -232,7 +232,7 @@ int main ()
 	cairo_destroy (cr);
 	Surface.update ();
 	Surface.setClickable (true);
-	Surface.setDragable (true);
+	Surface.setDraggable (true);
 
 	// Box widgets
 	BWidgets::ChoiceBox choiceBox (10, 10, 100, 40, "ChoiceBox", {"Berlin", "Paris", "London", "Dublin", "Stockholm", "Madrid", "Riga"}, 1.0);

@@ -42,11 +42,14 @@ Dial::Dial (const double x, const double y, const double width, const double hei
 {
 
 	setClickable (true);
-	setDragable (true);
+	setDraggable (true);
+	setScrollable (true);
 	knob.setClickable (false);
-	knob.setDragable (false);
+	knob.setDraggable (false);
+	knob.setScrollable (false);
 	dot.setClickable (false);
-	dot.setDragable (false);
+	dot.setDraggable (false);
+	dot.setScrollable (false);
 	add (knob);
 	add (dot);
 }
@@ -155,6 +158,8 @@ void Dial::onButtonPressed (BEvents::PointerEvent* event)
 		}
 
 		// Otherwise relative value change by dragging up or down
+		// TODO Isn't there really no way to turn the dial in a sensitive but
+		// safe way?
 		else
 		{
 			if ((min != max) && (dialRadius >= 1))
@@ -170,6 +175,7 @@ void Dial::onButtonPressed (BEvents::PointerEvent* event)
 
 void Dial::onPointerDragged (BEvents::PointerEvent* event) {onButtonPressed (event);}
 
+// TODO Try out direction, steps
 void Dial::onWheelScrolled (BEvents::WheelEvent* event)
 {
 	double min = getMin ();

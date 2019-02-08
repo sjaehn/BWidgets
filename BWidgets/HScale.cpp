@@ -29,7 +29,8 @@ HScale::HScale (const double  x, const double y, const double width, const doubl
 		scaleX0 (0), scaleY0 (0), scaleWidth (width), scaleHeight (height), scaleXValue (0)
 {
 	setClickable (true);
-	setDragable (true);
+	setDraggable (true);
+	setScrollable (true);
 }
 
 HScale::HScale (const HScale& that) :
@@ -109,6 +110,7 @@ void HScale::onButtonPressed (BEvents::PointerEvent* event)
 
 void HScale::onPointerDragged (BEvents::PointerEvent* event) {onButtonPressed (event);}
 
+// TODO Try out direction, steps
 void HScale::onWheelScrolled (BEvents::WheelEvent* event)
 {
 	double min = getMin ();
