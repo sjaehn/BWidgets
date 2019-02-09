@@ -50,6 +50,8 @@ typedef enum {
 	POINTER_DRAG_EVENT,
 	WHEEL_SCROLL_EVENT,
 	VALUE_CHANGED_EVENT,
+	FOCUS_IN_EVENT,
+	FOCUS_OUT_EVENT,
 	NO_EVENT
 } EventType;
 
@@ -387,6 +389,50 @@ public:
 
 protected:
 	double value;
+};
+/*
+ * End of class BEvents::ValueChangedEvent
+ *****************************************************************************/
+
+/**
+ * Class BEvents::FocusEvent
+ *
+ * Focus events are emitted by widgets if the pointer rests for a predefined
+ * time over the widget
+ */
+class FocusEvent : public Event
+{
+public:
+	FocusEvent ();
+	FocusEvent (void* widget, const EventType type, const double x, const double y);
+
+	/**
+	 * Redefines the pointers x coordinate
+	 * @param x X coordinate relative to the widgets origin
+	 */
+	void setX (const double x);
+
+	/**
+	 * Gets the pointers x coordinate of the wheel event
+	 * @return X coordinate relative to the widgets origin
+	 */
+	double getX () const;
+
+	/**
+	 * Redefines the pointers y coordinate
+	 * @param y y coordinate relative to the widgets origin
+	 */
+	void setY (const double y);
+
+	/**
+	 * Gets the pointers y coordinate
+	 * @return Y coordinate relative to the widgets origin
+	 */
+	double getY () const;
+
+protected:
+	double xpos;
+	double ypos;
 };
 /*
  * End of class BEvents::ValueChangedEvent

@@ -62,6 +62,7 @@
 #include <string>
 #include <iostream>
 #include <functional>
+#include <chrono>
 
 #include "BColors.hpp"
 #include "BStyles.hpp"
@@ -80,6 +81,7 @@ namespace BWidgets
  * also be containers for other widgets (= have children).
  */
 class Window; // Forward declaration
+class FocusWidget; // Forward declaration
 
 class Widget
 {
@@ -377,6 +379,28 @@ public:
 	bool isScrollable () const;
 
 	/**
+	 * Defines whether the widget may emit BEvents::FOCUS_EVENT's if the
+	 * pointer rests for a predefined time over the widget.
+	 * @param status TRUE if widget is focusable, otherwise false
+	 */
+	void setFocusable (const bool status);
+
+	/**
+	 * Gets whether the widget may emit BEvents::FOCUS_EVENT's if the
+	 * pointer rests for a predefined time over the widget.
+	 * @return TRUE if widget is focusable, otherwise false
+	 */
+	bool isFocusable () const;
+
+	/**
+	 * Links a widget that pops up following a BEvents::FOCUS_EVENT.
+	 * @param widget	Pointer to a widget or nullptr
+	 */
+	void setFocusWidget (FocusWidget* widget);
+
+	FocusWidget* getFocusWidget ();
+
+	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the
 	 * Widget is visible.
 	 * This method should be called if the widgets properties are indirectly
@@ -413,6 +437,10 @@ public:
 	 * @param event Placeholder, will not be interpreted by this method.
 	 */
 	static void dragAndDropCallback (BEvents::Event* event);
+
+	static void focusInCallback (BEvents::Event* event);
+
+	static void focusOutCallback (BEvents::Event* event);
 
 	/**
 	 * Predefined empty method to handle a BEvents::EventType::CONFIGURE_EVENT.
@@ -486,6 +514,20 @@ public:
 	virtual void onValueChanged (BEvents::ValueChangedEvent* event);
 
 	/**
+	 * Predefined empty method to handle a
+	 * BEvents::EventType::FOCUS_IN_EVENT.
+	 * @param event Focus event
+	 */
+	virtual void onFocusIn (BEvents::FocusEvent* event);
+
+	/**
+	 * Predefined empty method to handle a
+	 * BEvents::EventType::FOCUS_OUT_EVENT.
+	 * @param event Focus event
+	 */
+	virtual void onFocusOut (BEvents::FocusEvent* event);
+
+	/**
 	 * Scans theme for widget properties and applies these properties.
 	 * @param theme Theme to be scanned
 	 */
@@ -517,7 +559,7 @@ protected:
 
 	bool isPointInWidget (const double x, const double y) const;
 	Widget* getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability,
-						 const bool checkDraggability, const bool checkScrollability);
+						 const bool checkDraggability, const bool checkScrollability, const bool checkFocusability);
 
 	void postRedisplay (const double x, const double y, const double width, const double height);
 	void redisplay (cairo_surface_t* surface, double x, double y, double width, double height);
@@ -532,6 +574,7 @@ protected:
 	bool clickable;
 	bool draggable;
 	bool scrollable;
+	bool focusable;
 	Window* main_;
 	Widget* parent_;
 	std::vector <Widget*> children_;
@@ -541,6 +584,8 @@ protected:
 	std::array<std::function<void (BEvents::Event*)>, BEvents::EventType::NO_EVENT> cbfunction;
 	cairo_surface_t* widgetSurface;
 	BColors::State widgetState;
+	FocusWidget* focusWidget;
+
 };
 
 /**
@@ -653,6 +698,7 @@ protected:
 	 * BEvents::Event derived objects.
 	 */
 	static void translatePuglEvent (PuglView* view, const PuglEvent* event);
+	void translateTimeEvent ();
 
 	void purgeEventQueue ();
 
@@ -663,6 +709,7 @@ protected:
 
 	double pointerX;
 	double pointerY;
+	std::chrono::steady_clock::time_point pointerTime;
 
 	typedef struct
 	{

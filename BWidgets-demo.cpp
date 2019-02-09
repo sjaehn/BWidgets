@@ -25,14 +25,6 @@ static void showValue (BEvents::Event* event)
 	}
 }
 
-static void showDelta (BEvents::Event* event)
-{
-	if (event)
-	{
-		std::cout << ((BEvents::PointerEvent*) event)->getDeltaX() << ", " << ((BEvents::PointerEvent*) event)->getDeltaY() << std::endl;
-	}
-}
-
 int main ()
 {
 	//Define Styles and Colors first
@@ -67,6 +59,11 @@ int main ()
 		},
 		{"Label", {{"uses", STYLEPTR (&defaultStyles)},
 				   {"textcolors", STYLEPTR (&BColors::blues)},
+				   {"font", STYLEPTR (&labelFont)}}
+		},
+		{"Focus", {{"background", STYLEPTR (&BStyles::darkgreyFill)},
+				   {"border", STYLEPTR (&defaultBorder)},
+				   {"textcolors", STYLEPTR (&BColors::whites)},
 				   {"font", STYLEPTR (&labelFont)}}
 		},
 		{"smallLabel", {{"uses", STYLEPTR (&defaultStyles)},
@@ -145,26 +142,44 @@ int main ()
 	BWidgets::HSwitch Switch2 (60, 210, 40, 20, "Switch", 0.0);
 	Switch2.applyTheme (defaultTheme);
 
+	BWidgets::FocusWidget focusWidget = BWidgets::FocusWidget();
+	BWidgets::Label focusLabel (0, 0, 60, 20, "Focus", "Focus");
+	focusLabel.applyTheme (defaultTheme);
+	focusWidget.add (focusLabel);
+
+
 	// Slider widgets
 	BWidgets::Label VSliderLabel = BWidgets::Label (10, 10, 80, 16, "VSliders");
 	VSliderLabel.applyTheme (defaultTheme, "Label");
 	BWidgets::VSlider Slider1 = BWidgets::VSlider (10, 30, 20, 240, "Slider", 80.0, 0.0, 100.0, 0.0);
 	Slider1.applyTheme (defaultTheme);
+	Slider1.setFocusWidget(&focusWidget);
+	Slider1.setFocusable (true);
 	BWidgets::VSlider Slider2 = BWidgets::VSlider (40, 30, 20, 240, "Slider", 80.0, 0.0, 100.0, -10.0);
 	Slider2.applyTheme (defaultTheme);
+	Slider2.setFocusWidget(&focusWidget);
+	Slider2.setFocusable (true);
 
 	BWidgets::Label HSliderLabel = BWidgets::Label (100, 10, 240, 16, "HSliders");
 	HSliderLabel.applyTheme (defaultTheme, "Label");
 	BWidgets::HSlider Slider3 = BWidgets::HSlider (100, 30, 240, 20, "Slider", 80.0, 0.0, 100.0, 0.0);
 	Slider3.applyTheme (defaultTheme);
+	Slider3.setFocusWidget(&focusWidget);
+	Slider3.setFocusable (true);
 	BWidgets::HSlider Slider4 = BWidgets::HSlider (100, 60, 240, 20, "Slider", 80.0, 0.0, 100.0, -0.01);
 	Slider4.applyTheme (defaultTheme);
+	Slider4.setFocusWidget(&focusWidget);
+	Slider4.setFocusable (true);
 	BWidgets::DisplayHSlider Slider5 = BWidgets::DisplayHSlider (100, 80, 240, 40, "DialVal",
 																				   80.0, 0.0, 100.0, 0.0, "%3.1f");
 	Slider5.applyTheme (defaultTheme);
+	Slider5.setFocusWidget(&focusWidget);
+	Slider5.setFocusable (true);
 	BWidgets::DisplayVSlider Slider6 = BWidgets::DisplayVSlider (60, 30, 40, 240, "DialVal",
 																					   80.0, 0.0, 100.0, 1.0, "%3.1f");
 	Slider6.applyTheme (defaultTheme);
+	Slider6.setFocusWidget(&focusWidget);
+	Slider6.setFocusable (true);
 
 	// Dial widgets
 	BWidgets::Label DialLabel = BWidgets::Label (100, 130, 300, 16, "Dials");
@@ -238,7 +253,6 @@ int main ()
 	BWidgets::ChoiceBox choiceBox (10, 10, 100, 40, "ChoiceBox", {"Berlin", "Paris", "London", "Dublin", "Stockholm", "Madrid", "Riga"}, 1.0);
 	BWidgets::ListBox listBox (130, 10, 100, 140, "ListBox", {"Mumbai", "Hyderabad", "Lucknow", "Dehli", "Jaipur", "Surat", "Patna", "Agra", "Goa", "Jammu"});
 	BWidgets::PopupListBox popupListBox (250, 10, 100, 20, 100, 140, "PopupListBox", {"Arusha", "Moshi", "Tanga", "Dodoma", "Mwanza", "Dar es Salaam", "Mbeya", "Zanzibar"});
-
 
 	// Add the background widget container to the main window and add all label
 	// widgets and switches to the background widget container

@@ -116,4 +116,19 @@ double ValueChangedEvent::getValue () const {return value;}
  * End of class BEvents::ValueChangedEvent
  *****************************************************************************/
 
+/*****************************************************************************
+ * Class BEvents::WheelEvent
+ *****************************************************************************/
+
+FocusEvent::FocusEvent () : FocusEvent ((void*) nullptr, NO_EVENT, 0, 0) {}
+FocusEvent::FocusEvent (void* widget, const EventType type, const double x, const double y) : Event (widget, type), xpos (x), ypos (y) {}
+void FocusEvent::setX (const double x) {xpos = x;}
+double FocusEvent::getX () const {return xpos;}
+void FocusEvent::setY (const double y) {ypos = y;}
+double FocusEvent::getY () const {return ypos;}
+
+/*
+ * End of class BEvents::WheelEvent
+ *****************************************************************************/
+
 }

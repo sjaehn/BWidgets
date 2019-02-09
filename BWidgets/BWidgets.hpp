@@ -23,6 +23,7 @@
 #include "BEvents.hpp"
 #include "BValues.hpp"
 #include "Widget.hpp"
+#include "FocusWidget.hpp"
 #include "Label.hpp"
 #include "Text.hpp"
 #include "Knob.hpp"
