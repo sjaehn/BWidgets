@@ -61,11 +61,6 @@ int main ()
 				   {"textcolors", STYLEPTR (&BColors::blues)},
 				   {"font", STYLEPTR (&labelFont)}}
 		},
-		{"Focus", {{"background", STYLEPTR (&BStyles::darkgreyFill)},
-				   {"border", STYLEPTR (&defaultBorder)},
-				   {"textcolors", STYLEPTR (&BColors::whites)},
-				   {"font", STYLEPTR (&labelFont)}}
-		},
 		{"smallLabel", {{"uses", STYLEPTR (&defaultStyles)},
 				   {"textcolors", STYLEPTR (&BColors::blues)},
 				   {"font", STYLEPTR (&smallFont)}}
@@ -79,15 +74,44 @@ int main ()
 					{"fgcolors", STYLEPTR (&defaultFgColors)},
 					{"bgcolors", STYLEPTR (&BColors::darks)}}
 		},
+		{"Slider/focus",
+				  {{"background", STYLEPTR (&BStyles::darkgreyFill)},
+				   {"border", STYLEPTR (&defaultBorder)}}
+		},
+
+		{"Slider/focus/label",
+				  {{"textcolors", STYLEPTR (&BColors::whites)},
+				   {"font", STYLEPTR (&labelFont)}}
+		},
 		{"Dial", {{"uses", STYLEPTR (&defaultStyles)},
 				  {"fgcolors", STYLEPTR (&defaultFgColors)},
 				  {"bgcolors", STYLEPTR (&BColors::darks)}}
 		},
+		{"Dial/focus",
+				  {{"background", STYLEPTR (&BStyles::darkgreyFill)},
+				   {"border", STYLEPTR (&defaultBorder)}}
+		},
+
+		{"Dial/focus/label",
+				  {{"textcolors", STYLEPTR (&BColors::whites)},
+				   {"font", STYLEPTR (&labelFont)}}
+		},
+
 		{"DialVal", {{"uses", STYLEPTR (&defaultStyles)},
 			   	     {"fgcolors", STYLEPTR (&defaultFgColors)},
 					 {"bgcolors", STYLEPTR (&BColors::darks)},
 					 {"textcolors", STYLEPTR (&BColors::darks)},
 					 {"font", STYLEPTR (&labelFont)}}
+		},
+
+		{"DialVal/focus",
+				  {{"background", STYLEPTR (&BStyles::darkgreyFill)},
+				   {"border", STYLEPTR (&defaultBorder)}}
+		},
+
+		{"DialVal/focus/label",
+				  {{"textcolors", STYLEPTR (&BColors::whites)},
+				   {"font", STYLEPTR (&labelFont)}}
 		},
 		{"Button", {{"uses", STYLEPTR (&defaultStyles)},
 					{"buttoncolors", STYLEPTR (&BColors::darks)},
@@ -142,43 +166,30 @@ int main ()
 	BWidgets::HSwitch Switch2 (60, 210, 40, 20, "Switch", 0.0);
 	Switch2.applyTheme (defaultTheme);
 
-	BWidgets::FocusWidget focusWidget = BWidgets::FocusWidget();
-	BWidgets::Label focusLabel (0, 0, 60, 20, "Focus", "Focus");
-	focusLabel.applyTheme (defaultTheme);
-	focusWidget.add (focusLabel);
-
-
 	// Slider widgets
 	BWidgets::Label VSliderLabel = BWidgets::Label (10, 10, 80, 16, "VSliders");
 	VSliderLabel.applyTheme (defaultTheme, "Label");
-	BWidgets::VSlider Slider1 = BWidgets::VSlider (10, 30, 20, 240, "Slider", 80.0, 0.0, 100.0, 0.0);
+	BWidgets::Label VSliderLabel2 = BWidgets::Label (10, 26, 80, 16, "focusable = true");
+	VSliderLabel2.applyTheme (defaultTheme, "smallLabel");
+	BWidgets::VSlider Slider1 = BWidgets::VSlider (10, 50, 20, 220, "Slider", 80.0, 0.0, 100.0, 0.0);
 	Slider1.applyTheme (defaultTheme);
-	Slider1.setFocusWidget(&focusWidget);
 	Slider1.setFocusable (true);
-	BWidgets::VSlider Slider2 = BWidgets::VSlider (40, 30, 20, 240, "Slider", 80.0, 0.0, 100.0, -10.0);
+	BWidgets::VSlider Slider2 = BWidgets::VSlider (40, 50, 20, 220, "Slider", 80.0, 0.0, 100.0, -10.0);
 	Slider2.applyTheme (defaultTheme);
-	Slider2.setFocusWidget(&focusWidget);
 	Slider2.setFocusable (true);
 
 	BWidgets::Label HSliderLabel = BWidgets::Label (100, 10, 240, 16, "HSliders");
 	HSliderLabel.applyTheme (defaultTheme, "Label");
 	BWidgets::HSlider Slider3 = BWidgets::HSlider (100, 30, 240, 20, "Slider", 80.0, 0.0, 100.0, 0.0);
 	Slider3.applyTheme (defaultTheme);
-	Slider3.setFocusWidget(&focusWidget);
-	Slider3.setFocusable (true);
 	BWidgets::HSlider Slider4 = BWidgets::HSlider (100, 60, 240, 20, "Slider", 80.0, 0.0, 100.0, -0.01);
 	Slider4.applyTheme (defaultTheme);
-	Slider4.setFocusWidget(&focusWidget);
-	Slider4.setFocusable (true);
 	BWidgets::DisplayHSlider Slider5 = BWidgets::DisplayHSlider (100, 80, 240, 40, "DialVal",
 																				   80.0, 0.0, 100.0, 0.0, "%3.1f");
 	Slider5.applyTheme (defaultTheme);
-	Slider5.setFocusWidget(&focusWidget);
-	Slider5.setFocusable (true);
-	BWidgets::DisplayVSlider Slider6 = BWidgets::DisplayVSlider (60, 30, 40, 240, "DialVal",
+	BWidgets::DisplayVSlider Slider6 = BWidgets::DisplayVSlider (60, 50, 40, 220, "DialVal",
 																					   80.0, 0.0, 100.0, 1.0, "%3.1f");
 	Slider6.applyTheme (defaultTheme);
-	Slider6.setFocusWidget(&focusWidget);
 	Slider6.setFocusable (true);
 
 	// Dial widgets
@@ -186,11 +197,14 @@ int main ()
 	DialLabel.applyTheme (defaultTheme, "Label");
 	BWidgets::Label DialLabel2 = BWidgets::Label (80, 220, 120, 16, "hardChangeable = false");
 	DialLabel2.applyTheme (defaultTheme, "smallLabel");
+	BWidgets::Label DialLabel3 = BWidgets::Label (200, 220, 80, 16, "focusable = true");
+	DialLabel3.applyTheme (defaultTheme, "smallLabel");
 	BWidgets::Dial Dial1 = BWidgets::Dial (100, 150, 80, 80, "Dial", 80.0, 0.0, 100.0, 0.0);
 	Dial1.applyTheme (defaultTheme);
 	Dial1.setHardChangeable (false);
 	BWidgets::Dial Dial2 = BWidgets::Dial (200, 150, 80, 80, "Dial", 80.0, 0.0, 100.0, -10.0);
 	Dial2.applyTheme (defaultTheme);
+	Dial2.setFocusable (true);
 	BWidgets::DisplayDial Dial3 = BWidgets::DisplayDial (300, 150, 80, 96, "DialVal", 80.0, 0.0, 100.0, 1.0, "%3.1f");
 	Dial3.applyTheme (defaultTheme);
 
@@ -280,9 +294,11 @@ int main ()
 	// buttons and dials to the foreground widget container
 	MainWindow->add (Widget);
 	Widget.add (VSliderLabel);
+	Widget.add (VSliderLabel2);
 	Widget.add (HSliderLabel);
 	Widget.add (DialLabel);
 	Widget.add (DialLabel2);
+	Widget.add (DialLabel3);
 	Widget.add (ScaleLabel);
 	Widget.add (ScaleLabel2);
 	Widget.add (ButtonLabel);

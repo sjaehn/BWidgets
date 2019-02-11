@@ -1,5 +1,5 @@
 /* Widget.cpp
- * Copyright (C) 2018 by Sven Jähnichen
+ * Copyright (C) 2018, 2019 by Sven Jähnichen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
  */
 
 #include "Widget.hpp"
+#include "Window.hpp"
 #include "FocusWidget.hpp"
 
 namespace BWidgets
@@ -43,7 +44,7 @@ Widget::Widget(const double x, const double y, const double width, const double 
 Widget::Widget (const Widget& that) :
 		extensionData (that.extensionData), x_ (that.x_), y_ (that.y_), width_ (that.width_), height_ (that.height_),
 		visible (that.visible), clickable (that.clickable), draggable (that.draggable), scrollable (that.scrollable),
-		focusable (that.focusable), focusWidget (that.focusWidget),
+		focusable (that.focusable), focusWidget (nullptr),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (that.border_), background_ (that.background_), name_ (that.name_),
 		cbfunction (that.cbfunction), widgetState (that.widgetState)
 {
@@ -81,7 +82,7 @@ Widget& Widget::operator= (const Widget& that)
 	draggable = that.draggable;
 	scrollable = that.scrollable;
 	focusable = that.focusable;
-	focusWidget = that.focusWidget;
+	focusWidget = nullptr;
 	border_ = that.border_;
 	background_ = that.background_;
 	cbfunction = that.cbfunction;
@@ -317,6 +318,32 @@ void Widget::setHeight (const double height)
 	}
 }
 
+void Widget::resize ()
+{
+	double height = 0.0;
+	double width = 0.0;
+
+	for (Widget* w : children_)
+	{
+		if (w->getX () + w->getWidth() > width) width = w->getX () + w->getWidth();
+		if (w->getY () + w->getHeight() > height) height = w->getY () + w->getHeight();
+	}
+	resize (width, height);
+}
+
+void Widget::resize (const double width, const double height)
+{
+	if ((width_ != width) || (height_ != height))
+	{
+		width_ =  width;
+		height_ = height;
+		cairo_surface_destroy (widgetSurface);	// destroy old surface first
+		widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
+		draw (0, 0, width_, height_);
+		if (isVisible () && parent_) parent_->postRedisplay ();
+	}
+}
+
 double Widget::getHeight () const {return height_;}
 
 void Widget::setState (const BColors::State state) {widgetState = state;}
@@ -346,6 +373,10 @@ Widget* Widget::getParent () const {return parent_;}
 bool Widget::hasChildren () const {return (children_.size () > 0 ? true : false);}
 
 std::vector<Widget*> Widget::getChildren () const {return children_;}
+
+void  Widget::setFocusWidget (FocusWidget* widget) {focusWidget = widget;}
+
+FocusWidget*  Widget::getFocusWidget () {return focusWidget;}
 
 void Widget::rename (const std::string& name) {name_ = name;}
 
@@ -382,10 +413,6 @@ bool Widget::isScrollable () const {return scrollable;}
 void Widget::setFocusable (const bool status) {focusable = status;}
 
 bool Widget::isFocusable () const {return focusable;}
-
-void  Widget::setFocusWidget (FocusWidget* widget) {focusWidget = widget;}
-
-FocusWidget*  Widget::getFocusWidget () {return focusWidget;}
 
 void Widget::update ()
 {
@@ -474,7 +501,7 @@ void Widget::focusInCallback (BEvents::Event* event)
 	{
 		Widget* w = (Widget*) (event->getWidget());
 		BEvents::FocusEvent* focusEvent = (BEvents::FocusEvent*) event;
-		if (w->getFocusWidget() && w->getMainWindow())
+		if (w->getMainWindow() && w->getFocusWidget())
 		{
 			Window* main = w->getMainWindow();
 			FocusWidget* focusWidget = w->getFocusWidget();
@@ -693,438 +720,6 @@ bool Widget::fitToArea (double& x, double& y, double& width, double& height)
 	}
 
 	return isInArea;
-}
-
-/*****************************************************************************/
-
-Window::Window () : Window (BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT, "window", 0.0) {}
-
-Window::Window (const double width, const double height, const std::string& title, PuglNativeWindow nativeWindow, bool resizable) :
-		Widget (0.0, 0.0, width, height, title), title_ (title), view_ (NULL), nativeWindow_ (nativeWindow), quit_ (false), pointerX (0),
-		pointerY (0)
-{
-	pointerTime = std::chrono::steady_clock::now();
-	input.fill({nullptr, 0.0, 0.0});
-	main_ = this;
-	view_ = puglInit(NULL, NULL);
-
-	if (nativeWindow_ != 0)
-	{
-		puglInitWindowParent(view_, nativeWindow_);
-	}
-
-	puglInitWindowSize (view_, width_, height_);
-	puglInitResizable (view_, resizable);
-	puglInitContextType (view_, PUGL_CAIRO);
-	puglIgnoreKeyRepeat (view_, true);
-	puglCreateWindow (view_, title.c_str ());
-	puglShowWindow (view_);
-	puglSetHandle (view_, this);
-
-	puglSetEventFunc (view_, Window::translatePuglEvent);
-
-	setBackground (BWIDGETS_DEFAULT_WINDOW_BACKGROUND);
-}
-
-Window::~Window ()
-{
-	purgeEventQueue ();
-	puglDestroy(view_);
-	main_ = nullptr;	// Important switch for the super destructor. It took
-						// days of debugging ...
-}
-
-PuglView* Window::getPuglView () {return view_;}
-
-cairo_t* Window::getPuglContext ()
-{
-	if (view_) return (cairo_t*) puglGetContext (view_);
-	else return NULL;
-}
-
-void Window::run ()
-{
-	while (!quit_)
-	{
-		handleEvents ();
-	}
-}
-
-void Window::onConfigure (BEvents::ExposeEvent* event)
-{
-	if (width_ != event->getWidth ()) setWidth (event->getWidth ());
-	if (height_ != event->getHeight ()) setHeight (event->getHeight ());
-}
-
-void Window::onClose ()
-{
-	quit_ = true;
-}
-
-void Window::onExpose (BEvents::ExposeEvent* event)
-{
-	if (event)
-	{
-		Widget* widget = (Widget*) event->getWidget ();
-
-		// Create a temporal storage surface and store all children surfaces on this
-		cairo_surface_t* storageSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
-		redisplay (storageSurface, event->getX (), event->getY (),
-				   event->getWidth (), event->getHeight ());
-
-		// Copy storage surface onto pugl provided surface
-		cairo_t* cr = main_->getPuglContext ();
-		cairo_save (cr);
-		cairo_set_source_surface (cr, storageSurface, 0, 0);
-		cairo_paint (cr);
-		cairo_restore (cr);
-
-		cairo_surface_destroy (storageSurface);
-	}
-}
-
-void Window::addEventToQueue (BEvents::Event* event)
-{
-	eventQueue.push_back (event);
-}
-
-void Window::setInput (const BEvents::InputDevice device, Widget* widget, double x, double y)
-{
-	if ((device > BEvents::NO_BUTTON) && (device < BEvents::NR_OF_BUTTONS))
-	{
-		input[device].widget = widget;
-		input[device].x = x;
-		input[device].y = y;
-	}
-}
-
-Widget* Window::getInputWidget (BEvents::InputDevice device) const
-{
-	if ((device > BEvents::NO_BUTTON) && (device < BEvents::NR_OF_BUTTONS)) return input[device].widget;
-	else return nullptr;
-}
-
-double Window::getInputX (BEvents::InputDevice device) const
-{
-	if ((device > BEvents::NO_BUTTON) && (device < BEvents::NR_OF_BUTTONS)) return input[device].x;
-	else return 0.0;
-}
-
-double Window::getInputY (BEvents::InputDevice device) const
-{
-	if ((device > BEvents::NO_BUTTON) && (device < BEvents::NR_OF_BUTTONS)) return input[device].y;
-	else return 0.0;
-}
-
-void Window::handleEvents ()
-{
-	puglProcessEvents (view_);
-	translateTimeEvent ();
-
-	while (!eventQueue.empty ())
-	{
-		BEvents::Event* event = eventQueue.front ();
-		if (event)
-		{
-			Widget* widget = (Widget*) event->getWidget ();
-			if (widget)
-			{
-				BEvents::EventType eventType = event->getEventType ();
-
-				switch (eventType)
-				{
-				case BEvents::CONFIGURE_EVENT:
-					onConfigure ((BEvents::ExposeEvent*) event);
-					break;
-
-				case BEvents::EXPOSE_EVENT:
-					onExpose ((BEvents::ExposeEvent*) event);
-					break;
-
-				case BEvents::CLOSE_EVENT:
-					onClose ();
-					break;
-
-				case BEvents::BUTTON_PRESS_EVENT:
-					{
-						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
-						setInput (be->getButton (), widget, be->getX(), be->getY());
-						widget->onButtonPressed (be);
-					}
-					break;
-
-				case BEvents::BUTTON_RELEASE_EVENT:
-					{
-						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
-						setInput (be->getButton (), nullptr, 0.0, 0.0);
-						widget->onButtonReleased (be);
-					}
-					break;
-
-				case BEvents::BUTTON_CLICK_EVENT:
-					{
-						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
-						setInput (be->getButton (), nullptr, 0.0, 0.0);
-						widget->onButtonClicked (be);
-					}
-					break;
-
-				case BEvents::POINTER_MOTION_EVENT:
-					widget->onPointerMotion((BEvents::PointerEvent*) event);
-					break;
-
-				case BEvents::POINTER_DRAG_EVENT:
-					widget->onPointerDragged((BEvents::PointerEvent*) event);
-					break;
-
-				case BEvents::WHEEL_SCROLL_EVENT:
-					widget->onWheelScrolled((BEvents::WheelEvent*) event);
-					break;
-
-				case BEvents::VALUE_CHANGED_EVENT:
-					widget->onValueChanged((BEvents::ValueChangedEvent*) event);
-					break;
-
-				case BEvents::FOCUS_IN_EVENT:
-					widget->onFocusIn((BEvents::FocusEvent*) event);
-					break;
-
-				case BEvents::FOCUS_OUT_EVENT:
-					widget->onFocusOut((BEvents::FocusEvent*) event);
-					break;
-
-				default:
-					break;
-				}
-
-			}
-			delete event;
-		}
-		eventQueue.erase (eventQueue.begin ());
-	}
-}
-
-void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
-{
-	Window* w = (Window*) puglGetHandle (view);
-	switch (event->type) {
-	case PUGL_BUTTON_PRESS:
-		{
-			Widget* widget = w->getWidgetAt (event->button.x, event->button.y, true, true, false, false, false);
-			if (widget)
-			{
-				w->addEventToQueue (new BEvents::PointerEvent (widget,
-															  BEvents::BUTTON_PRESS_EVENT,
-															  event->button.x - widget->getOriginX (),
-															  event->button.y - widget->getOriginY (),
-															  event->button.x - widget->getOriginX (),
-															  event->button.y - widget->getOriginY (),
-															  0, 0,
-															  (BEvents::InputDevice) event->button.button));
-
-				// FOCUS_OUT
-				if (widget->getFocusWidget() && (widget->getFocusWidget()->isFocused()))
-				{
-					w->addEventToQueue(new BEvents::FocusEvent (widget, BEvents::FOCUS_OUT_EVENT, w->pointerX, w->pointerY));
-					widget->getFocusWidget()->setFocused(false);
-				}
-			}
-
-			w->pointerX = event->button.x;
-			w->pointerY = event->button.y;
-			w->pointerTime = std::chrono::steady_clock::now();
-		}
-		break;
-
-	case PUGL_BUTTON_RELEASE:
-		{
-			BEvents::InputDevice device = (BEvents::InputDevice) event->button.button;
-			Widget* widget = w->getInputWidget (device);
-			if (widget)
-			{
-				double xorigin = (widget->getMainWindow() ? widget->getMainWindow()->getInputX (device) : 0);
-				double yorigin = (widget->getMainWindow() ? widget->getMainWindow()->getInputY (device) : 0);
-				w->addEventToQueue (new BEvents::PointerEvent (widget,
-															  BEvents::BUTTON_RELEASE_EVENT,
-															  event->button.x - widget->getOriginX (),
-															  event->button.y - widget->getOriginY (),
-															  xorigin,
-															  yorigin,
-															  0, 0,
-															  device));
-
-
-				// Also emit BUTTON_CLICK_EVENT ?
-				Widget* widget2 = w->getWidgetAt (event->button.x, event->button.y, true, true, false, false, false);
-				if (widget == widget2)
-				{
-					w->addEventToQueue (new BEvents::PointerEvent (widget,
-																  BEvents::BUTTON_CLICK_EVENT,
-																  event->button.x - widget->getOriginX (),
-																  event->button.y - widget->getOriginY (),
-																  xorigin,
-																  yorigin,
-																  0, 0,
-																  device));
-				}
-
-				// FOCUS_OUT
-				if (widget->getFocusWidget() && (widget->getFocusWidget()->isFocused()))
-				{
-					w->addEventToQueue(new BEvents::FocusEvent (widget, BEvents::FOCUS_OUT_EVENT, w->pointerX, w->pointerY));
-					widget->getFocusWidget()->setFocused(false);
-				}
-			}
-
-			w->pointerX = event->button.x;
-			w->pointerY = event->button.y;
-			w->pointerTime = std::chrono::steady_clock::now();
-		}
-		break;
-
-	case PUGL_MOTION_NOTIFY:
-		{
-			BEvents::InputDevice device = BEvents::NO_BUTTON;
-
-			// Scan for pressed buttons associated with a widget
-			for (int i = BEvents::NO_BUTTON + 1; i < BEvents::NR_OF_BUTTONS; ++i)
-			{
-				if (w->getInputWidget ((BEvents::InputDevice) i))
-				{
-					device = (BEvents::InputDevice) i;
-					Widget* widget = w->getInputWidget (device);
-					if (widget->isDraggable ())
-					{
-						double xorigin = w->getInputX (device);
-						double yorigin = w->getInputY (device);
-
-						// new
-						w->addEventToQueue (new BEvents::PointerEvent (widget,
-																	   BEvents::POINTER_DRAG_EVENT,
-																	   event->motion.x - widget->getOriginX (),
-																	   event->motion.y - widget->getOriginY (),
-																	   xorigin,
-																	   yorigin,
-																	   event->motion.x - w->pointerX,
-																	   event->motion.y - w->pointerY,
-																	   device));
-					}
-
-					// FOCUS_OUT
-					if (widget->getFocusWidget() && (widget->getFocusWidget()->isFocused()))
-					{
-						w->addEventToQueue(new BEvents::FocusEvent (widget, BEvents::FOCUS_OUT_EVENT, w->pointerX, w->pointerY));
-						widget->getFocusWidget()->setFocused(false);
-					}
-				}
-			}
-
-			// No button associated with a widget? Only POINTER_MOTION_EVENT
-			if (device == BEvents::NO_BUTTON)
-			{
-				Widget* widget = w->getWidgetAt (event->motion.x, event->motion.y, true, false, false, false, false);
-				if (widget)
-				{
-					w->addEventToQueue (new BEvents::PointerEvent (widget,
-																   BEvents::POINTER_MOTION_EVENT,
-																   event->motion.x - widget->getOriginX (),
-																   event->motion.y - widget->getOriginY (),
-																   0, 0,
-																   event->motion.x - w->pointerX,
-																   event->motion.y - w->pointerY,
-																   device));
-				}
-
-				// FOCUS_OUT
-				if (widget->getFocusWidget() && (widget->getFocusWidget()->isFocused()))
-				{
-					w->addEventToQueue(new BEvents::FocusEvent (widget, BEvents::FOCUS_OUT_EVENT, w->pointerX, w->pointerY));
-					widget->getFocusWidget()->setFocused(false);
-				}
-
-			}
-
-			w->pointerX = event->motion.x;
-			w->pointerY = event->motion.y;
-			w->pointerTime = std::chrono::steady_clock::now();
-		}
-		break;
-
-	case PUGL_SCROLL:
-		{
-			Widget* widget = w->getWidgetAt (event->button.x, event->button.y, true, false, false, true, false);
-			if (widget)
-			{
-				w->addEventToQueue(new BEvents::WheelEvent (widget,
-															BEvents::WHEEL_SCROLL_EVENT,
-															event->scroll.x,
-															event->scroll.y,
-															event->scroll.dx,
-															event->scroll.dy));
-			}
-		}
-		break;
-
-	case PUGL_CONFIGURE:
-		w->addEventToQueue (new BEvents::ExposeEvent (w,
-													  BEvents::CONFIGURE_EVENT,
-													  event->configure.x,
-													  event->configure.y,
-													  event->configure.width,
-													  event->configure.height));
-		break;
-
-	case PUGL_EXPOSE:
-		w->postRedisplay ();
-		break;
-
-	case PUGL_CLOSE:
-		w->addEventToQueue (new BEvents::Event (w, BEvents::CLOSE_EVENT));
-		break;
-
-	default:
-		break;
-	}
-
-}
-
-void Window::translateTimeEvent ()
-{
-	Widget* widget = getWidgetAt (pointerX, pointerY, true, false, false, false, true);
-	if ((widget) && (widget->getFocusWidget()))
-	{
-		FocusWidget* focusWidget = widget->getFocusWidget();
-		std::chrono::steady_clock::time_point nowTime = std::chrono::steady_clock::now();
-
-		std::chrono::milliseconds diffMs = std::chrono::duration_cast<std::chrono::milliseconds> (nowTime - pointerTime);
-
-		if (diffMs > focusWidget->getFocusInMilliseconds() + focusWidget->getFocusOutMilliseconds())
-		{
-			if (focusWidget->isFocused())
-			{
-				addEventToQueue(new BEvents::FocusEvent (widget, BEvents::FOCUS_OUT_EVENT, pointerX, pointerY));
-				focusWidget->setFocused(false);
-			}
-		}
-		else if (diffMs > focusWidget->getFocusInMilliseconds())
-		{
-			if (!focusWidget->isFocused())
-			{
-				addEventToQueue(new BEvents::FocusEvent (widget, BEvents::FOCUS_IN_EVENT, pointerX, pointerY));
-				focusWidget->setFocused(true);
-			}
-		}
-	}
-}
-
-void Window::purgeEventQueue ()
-{
-	while (!eventQueue.empty ())
-	{
-		BEvents::Event* event = eventQueue.back ();
-		if (event) delete event;
-		eventQueue.pop_back ();
-	}
 }
 
 }

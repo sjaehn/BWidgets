@@ -23,6 +23,7 @@
 
 #define BWIDGETS_DEFAULT_FOCUS_IN_TIME 1000
 #define BWIDGETS_DEFAULT_FOCUS_OUT_TIME 5000
+#define BWIDGETS_DEFAULT_FOCUS_NAME "/focus"
 
 namespace BWidgets
 {
@@ -36,7 +37,10 @@ class FocusWidget : public Widget
 {
 public:
 	FocusWidget ();
-	FocusWidget (const std::string& name);
+	FocusWidget (Widget* hostWidget, const std::string& name);
+	~FocusWidget ();
+
+	//TODO Copy constructor
 
 	void setFocusInMilliseconds (const std::chrono::milliseconds ms);
 
@@ -50,10 +54,15 @@ public:
 
 	bool isFocused () const;
 
+	void link (Widget* hostWidget);
+
+	void unlink ();
+
 protected:
 	std::chrono::milliseconds focusInMs;
 	std::chrono::milliseconds focusOutMs;
 	bool focusEntered;
+	Widget* host;
 };
 
 }

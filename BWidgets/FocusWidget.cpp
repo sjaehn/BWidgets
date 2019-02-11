@@ -19,13 +19,18 @@
 
 namespace BWidgets
 {
-FocusWidget::FocusWidget () : FocusWidget ("focus") {}
+FocusWidget::FocusWidget () : FocusWidget (nullptr, "focus") {}
 
-FocusWidget::FocusWidget (const std::string& name) :
+FocusWidget::FocusWidget (Widget* hostWidget, const std::string& name) :
 		Widget (0, 0, 100, 20, name), focusInMs (BWIDGETS_DEFAULT_FOCUS_IN_TIME), focusOutMs (BWIDGETS_DEFAULT_FOCUS_OUT_TIME),
-		focusEntered (false) {}
+		focusEntered (false), host (nullptr)
+{
+	link (hostWidget);
+}
 
-// TODO override/ shadow add method to resize container
+// TODO Copy constructor
+
+FocusWidget::~FocusWidget () {unlink ();}
 
 void FocusWidget::setFocusInMilliseconds (const std::chrono::milliseconds ms) {focusInMs = ms;}
 
@@ -38,5 +43,17 @@ std::chrono::milliseconds FocusWidget::getFocusOutMilliseconds () const {return 
 void FocusWidget::setFocused (const bool status) {focusEntered = status;}
 
 bool FocusWidget::isFocused () const {return focusEntered;}
+
+void FocusWidget::link (Widget* hostWidget)
+{
+	if (hostWidget) hostWidget->setFocusWidget (this);
+	host = hostWidget;
+}
+
+void FocusWidget::unlink ()
+{
+	if (host) host->setFocusWidget (nullptr);
+	host = nullptr;
+}
 
 }

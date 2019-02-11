@@ -19,6 +19,7 @@
 #define BWIDGETS_VALUEWIDGET_HPP_
 
 #include "Widget.hpp"
+#include "Window.hpp"
 
 #define BWIDGETS_DEFAULT_VALUE 0.0
 #define BWIDGETS_DEFAULT_VALUE_FORMAT "%3.2f"

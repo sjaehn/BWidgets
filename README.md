@@ -54,6 +54,7 @@ namespace BEvents
       ├── ExposeEvent
       ├── PointerEvent
       ├── WheelEvent
+      ├── FocusEvent
       ╰── ValueChangedEvent
        
 namespace BItems
@@ -62,6 +63,7 @@ namespace BItems
 namespace BWidgets
  ╰── Widget
       ├── Window
+      ├── FocusWidget
       ├── DrawingSurface
       ├── Label
       ├── Text
@@ -91,3 +93,16 @@ namespace BWidgets
                           ╰── DisplayVSlider
  
 ```
+
+Widgets
+-------
+
+All widget classes of BWidgets are derived from **BWidgets::Widget**. This widget class contain all important basic widget informations, such as position in the widget tree (children, parent, main), position on screen (relative to its parent widget), size, border, background, visibility and their ability to emit events (clickability, draggability, scrollability, focusability). Thus, all derived widget inherit and may extend these properties.
+
+The most important class of BWidgets is **BWidgets::Window**. An object of this class is not only the main window to add all other widget to. Is also hosts the event handler and represents the connection to the system. Therefore, only one BWidgets::Window is allowed.
+
+The **BWidgets::FocusWidget** class is the only derived class that is handled in both BWidgets::Widget and BWidgets::Window. It is a container class for widgets that pop up (or off) upon a FocusEvent. The widget itself hosts parameters for FocusEvent handling, such as the time for focus in and out.
+
+**BWidgets::ValueWidget**s extends BWidgets::Widgets by a value and their ability to emit ValueChangedEvents.
+
+In **BWidgets::RangeWidget**s, the value is additionally kept within a defines range. 

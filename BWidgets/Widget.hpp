@@ -1,5 +1,5 @@
 /* Widget.hpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,6 @@
 #define BWIDGETS_DEFAULT_NORMALLIGHTED 0.0
 #define BWIDGETS_DEFAULT_SHADOWED -0.333
 #define BWIDGETS_DEFAULT_DARKENED -0.5
-
-// Default BWidgets::Window settings (Note: use non-transparent backgrounds only)
-#define BWIDGETS_DEFAULT_WINDOW_BACKGROUND BStyles::blackFill
 
 // Default settings for all text containing widgets
 #define BWIDGETS_DEFAULT_TEXT_COLORS BColors::lights
@@ -218,6 +215,16 @@ public:
 	double getHeight () const;
 
 	/**
+	 * Resizes the widget, redraw and emits a BEvents::ExposeEvent if the
+	 * widget is visible. If no parameters are given, the widget will be
+	 * resized to the size of the containing child widgets.
+	 * @param width		New widgets width
+	 * @param height	New widgets height
+	 */
+	void resize ();
+	void resize (const double width, const double height);
+
+	/**
 	 * Gets the x offset of the widget content. This is distance between the
 	 * outer border and the widget content. It is also the sum of margin,
 	 * border, and padding.
@@ -312,6 +319,19 @@ public:
 	std::vector<Widget*> getChildren () const;
 
 	/**
+	 * Links a widget that will pop up following a BEvents::FOCUS_EVENT.
+	 * @param widget	Pointer to a widget or nullptr
+	 */
+	void setFocusWidget (FocusWidget* widget);
+
+	/**
+	 * Fets the link to the widget that will pop up following a
+	 * BEvents::FOCUS_EVENT.
+	 * @param return	Pointer to a widget or nullptr
+	 */
+	FocusWidget* getFocusWidget ();
+
+	/**
 	 * Renames the widget.
 	 * @param name New name
 	 */
@@ -391,14 +411,6 @@ public:
 	 * @return TRUE if widget is focusable, otherwise false
 	 */
 	bool isFocusable () const;
-
-	/**
-	 * Links a widget that pops up following a BEvents::FOCUS_EVENT.
-	 * @param widget	Pointer to a widget or nullptr
-	 */
-	void setFocusWidget (FocusWidget* widget);
-
-	FocusWidget* getFocusWidget ();
 
 	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the
@@ -587,146 +599,6 @@ protected:
 	FocusWidget* focusWidget;
 
 };
-
-/**
- * Class BWidgets::Window
- *
- * Main window class of BWidgets. Add all other widgets (directly or
- * indirectly) to this window.
- * A BWidgets::Window is the BWidgets::Widget that is controlled by the host
- * via Pugl, receives host events via Pugl and coordinates handling of all
- * events. Configure, expose, and close events will be handled directly and
- * exclusively by this widget.
- */
-class Window : public Widget
-{
-public:
-	Window ();
-	Window (const double width, const double height, const std::string& title, PuglNativeWindow nativeWindow, bool resizable = false);
-
-	Window (const Window& that) = delete;	// Only one window in this version
-
-	~Window ();
-
-	Window& operator= (const Window& that) = delete;	// Only one Window in this version
-
-	/**
-	 * Gets in contact to the host system via Pugl
-	 * @return Pointer to the PuglView
-	 */
-	PuglView* getPuglView ();
-
-	/**
-	 * Gets the Cairo context provided by the host system via Pugl
-	 * @return Pointer to the Cairo context
-	 */
-	cairo_t* getPuglContext ();
-
-	/**
-	 * Runs the window until the close flag is set and thus it will be closed.
-	 * For stand-alone applications.
-	 */
-	void run ();
-
-	/**
-	 * Queues an event until the next call of the handleEvents method.
-	 * @param event Event
-	 */
-	void addEventToQueue (BEvents::Event* event);
-
-	/**
-	 * Main Event handler. Walks through the event queue and sorts the events
-	 * to their respective onXXX handling methods
-	 */
-	void handleEvents ();
-
-	/**
-	 * Executes an reexposure of the area given by the expose event.
-	 * @param event Expose event containing the widget that emitted the event
-	 * 				and the area that should be reexposed.
-	 */
-	virtual void onExpose (BEvents::ExposeEvent* event) override;
-
-	/**
-	 * Predefined empty method to handle a BEvents::EventType::CONFIGURE_EVENT.
-	 * BEvents::EventType::CONFIGURE_EVENTs will only be handled by
-	 * BWidget::Window.
-	 */
-	virtual void onConfigure (BEvents::ExposeEvent* event) override;
-
-	/**
-	 * Sets the close flag and thus ends the run method.
-	 */
-	virtual void onClose () override;
-
-	/*
-	 * Links or unlinks a mouse button to a widget.
-	 * @param device	Button
-	 * @param widget	Pointer to the widget to be linked or nullptr to unlink
-	 * @param x			X position relative to the widgets origin where the button
-	 * 					was pressed
-	 * @param y			Y position relative to the widgets origin where the button
-	 * 					was pressed
-	 */
-	void setInput (const BEvents::InputDevice device, Widget* widget, double x, double y);
-
-	/*
-	 * Gets the links from mouse button to a widget.
-	 * @param device Button
-	 * @return Pointer to the linked widget or nullptr
-	 */
-	Widget* getInputWidget (BEvents::InputDevice device) const;
-
-	/*
-	 * Gets the button press position relative to the widgets origin
-	 * @param device	Button
-	 * @return			X position
-	 */
-	double getInputX (BEvents::InputDevice device) const;
-
-	/*
-	 * Gets the button press position relative to the widgets origin
-	 * @param device	Button
-	 * @return			Y position
-	 */
-	double getInputY (BEvents::InputDevice device) const;
-
-protected:
-
-	/**
-	 * Communication interface to the host via Pugl. Translates PuglEvents to
-	 * BEvents::Event derived objects.
-	 */
-	static void translatePuglEvent (PuglView* view, const PuglEvent* event);
-	void translateTimeEvent ();
-
-	void purgeEventQueue ();
-
-	std::string title_;
-	PuglView* view_;
-	PuglNativeWindow nativeWindow_;
-	bool quit_;
-
-	double pointerX;
-	double pointerY;
-	std::chrono::steady_clock::time_point pointerTime;
-
-	typedef struct
-	{
-		Widget* widget;
-		double x;
-		double y;
-	} Input;
-
-	/**
-	 * Stores either nullptr or (a pointer to) the widget that emitted the
-	 * BEvents::BUTTON_PRESS_EVENT until a BEvents::BUTTON_RELEASE_EVENT or
-	 * the linked widget is released or destroyed.
-	 */
-	std::array<Input, BEvents::InputDevice::NR_OF_BUTTONS> input;
-	std::vector<BEvents::Event*> eventQueue;
-};
-
 }
 
 

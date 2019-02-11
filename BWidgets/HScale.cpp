@@ -26,19 +26,44 @@ HScale::HScale (const double  x, const double y, const double width, const doubl
 				  const double value, const double min, const double max, const double step) :
 		RangeWidget (x, y, width, height, name, value, min, max, step),
 		fgColors (BWIDGETS_DEFAULT_FGCOLORS), bgColors (BWIDGETS_DEFAULT_BGCOLORS),
-		scaleX0 (0), scaleY0 (0), scaleWidth (width), scaleHeight (height), scaleXValue (0)
+		scaleX0 (0), scaleY0 (0), scaleWidth (width), scaleHeight (height), scaleXValue (0),
+		focusLabel (0, 0, 80, 20, name + BWIDGETS_DEFAULT_FOCUS_NAME + BWIDGETS_DEFAULT_FOCUS_LABEL_NAME, "")
 {
 	setClickable (true);
 	setDraggable (true);
 	setScrollable (true);
+
+	std::string valstr = BValues::toBString (value);
+	focusLabel.setText(valstr);
+	focusLabel.resize (focusLabel.getTextWidth (valstr) + 10, 20);
+	focusWidget = new FocusWidget (this, name + BWIDGETS_DEFAULT_FOCUS_NAME);
+	if (focusWidget)
+	{
+		focusWidget->add (focusLabel);
+		focusWidget->resize ();
+	}
 }
 
 HScale::HScale (const HScale& that) :
 		RangeWidget (that), fgColors (that.fgColors), bgColors (that.bgColors), scaleX0 (that.scaleX0), scaleY0 (that.scaleY0),
-		scaleWidth (that.scaleWidth), scaleHeight (that.scaleHeight), scaleXValue (that.scaleXValue)
-{}
+		scaleWidth (that.scaleWidth), scaleHeight (that.scaleHeight), scaleXValue (that.scaleXValue),
+		focusLabel (0, 0, 80, 20, that.name_ + BWIDGETS_DEFAULT_FOCUS_NAME + BWIDGETS_DEFAULT_FOCUS_LABEL_NAME, "")
+{
+	std::string valstr = BValues::toBString (value);
+	focusLabel.setText(valstr);
+	focusLabel.resize (focusLabel.getTextWidth (valstr) + 10, 20);
+	focusWidget = new FocusWidget (this, that.name_ + BWIDGETS_DEFAULT_FOCUS_NAME);
+	if (focusWidget)
+	{
+		focusWidget->add (focusLabel);
+		focusWidget->resize ();
+	}
+}
 
-HScale::~HScale () {}
+HScale::~HScale ()
+{
+	if (focusWidget) delete focusWidget;
+}
 
 HScale& HScale::operator= (const HScale& that)
 {
@@ -49,9 +74,26 @@ HScale& HScale::operator= (const HScale& that)
 	scaleWidth = that.scaleWidth;
 	scaleHeight = that.scaleHeight;
 	scaleXValue = that.scaleXValue;
+	if (focusWidget) delete focusWidget;
+	focusLabel = that.focusLabel;
+	focusWidget = new FocusWidget (this, that.name_ + BWIDGETS_DEFAULT_FOCUS_NAME);
+	if (focusWidget)
+	{
+		focusWidget->add (focusLabel);
+		focusWidget->resize ();
+	}
 	RangeWidget::operator= (that);
 
 	return *this;
+}
+
+void HScale::setValue (const double val)
+{
+	RangeWidget::setValue (val);
+	std::string valstr = BValues::toBString (value);
+	focusLabel.setText(valstr);
+	focusLabel.resize (focusLabel.getTextWidth (valstr) + 10, 20);
+	if (focusWidget) focusWidget->resize();
 }
 
 void HScale::update ()
@@ -64,6 +106,9 @@ void HScale::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
 
 void HScale::applyTheme (BStyles::Theme& theme, const std::string& name)
 {
+	if (focusWidget) focusWidget->applyTheme (theme, name + BWIDGETS_DEFAULT_FOCUS_NAME);
+	focusLabel.applyTheme (theme, name + BWIDGETS_DEFAULT_FOCUS_NAME + BWIDGETS_DEFAULT_FOCUS_LABEL_NAME);
+
 	Widget::applyTheme (theme, name);
 
 	// Foreground colors (scale)

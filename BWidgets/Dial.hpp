@@ -21,12 +21,15 @@
 #include "RangeWidget.hpp"
 #include "Knob.hpp"
 #include "DrawingSurface.hpp"
+#include "Label.hpp"
 
 #define BWIDGETS_DEFAULT_DIAL_WIDTH 50.0
 #define BWIDGETS_DEFAULT_DIAL_HEIGHT 50.0
 #define BWIDGETS_DEFAULT_DIAL_KNOB_SIZE 0.6
 #define BWIDGETS_DEFAULT_DIAL_DEPTH 1.0
 #define BWIDGETS_DEFAULT_DIAL_DOT_SIZE 0.1
+
+#define BWIDGETS_DEFAULT_FOCUS_LABEL_NAME "/label"
 
 namespace BWidgets
 {
@@ -59,6 +62,14 @@ public:
 	 * @param that Source widget
 	 */
 	Dial& operator= (const Dial& that);
+
+	/**
+	 * Changes the value of the widget and keeps it within the defined range.
+	 * Passes the value to its predefined child widgets.
+	 * Emits a value changed event and (if visible) an expose event.
+	 * @param val Value
+	 */
+	virtual void setValue (const double val) override;
 
 	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the
@@ -116,6 +127,8 @@ protected:
 	DrawingSurface dot;
 	BColors::ColorSet fgColors;
 	BColors::ColorSet bgColors;
+
+	Label focusLabel;
 };
 
 }
