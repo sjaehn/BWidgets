@@ -182,7 +182,7 @@ int main ()
 	HSliderLabel.applyTheme (defaultTheme, "Label");
 	BWidgets::HSlider Slider3 = BWidgets::HSlider (100, 30, 240, 20, "Slider", 80.0, 0.0, 100.0, 0.0);
 	Slider3.applyTheme (defaultTheme);
-	BWidgets::HSlider Slider4 = BWidgets::HSlider (100, 60, 240, 20, "Slider", 80.0, 0.0, 100.0, -0.01);
+	BWidgets::HSlider Slider4 = BWidgets::HSlider (100, 60, 240, 20, "Slider", 80.0, 0.0, 100.0, -1);
 	Slider4.applyTheme (defaultTheme);
 	BWidgets::DisplayHSlider Slider5 = BWidgets::DisplayHSlider (100, 80, 240, 40, "DialVal",
 																				   80.0, 0.0, 100.0, 0.0, "%3.1f");
@@ -213,10 +213,10 @@ int main ()
 	ScaleLabel.applyTheme (defaultTheme, "Label");
 	BWidgets::Label ScaleLabel2 = BWidgets::Label (360, 26, 120, 16, "hardChangeable = false");
 	ScaleLabel2.applyTheme (defaultTheme, "smallLabel");
-	BWidgets::VScale Scale1 (380, 50, 10, 80, "Slider", 80.0, 0.0, 100.0, -0.01);
+	BWidgets::VScale Scale1 (380, 50, 10, 80, "Slider", 80.0, 0.0, 100.0, -1);
 	Scale1.applyTheme (defaultTheme);
 	Scale1.setHardChangeable (false);
-	BWidgets::HScale Scale2 (400, 50, 60, 10, "Slider", 80.0, 0.0, 100.0, -0.01);
+	BWidgets::HScale Scale2 (400, 50, 60, 10, "Slider", 80.0, 0.0, 100.0, -1);
 	Scale2.applyTheme (defaultTheme);
 	Scale2.setHardChangeable (false);
 
