@@ -27,33 +27,13 @@ HPianoRoll::HPianoRoll (const double x, const double y, const double width, cons
 
 HPianoRoll::HPianoRoll (const double x, const double y, const double width, const double height, const std::string& name,
 						const int startMidiKey, const int endMidiKey) :
-		Widget (x, y, width, height, name),
-		startMidiKey (startMidiKey), endMidiKey (endMidiKey),
-		activeKeys (endMidiKey - startMidiKey + 1, true), pressedKeys (endMidiKey - startMidiKey + 1, false),
+		PianoWidget (x, y, width, height, name, startMidiKey, endMidiKey),
 		blackBgColors ({{0.1, 0.1, 0.1, 1.0}, {0.4, 0.1, 0.1, 1.0}, {0.25, 0.25, 0.25, 1.0}, {0.0, 0.0, 0.0, 1.0}}),
 		whiteBgColors ({{0.9, 0.9, 0.9, 1.0}, {1.0, 0.75, 0.75, 1.0}, {0.5, 0.5, 0.5, 1.0}, {0.0, 0.0, 0.0, 1.0}}),
 		toggleKeys (false), actKeyNr (-1)
 {
 	setDraggable (true);
 }
-
-void HPianoRoll::pressKeys (std::vector<bool>& keys)
-{
-	if (keys.size() == endMidiKey - startMidiKey + 1) pressedKeys = keys;
-	// TODO else throw exception
-	update ();
-}
-
-std::vector<bool> HPianoRoll::getPressedKeys () const {return pressedKeys;}
-
-void HPianoRoll::activateKeys (std::vector<bool>& keys)
-{
-	if (keys.size() == endMidiKey - startMidiKey + 1) activeKeys = keys;
-	// TODO else throw exception
-	update ();
-}
-
-std::vector<bool> HPianoRoll::getActiveKeys () const {return activeKeys;}
 
 void HPianoRoll::setKeysToggleable (const bool toggle) {toggleKeys = toggle;}
 

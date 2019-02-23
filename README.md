@@ -68,29 +68,31 @@ namespace BWidgets
       ├── Label
       ├── Text
       ├── Knob
-      ╰── ValueWidget
-           ├── Button
-           │    ├── UpButton
-           │    ├── DownButton
-           │    ├── TextButton
-           │    ╰── ToggleButton
-           │         ╰── TextToggleButton
-           ├── MessageBox
-           ├── ItemBox
-           │    ╰── PopupListBox
-           ├── ChoiceBox
-           │    ╰── ListBox
-           ╰── RangeWidget
-                ├── Dial
-                │    ╰── DisplayDial
-                ├── HScale
-                │    ╰── HSlider
-                │         ├── HSwitch
-                │         ╰── DisplayHSlider
-                ╰── VScale
-                     ╰── VSlider
-                          ├── VSwitch
-                          ╰── DisplayVSlider
+      ├── ValueWidget
+      │    ├── Button
+      │    │    ├── UpButton
+      │    │    ├── DownButton
+      │    │    ├── TextButton
+      │    │    ╰── ToggleButton
+      │    │         ╰── TextToggleButton
+      │    ├── MessageBox
+      │    ├── ItemBox
+      │    │    ╰── PopupListBox
+      │    ├── ChoiceBox
+      │    │    ╰── ListBox
+      │    ╰── RangeWidget
+      │         ├── Dial
+      │         │    ╰── DisplayDial
+      │         ├── HScale
+      │         │    ╰── HSlider
+      │         │         ├── HSwitch
+      │         │         ╰── DisplayHSlider
+      │         ╰── VScale
+      │              ╰── VSlider
+      │                   ├── VSwitch
+      │                   ╰── DisplayVSlider
+      ╰── PianoWidget
+           ╰── HPianoRoll
  
 ```
 
