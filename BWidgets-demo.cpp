@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #include "BWidgets/BWidgets.hpp"
 
 static void showValue (BEvents::Event* event)
@@ -129,6 +128,15 @@ int main ()
 	// The starting point is the main window. All widgets will be added to this
 	// window later.
 	BWidgets::Window* MainWindow = new BWidgets::Window (640, 480, "Window", 0);
+
+	// Piano roll
+	BWidgets::HPianoRoll piano (20, 380, 600, 60, "piano");
+	std::vector<bool> activeKeys = piano.getActiveKeys();
+	std::fill (activeKeys.begin(), activeKeys.begin() + 48, false);
+	std::fill (activeKeys.begin() + 72, activeKeys.end(), false);
+	piano.activateKeys(activeKeys);
+	piano.setKeysToggleable(false);
+	MainWindow->add (piano);
 
 	// Definition of a few container widgets.
 	BWidgets::Widget Widget2 = BWidgets::Widget (100, 100, 500, 300, "BackgroundWidget");
@@ -337,9 +345,6 @@ int main ()
 	mBox4.addButton ("Maybe");
 	mBox4.moveTo (320, 290);
 	MainWindow->add (mBox4);
-
-
-	//MainWindow->showChildrenTree (MainWindow, 0);
 
 	// Run until main window is closed
 	MainWindow->run ();
