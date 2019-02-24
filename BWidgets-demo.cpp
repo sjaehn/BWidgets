@@ -272,9 +272,9 @@ int main ()
 	Surface.setDraggable (true);
 
 	// Box widgets
-	BWidgets::ChoiceBox choiceBox (10, 10, 100, 40, "ChoiceBox", {"Berlin", "Paris", "London", "Dublin", "Stockholm", "Madrid", "Riga"}, 1.0);
+	BWidgets::ChoiceBox choiceBox (10, 10, 100, 40, "ChoiceBox", {{0,"Berlin"}, {1,"Paris"}, {2,"London"}, {4,"Dublin"}, {6,"Stockholm"}, {9,"Madrid"}, {8,"Riga"}}, 1.0);
 	BWidgets::ListBox listBox (130, 10, 100, 140, "ListBox", {"Mumbai", "Hyderabad", "Lucknow", "Dehli", "Jaipur", "Surat", "Patna", "Agra", "Goa", "Jammu"});
-	BWidgets::PopupListBox popupListBox (250, 10, 100, 20, 100, 140, "PopupListBox", {"Arusha", "Moshi", "Tanga", "Dodoma", "Mwanza", "Dar es Salaam", "Mbeya", "Zanzibar"});
+	BWidgets::PopupListBox popupListBox (250, 10, 100, 20, 100, 140, "PopupListBox", {{0,"Arusha"}, {1,"Moshi"}, {16,"Tanga"}, {3,"Dodoma"}, {5,"Mwanza"}, {7,"Dar es Salaam"}, {9,"Mbeya"}, {11,"Zanzibar"}});
 
 	// Add the background widget container to the main window and add all label
 	// widgets and switches to the background widget container
