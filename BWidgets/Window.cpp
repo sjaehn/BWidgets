@@ -144,6 +144,38 @@ double Window::getInputY (BEvents::InputDevice device) const
 	else return 0.0;
 }
 
+void Window::mergeEvents ()
+{
+	if ((eventQueue.size () > 1) && (eventQueue.front()))
+	{
+		BEvents::Event* event = eventQueue.front ();
+
+		// Check for mergeable events
+		// Wheel scroll events
+		if (event->getEventType() == BEvents::WHEEL_SCROLL_EVENT)
+		{
+			BEvents::WheelEvent* firstEvent = (BEvents::WheelEvent*) event;
+			while ((eventQueue.size () > 1) && (eventQueue[1]))
+			{
+				BEvents::WheelEvent* nextEvent = (BEvents::WheelEvent*) eventQueue[1];
+				if (
+						(nextEvent->getEventType() == BEvents::WHEEL_SCROLL_EVENT) &&
+						(nextEvent->getWidget() == firstEvent->getWidget()) &&
+						(nextEvent->getX() == firstEvent->getX()) &&
+						(nextEvent->getY() == firstEvent->getY())
+					)
+				{
+					firstEvent->setDeltaX (nextEvent->getDeltaX() + firstEvent->getDeltaX());
+					firstEvent->setDeltaY (nextEvent->getDeltaY() + firstEvent->getDeltaY());
+					eventQueue.erase (eventQueue.begin() + 1);
+				}
+
+				else break;
+			}
+		}
+	}
+}
+
 void Window::handleEvents ()
 {
 	puglProcessEvents (view_);
@@ -151,6 +183,8 @@ void Window::handleEvents ()
 
 	while (!eventQueue.empty ())
 	{
+		mergeEvents ();
+
 		BEvents::Event* event = eventQueue.front ();
 		if (event)
 		{
