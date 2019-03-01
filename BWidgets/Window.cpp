@@ -151,7 +151,57 @@ void Window::mergeEvents ()
 		BEvents::Event* event = eventQueue.front ();
 
 		// Check for mergeable events
-		// Wheel scroll events
+
+		// TODO EXPOSE_EVENT
+
+		// POINTER_MOTION_EVENT
+		if (event->getEventType() == BEvents::POINTER_MOTION_EVENT)
+		{
+			BEvents::PointerEvent* firstEvent = (BEvents::PointerEvent*) event;
+			while ((eventQueue.size () > 1) && (eventQueue[1]))
+			{
+				BEvents::PointerEvent* nextEvent = (BEvents::PointerEvent*) eventQueue[1];
+				if ((nextEvent->getEventType() == BEvents::POINTER_MOTION_EVENT) && (nextEvent->getWidget() == firstEvent->getWidget()))
+				{
+					firstEvent->setX (nextEvent->getX());
+					firstEvent->setY (nextEvent->getY());
+					firstEvent->setDeltaX (nextEvent->getDeltaX() + firstEvent->getDeltaX());
+					firstEvent->setDeltaY (nextEvent->getDeltaY() + firstEvent->getDeltaY());
+					eventQueue.erase (eventQueue.begin() + 1);
+				}
+
+				else break;
+			}
+		}
+
+		// POINTER_DRAG_EVENT
+		if (event->getEventType() == BEvents::POINTER_DRAG_EVENT)
+		{
+			BEvents::PointerEvent* firstEvent = (BEvents::PointerEvent*) event;
+			while ((eventQueue.size () > 1) && (eventQueue[1]))
+			{
+				BEvents::PointerEvent* nextEvent = (BEvents::PointerEvent*) eventQueue[1];
+				if (
+						(nextEvent->getEventType() == BEvents::POINTER_DRAG_EVENT) &&
+						(nextEvent->getWidget() == firstEvent->getWidget()) &&
+						(nextEvent->getButton() == firstEvent->getButton()) &&
+						(nextEvent->getXOrigin() == firstEvent->getXOrigin()) &&
+						(nextEvent->getYOrigin() == firstEvent->getYOrigin())
+					)
+				{
+					firstEvent->setX (nextEvent->getX());
+					firstEvent->setY (nextEvent->getY());
+					firstEvent->setDeltaX (nextEvent->getDeltaX() + firstEvent->getDeltaX());
+					firstEvent->setDeltaY (nextEvent->getDeltaY() + firstEvent->getDeltaY());
+					eventQueue.erase (eventQueue.begin() + 1);
+				}
+
+				else break;
+			}
+		}
+
+
+		// WHEEL_SCROLL_EVENT
 		if (event->getEventType() == BEvents::WHEEL_SCROLL_EVENT)
 		{
 			BEvents::WheelEvent* firstEvent = (BEvents::WheelEvent*) event;

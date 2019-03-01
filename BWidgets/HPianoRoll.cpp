@@ -33,6 +33,7 @@ HPianoRoll::HPianoRoll (const double x, const double y, const double width, cons
 		toggleKeys (false), actKeyNr (-1)
 {
 	setDraggable (true);
+	cbfunction[BEvents::EventType::POINTER_DRAG_EVENT] = Widget::defaultCallback;
 }
 
 void HPianoRoll::setKeysToggleable (const bool toggle) {toggleKeys = toggle;}
@@ -68,6 +69,9 @@ void HPianoRoll::onButtonPressed (BEvents::PointerEvent* event)
 
 			actKeyNr = newKeyNr;
 		}
+
+		if (event->getEventType() == BEvents::BUTTON_PRESS_EVENT) Widget::onButtonPressed (event);
+		else if (event->getEventType() == BEvents::POINTER_DRAG_EVENT) Widget::onPointerDragged (event);
 	}
 }
 
@@ -82,6 +86,8 @@ void HPianoRoll::onButtonReleased (BEvents::PointerEvent* event)
 		}
 		actKeyNr = -1;
 	}
+
+	Widget::onButtonReleased (event);
 }
 
 void HPianoRoll::onPointerDragged (BEvents::PointerEvent* event)
