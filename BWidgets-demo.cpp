@@ -24,6 +24,15 @@ static void showValue (BEvents::Event* event)
 	}
 }
 
+static void showKey (BEvents::Event* event)
+{
+	if ((event) && (event->getWidget ()))
+	{
+		BEvents::KeyEvent* ke = (BEvents::KeyEvent*) event;
+		((BWidgets::Label*) ke->getWidget ())->setText (ke->getKeyUTF8 ());
+	}
+}
+
 int main ()
 {
 	//Define Styles and Colors first
@@ -41,6 +50,8 @@ int main ()
 											   BStyles::TEXT_ALIGN_LEFT, BStyles::TEXT_VALIGN_TOP);
 	BStyles::Font labelFont = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0,
 											 BStyles::TEXT_ALIGN_CENTER, BStyles::TEXT_VALIGN_MIDDLE);
+	BStyles::Font bigFont = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 20.0,
+											 BStyles::TEXT_ALIGN_CENTER, BStyles::TEXT_VALIGN_MIDDLE);
 	BStyles::Font smallFont = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 8.0,
 											 BStyles::TEXT_ALIGN_CENTER, BStyles::TEXT_VALIGN_MIDDLE);
 
@@ -49,6 +60,8 @@ int main ()
 		defaultStyles,
 		{"Window", {{"background", STYLEPTR (&BStyles::blackFill)},
 					{"border", STYLEPTR (&BStyles::noBorder)}}
+		},
+		{"Blank", {{"uses", STYLEPTR (&defaultStyles)}}
 		},
 		{"Frame", {{"background", STYLEPTR (&BStyles::greyFill)},
 				   {"border", STYLEPTR (&frameBorder)}}
@@ -59,6 +72,10 @@ int main ()
 		{"Label", {{"uses", STYLEPTR (&defaultStyles)},
 				   {"textcolors", STYLEPTR (&BColors::blues)},
 				   {"font", STYLEPTR (&labelFont)}}
+		},
+		{"bigLabel", {{"uses", STYLEPTR (&defaultStyles)},
+				   {"textcolors", STYLEPTR (&BColors::darks)},
+				   {"font", STYLEPTR (&bigFont)}}
 		},
 		{"smallLabel", {{"uses", STYLEPTR (&defaultStyles)},
 				   {"textcolors", STYLEPTR (&BColors::blues)},
@@ -145,6 +162,9 @@ int main ()
 	BWidgets::Widget Widget3 = BWidgets::Widget (80, 10, 500, 300, "Frame");
 	Widget3.applyTheme (defaultTheme);
 	Widget3.setDraggable (true);
+	BWidgets::Widget Widget4 = BWidgets::Widget (540, 40, 80, 75, "Frame");
+	Widget4.applyTheme (defaultTheme);
+	Widget4.setDraggable (true);
 	BWidgets::Widget Widget = BWidgets::Widget (20, 40, 500, 300, "Frame");
 	Widget.applyTheme (defaultTheme);
 	Widget.setBackground(bgPicture);
@@ -276,6 +296,14 @@ int main ()
 	BWidgets::ListBox listBox (130, 10, 100, 140, "ListBox", {"Mumbai", "Hyderabad", "Lucknow", "Dehli", "Jaipur", "Surat", "Patna", "Agra", "Goa", "Jammu"});
 	BWidgets::PopupListBox popupListBox (250, 10, 100, 20, 100, 140, "PopupListBox", {{0,"Arusha"}, {1,"Moshi"}, {16,"Tanga"}, {3,"Dodoma"}, {5,"Mwanza"}, {7,"Dar es Salaam"}, {9,"Mbeya"}, {11,"Zanzibar"}});
 
+	// Key widgets
+	BWidgets::Label pressAnyKeyLabel (10, 10, 60, 10, "smallLabel", "Press any key");
+	pressAnyKeyLabel.applyTheme (defaultTheme);
+	BWidgets::ImageIcon keyIcon (20, 25, 40, 40, "Blank", "keyboard.png");
+	keyIcon.applyTheme (defaultTheme);
+	BWidgets::Label keyLabel (30, 30, 20, 20, "bigLabel", "-");
+	keyLabel.applyTheme (defaultTheme);
+
 	// Add the background widget container to the main window and add all label
 	// widgets and switches to the background widget container
 	MainWindow->add (Widget2);
@@ -294,6 +322,15 @@ int main ()
 	Widget3.add (choiceBox);
 	Widget3.add (listBox);
 	Widget3.add (popupListBox);
+
+	// Add Widget4 container to the main window and add all box widgets to
+	// Widget4
+	MainWindow->add (Widget4);
+	Widget4.add (pressAnyKeyLabel);
+	Widget4.add (keyIcon);
+	Widget4.add (keyLabel);
+	keyLabel.setCallbackFunction (BEvents::EventType::KEY_PRESS_EVENT, showKey);
+	MainWindow->setKeyGrab (&keyLabel);
 
 	// Add the drawing surface widget directly to the main window
 	MainWindow->add (Surface);

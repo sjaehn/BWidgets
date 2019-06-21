@@ -1,7 +1,7 @@
 # B.Widgets
 Widget toolkit based on Cairo and PUGL.
 
-This is a simple widget toolkit for the B.Music projects. 
+This is a simple widget toolkit for the B.Music projects.
 
 **This toolkit is still in development**
 
@@ -10,7 +10,7 @@ Dependencies
 * Cairo
 * X11 (for Linux systems, for MacOS X and Windows see description)
 
-Install the developers versions of these packages first. BWidgets may also be adapted to MacOS X and Windows. For these systems, take hands on and adapt the final parameter in line 2 of the makefile. 
+Install the developers versions of these packages first. BWidgets may also be adapted to MacOS X and Windows. For these systems, take hands on and adapt the final parameter in line 2 of the makefile.
 
 Installation
 ------------
@@ -39,7 +39,7 @@ Class hierarchy
 namespace BColors
  ├── Color
  ╰── ColorSet
- 
+
 namespace BStyles
  ├── Line
  ├── Border
@@ -48,23 +48,25 @@ namespace BStyles
  ├── Style
  ├── StyleSet
  ╰── Theme
-  
+
 namespace BEvents
  ╰── Event
       ├── ExposeEvent
+      ├── KeyEvent
       ├── PointerEvent
       ├── WheelEvent
       ├── FocusEvent
       ╰── ValueChangedEvent
-       
+
 namespace BItems
  ╰── Item
- 
+
 namespace BWidgets
  ╰── Widget
       ├── Window
       ├── FocusWidget
       ├── DrawingSurface
+      ├── ImageIcon
       ├── Label
       ├── Text
       ├── Knob
@@ -93,7 +95,7 @@ namespace BWidgets
       │                   ╰── DisplayVSlider
       ╰── PianoWidget
            ╰── HPianoRoll
- 
+
 ```
 
 Widgets
@@ -107,4 +109,4 @@ The **BWidgets::FocusWidget** class is the only derived class that is handled in
 
 **BWidgets::ValueWidget**s extends BWidgets::Widgets by a value and their ability to emit ValueChangedEvents.
 
-In **BWidgets::RangeWidget**s, the value is additionally kept within a defines range. 
+In **BWidgets::RangeWidget**s, the value is additionally kept within a defines range.
