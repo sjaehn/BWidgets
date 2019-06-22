@@ -56,7 +56,6 @@ Window::Window (const double width, const double height, const std::string& titl
 
 Window::~Window ()
 {
-	std::cout << "Window ";
 	purgeEventQueue ();
 	puglDestroy(view_);
 	main_ = nullptr;	// Important switch for the super destructor. It took
@@ -618,8 +617,6 @@ void Window::translateTimeEvent ()
 
 void Window::purgeEventQueue (Widget* widget)
 {
-	//std::cout << "purgeEventQueue size " << eventQueue.size () << " for " << (widget ? widget->getName () : "()") << "\n";
-
 	for (std::vector<BEvents::Event*>::iterator it = eventQueue.begin (); it != eventQueue.end (); )
 	{
 		BEvents::Event* event = *it;
@@ -630,8 +627,6 @@ void Window::purgeEventQueue (Widget* widget)
 		}
 		else ++it;
 	}
-
-	//std::cout << "New size " << eventQueue.size () << " for " << (widget ? widget->getName () : "()") << "...\n";
 }
 
 }

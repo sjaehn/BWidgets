@@ -38,6 +38,7 @@ BWidgets/BColors.cpp \
 BWidgets/BEvents.cpp \
 BWidgets/BValues.cpp \
 BWidgets/cairoplus.c \
+BWidgets/pugl/pugl_x11_cairo.c \
 BWidgets/pugl/pugl_x11.c
 
 all:
