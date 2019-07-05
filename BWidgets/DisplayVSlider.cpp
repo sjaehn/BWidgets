@@ -62,6 +62,8 @@ DisplayVSlider& DisplayVSlider::operator= (const DisplayVSlider& that)
 	return *this;
 }
 
+Widget* DisplayVSlider::clone () const {return new DisplayVSlider (*this);}
+
 void DisplayVSlider::setValue (const double val)
 {
 	VScale::setValue (val);

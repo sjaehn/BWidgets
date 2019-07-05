@@ -1,5 +1,5 @@
 /* ItemBox.hpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 #ifndef BWIDGETS_ITEMBOX_HPP_
 #define BWIDGETS_ITEMBOX_HPP_
 
-#include "BItems.hpp"
 #include "Label.hpp"
 #include "ValueWidget.hpp"
 #include <cmath>
@@ -40,13 +39,18 @@ namespace BWidgets
 /**
  * Class BWidgets::ItemBox
  *
- * Single line text box widget displaying the text string of a BItems::Item.
+ * Single line box widget displaying an item widget. An item is a value
+ * associated with a widget. If no widget has been selected (nullptr), an
+ * internal label widget will be used.
+ *
+ * TODO: Flexible padding
  */
 class ItemBox : public ValueWidget
 {
 public:
 	ItemBox ();
-	ItemBox (const double x, const double y, const double width, const double height, const std::string& name, const BItems::Item& item);
+	ItemBox (const double x, const double y, const double width, const double height,
+		 const std::string& name, const Item item);
 
 	/**
 	 * Creates a new (orphan) item box and copies the properties from a
@@ -66,52 +70,22 @@ public:
 	ItemBox& operator= (const ItemBox& that);
 
 	/**
+	 * Pattern cloning. Creates a new instance of the widget and copies all
+	 * its properties.
+	 */
+	virtual Widget* clone () const override;
+
+	/**
 	 * Sets the item of this widget.
 	 * @param item Item.
 	 */
-	void setItem (const BItems::Item& item);
-
-	/**
-	 * Sets only the text of the item.
-	 * @param text Text string
-	 */
-	void setItemText (const std::string& text);
+	void setItem (const Item item);
 
 	/**
 	 * Gets the item of the widget.
 	 * @return Item.
 	 */
-	BItems::Item getItem () const;
-
-	/**
-	 * Gets (a pointer to) the internal BWidgets::Label of the widget.
-	 * @return BWidgets::Label of the widget
-	 */
-	Label* getLabel ();
-
-	/**
-	 * Sets the BColors::ColorSet for this widget
-	 * @param colors Color set.
-	 */
-	void setTextColors (const BColors::ColorSet& colorset);
-
-	/**
-	 * Gets (a pointer to) the BColors::ColorSet of this widget.
-	 * @return Pointer to the color set.
-	 */
-	BColors::ColorSet* getTextColors ();
-
-	/**
-	 * Sets the font for the text output.
-	 * @param font Font
-	 */
-	void setFont (const BStyles::Font& font);
-
-	/**
-	 * Gets (a pointer to) the font for the text output.
-	 * @return Pointer to font
-	 */
-	BStyles::Font* getFont ();
+	Item getItem () const;
 
 	/**
 	 * Scans theme for widget properties and applies these properties.
@@ -131,8 +105,7 @@ public:
 	virtual void update () override;
 
 protected:
-	Label itemLabel;
-
+	Widget* widget;
 };
 
 }

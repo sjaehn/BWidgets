@@ -292,9 +292,9 @@ int main ()
 	Surface.setDraggable (true);
 
 	// Box widgets
-	BWidgets::ChoiceBox choiceBox (10, 10, 100, 40, "ChoiceBox", {{0,"Berlin"}, {1,"Paris"}, {2,"London"}, {4,"Dublin"}, {6,"Stockholm"}, {9,"Madrid"}, {8,"Riga"}}, 1.0);
-	BWidgets::ListBox listBox (130, 10, 100, 140, "ListBox", {"Mumbai", "Hyderabad", "Lucknow", "Dehli", "Jaipur", "Surat", "Patna", "Agra", "Goa", "Jammu"});
-	BWidgets::PopupListBox popupListBox (250, 10, 100, 20, 100, 140, "PopupListBox", {{0,"Arusha"}, {1,"Moshi"}, {16,"Tanga"}, {3,"Dodoma"}, {5,"Mwanza"}, {7,"Dar es Salaam"}, {9,"Mbeya"}, {11,"Zanzibar"}});
+	BWidgets::ChoiceBox choiceBox (10, 10, 100, 40, "ChoiceBox", {"Berlin", "Paris", "London","Dublin","Stockholm","Madrid","Riga"}, 1.0);
+	BWidgets::ListBox listBox (130, 10, 100, 140, "ListBox", {{0, "Mumbai"}, {3, "Hyderabad"}, {2, "Lucknow"}, {7, "Dehli"}, {5.5, "Jaipur"}, {6, "Surat"}, {5, "Patna"}, {8, "Agra"}, {9, "Goa"}, {10,"Jammu"}}, 7.0);
+	BWidgets::PopupListBox popupListBox (250, 10, 100, 20, 100, 140, "PopupListBox", {{0, "Arusha"}, {1, "Moshi"}, {2, "Tanga"}, {3, "Dodoma"}, {4, "Mwanza"}, {5, "Dar es Salaam"}, {6, "Mbeya"}, {7, "Zanzibar"}});
 
 	// Key widgets
 	BWidgets::Label pressAnyKeyLabel (10, 10, 60, 10, "smallLabel", "Press any key");

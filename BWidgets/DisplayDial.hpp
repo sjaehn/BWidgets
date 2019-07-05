@@ -56,6 +56,12 @@ public:
 	DisplayDial& operator= (const DisplayDial& that);
 
 	/**
+	 * Pattern cloning. Creates a new instance of the widget and copies all
+	 * its properties.
+	 */
+	virtual Widget* clone () const override;
+
+	/**
 	 * Changes the value of the widget and keeps it within the defined range.
 	 * Passes the value to its predefined child widgets.
 	 * Emits a value changed event and (if visible) an expose event.

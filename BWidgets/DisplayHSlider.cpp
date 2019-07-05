@@ -62,6 +62,8 @@ DisplayHSlider& DisplayHSlider::operator= (const DisplayHSlider& that)
 	return *this;
 }
 
+Widget* DisplayHSlider::clone () const {return new DisplayHSlider (*this);}
+
 void DisplayHSlider::setValue (const double val)
 {
 	HScale::setValue (val);

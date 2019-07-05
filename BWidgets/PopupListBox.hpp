@@ -1,5 +1,5 @@
 /* PopupListBox.hpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,17 +50,31 @@ class PopupListBox : public ItemBox
 public:
 	PopupListBox ();
 	PopupListBox (const double x, const double y, const double width, const double height,
-				  const double listWidth, const double listHeight,
-				  const std::string& name, std::vector<std::string> strings = {}, double preselection = UNSELECTED);
+		      const double listWidth, const double listHeight, const std::string& name);
 	PopupListBox (const double x, const double y, const double width, const double height,
-				  const double listXOffset, const double listYOffset, const double listWidth, const double listHeight,
-				  const std::string& name, std::vector<std::string> strings = {}, double preselection = UNSELECTED);
+		      const double listWidth, const double listHeight, const std::string& name,
+		      const std::vector<std::string>& strings, double preselection = UNSELECTED);
 	PopupListBox (const double x, const double y, const double width, const double height,
-				  const double listWidth, const double listHeight,
-				  const std::string& name, std::vector<BItems::Item> items = {}, double preselection = UNSELECTED);
+		      const double listWidth, const double listHeight, const std::string& name,
+		      const std::vector<stringItem>& strItems, double preselection = UNSELECTED);
 	PopupListBox (const double x, const double y, const double width, const double height,
-				  const double listXOffset, const double listYOffset, const double listWidth, const double listHeight,
-				  const std::string& name, std::vector<BItems::Item> items = {}, double preselection = UNSELECTED);
+		      const double listWidth, const double listHeight, const std::string& name,
+		      const std::vector<Item>& items, double preselection = UNSELECTED);
+	PopupListBox (const double x, const double y, const double width, const double height,
+		      const double listXOffset, const double listYOffset, const double listWidth,
+		      const double listHeight, const std::string& name);
+	PopupListBox (const double x, const double y, const double width, const double height,
+		      const double listXOffset, const double listYOffset, const double listWidth,
+		      const double listHeight, const std::string& name,
+		      const std::vector<std::string>& strings, double preselection = UNSELECTED);
+	PopupListBox (const double x, const double y, const double width, const double height,
+		      const double listXOffset, const double listYOffset, const double listWidth,
+		      const double listHeight, const std::string& name,
+		      const std::vector<stringItem>& stringItems, double preselection = UNSELECTED);
+	PopupListBox (const double x, const double y, const double width, const double height,
+		      const double listXOffset, const double listYOffset, const double listWidth,
+		      const double listHeight, const std::string& name,
+		      const std::vector<Item>& items, double preselection = UNSELECTED);
 
 	/**
 	 * Creates a new (orphan) choice box and copies the properties from a
@@ -80,11 +94,17 @@ public:
 	PopupListBox& operator= (const PopupListBox& that);
 
 	/**
+	 * Pattern cloning. Creates a new instance of the widget and copies all
+	 * its properties.
+	 */
+	virtual Widget* clone () const override;
+
+	/**
 	 * Gets (a pointer to) the vector of items and thus gets access to the
 	 * internally stored list of items.
 	 * @return Pointer to a string vector
 	 */
-	std::vector<BItems::Item>* getItemList ();
+	std::vector<Item>* getItemList ();
 
 	/**
 	 * Gets (a pointer to) the internal BWidgets::ListBox
@@ -135,8 +155,10 @@ public:
 	virtual void onWheelScrolled (BEvents::WheelEvent* event) override;
 
 protected:
+	void initItem ();
 	static void handleValueChanged (BEvents::Event* event);
 	static void handleDownButtonClicked (BEvents::Event* event);
+
 
 	DownButton downButton;
 	ListBox listBox;

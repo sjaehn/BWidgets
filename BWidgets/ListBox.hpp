@@ -1,5 +1,5 @@
 /* ListBox.hpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,9 +40,13 @@ class ListBox : public ChoiceBox
 public:
 	ListBox ();
 	ListBox (const double x, const double y, const double width, const double height,
-				const std::string& name, std::vector<std::string> strings = {}, double preselection = UNSELECTED);
+		 const std::string& name);
 	ListBox (const double x, const double y, const double width, const double height,
-				const std::string& name, std::vector<BItems::Item> items = {}, double preselection = UNSELECTED);
+		 const std::string& name, const std::vector<std::string>& strings, double preselection = UNSELECTED);
+	ListBox (const double x, const double y, const double width, const double height,
+		 const std::string& name, const std::vector<stringItem>& strItems, double preselection = UNSELECTED);
+	ListBox (const double x, const double y, const double width, const double height,
+		 const std::string& name, const std::vector<Item>& items, double preselection = UNSELECTED);
 
 	/**
 	 * Creates a new (orphan) choice box and copies the properties from a
@@ -82,7 +86,7 @@ public:
 
 protected:
 	static void handleButtonClicked (BEvents::Event* event);
-	virtual void updateLabels () override;
+	virtual void updateItems () override;
 	virtual int getLines () override;
 
 	int listTop;

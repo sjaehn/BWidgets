@@ -54,6 +54,12 @@ public:
 	ImageIcon& operator= (const ImageIcon& that);
 
 	/**
+	 * Pattern cloning. Creates a new instance of the widget and copies all
+	 * its properties.
+	 */
+	virtual Widget* clone () const override;
+
+	/**
 	 * Loads an image from a Cairo surface or an image file.
 	 * @param surface	Cairo surface
 	 * @param filename	Filename

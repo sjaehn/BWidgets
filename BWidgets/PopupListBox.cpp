@@ -19,33 +19,98 @@
 
 namespace BWidgets
 {
-PopupListBox::PopupListBox () : PopupListBox (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, "popuplistbox", std::vector<BItems::Item> {}, UNSELECTED) {}
+PopupListBox::PopupListBox () :
+	PopupListBox (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, "popuplistbox") {}
 
-PopupListBox::PopupListBox (const double x, const double y, const double width, const double height,
-							const double listWidth, const double listHeight, const std::string& name,
-							std::vector<std::string> strings, double preselection) :
-		PopupListBox (x, y, width, height, 0.0, 0.0, listWidth, listHeight, name, strings, preselection) {}
+PopupListBox::PopupListBox (const double x, const double y, const double width,
+			    const double height, const double listWidth,
+			    const double listHeight, const std::string& name) :
+	PopupListBox (x, y, width, height, 0.0, 0.0, listWidth, listHeight, name, std::vector<Item> {}, UNSELECTED) {}
 
-PopupListBox::PopupListBox (const double x, const double y, const double width, const double height,
-							const double listXOffset, const double listYOffset, const double listWidth, const double listHeight,
-							const std::string& name, std::vector<std::string> strings, double preselection) :
-		PopupListBox (x, y, width, height, listXOffset, listYOffset, listWidth, listHeight, name, std::vector<BItems::Item> {}, preselection)
+PopupListBox::PopupListBox (const double x, const double y, const double width,
+			    const double height, const double listWidth,
+			    const double listHeight, const std::string& name,
+			    const std::vector<std::string>& strings, double preselection) :
+	PopupListBox (x, y, width, height, 0.0, 0.0, listWidth, listHeight, name, strings, preselection) {}
+
+PopupListBox::PopupListBox (const double x, const double y, const double width,
+			    const double height, const double listWidth,
+			    const double listHeight, const std::string& name,
+			    const std::vector<stringItem>& strItems, double preselection) :
+	PopupListBox (x, y, width, height, 0.0, 0.0, listWidth, listHeight, name, strItems, preselection) {} //TODO
+
+PopupListBox::PopupListBox (const double x, const double y, const double width,
+			    const double height, const double listWidth,
+			    const double listHeight, const std::string& name,
+			    const std::vector<Item>& items, double preselection) :
+	PopupListBox (x, y, width, height, 0.0, 0.0, listWidth, listHeight, name, items, preselection) {}
+
+PopupListBox::PopupListBox (const double x, const double y, const double width,
+			    const double height, const double listXOffset,
+			    const double listYOffset, const double listWidth,
+			    const double listHeight, const std::string& name) :
+	PopupListBox (x, y, width, height, listXOffset, listYOffset, listWidth, listHeight, name, std::vector<Item> {}, UNSELECTED) {}
+
+PopupListBox::PopupListBox (const double x, const double y, const double width,
+			    const double height, const double listXOffset,
+			    const double listYOffset, const double listWidth,
+			    const double listHeight, const std::string& name,
+			    const std::vector<std::string>& strings, double preselection) :
+	PopupListBox (x, y, width, height, listXOffset, listYOffset, listWidth, listHeight, name, std::vector<Item> {}, preselection)
 {
-	listBox.addItemText (strings);
-	itemLabel.setText (listBox.getItem (preselection).string);
-	listBox.setValue (preselection);
+	try {listBox.addText (strings);}
+	catch (std::bad_alloc& ba) {throw ba;}
+
+	if ((preselection >= 1.0) && (preselection <= strings.size ()))
+	{
+		value = floor (preselection);
+		try {widget = new Label (0, 0, 0, 0, name + BWIDGETS_DEFAULT_ITEMBOX_ITEM_NAME, strings[int (value) - 1]);}
+		catch (std::bad_alloc& ba) {throw ba;}
+		initItem ();
+		add (*widget);
+	}
+
+	listBox.setValue (value);
 	if (!strings.empty()) listBox.setTop (1);
 }
 
-PopupListBox::PopupListBox (const double x, const double y, const double width, const double height,
-							const double listWidth, const double listHeight, const std::string& name,
-							std::vector<BItems::Item> items, double preselection) :
-		PopupListBox (x, y, width, height, 0.0, 0.0, listWidth, listHeight, name, items, preselection) {}
+PopupListBox::PopupListBox (const double x, const double y, const double width,
+			    const double height, const double listXOffset,
+			    const double listYOffset, const double listWidth,
+			    const double listHeight, const std::string& name,
+			    const std::vector<stringItem>& strItems, double preselection) :
+	PopupListBox (x, y, width, height, listXOffset, listYOffset, listWidth, listHeight, name, std::vector<Item> {}, preselection)
+{
+	try {listBox.addText (strItems);}
+	catch (std::bad_alloc& ba) {throw ba;}
 
-PopupListBox::PopupListBox (const double x, const double y, const double width, const double height,
-							const double listXOffset, const double listYOffset, const double listWidth, const double listHeight,
-							const std::string& name, std::vector<BItems::Item> items, double preselection) :
-		ItemBox (x, y, width, height, name, {preselection, ""}),
+	// Set item
+	if (preselection != UNSELECTED)
+	{
+		for (uint i = 0; i < strItems.size (); ++i)
+		{
+			if (strItems[i].value == preselection)
+			{
+				value = strItems[i].value;
+				try {widget = new Label (0, 0, 0, 0, name + BWIDGETS_DEFAULT_ITEMBOX_ITEM_NAME,
+								     strItems[i].string);}
+				catch (std::bad_alloc& ba) {throw ba;}
+				initItem ();
+				add (*widget);
+			}
+		}
+	}
+
+	listBox.setValue (value);
+	if (!strItems.empty()) listBox.setTop (1);
+}
+
+PopupListBox::PopupListBox (const double x, const double y, const double width,
+			    const double height, const double listXOffset,
+			    const double listYOffset, const double listWidth,
+			    const double listHeight, const std::string& name,
+			    const std::vector<Item>& items, double preselection) :
+		ItemBox (x, y, width, height, name, {UNSELECTED, nullptr}),
 		downButton (0, 0, 0, 0, name + BWIDGETS_DEFAULT_POPUPLISTBOX_BUTTON_NAME, 0.0),
 		listBox (0, 0, 0, 0, name + BWIDGETS_DEFAULT_POPUPLISTBOX_LISTBOX_NAME, items, preselection),
 		listBoxXOffset (listXOffset), listBoxYOffset (listYOffset), listBoxWidth (listWidth), listBoxHeight (listHeight)
@@ -53,7 +118,25 @@ PopupListBox::PopupListBox (const double x, const double y, const double width, 
 {
 	setScrollable (true);
 
-	itemLabel.setText (listBox.getItem (preselection).string);
+	// Set item
+	if (preselection != UNSELECTED)
+	{
+		for (uint i = 0; i < items.size (); ++i)
+		{
+			if (items[i].value == preselection)
+			{
+				value = items[i].value;
+				if (items[i].widget)
+				{
+					try {widget = items[i].widget->clone ();}
+					catch (std::bad_alloc& ba) {throw ba;}
+					initItem ();
+					add (*widget);
+				}
+				break;
+			}
+		}
+	}
 
 	downButton.setCallbackFunction (BEvents::EventType::BUTTON_PRESS_EVENT, PopupListBox::handleDownButtonClicked);
 	listBox.extensionData = this;
@@ -69,10 +152,18 @@ PopupListBox::PopupListBox (const PopupListBox& that) :
 		listBoxXOffset (that.listBoxXOffset),
 		listBoxYOffset (that.listBoxYOffset), listBoxWidth (that.listBoxWidth), listBoxHeight (that.listBoxHeight)
 {
+	if (widget) release (widget);
+	try {widget = that.widget->clone ();}
+	catch (std::bad_alloc& ba) {throw ba;}
+	initItem ();
+	add (*widget);
 	add (downButton);
 }
 
-PopupListBox::~PopupListBox () {}
+PopupListBox::~PopupListBox ()
+{
+	if (widget) delete widget;
+}
 
 PopupListBox& PopupListBox::operator= (const PopupListBox& that)
 {
@@ -84,11 +175,19 @@ PopupListBox& PopupListBox::operator= (const PopupListBox& that)
 	listBoxHeight = that.listBoxHeight;
 
 	ItemBox::operator= (that);
+	if (widget) release (widget);
+	try {widget = that.widget->clone ();}
+	catch (std::bad_alloc& ba) {throw ba;}
+	initItem ();
+	add (*widget);
+
 	listBox.extensionData = this;
 	return *this;
 }
 
-std::vector<BItems::Item>* PopupListBox::getItemList () {return listBox.getItemList ();}
+Widget* PopupListBox::clone () const {return new PopupListBox (*this);}
+
+std::vector<Item>* PopupListBox::getItemList () {return listBox.getItemList ();}
 
 ListBox* PopupListBox::getListBox () {return &listBox;}
 
@@ -103,11 +202,15 @@ void PopupListBox::applyTheme (BStyles::Theme& theme, const std::string& name)
 
 void PopupListBox::setValue (const double val)
 {
-	if (val !=listBox.getValue ()) listBox.setValue (val);
+	if (val != listBox.getValue ()) listBox.setValue (val);
 	if (value != listBox.getValue ())
 	{
 		ItemBox::setValue (listBox.getValue ());
-		setItemText (listBox.getItem (val).string);
+		if (widget) delete (widget);
+		widget = listBox.getItem (listBox.getValue ()).widget->clone ();
+		initItem ();
+		add (*widget);
+		update ();
 	}
 }
 
@@ -128,8 +231,14 @@ void PopupListBox::resizeListBox (const double width, const double height)
 void PopupListBox::update ()
 {
 	// Update super widget first
-	//setItemText (listBox.getActiveItem ().string);
 	ItemBox::update ();
+
+	// Keep button on top
+	int cs = children_.size ();
+	if ((cs >= 2) && (children_[cs - 1] != (Widget*) &downButton))
+	{
+		downButton.moveToTop ();
+	}
 
 	// Calculate size and position of widget elements
 	double x0 = getXOffset ();
@@ -170,9 +279,24 @@ void PopupListBox::onButtonPressed (BEvents::PointerEvent* event)
 
 void PopupListBox::onWheelScrolled (BEvents::WheelEvent* event)
 {
-	std::vector<BItems::Item>* itemList = listBox.getItemList ();
+	std::vector<Item>* itemList = listBox.getItemList ();
 	double newNr = LIMIT (listBox.getActive () - event->getDeltaY (), 1, itemList->size ());
 	setValue ((*itemList)[newNr - 1].value);
+}
+
+void PopupListBox::initItem ()
+{
+	if (widget)
+	{
+		widget->getBorder ()->setPadding (BWIDGETS_DEFAULT_ITEMBOX_ITEM_PADDING);
+		widget->setClickable (false);
+		widget->setDraggable (false);
+		widget->setScrollable (false);
+		widget->setFocusable (false);
+		widget->setState (BColors::NORMAL);
+		widget->moveTo (0, 0);
+		widget->show ();
+	}
 }
 
 void PopupListBox::handleDownButtonClicked (BEvents::Event* event)

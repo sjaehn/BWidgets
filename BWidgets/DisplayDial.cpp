@@ -56,6 +56,8 @@ DisplayDial& DisplayDial::operator= (const DisplayDial& that)
 	return *this;
 }
 
+Widget* DisplayDial::clone () const {return new DisplayDial (*this);}
+
 void DisplayDial::setValue (const double val)
 {
 	Dial::setValue (val);

@@ -104,6 +104,8 @@ Widget& Widget::operator= (const Widget& that)
 	return *this;
 }
 
+Widget* Widget::clone () const {return new Widget (*this);}
+
 void Widget::show ()
 {
 	visible = true;

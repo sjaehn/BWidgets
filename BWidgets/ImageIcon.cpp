@@ -61,6 +61,8 @@ ImageIcon& ImageIcon::operator= (const ImageIcon& that)
 	return *this;
 }
 
+Widget* ImageIcon::clone () const {return new ImageIcon (*this);}
+
 void ImageIcon::loadImage (cairo_surface_t* surface)
 {
 	if (originalSurface && (cairo_surface_status (originalSurface) == CAIRO_STATUS_SUCCESS)) cairo_surface_destroy (originalSurface);

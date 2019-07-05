@@ -68,6 +68,17 @@
 
 namespace BWidgets
 {
+
+class Window; // Forward declaration
+class Widget; // Forward declaration
+class FocusWidget; // Forward declaration
+
+struct Item
+{
+	double value;
+	Widget* widget;
+};
+
 /**
  * Class BWidgets::Widget
  *
@@ -77,8 +88,6 @@ namespace BWidgets
  * border and a background. A BWidgets::Widget (and all derived widgets) may
  * also be containers for other widgets (= have children).
  */
-class Window; // Forward declaration
-class FocusWidget; // Forward declaration
 
 class Widget
 {
@@ -103,6 +112,12 @@ public:
 	 * @param that Source widget
 	 */
 	Widget& operator= (const Widget& that);
+
+	/**
+	 * Pattern cloning. Creates a new instance of the widget and copies all
+	 * its properties.
+	 */
+	virtual Widget* clone () const;
 
 	/**
 	 * Makes the widget visible (if its parents are visible too) and emits an
