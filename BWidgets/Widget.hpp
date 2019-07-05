@@ -281,6 +281,31 @@ public:
 	BColors::State getState () const;
 
 	/**
+	 * Sets the filter for display and event handling.
+	 * @param ()		All widget states
+	 * @param state		Widget state
+	 * @param states	Vector of widget states
+	 */
+	void setStateFilter ();
+	void setStateFilter (const BColors::State state);
+	void setStateFilter (const std::vector<BColors::State>& states);
+
+	/**
+	 * Clears the filter for display and event handling.
+	 * @param ()		All widget states
+	 * @param state		Widget state
+	 * @param states	Vector of widget states
+	 */
+	void clearStateFilter ();
+	void clearStateFilter (const BColors::State state);
+	void clearStateFilter (const std::vector<BColors::State>& states);
+
+	/**
+	 * Gets all set filters for display and event handling
+	 */
+	std::vector<BColors::State> getStateFilter () const;
+
+	/**
 	 * (Re-)Defines the border of the widget. Redraws widget and emits a
 	 * BEvents::ExposeEvent if the widget is visible.
 	 * @param border New widgets border
@@ -628,8 +653,9 @@ protected:
 	std::vector <Widget*> getChildrenAsQueue (std::vector <Widget*> queue = {}) const;
 
 	bool isPointInWidget (const double x, const double y) const;
-	Widget* getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability,
-						 const bool checkDraggability, const bool checkScrollability, const bool checkFocusability);
+	Widget* getWidgetAt (const double x, const double y, const bool checkVisibility,
+			     const bool checkClickability, const bool checkDraggability,
+			     const bool checkScrollability, const bool checkFocusability);
 
 	void postRedisplay (const double x, const double y, const double width, const double height);
 	void redisplay (cairo_surface_t* surface, double x, double y, double width, double height);
@@ -655,6 +681,7 @@ protected:
 	std::array<std::function<void (BEvents::Event*)>, BEvents::EventType::NO_EVENT> cbfunction;
 	cairo_surface_t* widgetSurface;
 	BColors::State widgetState;
+	uint32_t stateFilter;
 	FocusWidget* focusWidget;
 
 };
