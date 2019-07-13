@@ -19,13 +19,14 @@
 #define BWIDGETS_CHOICEBOX_HPP_
 
 #include "ValueWidget.hpp"
-#include "Label.hpp"
 #include "UpButton.hpp"
 #include "DownButton.hpp"
+#include "BItems.hpp"
 #include <cmath>
 
 #define BWIDGETS_DEFAULT_CHOICEBOX_WIDTH 100.0
 #define BWIDGETS_DEFAULT_CHOICEBOX_HEIGHTH 40.0
+#define BWIDGETS_DEFAULT_CHOICEBOX_ITEM_HEIGHTH 20.0
 #define BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT 9.0
 #define BWIDGETS_DEFAULT_CHOICEBOX_LINE_HEIGHT 1.6666
 
@@ -40,12 +41,6 @@
 
 namespace BWidgets
 {
-
-struct stringItem
-{
-	double value;
-	std::string string;
-};
 
 /**
  * Class BWidgets::ChoiceBox
@@ -64,11 +59,7 @@ public:
 	ChoiceBox (const double x, const double y, const double width, const double height,
 		   const std::string& name);
 	ChoiceBox (const double x, const double y, const double width, const double height,
-		   const std::string& name, const std::vector<std::string>& strings, double preselection = UNSELECTED);
-	ChoiceBox (const double x, const double y, const double width, const double height,
-		   const std::string& name, const std::vector<stringItem>& strItems, double preselection = UNSELECTED);
-	ChoiceBox (const double x, const double y, const double width, const double height,
-		   const std::string& name, const std::vector<Item>& items, double preselection = UNSELECTED);
+		   const std::string& name, const BItems::ItemList& items, double preselection = UNSELECTED);
 
 	/**
 	 * Creates a new (orphan) choice box and copies the properties from a
@@ -96,22 +87,23 @@ public:
 	/**
 	 * Gets (a pointer to) the vector of items and thus gets access to the
 	 * internally stored list of items.
-	 * @return Pointer to a string vector
+	 * @return Pointer to a BItems::ItemList
 	 */
-	std::vector<Item>* getItemList ();
+	BItems::ItemList* getItemList ();
 
 	/**
-	 * Gets an item of the internally stored list of items.
-	 * @param value Value of the item.
-	 * @return Active item
+	 * Gets (a pointer to) the item of the internally stored list of items
+	 * that is represented by a value.
+	 * @param value	Value of the item.
+	 * @return	Pointer to the item.
 	 */
-	Item getItem (const double value) const;
+	BItems::Item* getItem (const double value);
 
 	/**
-	 * Gets the active item.
-	 * @return Active item
+	 * Gets (a pointer to) the active item of the internally stored list.
+	 * @return	Pointer to the active item
 	 */
-	Item getActiveItem () const;
+	BItems::Item* getActiveItem ();
 
 	/**
 	 * Adds a new item or new items to the end of the internally stored list of
@@ -119,23 +111,8 @@ public:
 	 * @param newBItems::Item	A single new item to add.
 	 * @param newBItems::Items	A vector of new items to add.
 	 */
-	void addItem (const Item newItem);
-	void addItem (const std::vector<Item>& newItems);
-
-	/**
-	 * Adds label item(s) that were created from a text string or
-	 * from a vector of text strings. In case of @param text(s), the value
-	 * of the added item will be set to the next full
-	 * number following to the value of the last item before.
-	 * @param text		Text string of a single new item to add.
-	 * @param texts		A vector of text strings of new items to add.
-	 * @param strItem
-	 * @param strItems
-	 */
-	void addText (const std::string& text);
-	void addText (const std::vector<std::string>& texts);
-	void addText (const stringItem& strItem);
-	void addText (const std::vector<stringItem>& strItems);
+	void addItem (const BItems::Item& newItem);
+	void addItem (const BItems::ItemList& newItems);
 
 	/**
 	 * Scans theme for widget properties and applies these properties.
@@ -189,8 +166,7 @@ public:
 	virtual void onWheelScrolled (BEvents::WheelEvent* event) override;
 
 protected:
-	void copyLabelsAndItemsFrom (const ChoiceBox& that);
-	void deleteLabels ();
+	void removeItems ();
 	virtual void updateItems ();
 	virtual int getLines ();
 	static void handleButtonClicked (BEvents::Event* event);
@@ -198,8 +174,7 @@ protected:
 
 	UpButton upButton;
 	DownButton downButton;
-	std::vector<Item> items;
-	std::vector<Label*> labels;
+	BItems::ItemList items;
 
 	int activeNr;
 };

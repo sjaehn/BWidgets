@@ -26,8 +26,7 @@ ChoiceBox::ChoiceBox (const double x, const double y, const double width,
 	ValueWidget (x, y, width, height, name, UNSELECTED),
 	upButton (0, 0, 0, 0, name + BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_NAME, 0.0),
 	downButton (0, 0, 0, 0, name + BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_NAME, 0.0),
-	items ({}), labels ({}),
-	activeNr (0)
+	items (), activeNr (0)
 {
 	background_ = BWIDGETS_DEFAULT_MENU_BACKGROUND;
 	border_ = BWIDGETS_DEFAULT_MENU_BORDER;
@@ -41,40 +40,8 @@ ChoiceBox::ChoiceBox (const double x, const double y, const double width,
 	setScrollable (true);
 }
 
-
 ChoiceBox::ChoiceBox (const double x, const double y, const double width, const double height,
-		      const std::string& name, const std::vector<std::string>& strings, double preselection) :
-	ChoiceBox (x, y, width, height, name)
-{
-	// Generate labels and items from strings
-	addText (strings);
-
-	// Set value and preselection
-	value = preselection;
-	if ((preselection >= 1.0) && (preselection <= strings.size ())) activeNr = preselection;
-}
-
-ChoiceBox::ChoiceBox (const double x, const double y, const double width, const double height,
-	   	      const std::string& name, const std::vector<stringItem>& strItems, double preselection) :
-	ChoiceBox (x, y, width, height, name)
-{
-	addText (strItems);
-
-	// Set value and preselection
-	value = preselection;
-
-	for (uint i = 0; i < items.size (); ++ i)
-	{
-		if (preselection == items[i].value)
-		{
-			activeNr = i + 1;
-			break;
-		}
-	}
-}
-
-ChoiceBox::ChoiceBox (const double x, const double y, const double width, const double height,
-		      const std::string& name, const std::vector<Item>& items, double preselection) :
+		      const std::string& name, const BItems::ItemList& items, double preselection) :
 	ChoiceBox (x, y, width, height, name)
 
 {
@@ -83,35 +50,33 @@ ChoiceBox::ChoiceBox (const double x, const double y, const double width, const 
 	// Set value and preselection
 	value = preselection;
 
-	for (uint i = 0; i < items.size (); ++ i)
+	uint n = 0;
+	for (BItems::Item const& i : items)
 	{
-		if (preselection == items[i].value)
+		if (preselection == i.getValue())
 		{
-			activeNr = i + 1;
+			activeNr = n + 1;
 			break;
 		}
+		++n;
 	}
 }
 
 ChoiceBox::ChoiceBox (const ChoiceBox& that) :
 	ValueWidget (that), upButton (that.upButton), downButton (that.downButton),
-	items ({}), labels ({}), activeNr (that.activeNr)
+	items (), activeNr (that.activeNr)
 {
-	copyLabelsAndItemsFrom (that);
-
+	addItem (that.items);
 	add (upButton);
 	add (downButton);
 }
 
-ChoiceBox::~ChoiceBox ()
-{
-	deleteLabels ();
-}
+ChoiceBox::~ChoiceBox () {}
 
 ChoiceBox& ChoiceBox::operator= (const ChoiceBox& that)
 {
-	deleteLabels ();
-	copyLabelsAndItemsFrom (that);
+	removeItems ();
+	addItem (that.items);
 
 	upButton = that.upButton;
 	downButton = that.downButton;
@@ -124,125 +89,48 @@ ChoiceBox& ChoiceBox::operator= (const ChoiceBox& that)
 
 Widget* ChoiceBox::clone () const {return new ChoiceBox (*this);}
 
-void ChoiceBox::copyLabelsAndItemsFrom (const ChoiceBox& that)
+void ChoiceBox::removeItems ()
 {
-	// Copy construct labels
-	for (uint i = 0; i < that.labels.size (); ++i)
+	while (!items.empty ())
 	{
-		Label* label;
-		try {label = new Label (*that.labels[i]);}
-		catch (std::bad_alloc& ba) {throw ba;}
-		labels.push_back (label);
-	}
-
-	// Copy items
-	for (uint i = 0; i < that.items.size (); ++i)
-	{
-		// Check if it is an internally used label
-		size_t lNr = that.labels.size ();
-		for (uint j = 0 ; j < that.labels.size (); ++j)
-		{
-			if (that.items[i].widget == that.labels[j])
-			{
-				lNr = j;
-				break;
-			}
-		}
-
-		// Internally used label: create new item with link to copied label
-		if (lNr < that.labels.size ()) items.push_back ({that.items[i].value, labels[lNr]});
-
-		// Otherwise simply copy item
-		else items.push_back (that.items[i]);
+		if (items.back().getWidget ()) release (items.back().getWidget ());
+		items.pop_back ();
 	}
 }
 
-void ChoiceBox::deleteLabels ()
+BItems::ItemList* ChoiceBox::getItemList () {return &items;}
+
+BItems::Item* ChoiceBox::getItem (const double val)
 {
-	while  (!labels.empty ())
+	return items.getItem (val);
+}
+
+BItems::Item* ChoiceBox::getActiveItem ()
+{
+	if ((activeNr >= 1) && (activeNr <= int (items.size ())))
 	{
-		Label* l = labels.back ();
-		if (l) delete l;
-		labels.pop_back ();
+		BItems::ItemList::iterator it = std::next (items.begin (), activeNr - 1);
+		return &(*it);
 	}
+	else return nullptr;
 }
 
-std::vector<Item>* ChoiceBox::getItemList () {return &items;}
-
-Item ChoiceBox::getItem (const double val) const
-{
-	for (Item i : items)
-	{
-		if (i.value == val) return i;
-	}
-	return Item {UNSELECTED, nullptr};
-}
-
-Item ChoiceBox::getActiveItem () const
-{
-	if ((activeNr >= 1) && (activeNr <= int (items.size ()))) return items[activeNr - 1];
-	else return Item {UNSELECTED, nullptr};
-}
-
-void ChoiceBox::addItem (const Item newItem)
+void ChoiceBox::addItem (const BItems::Item& newItem)
 {
 	items.push_back (newItem);
-	if (newItem.widget)
+	Widget* w = items.back ().getWidget ();
+	if (w)
 	{
-		newItem.widget->setClickable (true);
-		newItem.widget->setCallbackFunction (BEvents::BUTTON_PRESS_EVENT, ChoiceBox::handleItemClicked);
-		add (*newItem.widget);
+		w->setClickable (true);
+		w->setCallbackFunction (BEvents::BUTTON_PRESS_EVENT, ChoiceBox::handleItemClicked);
+		add (*w);
 	}
 	if (isVisible ()) update ();
 }
 
-void ChoiceBox::addItem (const std::vector<Item>& newItems)
+void ChoiceBox::addItem (const BItems::ItemList& newItems)
 {
-	for (Item ni : newItems) items.push_back (ni);
-}
-
-void ChoiceBox::addText (const std::string& text)
-{
-	// Find next value
-	double val = 1.0;
-	for (Item i : items)
-	{
-		if (floor (i.value) >= val) val = floor (i.value) + 1.0;
-	}
-
-	// Create new label widget
-	try {addText (stringItem {val, text});}
-	catch (std::bad_alloc& ba) {throw ba;}
-}
-
-void ChoiceBox::addText (const std::vector<std::string>& texts)
-{
-	for (std::string s : texts)
-	{
-		try {addText (s);}
-		catch (std::bad_alloc& ba) {throw ba;}
-	}
-}
-
-void ChoiceBox::addText (const stringItem& strItem)
-{
-	// Create new label widget
-	Label* label;
-	try {label = new Label (0, 0, 0, 0, name_ + BWIDGETS_DEFAULT_CHOICEBOX_ITEM_NAME, strItem.string);}
-	catch (std::bad_alloc& ba) {throw ba;}
-	labels.push_back (label);
-
-	// Create item from new label and add to items
-	addItem ({strItem.value, label});
-}
-
-void ChoiceBox::addText (const std::vector<stringItem>& strItems)
-{
-	for (stringItem s : strItems)
-	{
-		try {addText (s);}
-		catch (std::bad_alloc& ba) {throw ba;}
-	}
+	for (BItems::Item const& ni : newItems) addItem (ni);
 }
 
 void ChoiceBox::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
@@ -250,9 +138,9 @@ void ChoiceBox::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
 void ChoiceBox::applyTheme (BStyles::Theme& theme, const std::string& name)
 {
 	Widget::applyTheme (theme, name);
-	for (Item i : items)
+	for (BItems::Item const& i : items)
 	{
-		if (i.widget) i.widget -> applyTheme (theme, name_ + BWIDGETS_DEFAULT_CHOICEBOX_ITEM_NAME);
+		if (i.getWidget ()) i.getWidget()->applyTheme (theme, name_ + BWIDGETS_DEFAULT_CHOICEBOX_ITEM_NAME);
 	}
 	upButton.applyTheme (theme, name + BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_NAME);
 	downButton.applyTheme (theme, name + BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_NAME);
@@ -269,14 +157,16 @@ void ChoiceBox::setValue (const double val)
 
 	else
 	{
-		for (uint i = 0; i < items.size(); ++i)
+		uint n = 0;
+		for (BItems::Item const& i : items)
 		{
-			if (val == items[i].value)
+			if (val == i.getValue ())
 			{
 				ValueWidget::setValue (val);
-				activeNr = i + 1;
+				activeNr = n + 1;
 				return;
 			}
+			++n;
 		}
 	}
 }
@@ -296,6 +186,16 @@ void ChoiceBox::update ()
 
 	// Validate value and update activeNr
 	setValue (getValue ());
+
+	// Keep Buttons on top
+	int cs = children_.size ();
+	if ((cs >= 2) &&
+	    ((children_[cs - 1] != (Widget*) &upButton) ||
+	     (children_[cs - 2] != (Widget*) &downButton)))
+	{
+		downButton.moveToTop ();
+		upButton.moveToTop ();
+	}
 
 	// Update items
 	updateItems ();
@@ -329,16 +229,6 @@ void ChoiceBox::update ()
 
 void ChoiceBox::updateItems ()
 {
-	// Keep Buttons on top
-	int cs = children_.size ();
-	if ((cs >= 2) &&
-	    ((children_[cs - 1] != (Widget*) &upButton) ||
-	     (children_[cs - 2] != (Widget*) &downButton)))
-	{
-		downButton.moveToTop ();
-		upButton.moveToTop ();
-	}
-
 	double x0 = getXOffset ();
 	double y0 = getYOffset ();
 	double width = getEffectiveWidth ();
@@ -346,27 +236,31 @@ void ChoiceBox::updateItems ()
 	double itemHeight = (height >= 2 * BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT ?
 			     height - 2 * BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT : 0);
 	double upButtonHeight = (height >= BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT ?
-				 BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT : height);
+				 BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT : 0); // TODO
 
-	for (uint i = 0; i < items.size (); ++i)
+	uint n = 0;
+	for (BItems::Item const& i : items)
 	{
-		if (items[i].widget)
+		Widget* w = i.getWidget ();
+		if (w)
 		{
-			if (i + 1 == uint (activeNr)) items[i].widget->show ();
-			else items[i].widget->hide ();
+			if (n + 1 == uint (activeNr)) w->show ();
+			else w->hide ();
 
-			items[i].widget->moveTo (x0 + BWIDGETS_DEFAULT_CHOICEBOX_PADDING, y0 + upButtonHeight);
-			items[i].widget->setWidth (width > 2 * BWIDGETS_DEFAULT_CHOICEBOX_PADDING ?
+			w->moveTo (x0 + BWIDGETS_DEFAULT_CHOICEBOX_PADDING, y0 + upButtonHeight);
+			w->setWidth (width > 2 * BWIDGETS_DEFAULT_CHOICEBOX_PADDING ?
 						   width - 2 * BWIDGETS_DEFAULT_CHOICEBOX_PADDING : 0);
-			items[i].widget->setHeight (itemHeight);
+			w->setHeight (itemHeight);
 		}
+		++n;
 	}
 }
 
 void ChoiceBox::onWheelScrolled (BEvents::WheelEvent* event)
 {
 	double newNr = LIMIT (activeNr - event->getDeltaY (), 1, items.size ());
-	setValue (items[newNr - 1].value);
+	BItems::ItemList::iterator it = std::next (items.begin (), newNr - 1);
+	setValue ((*it).getValue ());
 }
 
 void ChoiceBox::handleButtonClicked (BEvents::Event* event)
@@ -383,11 +277,13 @@ void ChoiceBox::handleButtonClicked (BEvents::Event* event)
 				double actNr = p->activeNr;
 				if ((w == (Button*) &(p->upButton)) && (actNr >= 2))
 				{
-					p->setValue (p->items[actNr - 1 - 1].value);
+					BItems::ItemList::iterator it = std::next (p->items.begin(), actNr - 2);
+					p->setValue ((*it).getValue());
 				}
-				if ((w == (Button*) &(p->downButton)) && (actNr < p->items.size ()))
+				else if ((w == (Button*) &(p->downButton)) && (actNr < p->items.size ()))
 				{
-					p->setValue (p->items[actNr - 1 + 1].value);
+					BItems::ItemList::iterator it = std::next (p->items.begin(), actNr);
+					p->setValue ((*it).getValue());
 				}
 			}
 		}
@@ -405,9 +301,9 @@ if (event && (event->getEventType () == BEvents::EventType::BUTTON_PRESS_EVENT) 
 			ChoiceBox* p = (ChoiceBox*) w->getParent ();
 			if (p->getParent ())
 			{
-				for (uint i = 0; i < p->items.size (); ++i)
+				for (BItems::Item const& i : p->items)
 				{
-					if (w == p->items[i].widget) p->setValue (p->items[i].value);
+					if (w == i.getWidget()) p->setValue (i.getValue());
 				}
 			}
 		}

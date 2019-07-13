@@ -20,78 +20,81 @@
 namespace BWidgets
 {
 ItemBox::ItemBox () :
-	ItemBox (0.0, 0.0, 0.0, 0.0, "itembox", Item {UNSELECTED, nullptr}) {}
+	ItemBox (0.0, 0.0, 0.0, 0.0, "itembox", BItems::Item {UNSELECTED, nullptr}) {}
 
 ItemBox::ItemBox (const double x, const double y, const double width,
-		  const double height, const std::string& name, const Item item) :
-	ValueWidget (x, y, width, height, name, item.value)
+		  const double height, const std::string& name, const BItems::Item item) :
+	ValueWidget (x, y, width, height, name, UNSELECTED), item (item)
 
 {
+	value = this->item.getValue ();
 	background_ = BWIDGETS_DEFAULT_MENU_BACKGROUND;
 	border_ = BWIDGETS_DEFAULT_MENU_BORDER;
 
-	if (item.widget)
+	Widget* w = this->item.getWidget ();
+	if (w)
 	{
-		widget = item.widget;
+		w->getBorder ()->setPadding (BWIDGETS_DEFAULT_ITEMBOX_ITEM_PADDING);
+		w->setClickable (false);
 
-		widget -> getBorder () -> setPadding (BWIDGETS_DEFAULT_ITEMBOX_ITEM_PADDING);
-		widget -> setClickable (false);
-
-		add (*widget);
+		add (*w);
 	}
 }
 
 ItemBox::ItemBox (const ItemBox& that) :
-	ValueWidget (that), widget (that.widget)
+	ValueWidget (that), item (that.item)
 {
-	add (*widget);
+	if (item.getWidget ()) add (*item.getWidget ());
 }
 
 ItemBox::~ItemBox () {}
 
 ItemBox& ItemBox::operator= (const ItemBox& that)
 {
-	widget = that.widget;
-
+	Widget* w = item.getWidget ();
+	if (w && isChild (w)) release (w);
+	item = that.item;
+	if (item.getWidget ()) add (*item.getWidget ());
 	ValueWidget::operator= (that);
 	return *this;
 }
 
 Widget* ItemBox::clone () const {return new ItemBox (*this);}
 
-void ItemBox::setItem (const Item item)
+void ItemBox::setItem (const BItems::Item item)
 {
 	bool wasClickable = false;
 
-	if (widget)
-	{
-		widget -> isClickable ();
-		release (widget);
-	}
+	Widget* w = item.getWidget ();
+	if (w && isChild (w)) release (w);
 
 	// Set widget
-	setValue (item.value);
-	widget = item.widget;
+	this->item = item;
+	setValue (this->item.getValue());
 
 	// Configure widget
-	if (widget)
+	w = item.getWidget ();
+	if (w)
 	{
-		widget -> getBorder () -> setPadding (BWIDGETS_DEFAULT_ITEMBOX_ITEM_PADDING);
-		widget -> setClickable (wasClickable);
-		add (*widget);
+		w->getBorder ()->setPadding (BWIDGETS_DEFAULT_ITEMBOX_ITEM_PADDING);
+		w->setClickable (wasClickable);
+		add (*w);
 	}
 
 	update ();
 }
 
-Item ItemBox::getItem () const {return {getValue (), widget};}
+BItems::Item* ItemBox::getItem () {return &item;}
 
 void ItemBox::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
 
 void ItemBox::applyTheme (BStyles::Theme& theme, const std::string& name)
 {
 	Widget::applyTheme (theme, name);
-	if (widget) widget -> applyTheme (theme, name + BWIDGETS_DEFAULT_ITEMBOX_ITEM_NAME);
+	if (item.getWidget ())
+	{
+		item.getWidget ()->applyTheme (theme, name + BWIDGETS_DEFAULT_ITEMBOX_ITEM_NAME);
+	}
 
 	update ();
 }
@@ -101,6 +104,7 @@ void ItemBox::update ()
 	// Update super widget first
 	Widget::update ();
 
+	Widget* widget = item.getWidget ();
 	if (widget)
 	{
 		// Set position of label

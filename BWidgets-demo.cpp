@@ -212,9 +212,9 @@ int main ()
 	Slider3.applyTheme (defaultTheme);
 	BWidgets::HSlider Slider4 = BWidgets::HSlider (100, 60, 240, 20, "Slider", 80.0, 0.0, 100.0, -1);
 	Slider4.applyTheme (defaultTheme);
-	BWidgets::DisplayHSlider Slider5 = BWidgets::DisplayHSlider (100, 80, 240, 40, "DialVal",80.0, 0.0, 100.0, 0.0, "%3.1f");
+	BWidgets::HSliderValue Slider5 = BWidgets::HSliderValue (100, 80, 240, 40, "DialVal",80.0, 0.0, 100.0, 0.0, "%3.1f");
 	Slider5.applyTheme (defaultTheme);
-	BWidgets::DisplayVSlider Slider6 = BWidgets::DisplayVSlider (60, 50, 40, 220, "DialVal", 80.0, 0.0, 100.0, 1.0, "%3.1f");
+	BWidgets::VSliderValue Slider6 = BWidgets::VSliderValue (60, 50, 40, 220, "DialVal", 80.0, 0.0, 100.0, 1.0, "%3.1f");
 	Slider6.applyTheme (defaultTheme);
 	Slider6.setFocusable (true);
 
@@ -231,7 +231,7 @@ int main ()
 	BWidgets::Dial Dial2 = BWidgets::Dial (200, 150, 80, 80, "Dial", 80.0, 0.0, 100.0, -10.0);
 	Dial2.applyTheme (defaultTheme);
 	Dial2.setFocusable (true);
-	BWidgets::DisplayDial Dial3 = BWidgets::DisplayDial (300, 150, 80, 96, "DialVal", 80.0, 0.0, 100.0, 1.0, "%3.1f");
+	BWidgets::DialValue Dial3 = BWidgets::DialValue (300, 150, 80, 96, "DialVal", 80.0, 0.0, 100.0, 1.0, "%3.1f");
 	Dial3.applyTheme (defaultTheme);
 
 	// Scale widgets
@@ -290,10 +290,11 @@ int main ()
 	Surface.setDraggable (true);
 
 	// Box widgets
-	BWidgets::ChoiceBox choiceBox (10, 10, 100, 40, "ChoiceBox", {"Berlin", "Paris", "London","Dublin","Stockholm","Madrid","Riga"}, 1.0);
-	BWidgets::ListBox listBox (130, 10, 100, 140, "ListBox", {{0, "Mumbai"}, {3, "Hyderabad"}, {2, "Lucknow"}, {7, "Dehli"}, {5.5, "Jaipur"}, {6, "Surat"}, {5, "Patna"}, {8, "Agra"}, {9, "Goa"}, {10,"Jammu"}}, 7.0);
-	BWidgets::PopupListBox popupListBox (250, 10, 100, 20, 100, 140, "PopupListBox", {{0, "Arusha"}, {1, "Moshi"}, {2, "Tanga"}, {3, "Dodoma"}, {4, "Mwanza"}, {5, "Dar es Salaam"}, {6, "Mbeya"}, {7, "Zanzibar"}});
-	
+	BItems::ItemList eurocities = BItems::ItemList ({"Berlin", "Paris", "London","Dublin","Stockholm","Madrid","Riga"});
+	BWidgets::ChoiceBox choiceBox (10, 10, 100, 40, "ChoiceBox", eurocities, 1.0);
+	BWidgets::ListBox listBox (130, 10, 100, 140, "ListBox", BItems::ItemList ({{0, "Mumbai"}, {3, "Hyderabad"}, {2, "Lucknow"}, {7, "Dehli"}, {5.5, "Jaipur"}, {6, "Surat"}, {5, "Patna"}, {8, "Agra"}, {9, "Goa"}, {10,"Jammu"}}), 7.0);
+	BWidgets::PopupListBox popupListBox (250, 10, 100, 20, 100, 140, "PopupListBox", BItems::ItemList ({{0, "Arusha"}, {1, "Moshi"}, {2, "Tanga"}, {3, "Dodoma"}, {4, "Mwanza"}, {5, "Dar es Salaam"}, {6, "Mbeya"}, {7, "Zanzibar"}}));
+
 	// Key widgets
 	BWidgets::Label pressAnyKeyLabel (10, 10, 60, 10, "smallLabel", "Press any key");
 	pressAnyKeyLabel.applyTheme (defaultTheme);
@@ -368,8 +369,7 @@ int main ()
 	// Message Box with default settings
 	BWidgets::MessageBox mBox (260, 230, 200, 100, "mbox", "Message Box", "This is a message box. Press on OK to continue.");
 	MainWindow->add (mBox);
-	BWidgets::MessageBox mBox2 (280, 250, 200, 100, "mbox",
-								"Message Box", "This is a second message box with user defined buttons. Press on one of them to continue.",
+	BWidgets::MessageBox mBox2 (280, 250, 200, 100, "mbox", "Message Box", "This is a second message box with user defined buttons. Press on one of them to continue.",
 								{"Cancel", "Yes", "No"});
 	MainWindow->add (mBox2);
 	BWidgets::MessageBox mBox3 (mBox2);

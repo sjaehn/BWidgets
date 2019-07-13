@@ -20,8 +20,13 @@
 
 #include "ChoiceBox.hpp"
 
+#ifndef BWIDGETS_DEFAULT_LISTBOX_WIDTH
 #define BWIDGETS_DEFAULT_LISTBOX_WIDTH BWIDGETS_DEFAULT_CHOICEBOX_WIDTH
+#endif
+
+#ifndef BWIDGETS_DEFAULT_LISTBOX_HEIGHTH
 #define BWIDGETS_DEFAULT_LISTBOX_HEIGHTH 100.0
+#endif
 
 namespace BWidgets
 {
@@ -29,7 +34,7 @@ namespace BWidgets
 /**
  * Class BWidgets::ListBox
  *
- * Widget for selection of one item (string) out of a vector of strings.
+ * Widget for selection of one item out of a vector of items.
  * It is a composite value widget consisting of a label, an up button, and a
  * down button. The value of this widget reflects the number the item selected
  * starting with 1.0. On change, a value changed event is emitted and this
@@ -42,15 +47,11 @@ public:
 	ListBox (const double x, const double y, const double width, const double height,
 		 const std::string& name);
 	ListBox (const double x, const double y, const double width, const double height,
-		 const std::string& name, const std::vector<std::string>& strings, double preselection = UNSELECTED);
-	ListBox (const double x, const double y, const double width, const double height,
-		 const std::string& name, const std::vector<stringItem>& strItems, double preselection = UNSELECTED);
-	ListBox (const double x, const double y, const double width, const double height,
-		 const std::string& name, const std::vector<Item>& items, double preselection = UNSELECTED);
+		 const std::string& name, const BItems::ItemList& items, double preselection = UNSELECTED);
 
 	/**
-	 * Creates a new (orphan) choice box and copies the properties from a
-	 * source choice box widget.
+	 * Creates a new (orphan) list box and copies the properties from a
+	 * source list box widget.
 	 * @param that Source choice box
 	 */
 	ListBox (const ListBox& that);
@@ -58,12 +59,18 @@ public:
 	~ListBox ();
 
 	/**
-	 * Assignment. Copies the properties from a source choice box widget
+	 * Assignment. Copies the properties from a source list box widget
 	 * and keeps its name and its position within the widget tree. Emits a
 	 * BEvents::ExposeEvent if the text widget is visible.
-	 * @param that Source text widget
+	 * @param that Source list box widget
 	 */
 	ListBox& operator= (const ListBox& that);
+
+	/**
+	 * Pattern cloning. Creates a new instance of the widget and copies all
+	 * its properties.
+	 */
+	virtual Widget* clone () const override;
 
 	/**
 	 * Sets the top line of the shown list.

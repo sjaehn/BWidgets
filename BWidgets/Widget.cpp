@@ -38,7 +38,6 @@ Widget::Widget(const double x, const double y, const double width, const double 
 	mergeable[BEvents::POINTER_MOTION_EVENT] = true;
 	mergeable[BEvents::POINTER_DRAG_EVENT] = true;
 	mergeable[BEvents::WHEEL_SCROLL_EVENT] = true;
-	setStateFilter ();
 	cbfunction.fill (Widget::defaultCallback);
 	cbfunction[BEvents::EventType::POINTER_DRAG_EVENT] = Widget::dragAndDropCallback;
 	cbfunction[BEvents::EventType::FOCUS_IN_EVENT] = Widget::focusInCallback;
@@ -52,7 +51,7 @@ Widget::Widget (const Widget& that) :
 		visible (that.visible), clickable (that.clickable), draggable (that.draggable), scrollable (that.scrollable),
 		focusable (that.focusable), focusWidget (nullptr), mergeable (that.mergeable),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (that.border_), background_ (that.background_), name_ (that.name_),
-		cbfunction (that.cbfunction), widgetState (that.widgetState), stateFilter (that.stateFilter)
+		cbfunction (that.cbfunction), widgetState (that.widgetState)
 {
 	widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, that.width_, that.height_);
 	id = (long) this;
@@ -98,7 +97,6 @@ Widget& Widget::operator= (const Widget& that)
 	background_ = that.background_;
 	cbfunction = that.cbfunction;
 	widgetState = that.widgetState;
-	stateFilter = that.stateFilter;
 
 	if (widgetSurface) cairo_surface_destroy (widgetSurface);
 	widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, that.width_, that.height_);
@@ -163,7 +161,7 @@ void Widget::release (Widget* child)
 {
 	if (child)
 	{
-		//std::cout << "Release " << child->name_ << ":" << child->id << "\n";
+		//std::cout << "Release " << child->name_ << ":" << &(*child) << "\n";
 		bool wasVisible = child->isVisible ();
 
 		// Delete child's connection to this widget
@@ -378,34 +376,6 @@ void Widget::setBorder (const BStyles::Border& border)
 	update ();
 }
 
-void Widget::setStateFilter () {stateFilter = (2 << BColors::State::USER_DEFINED) - 1;}
-
-void Widget::setStateFilter (const BColors::State state) {stateFilter = stateFilter | (1 << state);}
-
-void Widget::setStateFilter (const std::vector<BColors::State>& states)
-{
-	for (BColors::State s : states) setStateFilter (s);
-}
-
-void Widget::clearStateFilter () {stateFilter = 0;}
-
-void Widget::clearStateFilter (const BColors::State state) {stateFilter = stateFilter & (~(1 << state));}
-
-void Widget::clearStateFilter (const std::vector<BColors::State>& states)
-{
-	for (BColors::State s : states) clearStateFilter (s);
-}
-
-std::vector<BColors::State> Widget::getStateFilter () const
-{
-	std::vector<BColors::State> states = {};
-	for (uint i = 0; i < 32; ++i)
-	{
-		if ((stateFilter & (1 << i)) != 0) states.push_back (BColors::State (i));
-	}
-	return states;
-}
-
 BStyles::Border* Widget::getBorder () {return &border_;}
 
 void Widget::setBackground (const BStyles::Fill& background)
@@ -507,13 +477,15 @@ Widget* Widget::getWidgetAt (const double x, const double y, const bool checkVis
 			{
 				double xNew = x - w->x_;
 				double yNew = y - w->y_;
+
 				Widget* nextw = nullptr;
-				if (stateFilter & (1 << widgetState))
+				if (filter (w))
 				{
 					nextw = w->getWidgetAt (xNew, yNew, checkVisibility,
 								checkClickability, checkDraggability,
 								checkScrollability, checkFocusability);
 				}
+
 				if (nextw)
 				{
 					finalw = nextw;
@@ -665,7 +637,7 @@ void Widget::redisplay (cairo_surface_t* surface, double x, double y, double wid
 			{
 				double xNew = x - w->x_;
 				double yNew = y - w->y_;
-				if (stateFilter & (1 << w->getState ()))
+				if (filter (w))
 				{
 					w->redisplay (surface, xNew, yNew, width, height);
 				}
@@ -673,6 +645,8 @@ void Widget::redisplay (cairo_surface_t* surface, double x, double y, double wid
 		}
 	}
 }
+
+bool Widget::filter (Widget* widget) {return true;}
 
 void Widget::draw (const double x, const double y, const double width, const double height)
 {

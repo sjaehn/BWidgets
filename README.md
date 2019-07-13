@@ -59,14 +59,18 @@ namespace BEvents
       ╰── ValueChangedEvent
 
 namespace BItems
- ╰── Item
+ ├── Item
+ ╰── ItemList
 
 namespace BWidgets
  ╰── Widget
       ├── Window
       ├── FocusWidget
       ├── DrawingSurface
-      ├── ImageIcon
+      ├── Display
+      │    ╰── StateDisplay
+      ├── Icon
+      │    ╰── ImageIcon
       ├── Label
       ├── Text
       ├── Knob
@@ -84,15 +88,15 @@ namespace BWidgets
       │    │    ╰── ListBox
       │    ╰── RangeWidget
       │         ├── Dial
-      │         │    ╰── DisplayDial
+      │         │    ╰── DialValue
       │         ├── HScale
       │         │    ╰── HSlider
       │         │         ├── HSwitch
-      │         │         ╰── DisplayHSlider
+      │         │         ╰── HSliderValue
       │         ╰── VScale
       │              ╰── VSlider
       │                   ├── VSwitch
-      │                   ╰── DisplayVSlider
+      │                   ╰── VSliderValue
       ╰── PianoWidget
            ╰── HPianoRoll
 

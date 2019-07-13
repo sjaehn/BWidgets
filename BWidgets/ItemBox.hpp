@@ -18,6 +18,7 @@
 #ifndef BWIDGETS_ITEMBOX_HPP_
 #define BWIDGETS_ITEMBOX_HPP_
 
+#include "BItems.hpp"
 #include "Label.hpp"
 #include "ValueWidget.hpp"
 #include <cmath>
@@ -50,7 +51,7 @@ class ItemBox : public ValueWidget
 public:
 	ItemBox ();
 	ItemBox (const double x, const double y, const double width, const double height,
-		 const std::string& name, const Item item);
+		 const std::string& name, const BItems::Item item);
 
 	/**
 	 * Creates a new (orphan) item box and copies the properties from a
@@ -76,16 +77,16 @@ public:
 	virtual Widget* clone () const override;
 
 	/**
-	 * Sets the item of this widget.
-	 * @param item Item.
+	 * Sets the item stored in this widget.
+	 * @param item	Item.
 	 */
-	void setItem (const Item item);
+	void setItem (const BItems::Item item);
 
 	/**
-	 * Gets the item of the widget.
-	 * @return Item.
+	 * Gets (a pointer to) the item stored in this widget.
+	 * @return	Item.
 	 */
-	Item getItem () const;
+	BItems::Item* getItem ();
 
 	/**
 	 * Scans theme for widget properties and applies these properties.
@@ -105,7 +106,7 @@ public:
 	virtual void update () override;
 
 protected:
-	Widget* widget;
+	BItems::Item item;
 };
 
 }

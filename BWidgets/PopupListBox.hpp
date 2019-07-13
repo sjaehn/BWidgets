@@ -35,7 +35,7 @@ namespace BWidgets
 /**
  * Class BWidgets::PopupListBox
  *
- * Widget for selection of one item (string) out of a vector of strings.
+ * Widget for selection of one item out of a vector of items.
  * It is a composite value widget consisting of a the widget itself (a
  * BWidgets::ItemBox) , a BWidgets::ListBox and a BWidgets::DownButton. The
  * widget shows the result of the BWidgets::ListBox. The BWidgets::ListBox pops
@@ -53,40 +53,24 @@ public:
 		      const double listWidth, const double listHeight, const std::string& name);
 	PopupListBox (const double x, const double y, const double width, const double height,
 		      const double listWidth, const double listHeight, const std::string& name,
-		      const std::vector<std::string>& strings, double preselection = UNSELECTED);
-	PopupListBox (const double x, const double y, const double width, const double height,
-		      const double listWidth, const double listHeight, const std::string& name,
-		      const std::vector<stringItem>& strItems, double preselection = UNSELECTED);
-	PopupListBox (const double x, const double y, const double width, const double height,
-		      const double listWidth, const double listHeight, const std::string& name,
-		      const std::vector<Item>& items, double preselection = UNSELECTED);
+		      const BItems::ItemList& items, double preselection = UNSELECTED);
 	PopupListBox (const double x, const double y, const double width, const double height,
 		      const double listXOffset, const double listYOffset, const double listWidth,
 		      const double listHeight, const std::string& name);
 	PopupListBox (const double x, const double y, const double width, const double height,
 		      const double listXOffset, const double listYOffset, const double listWidth,
 		      const double listHeight, const std::string& name,
-		      const std::vector<std::string>& strings, double preselection = UNSELECTED);
-	PopupListBox (const double x, const double y, const double width, const double height,
-		      const double listXOffset, const double listYOffset, const double listWidth,
-		      const double listHeight, const std::string& name,
-		      const std::vector<stringItem>& stringItems, double preselection = UNSELECTED);
-	PopupListBox (const double x, const double y, const double width, const double height,
-		      const double listXOffset, const double listYOffset, const double listWidth,
-		      const double listHeight, const std::string& name,
-		      const std::vector<Item>& items, double preselection = UNSELECTED);
+		      const BItems::ItemList& items, double preselection = UNSELECTED);
 
 	/**
-	 * Creates a new (orphan) choice box and copies the properties from a
+	 * Creates a new (orphan) PopupListBox and copies the properties from a
 	 * source choice box widget.
 	 * @param that Source choice box
 	 */
 	PopupListBox (const PopupListBox& that);
 
-	~PopupListBox ();
-
 	/**
-	 * Assignment. Copies the properties from a source choice box widget
+	 * Assignment. Copies the properties from a source PopupListBox widget
 	 * and keeps its name and its position within the widget tree. Emits a
 	 * BEvents::ExposeEvent if the text widget is visible.
 	 * @param that Source text widget
@@ -104,7 +88,7 @@ public:
 	 * internally stored list of items.
 	 * @return Pointer to a string vector
 	 */
-	std::vector<Item>* getItemList ();
+	BItems::ItemList* getItemList ();
 
 	/**
 	 * Gets (a pointer to) the internal BWidgets::ListBox

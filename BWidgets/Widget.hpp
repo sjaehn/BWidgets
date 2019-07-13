@@ -55,6 +55,7 @@
 #include "cairoplus.h"
 #include "pugl/pugl.h"
 #include <stdint.h>
+#include <array>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -72,12 +73,6 @@ namespace BWidgets
 class Window; // Forward declaration
 class Widget; // Forward declaration
 class FocusWidget; // Forward declaration
-
-struct Item
-{
-	double value;
-	Widget* widget;
-};
 
 /**
  * Class BWidgets::Widget
@@ -659,6 +654,7 @@ protected:
 
 	void postRedisplay (const double x, const double y, const double width, const double height);
 	void redisplay (cairo_surface_t* surface, double x, double y, double width, double height);
+	virtual bool filter (Widget* widget);
 
 	virtual void draw (const double x, const double y, const double width, const double height);
 
@@ -681,7 +677,6 @@ protected:
 	std::array<std::function<void (BEvents::Event*)>, BEvents::EventType::NO_EVENT> cbfunction;
 	cairo_surface_t* widgetSurface;
 	BColors::State widgetState;
-	uint32_t stateFilter;
 	FocusWidget* focusWidget;
 
 };

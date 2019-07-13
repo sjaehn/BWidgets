@@ -32,29 +32,7 @@ ListBox::ListBox (const double x, const double y, const double width, const doub
  }
 
 ListBox::ListBox (const double x, const double y, const double width, const double height,
-		  const std::string& name, const std::vector<std::string>& strings, double preselection) :
-	ChoiceBox (x, y, width, height, name, strings, preselection),
-	listTop (0)
-{
-	if (!items.empty ()) listTop = 1;
-
-	upButton.setCallbackFunction (BEvents::EventType::BUTTON_PRESS_EVENT, ListBox::handleButtonClicked);
- 	downButton.setCallbackFunction (BEvents::EventType::BUTTON_PRESS_EVENT, ListBox::handleButtonClicked);
-}
-
-ListBox::ListBox (const double x, const double y, const double width, const double height,
-		  const std::string& name, const std::vector<stringItem>& strItems, double preselection) :
-	ChoiceBox (x, y, width, height, name, strItems, preselection),
-	listTop (0)
-{
-	if (!items.empty ()) listTop = 1;
-
-	upButton.setCallbackFunction (BEvents::EventType::BUTTON_PRESS_EVENT, ListBox::handleButtonClicked);
- 	downButton.setCallbackFunction (BEvents::EventType::BUTTON_PRESS_EVENT, ListBox::handleButtonClicked);
-}
-
-ListBox::ListBox (const double x, const double y, const double width, const double height,
-		  const std::string& name, const std::vector<Item>& items, double preselection) :
+		  const std::string& name, const BItems::ItemList& items, double preselection) :
 	ChoiceBox (x, y, width, height, name, items, preselection),
 	listTop (0)
 {
@@ -75,6 +53,8 @@ ListBox& ListBox::operator= (const ListBox& that)
 	ChoiceBox::operator= (that);
 	return *this;
 }
+
+Widget* ListBox::clone () const {return new ListBox (*this);}
 
 void ListBox::setTop (const int top)
 {
@@ -123,16 +103,6 @@ void ListBox::handleButtonClicked (BEvents::Event* event)
 
 void ListBox::updateItems ()
 {
-	// Keep Buttons on top
-	int cs = children_.size ();
-	if ((cs >= 2) &&
-	    ((children_[cs - 1] != (Widget*) &upButton) ||
-	     (children_[cs - 2] != (Widget*) &downButton)))
-	{
-		downButton.moveToTop ();
-		upButton.moveToTop ();
-	}
-
 	double x0 = getXOffset ();
 	double y0 = getYOffset ();
 	double width = getEffectiveWidth ();
@@ -140,33 +110,36 @@ void ListBox::updateItems ()
 	double listHeight = (height >= 2 * BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT ?
 			     height - 2 * BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT : 0);
 	double upButtonHeight = (height >= BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT ?
-				 BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT : height);
-	double itemHeight = items[0].widget->getHeight ();
+				 BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT : 0); // TODO
+	double itemHeight = (!items.empty () && items.front ().getWidget () ?
+			     items.front ().getWidget()->getHeight () :
+			     BWIDGETS_DEFAULT_CHOICEBOX_ITEM_HEIGHTH);
 	double lineHeight = ((items.empty () || (itemHeight == 0)) ? 20 : itemHeight);
 	uint lines = ceil (listHeight / lineHeight);
 
-	for (uint i = 0; i < items.size (); ++i)
+	uint n = 0;
+	for (BItems::Item const& i : items)
 	{
-		Widget* w = items[i].widget;
-
-		if ((i + 1 >= uint (listTop)) && (i + 1 < listTop + lines))
+		Widget* w = i.getWidget ();
+		if (w)
 		{
-			w->moveTo (x0 + BWIDGETS_DEFAULT_CHOICEBOX_PADDING,
-				   y0 + upButtonHeight + (i + 1 - listTop) * lineHeight);
-			w->setWidth (width > 2 * BWIDGETS_DEFAULT_CHOICEBOX_PADDING ?
-				     width - 2 * BWIDGETS_DEFAULT_CHOICEBOX_PADDING : 0);
-			w->setHeight (lineHeight);
+			if ((n + 1 >= uint (listTop)) && (n + 1 < listTop + lines))
+			{
+				w->moveTo (x0 + BWIDGETS_DEFAULT_CHOICEBOX_PADDING,
+					   y0 + upButtonHeight + (n + 1 - listTop) * lineHeight);
+				w->setWidth (width > 2 * BWIDGETS_DEFAULT_CHOICEBOX_PADDING ?
+					     width - 2 * BWIDGETS_DEFAULT_CHOICEBOX_PADDING : 0);
+				w->setHeight (lineHeight);
 
-			if (i + 1 == uint (activeNr)) w->setState (BColors::ACTIVE);
-			else w->setState (BColors::NORMAL);
+				if (n + 1 == uint (activeNr)) w->setState (BColors::ACTIVE);
+				else w->setState (BColors::NORMAL);
 
-			w->show ();
+				w->show ();
+			}
+
+			else w->hide ();
 		}
-		else
-		{
-			w->hide ();
-		}
-
+		++n;
 	}
 }
 
@@ -175,7 +148,9 @@ int ListBox::getLines ()
 	double height = getEffectiveHeight ();
 	double listHeight = (height >= 2 * BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT ?
 			     height - 2 * BWIDGETS_DEFAULT_CHOICEBOX_BUTTON_HEIGHT : 0);
-	double lineHeight = (labels.empty () ? 20 : items[0].widget->getHeight ());
+	double lineHeight = (((!items.empty ()) && items.front ().getWidget ()) ?
+			     items.front ().getWidget()->getHeight () :
+			     BWIDGETS_DEFAULT_CHOICEBOX_ITEM_HEIGHTH);
 	int lines = (listHeight > lineHeight ? listHeight / lineHeight : 1);
 	return lines;
 }
