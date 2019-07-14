@@ -118,7 +118,7 @@ ItemList::ItemList (BWidgets::Widget* widget) :
 ItemList::ItemList (const std::vector<BWidgets::Widget*>& widgets) :
         std::list<Item> ()
 {
-        for (BWidgets::Widget* w : widgets) push_back (w);
+        for (BWidgets::Widget* w : widgets) push_back (Item (getNextValue (), w));;
 }
 
 ItemList::ItemList (const std::string& text) :
@@ -127,7 +127,7 @@ ItemList::ItemList (const std::string& text) :
 ItemList::ItemList (const std::vector<std::string>& texts) :
         std::list<Item> ()
 {
-        for (std::string const& s : texts) push_back (s);
+        for (std::string const& s : texts) push_back (Item (getNextValue (), s));
 }
 
 void ItemList::push_back (const Item& item) {std::list<Item>::push_back (item);}
