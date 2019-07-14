@@ -3,7 +3,7 @@ SHELL = /bin/sh
 PKG_CONFIG ?= pkg-config
 CXX ?= g++
 CPPFLAGS += -DPIC
-CXXFLAGS += -std=c++11 -g -fPIC -DPUGL_HAVE_CAIRO `$(PKG_CONFIG) --cflags --libs x11 cairo`
+CXXFLAGS += -std=c++11 -g -Wall -fPIC -DPUGL_HAVE_CAIRO `$(PKG_CONFIG) --cflags --libs x11 cairo`
 LDFLAGS +=
 
 SRC = BWidgets-demo.cpp
