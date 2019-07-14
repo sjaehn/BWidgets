@@ -19,6 +19,7 @@
  #define BWIDGETS_BITEMS_HPP_
 
 #include <list>
+#include <initializer_list>
 #include "Widget.hpp"
 #include <cmath>
 
@@ -62,9 +63,9 @@ public:
         ItemList (const Item& item);
         ItemList (const std::list<Item>& items);
         ItemList (BWidgets::Widget* widget);
-        ItemList (const std::vector<BWidgets::Widget*>& widgets);
+        ItemList (const std::initializer_list<BWidgets::Widget*>& widgets);
         ItemList (const std::string& text);
-        ItemList (const std::vector<std::string>& texts);
+        ItemList (const std::initializer_list<std::string>& texts);
 
         using std::list<Item>::operator=;
         using std::list<Item>::begin;

@@ -115,7 +115,7 @@ ItemList::ItemList (const std::list<Item>& items) :
 ItemList::ItemList (BWidgets::Widget* widget) :
         std::list<Item> ({Item (1.0, widget)}) {}
 
-ItemList::ItemList (const std::vector<BWidgets::Widget*>& widgets) :
+ItemList::ItemList (const std::initializer_list<BWidgets::Widget*>& widgets) :
         std::list<Item> ()
 {
         for (BWidgets::Widget* w : widgets) push_back (Item (getNextValue (), w));;
@@ -124,7 +124,7 @@ ItemList::ItemList (const std::vector<BWidgets::Widget*>& widgets) :
 ItemList::ItemList (const std::string& text) :
         std::list<Item> ({Item (1.0, text)}) {}
 
-ItemList::ItemList (const std::vector<std::string>& texts) :
+ItemList::ItemList (const std::initializer_list<std::string>& texts) :
         std::list<Item> ()
 {
         for (std::string const& s : texts) push_back (Item (getNextValue (), s));
