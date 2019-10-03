@@ -367,9 +367,9 @@ int main ()
 	Surface.moveFrontwards ();
 
 	// Message Box with default settings
-	BWidgets::MessageBox mBox (260, 230, 200, 100, "mbox", "Message Box", "This is a message box. Press on OK to continue.");
+	BWidgets::MessageBox mBox (260, 230, 200, 120, "mbox", "Message Box", "This is a message box. Press on OK to continue.");
 	MainWindow->add (mBox);
-	BWidgets::MessageBox mBox2 (280, 250, 200, 100, "mbox", "Message Box", "This is a second message box with user defined buttons. Press on one of them to continue.",
+	BWidgets::MessageBox mBox2 (280, 250, 200, 140, "mbox", "Message Box", "This is a second message box with user defined buttons. Press on one of them to continue.",
 								{"Cancel", "Yes", "No"});
 	MainWindow->add (mBox2);
 	BWidgets::MessageBox mBox3 (mBox2);
