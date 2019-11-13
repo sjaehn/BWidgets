@@ -185,6 +185,9 @@ int main ()
 	Label3.applyTheme (defaultTheme, "Label");
 	BWidgets::Label Label4 = BWidgets::Label (10, 10, 240, 16, "This is a too long label text and it will be clipped!");
 	Label4.applyTheme (defaultTheme, "Label");
+	BWidgets::Label Label5 = BWidgets::Label (100, 220, 340, 16, "This is an editable label!");
+	Label5.applyTheme (defaultTheme, "Label");
+	Label5.setEditable (true);
 	BWidgets::Text Text1 (20, 20, 240, 80, "This is a text widget.\nThe text contains line breaks if the text is too long. Lines are broken on (i) \\n, (ii) space or (iii) any position.");
 	Text1.applyTheme (defaultTheme, "Text");
 
@@ -311,6 +314,7 @@ int main ()
 	Widget2.add (Label2a);
 	Widget2.add (Label3);
 	Widget2.add (Label4);
+	Widget2.add (Label5);
 	Widget2.add (Text1);
 	Widget2.add (Switch1);
 	Widget2.add (Switch2);
