@@ -66,7 +66,7 @@ Label& Label::operator= (const Label& that)
 		postMessage (BWIDGETS_LABEL_TEXT_CHANGED_MESSAGE, BUtilities::makeAny<std::string> (labelText));
 		oldText = labelText;
 	}
-	
+
 	return *this;
 }
 
@@ -242,11 +242,7 @@ void Label::onKeyPressed (BEvents::KeyEvent* event)
 			{
 				main_->removeKeyGrab (this);
 				setEditMode (false);
-				if (labelText != oldText)
-				{
-					postMessage (BWIDGETS_LABEL_TEXT_CHANGED_MESSAGE, BUtilities::makeAny<std::string> (labelText));
-					oldText = labelText;
-				}
+				if (labelText != oldText) setText (oldText);
 			}
 			break;
 

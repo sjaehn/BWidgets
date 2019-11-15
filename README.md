@@ -36,6 +36,9 @@ BWidgets is a toolkit intended to use directly in B.Music projects. If you want 
 Class hierarchy
 ---------------
 ```
+namespace BUtilities
+ ╰── Any
+
 namespace BColors
  ├── Color
  ╰── ColorSet
@@ -56,7 +59,8 @@ namespace BEvents
       ├── PointerEvent
       ├── WheelEvent
       ├── FocusEvent
-      ╰── ValueChangedEvent
+      ├── ValueChangedEvent
+      ╰── MessageEvent
 
 namespace BItems
  ├── Item
