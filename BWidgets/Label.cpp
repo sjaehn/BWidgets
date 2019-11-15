@@ -353,9 +353,9 @@ size_t Label::getCursorFromCoords (const double x, const double y)
 		{
 		case BStyles::TEXT_ALIGN_LEFT:		x0 = - ext.x_bearing;
 							break;
-		case BStyles::TEXT_ALIGN_CENTER:	x0 = w / 2 - (ext.width - 2 * ext0.width) / 2 - ext.x_bearing;
+		case BStyles::TEXT_ALIGN_CENTER:	x0 = w / 2 - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing) / 2;
 							break;
-		case BStyles::TEXT_ALIGN_RIGHT:		x0 = w - (ext.width - 2 * ext0.width) - ext.x_bearing;
+		case BStyles::TEXT_ALIGN_RIGHT:		x0 = w - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing);
 							break;
 		default:				x0 = 0;
 		}
@@ -367,7 +367,7 @@ size_t Label::getCursorFromCoords (const double x, const double y)
 			std::string fragment = convert.to_bytes (u32fragment);
 			cairo_text_extents_t ext1 = labelFont.getTextExtents(cr, "|" + fragment + "|");
 
-			if (x < xoff + x0 + ext1.width - 2 * ext0.width)
+			if (x < xoff + x0 + ext1.width - 2 * ext0.width - 2 * ext0.x_bearing)
 			{
 				cursor = i;
 				break;
@@ -409,11 +409,11 @@ void Label::draw (const double x, const double y, const double width, const doub
 
 		switch (labelFont.getTextAlign ())
 		{
-		case BStyles::TEXT_ALIGN_LEFT:		x0 = - ext.x_bearing;
+		case BStyles::TEXT_ALIGN_LEFT:		x0 = 0;
 							break;
-		case BStyles::TEXT_ALIGN_CENTER:	x0 = w / 2 - (ext.width - 2 * ext0.width) / 2 - ext.x_bearing;
+		case BStyles::TEXT_ALIGN_CENTER:	x0 = w / 2 - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing) / 2;
 							break;
-		case BStyles::TEXT_ALIGN_RIGHT:		x0 = w - (ext.width - 2 * ext0.width) - ext.x_bearing;
+		case BStyles::TEXT_ALIGN_RIGHT:		x0 = w - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing);
 							break;
 		default:				x0 = 0;
 		}
@@ -443,8 +443,8 @@ void Label::draw (const double x, const double y, const double width, const doub
 			cairo_text_extents_t ext1 = labelFont.getTextExtents(cr, "|" + s1 + "|");
 			cairo_text_extents_t ext2 = labelFont.getTextExtents(cr, "|" + s2 + "|");
 
-			double w1 = ext1.width - 2 * ext0.width;
-			double w2 = ext2.width - 2 * ext0.width;
+			double w1 = ext1.width - 2 * ext0.width - 2 * ext0.x_bearing;
+			double w2 = ext2.width - 2 * ext0.width - 2 * ext0.x_bearing;
 
 			BColors::Color lc = *labelColors.getColor (BColors::ACTIVE);
 			cairo_set_source_rgba (cr, lc.getRed (), lc.getGreen (), lc.getBlue (), lc.getAlpha ());
