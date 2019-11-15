@@ -394,6 +394,10 @@ void Window::handleEvents ()
 					widget->onFocusOut((BEvents::FocusEvent*) event);
 					break;
 
+				case BEvents::MESSAGE_EVENT:
+					widget->onMessage ((BEvents::MessageEvent*) event);
+					break;
+
 				default:
 					break;
 				}

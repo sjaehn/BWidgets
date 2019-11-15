@@ -33,6 +33,14 @@ static void showKey (BEvents::Event* event)
 	}
 }
 
+static void showMessage (BEvents::Event* event)
+{
+	if ((event) && (event->getWidget ()))
+	{
+		std::cout << "Message: " << ((BEvents::MessageEvent*) event)->getName () << std::endl;
+	}
+}
+
 int main ()
 {
 	//Define Styles and Colors first
@@ -188,6 +196,7 @@ int main ()
 	BWidgets::Label Label5 = BWidgets::Label (100, 220, 340, 16, "This is an editable label!");
 	Label5.applyTheme (defaultTheme, "Label");
 	Label5.setEditable (true);
+	Label5.setCallbackFunction (BEvents::EventType::MESSAGE_EVENT, showMessage);
 	BWidgets::Text Text1 (20, 20, 240, 80, "This is a text widget.\nThe text contains line breaks if the text is too long. Lines are broken on (i) \\n, (ii) space or (iii) any position.");
 	Text1.applyTheme (defaultTheme, "Text");
 

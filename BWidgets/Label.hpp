@@ -23,6 +23,9 @@
 #define BWIDGETS_DEFAULT_LABEL_ALIGN BStyles::TEXT_ALIGN_CENTER
 #define BWIDGETS_DEFAULT_LABEL_VALIGN BStyles::TEXT_VALIGN_MIDDLE
 
+#define BWIDGETS_LABEL_TEXT_CHANGED_MESSAGE "TEXT_CHANGED"
+#define BWIDGETS_LABEL_EDIT_ENTERED_MESSAGE "EDIT_ENTERED"
+
 #include "Widget.hpp"
 
 namespace BWidgets
@@ -142,6 +145,7 @@ protected:
 	BColors::ColorSet labelColors;
 	BStyles::Font labelFont;
 	std::string labelText;
+	std::string oldText;
 	std::u32string u32labelText;
 	bool editable;
 	bool editMode;

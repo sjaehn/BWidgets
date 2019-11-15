@@ -514,6 +514,7 @@ void Widget::onWheelScrolled (BEvents::WheelEvent* event){cbfunction[BEvents::Ev
 void Widget::onValueChanged (BEvents::ValueChangedEvent* event) {cbfunction[BEvents::EventType::VALUE_CHANGED_EVENT] (event);}
 void Widget::onFocusIn (BEvents::FocusEvent* event) {cbfunction[BEvents::EventType::FOCUS_IN_EVENT] (event);}
 void Widget::onFocusOut (BEvents::FocusEvent* event) {cbfunction[BEvents::EventType::FOCUS_OUT_EVENT] (event);}
+void Widget::onMessage (BEvents::MessageEvent* event) {cbfunction[BEvents::EventType::MESSAGE_EVENT] (event);}
 
 void Widget::defaultCallback (BEvents::Event* event) {}
 
@@ -588,6 +589,15 @@ std::vector <Widget*> Widget::getChildrenAsQueue (std::vector <Widget*> queue) c
 		if (!w->children_.empty()) queue = w->getChildrenAsQueue (queue);
 	}
 	return queue;
+}
+
+void Widget::postMessage (const std::string& name, const BUtilities::Any content)
+{
+	if (main_)
+	{
+		BEvents::MessageEvent* event = new BEvents::MessageEvent (this, name, content);
+		main_->addEventToQueue (event);
+	}
 }
 
 void Widget::postRedisplay () {postRedisplay (getOriginX (), getOriginY (), width_, height_);}

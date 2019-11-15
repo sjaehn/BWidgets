@@ -45,7 +45,6 @@ BWidgets/Window.cpp \
 BWidgets/Widget.cpp \
 BWidgets/BStyles.cpp \
 BWidgets/BColors.cpp \
-BWidgets/BEvents.cpp \
 BWidgets/BItems.cpp \
 BWidgets/BValues.cpp \
 BWidgets/cairoplus.c \

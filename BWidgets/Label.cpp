@@ -32,6 +32,7 @@ Label::Label (const double x, const double y, const double width, const double h
 		labelColors (BWIDGETS_DEFAULT_TEXT_COLORS),
 		labelFont (BWIDGETS_DEFAULT_FONT),
 		labelText (text),
+		oldText (text),
 		u32labelText (),
 		editable (false),
 		editMode (false),
@@ -59,6 +60,13 @@ Label& Label::operator= (const Label& that)
 	cursorFrom = that.cursorFrom;
 	cursorTo = that.cursorTo;
 	Widget::operator= (that);
+
+	if (labelText != oldText)
+	{
+		postMessage (BWIDGETS_LABEL_TEXT_CHANGED_MESSAGE, BUtilities::makeAny<std::string> (labelText));
+		oldText = labelText;
+	}
+	
 	return *this;
 }
 
@@ -75,6 +83,11 @@ void Label::setText (const std::string& text)
 		if (cursorFrom < sz) cursorFrom = sz;
 		if (cursorTo < sz) cursorTo = sz;
 		update ();
+		if (labelText != oldText)
+		{
+			postMessage (BWIDGETS_LABEL_TEXT_CHANGED_MESSAGE, BUtilities::makeAny<std::string> (labelText));
+			oldText = labelText;
+		}
 	}
 }
 
@@ -159,6 +172,7 @@ void Label::setEditMode (const bool mode)
 	{
 		editMode = mode;
 		update ();
+		if (editable) postMessage (BWIDGETS_LABEL_EDIT_ENTERED_MESSAGE, BUtilities::makeAny<bool> (editMode));
 	}
 }
 
@@ -216,6 +230,11 @@ void Label::onKeyPressed (BEvents::KeyEvent* event)
 			{
 				main_->removeKeyGrab (this);
 				setEditMode (false);
+				if (labelText != oldText)
+				{
+					postMessage (BWIDGETS_LABEL_TEXT_CHANGED_MESSAGE, BUtilities::makeAny<std::string> (labelText));
+					oldText = labelText;
+				}
 			}
 			break;
 
@@ -223,6 +242,11 @@ void Label::onKeyPressed (BEvents::KeyEvent* event)
 			{
 				main_->removeKeyGrab (this);
 				setEditMode (false);
+				if (labelText != oldText)
+				{
+					postMessage (BWIDGETS_LABEL_TEXT_CHANGED_MESSAGE, BUtilities::makeAny<std::string> (labelText));
+					oldText = labelText;
+				}
 			}
 			break;
 
