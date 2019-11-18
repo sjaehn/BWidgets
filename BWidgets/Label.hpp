@@ -132,6 +132,9 @@ public:
 	void setCursor (const size_t pos);
 	void setCursor (const size_t from, const size_t to);
 
+	void applyEdit ();
+	void discardEdit ();
+
 	virtual void onButtonPressed (BEvents::PointerEvent* event) override;
 	virtual void onPointerDragged (BEvents::PointerEvent* event) override;
 	virtual void onKeyPressed (BEvents::KeyEvent* event) override;
