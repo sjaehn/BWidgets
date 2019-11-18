@@ -54,7 +54,8 @@ namespace BStyles
 
 namespace BEvents
  ╰── Event
-      ├── ExposeEvent
+      ├── WidgetEvent
+           ╰── ExposeEvent
       ├── KeyEvent
       ├── PointerEvent
       ├── WheelEvent

@@ -16,6 +16,9 @@
  */
 #include "BWidgets/BWidgets.hpp"
 
+// Demonstration of callback function for VALUE_CHANGED_EVENT
+// Used by Dial2
+// Displays dial value
 static void showValue (BEvents::Event* event)
 {
 	if ((event) && (event->getWidget ()))
@@ -24,6 +27,9 @@ static void showValue (BEvents::Event* event)
 	}
 }
 
+// Demonstration of callback function for KEY_PRESS_EVENT
+// Used by keyLabel
+// Displays key UTF8 character
 static void showKey (BEvents::Event* event)
 {
 	if ((event) && (event->getWidget ()))
@@ -33,11 +39,32 @@ static void showKey (BEvents::Event* event)
 	}
 }
 
+// Demonstration of callback function for MESSAGE_EVENT
+// Used by Label5
+// Displays name of the message events
 static void showMessage (BEvents::Event* event)
 {
 	if ((event) && (event->getWidget ()))
 	{
 		std::cout << "Message: " << ((BEvents::MessageEvent*) event)->getName () << std::endl;
+	}
+}
+
+// Demonstration of callback function for CLOSE_REQUEST_EVENT
+// Used by mBox, mBox2, mBox3
+// Displays the button pressed to close the message box widget
+static void closeRequest (BEvents::Event* event)
+{
+	if ((event) && (event->getWidget ()))
+	{
+		BEvents::WidgetEvent* wev = (BEvents::WidgetEvent*)event;
+		if (wev)
+		{
+			BWidgets::MessageBox* ww = (BWidgets::MessageBox*) wev->getRequestWidget ();
+			std::cout << "Messagebox closed with " << ww->getButtonText (ww->getValue ()) << "\n";
+			//w->release (ww);
+			delete ww;
+		}
 	}
 }
 
@@ -380,19 +407,18 @@ int main ()
 	Surface.moveFrontwards ();
 
 	// Message Box with default settings
-	BWidgets::MessageBox mBox (260, 230, 200, 120, "mbox", "Message Box", "This is a message box. Press on OK to continue.");
-	MainWindow->add (mBox);
-	BWidgets::MessageBox mBox2 (280, 250, 200, 140, "mbox", "Message Box", "This is a second message box with user defined buttons. Press on one of them to continue.",
-								{"Cancel", "Yes", "No"});
-	MainWindow->add (mBox2);
-	BWidgets::MessageBox mBox3 (mBox2);
-	mBox3.moveTo (300, 270);
-	mBox3.removeButton ("Cancel");
-	MainWindow->add (mBox3);
-	BWidgets::MessageBox mBox4 = mBox3;
-	mBox4.addButton ("Maybe");
-	mBox4.moveTo (320, 290);
-	MainWindow->add (mBox4);
+	BWidgets::MessageBox* mBox = new BWidgets::MessageBox(260, 230, 200, 120, "mbox", "Message Box", "This is a message box. Press on OK to continue.");
+	MainWindow->add (*mBox);
+	BWidgets::MessageBox* mBox2 =new BWidgets::MessageBox (280, 250, 200, 140, "mbox", "Message Box",
+		"This is a second message box with user defined buttons. Press on one of them to continue.",
+		{"Cancel", "Yes", "No"});
+	MainWindow->add (*mBox2);
+	BWidgets::MessageBox* mBox3 = new BWidgets::MessageBox (*mBox2);
+	mBox3->moveTo (300, 270);
+	mBox3->removeButton ("Cancel");
+	MainWindow->add (*mBox3);
+
+	MainWindow->setCallbackFunction (BEvents::EventType::CLOSE_REQUEST_EVENT, closeRequest);
 
 	// Run until main window is closed
 	MainWindow->run ();
