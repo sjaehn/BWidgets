@@ -297,24 +297,15 @@ void Label::onKeyReleased (BEvents::KeyEvent* event) {cbfunction[BEvents::EventT
 
 void Label::onButtonPressed (BEvents::PointerEvent* event)
 {
-	if (editable && (event) && (event->getWidget () == this) && (main_) && (main_->getKeyGrabWidget (0) == this))
+	if (editable && (event) && (event->getWidget () == this) && (main_))
 	{
+		main_->setKeyGrab (this);
+		setEditMode (true);
 		size_t cursor = getCursorFromCoords (event->getX (), event->getY ());
 		setCursor (cursor, cursor);
 	}
 
 	cbfunction[BEvents::EventType::BUTTON_PRESS_EVENT] (event);
-}
-
-void Label::onButtonClicked (BEvents::PointerEvent* event)
-{
-	if (editable && (event) && (event->getWidget () == this) && (main_) && (main_->getKeyGrabWidget (0) != this))
-	{
-		main_->setKeyGrab (this);
-		setEditMode (true);
-	}
-
-	cbfunction[BEvents::EventType::BUTTON_CLICK_EVENT] (event);
 }
 
 void Label::onPointerDragged (BEvents::PointerEvent* event)
