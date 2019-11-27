@@ -620,9 +620,9 @@ void Widget::postRedisplay (const double xabs, const double yabs, const double w
 
 void Widget::postCloseRequest ()
 {
-	if (main_)
+	if (main_ && parent_)
 	{
-		BEvents::WidgetEvent* event = new BEvents::WidgetEvent (main_, this, BEvents::CLOSE_REQUEST_EVENT);
+		BEvents::WidgetEvent* event = new BEvents::WidgetEvent (parent_, this, BEvents::CLOSE_REQUEST_EVENT);
 		main_->addEventToQueue (event);
 	}
 }
