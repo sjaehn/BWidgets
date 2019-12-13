@@ -62,8 +62,6 @@ static void closeRequest (BEvents::Event* event)
 		{
 			BWidgets::MessageBox* ww = (BWidgets::MessageBox*) wev->getRequestWidget ();
 			std::cout << "Messagebox closed with " << ww->getButtonText (ww->getValue ()) << "\n";
-			//w->release (ww);
-			delete ww;
 		}
 	}
 }
@@ -194,6 +192,7 @@ int main ()
 	BWidgets::Widget Widget2 = BWidgets::Widget (100, 100, 500, 300, "BackgroundWidget");
 	Widget2.setBorder (BStyles::Border (BStyles::Line (BColors::blue, 3.0), 0.0, 0.0, 0.0));
 	Widget2.setBackground (BStyles::Fill (BColors::darkdarkgrey));
+
 	BWidgets::Widget Widget3 = BWidgets::Widget (80, 10, 500, 300, "Frame");
 	Widget3.applyTheme (defaultTheme);
 	Widget3.setDraggable (true);
@@ -282,6 +281,7 @@ int main ()
 	BWidgets::VScale Scale1 (380, 50, 10, 80, "Slider", 80.0, 0.0, 100.0, -1);
 	Scale1.applyTheme (defaultTheme);
 	Scale1.setHardChangeable (false);
+
 	BWidgets::HScale Scale2 (400, 50, 60, 10, "Slider", 80.0, 0.0, 100.0, -1);
 	Scale2.applyTheme (defaultTheme);
 	Scale2.setHardChangeable (false);
@@ -353,6 +353,7 @@ int main ()
 	Widget2.add (Label4);
 	Widget2.add (Label5);
 	Widget2.add (Text1);
+
 	Widget2.add (Switch1);
 	Widget2.add (Switch2);
 
@@ -401,7 +402,9 @@ int main ()
 	Widget.add (Button2);
 	Widget.add (Button3);
 	Widget.add (Button4);
+
 	Widget.add (Scale1);
+
 	Widget.add (Scale2);
 	Dial2.setCallbackFunction (BEvents::EventType::VALUE_CHANGED_EVENT, showValue);
 	Label4.moveTo (150, 200);
@@ -411,6 +414,7 @@ int main ()
 	// Message Box with default settings
 	BWidgets::MessageBox* mBox = new BWidgets::MessageBox(260, 230, 200, 120, "mbox", "Message Box", "This is a message box. Press on OK to continue.");
 	MainWindow->add (*mBox);
+
 	BWidgets::MessageBox* mBox2 =new BWidgets::MessageBox (280, 250, 200, 140, "mbox", "Message Box",
 		"This is a second message box with user defined buttons. Press on one of them to continue.",
 		{"Cancel", "Yes", "No"});
