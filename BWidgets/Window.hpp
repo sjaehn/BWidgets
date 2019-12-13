@@ -1,5 +1,5 @@
 /* Window.hpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #include <deque>
 #include <list>
 #include "Widget.hpp"
-#include "FocusWidget.hpp"
 
 namespace BWidgets
 {
@@ -42,12 +41,15 @@ namespace BWidgets
  */
 class Window : public Widget
 {
+protected:
+	BDevice::DeviceGrabStack<uint32_t> keyGrabStack_;
+
 public:
 	Window ();
 	Window (const double width, const double height, const std::string& title,
 		PuglNativeWindow nativeWindow, bool resizable = false);
 
-	Window (const Window& that) = delete;	// Only one window in this version
+	Window (const Window& that) = delete;			// Only one window in this version
 
 	~Window ();
 
@@ -109,59 +111,29 @@ public:
 	 * Links or unlinks a mouse button to a widget.
 	 * @param device	Button
 	 * @param widget	Pointer to the widget to be linked or nullptr to unlink
-	 * @param x			X position relative to the widgets origin where the button
-	 * 					was pressed
-	 * @param y			Y position relative to the widgets origin where the button
-	 * 					was pressed
+	 * @param position	Position relative to the widgets origin where the button
+	 * 			was pressed
 	 */
-	void setInput (const BEvents::InputDevice device, Widget* widget, double x, double y);
+	void setInput (const BDevice::ButtonCode device, Widget* widget, const BUtilities::Point position);
 
 	/*
 	 * Gets the links from mouse button to a widget.
 	 * @param device Button
 	 * @return Pointer to the linked widget or nullptr
 	 */
-	Widget* getInputWidget (BEvents::InputDevice device) const;
+	Widget* getInputWidget (BDevice::ButtonCode device) const;
 
 	/*
 	 * Gets the button press position relative to the widgets origin
 	 * @param device	Button
-	 * @return			X position
+	 * @return		Position
 	 */
-	double getInputX (BEvents::InputDevice device) const;
+	BUtilities::Point getInputPosition (BDevice::ButtonCode device) const;
 
-	/*
-	 * Gets the button press position relative to the widgets origin
-	 * @param device	Button
-	 * @return			Y position
+	/* Gets (the pointer to) the keyGrabStack.
+	 * @return	Pointer to keyGrabStack_.
 	 */
-	double getInputY (BEvents::InputDevice device) const;
-
-	/*
-	 * Adds (or replaces) a widget to the top of the KeyGrab stack and associates
-	 * this widget with the given key(s). The top widget of the stack associated
-	 * with the key(s) pressed or released will emit the respective
-	 * BEvents::KeyEvent.
-	 * @param widget	Widget that will emit the BEvents::KeyEvent.
-	 * @param key			0 for all keys (default) or unicode of the key
-	 * 								(or BEvent::KeyCode) or
-	 * @param keys		vector of unicodes
-	 */
-	void setKeyGrab (Widget* widget, uint32_t key = 0);
-	void setKeyGrab (Widget* widget, std::vector<uint32_t>& keys);
-
-	/*
-	 * Removes a widget (and its associated keys) from the KeyGrab stack.
-	 * @param widget	Widget to remove.
-	 */
-	void removeKeyGrab (Widget* widget);
-
-	/* Gets the widget that is resposible for emitting BEvents::KeyEvent's if
-	 * the respective key has been pressed or released.
-	 * @param key	Unicode of the key (or BEvent::KeyCode).
-	 * @return	Responsible widget or nullptr.
-	 */
-	Widget* getKeyGrabWidget (uint32_t key);
+	BDevice::DeviceGrabStack<uint32_t>* getKeyGrabStack ();
 
 	/*
 	 * Removes events (emited by a given widget) from the event queue
@@ -185,38 +157,30 @@ protected:
 	PuglNativeWindow nativeWindow_;
 	bool quit_;
 
-	typedef struct {
-		double x;
-		double y;
-		Widget* widget;
-		std::chrono::steady_clock::time_point time;
-	} Pointer;
-
-	Pointer pointer;
-
-	typedef struct
+	struct Pointer
 	{
 		Widget* widget;
-		double x;
-		double y;
-	} Input;
+		BUtilities::Point position;
+		bool status;
+		std::chrono::steady_clock::time_point time;
+	};
+
+	Pointer pointer_;
+
+	struct Input
+	{
+		Widget* widget;
+		BUtilities::Point position;
+	};
 
 	/**
 	 * Stores either nullptr or (a pointer to) the widget that emitted the
 	 * BEvents::BUTTON_PRESS_EVENT until a BEvents::BUTTON_RELEASE_EVENT or
 	 * the linked widget is released or destroyed.
 	 */
-	std::array<Input, BEvents::InputDevice::NR_OF_BUTTONS> input;
+	std::array<Input, BDevice::ButtonCode::NR_OF_BUTTONS> input_;
 
-	typedef struct
-	{
-		Widget* widget;
-		std::vector<uint32_t> keys;
-	} KeyGrab;
-
-	std::list<KeyGrab> keyGrabStack;
-
-	std::deque<BEvents::Event*> eventQueue;
+	std::deque<BEvents::Event*> eventQueue_;		// TODO: std::list ?
 };
 
 }

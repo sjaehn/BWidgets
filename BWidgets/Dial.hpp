@@ -1,5 +1,5 @@
 /* Dial.hpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,6 @@
 #define BWIDGETS_DEFAULT_DIAL_DEPTH 1.0
 #define BWIDGETS_DEFAULT_DIAL_DOT_SIZE 0.1
 
-#define BWIDGETS_DEFAULT_FOCUS_LABEL_NAME "/label"
-
 namespace BWidgets
 {
 /**
@@ -44,7 +42,7 @@ class Dial : public RangeWidget
 public:
 	Dial ();
 	Dial (const double x, const double y, const double width, const double height, const std::string& name,
-		  const double value, const double min, const double max, const double step);
+		const double value, const double min, const double max, const double step);
 
 	/**
 	 * Creates a new (orphan) dial and copies the dial properties from a
@@ -52,8 +50,6 @@ public:
 	 * @param that Source dial
 	 */
 	Dial (const Dial& that);
-
-	~Dial ();
 
 	/**
 	 * Assignment. Copies the dial properties from a source dial and keeps
@@ -68,14 +64,6 @@ public:
 	 * its properties.
 	 */
 	virtual Widget* clone () const override;
-
-	/**
-	 * Changes the value of the widget and keeps it within the defined range.
-	 * Passes the value to its predefined child widgets.
-	 * Emits a value changed event and (if visible) an expose event.
-	 * @param val Value
-	 */
-	virtual void setValue (const double val) override;
 
 	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the
@@ -129,18 +117,15 @@ public:
 protected:
 	void drawDot ();
 	virtual void updateCoords ();
-	virtual void draw (const double x, const double y, const double width, const double height) override;
+	virtual void draw (const BUtilities::RectArea& area) override;
 
-	double dialCenterX;
-	double dialCenterY;
+	BUtilities::Point dialCenter;
 	double dialRadius;
 
 	Knob knob;
 	DrawingSurface dot;
 	BColors::ColorSet fgColors;
 	BColors::ColorSet bgColors;
-
-	Label focusLabel;
 };
 
 }

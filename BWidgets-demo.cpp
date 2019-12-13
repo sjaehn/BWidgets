@@ -200,6 +200,7 @@ int main ()
 	BWidgets::Widget Widget4 = BWidgets::Widget (540, 40, 80, 75, "Frame");
 	Widget4.applyTheme (defaultTheme);
 	Widget4.setDraggable (true);
+
 	BWidgets::Widget Widget = BWidgets::Widget (20, 40, 500, 300, "Frame");
 	Widget.applyTheme (defaultTheme);
 	Widget.setBackground(bgPicture);
@@ -369,7 +370,7 @@ int main ()
 	Widget4.add (keyIcon);
 	Widget4.add (keyLabel);
 	keyLabel.setCallbackFunction (BEvents::EventType::KEY_PRESS_EVENT, showKey);
-	MainWindow->setKeyGrab (&keyLabel);
+	MainWindow->getKeyGrabStack()->add (&keyLabel);
 
 	// Add the drawing surface widget directly to the main window
 	MainWindow->add (Surface);
@@ -377,6 +378,7 @@ int main ()
 	// Add the foreground widget container to the main window and all sliders,
 	// buttons and dials to the foreground widget container
 	MainWindow->add (Widget);
+
 	Widget.add (VSliderLabel);
 	Widget.add (VSliderLabel2);
 	Widget.add (HSliderLabel);
@@ -404,7 +406,7 @@ int main ()
 	Dial2.setCallbackFunction (BEvents::EventType::VALUE_CHANGED_EVENT, showValue);
 	Label4.moveTo (150, 200);
 
-	Surface.moveFrontwards ();
+	Surface.raiseFrontwards ();
 
 	// Message Box with default settings
 	BWidgets::MessageBox* mBox = new BWidgets::MessageBox(260, 230, 200, 120, "mbox", "Message Box", "This is a message box. Press on OK to continue.");

@@ -7,7 +7,9 @@ CXXFLAGS += -std=c++11 -g -Wall -fPIC -DPUGL_HAVE_CAIRO `$(PKG_CONFIG) --cflags 
 LDFLAGS +=
 
 SRC = BWidgets-demo.cpp
-INCL = BWidgets/HPianoRoll.cpp \
+INCL = \
+BUtilities/to_string.cpp \
+BWidgets/HPianoRoll.cpp \
 BWidgets/PianoWidget.cpp \
 BWidgets/ImageIcon.cpp \
 BWidgets/Icon.cpp \
@@ -40,13 +42,11 @@ BWidgets/Knob.cpp \
 BWidgets/Label.cpp \
 BWidgets/StateDisplay.cpp \
 BWidgets/Display.cpp \
-BWidgets/FocusWidget.cpp \
 BWidgets/Window.cpp \
 BWidgets/Widget.cpp \
 BWidgets/BStyles.cpp \
 BWidgets/BColors.cpp \
 BWidgets/BItems.cpp \
-BWidgets/BValues.cpp \
 BWidgets/cairoplus.c \
 BWidgets/pugl/pugl_x11_cairo.c \
 BWidgets/pugl/pugl_x11.c

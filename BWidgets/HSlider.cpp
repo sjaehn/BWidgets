@@ -1,5 +1,5 @@
 /* HSlider.cpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ HSlider::HSlider () : HSlider (0.0, 0.0, BWIDGETS_DEFAULT_HSLIDER_WIDTH, BWIDGET
 HSlider::HSlider (const double  x, const double y, const double width, const double height, const std::string& name,
 				  const double value, const double min, const double max, const double step) :
 		HScale (x, y, width, height, name, value, min, max, step),
-		knob (0, 0, 0, 0, BWIDGETS_DEFAULT_KNOB_DEPTH, name), knobRadius (0), knobXCenter (0), knobYCenter (0)
+		knob (0, 0, 0, 0, BWIDGETS_DEFAULT_KNOB_DEPTH, name), knobRadius (0), knobPosition ()
 {
 	knob.setClickable (false);
 	knob.setDraggable (false);
@@ -35,12 +35,10 @@ HSlider::HSlider (const double  x, const double y, const double width, const dou
 }
 
 HSlider::HSlider (const HSlider& that) :
-		HScale (that), knob (that.knob), knobRadius (that.knobRadius), knobXCenter (that.knobXCenter), knobYCenter (that.knobYCenter)
+		HScale (that), knob (that.knob), knobRadius (that.knobRadius), knobPosition (that.knobPosition)
 {
 	add (knob);
 }
-
-HSlider::~HSlider () {}
 
 HSlider& HSlider::operator= (const HSlider& that)
 {
@@ -48,8 +46,7 @@ HSlider& HSlider::operator= (const HSlider& that)
 
 	knob = that.knob;
 	knobRadius = that.knobRadius;
-	knobXCenter = that.knobXCenter;
-	knobYCenter = that.knobYCenter;
+	knobPosition = that.knobPosition;
 	HScale::operator= (that);
 
 	add (knob);
@@ -64,7 +61,7 @@ void HSlider::update ()
 	HScale::update ();
 
 	// Update Knob
-	knob.moveTo (knobXCenter - knobRadius, knobYCenter - knobRadius);
+	knob.moveTo (knobPosition.x - knobRadius, knobPosition.y - knobRadius);
 	knob.setWidth (2 * knobRadius);
 	knob.setHeight (2 * knobRadius);
 }
@@ -83,12 +80,14 @@ void HSlider::updateCoords ()
 	double h = getEffectiveHeight ();
 
 	knobRadius = (h < w / 2 ? h / 2 : w / 4);
-	scaleX0 = getXOffset () + knobRadius;
-	scaleY0 = getYOffset () + h / 2 - knobRadius / 2;
-	scaleWidth = w - 2 * knobRadius;
-	scaleHeight = knobRadius;
-	scaleXValue = scaleX0 + getRelativeValue () * scaleWidth;
-	knobXCenter = scaleXValue;
-	knobYCenter = scaleY0 + scaleHeight / 2;
+	scaleArea = BUtilities::RectArea
+	(
+		getXOffset () + knobRadius,
+		getYOffset () + h / 2 - knobRadius / 2,
+		w - 2 * knobRadius,
+		knobRadius
+	);
+	scaleXValue = scaleArea.getX() + getRelativeValue () * scaleArea.getWidth();
+	knobPosition = BUtilities::Point (scaleXValue, scaleArea.getY() + scaleArea.getHeight() / 2);
 }
 }

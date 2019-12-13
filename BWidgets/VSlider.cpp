@@ -1,5 +1,5 @@
 /* VSlider.cpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ VSlider::VSlider () : VSlider (0.0, 0.0, BWIDGETS_DEFAULT_VSLIDER_WIDTH, BWIDGET
 VSlider::VSlider (const double  x, const double y, const double width, const double height, const std::string& name,
 				  const double value, const double min, const double max, const double step) :
 		VScale (x, y, width, height, name, value, min, max, step),
-		knob (0, 0, 0, 0, BWIDGETS_DEFAULT_KNOB_DEPTH, name), knobRadius (0), knobXCenter (0), knobYCenter (0)
+		knob (0, 0, 0, 0, BWIDGETS_DEFAULT_KNOB_DEPTH, name), knobRadius (0), knobPosition ()
 {
 	knob.setClickable (false);
 	knob.setDraggable (false);
@@ -34,12 +34,10 @@ VSlider::VSlider (const double  x, const double y, const double width, const dou
 }
 
 VSlider::VSlider (const VSlider& that) :
-		VScale (that), knob (that.knob), knobRadius (that.knobRadius), knobXCenter (that.knobXCenter), knobYCenter (that.knobYCenter)
+		VScale (that), knob (that.knob), knobRadius (that.knobRadius), knobPosition (that.knobPosition)
 {
 	add (knob);
 }
-
-VSlider::~VSlider () {}
 
 VSlider& VSlider::operator= (const VSlider& that)
 {
@@ -47,8 +45,7 @@ VSlider& VSlider::operator= (const VSlider& that)
 
 	knob = that.knob;
 	knobRadius = that.knobRadius;
-	knobXCenter = that.knobXCenter;
-	knobYCenter = that.knobYCenter;
+	knobPosition = that.knobPosition;
 	RangeWidget::operator= (that);
 
 	add (knob);
@@ -63,9 +60,8 @@ void VSlider::update ()
 	VScale::update ();
 
 	// Update Knob
-	knob.moveTo (knobXCenter -  knobRadius, knobYCenter - knobRadius);
-	knob.setWidth (2 * knobRadius);
-	knob.setHeight (2 * knobRadius);
+	knob.moveTo (knobPosition.x -  knobRadius, knobPosition.y - knobRadius);
+	knob.resize (2 * knobRadius, 2 * knobRadius);
 }
 
 void VSlider::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
@@ -82,12 +78,18 @@ void VSlider::updateCoords ()
 	double h = getEffectiveHeight ();
 
 	knobRadius = (w < h / 2 ? w / 2 : h / 4);
-	scaleX0 = getXOffset () + w / 2 - knobRadius / 2;
-	scaleY0 = getYOffset () + knobRadius;
-	scaleWidth = knobRadius;
-	scaleHeight = h - 2 * knobRadius;
-	scaleYValue = scaleY0 + (1 - getRelativeValue ()) * scaleHeight;
-	knobXCenter = scaleX0 + scaleWidth / 2;
-	knobYCenter = scaleYValue;
+	scaleArea = BUtilities::RectArea
+	(
+		getXOffset () + w / 2 - knobRadius / 2,
+		getYOffset () + knobRadius,
+		knobRadius,
+		h - 2 * knobRadius
+	);
+	scaleYValue = scaleArea.getY() + (1 - getRelativeValue ()) * scaleArea.getHeight();
+	knobPosition = BUtilities::Point
+	(
+		scaleArea.getX() + scaleArea.getWidth() / 2,
+		scaleYValue
+	);
 }
 }

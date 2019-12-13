@@ -1,5 +1,5 @@
 /* HSlider.hpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,8 +53,6 @@ public:
 	 */
 	virtual Widget* clone () const override;
 
-	~HSlider ();
-
 	/**
 	 * Assignment. Copies the slider properties from a source slider and keeps
 	 * its name and its position within the widget tree. Emits an expose event
@@ -90,8 +88,7 @@ protected:
 
 	Knob knob;
 	double knobRadius;
-	double knobXCenter;
-	double knobYCenter;
+	BUtilities::Point knobPosition;
 };
 
 }

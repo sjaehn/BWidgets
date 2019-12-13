@@ -1,5 +1,5 @@
 /* PopupListBox.cpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ PopupListBox::PopupListBox (const double x, const double y, const double width,
 		ItemBox (x, y, width, height, name, {UNSELECTED, nullptr}),
 		downButton (0, 0, 0, 0, name + BWIDGETS_DEFAULT_POPUPLISTBOX_BUTTON_NAME, 0.0),
 		listBox (0, 0, 0, 0, name + BWIDGETS_DEFAULT_POPUPLISTBOX_LISTBOX_NAME, items, preselection),
-		listBoxXOffset (listXOffset), listBoxYOffset (listYOffset), listBoxWidth (listWidth), listBoxHeight (listHeight)
+		listBoxArea (listXOffset, listYOffset, listXOffset + listWidth, listYOffset + listHeight)
 
 {
 	setScrollable (true);
@@ -81,8 +81,7 @@ PopupListBox::PopupListBox (const double x, const double y, const double width,
 
 PopupListBox::PopupListBox (const PopupListBox& that) :
 		ItemBox (that), downButton (that.downButton), listBox (that.listBox),
-		listBoxXOffset (that.listBoxXOffset),
-		listBoxYOffset (that.listBoxYOffset), listBoxWidth (that.listBoxWidth), listBoxHeight (that.listBoxHeight)
+		listBoxArea (that.listBoxArea)
 {
 	listBox.extensionData = this;
 	initItem ();
@@ -95,10 +94,7 @@ PopupListBox& PopupListBox::operator= (const PopupListBox& that)
 	downButton = that.downButton;
 
 	listBox = that.listBox;
-	listBoxXOffset = that.listBoxXOffset;
-	listBoxYOffset = that.listBoxYOffset;
-	listBoxWidth = that.listBoxWidth;
-	listBoxHeight = that.listBoxHeight;
+	listBoxArea = that.listBoxArea;
 
 	ItemBox::operator= (that);
 	initItem ();
@@ -137,28 +133,26 @@ void PopupListBox::setValue (const double val)
 	}
 }
 
-void PopupListBox::moveListBox (const double xOffset, const double yOffset)
+void PopupListBox::moveListBox (const BUtilities::Point& offset)
 {
-	listBoxXOffset = xOffset;
-	listBoxYOffset = yOffset;
+	listBoxArea.moveTo (offset);
 	if (listBox.isVisible()) update ();
 }
 
-void PopupListBox::resizeListBox (const double width, const double height)
+void PopupListBox::resizeListBox (const BUtilities::Point& extends)
 {
-	listBoxWidth = width;
-	listBoxHeight = height;
+	listBoxArea.resize (extends);
 	if (listBox.isVisible()) update ();
 }
 
-void PopupListBox::resizeListBoxItem (const double value, const double width, const double height)
+void PopupListBox::resizeListBoxItem (const double value, const BUtilities::Point& extends)
 {
-	listBox.resizeItem (value, width, height);
+	listBox.resizeItem (value, extends);
 }
 
-void PopupListBox::resizeListBoxItems (const double width, const double height)
+void PopupListBox::resizeListBoxItems (const BUtilities::Point& extends)
 {
-	listBox.resizeItems (width, height);
+	listBox.resizeItems (extends);
 }
 
 void PopupListBox::update ()
@@ -178,15 +172,14 @@ void PopupListBox::update ()
 		double h = getEffectiveHeight ();
 
 		widget->moveTo (x0, y0);
-		widget->setWidth (w2);
-		widget->setHeight (h);
+		widget->resize (w2, h);
 	}
 
 	// Keep button on top
 	int cs = children_.size ();
 	if ((cs >= 2) && (children_[cs - 1] != (Widget*) &downButton))
 	{
-		downButton.moveToTop ();
+		downButton.raiseToTop ();
 	}
 
 	// Calculate size and position of widget elements
@@ -198,8 +191,7 @@ void PopupListBox::update ()
 	// Down button
 	double dw = (w > BWIDGETS_DEFAULT_POPUPLISTBOX_BUTTON_WIDTH ? BWIDGETS_DEFAULT_POPUPLISTBOX_BUTTON_WIDTH : w);
 	downButton.moveTo (x0 + w - dw, y0);
-	downButton.setWidth (dw);
-	downButton.setHeight (h);
+	downButton.resize (dw, h);
 
 	// List box
 	if ((main_) && (!listBox.getMainWindow()))
@@ -207,10 +199,12 @@ void PopupListBox::update ()
 		main_->add (listBox);
 	}
 	if ((!main_) && (listBox.getMainWindow())) listBox.getMainWindow()->release (&listBox);
-	if ((listBoxXOffset == 0.0) && (listBoxYOffset == 0.0)) listBox.moveTo (getOriginX (), getOriginY () + getHeight ());
-	else listBox.moveTo (getOriginX () + listBoxXOffset, getOriginY () + listBoxYOffset);
-	listBox.setWidth (listBoxWidth);
-	listBox.setHeight (listBoxHeight);
+	if ((listBoxArea.getPosition ().x == 0.0) && (listBoxArea.getPosition ().y == 0.0))
+	{
+		listBox.moveTo (getAbsolutePosition ().x, getAbsolutePosition ().y + getHeight ());
+	}
+	else listBox.moveTo (getAbsolutePosition () + listBoxArea.getPosition ());
+	listBox.resize (listBoxArea.getExtends ());
 
 }
 
@@ -221,7 +215,7 @@ void PopupListBox::onButtonPressed (BEvents::PointerEvent* event)
 	{
 		update ();
 		listBox.show ();
-		listBox.moveToTop ();
+		listBox.raiseToTop ();
 	}
 
 	//Widget::cbfunction[BEvents::EventType::BUTTON_PRESS_EVENT] (event);
@@ -230,7 +224,7 @@ void PopupListBox::onButtonPressed (BEvents::PointerEvent* event)
 void PopupListBox::onWheelScrolled (BEvents::WheelEvent* event)
 {
 	BItems::ItemList* itemList = listBox.getItemList ();
-	double newNr = LIMIT (listBox.getActive () - event->getDeltaY (), 1, itemList->size ());
+	double newNr = LIMIT (listBox.getActive () - event->getDelta ().y, 1, itemList->size ());
 	BItems::ItemList::iterator it = std::next ((*itemList).begin (), newNr - 1);
 	setValue ((*it).getValue());
 }
