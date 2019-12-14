@@ -1,4 +1,4 @@
-/* BDevice.hpp
+/* BDevices.hpp
  * Copyright (C) 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BWIDGETS_BDEVICE_HPP_
-#define BWIDGETS_BDEVICE_HPP_
+#ifndef BWIDGETS_BDEVICES_HPP_
+#define BWIDGETS_BDEVICES_HPP_
 
 #include <set>
 #include <list>
@@ -29,7 +29,7 @@ namespace BWidgets
 class Widget;	// Forward declaration
 }
 
-namespace BDevice
+namespace BDevices
 {
 
 /**
@@ -73,7 +73,7 @@ enum KeyCode {
 };
 
 /**
- * Class BDevice::DeviceGrab<T>
+ * Class BDevices::DeviceGrab<T>
  *
  * Links a BWidgets::Widget to a std::set<T> of devices
  */
@@ -238,17 +238,17 @@ public:
 		stack_.push_back (DeviceGrab<T> (widget, devices));
 	}
 
-	/* Gets the widget that is linked to the respective device. Starts from
-	 * the top of the DeviceGrab stack.
+	/* Gets (the pointer to) the DeviceGrab containing the respective
+	 * device. Starts from the top of the DeviceGrab stack.
 	 * @param device	<T> of the respective device.
-	 * @return		Responsible widget or nullptr.
+	 * @return		Pointer to the respective DeviceGrab or nullptr.
 	 */
-	BWidgets::Widget* getGrabWidget (const T& device)
+	DeviceGrab<T>* getGrab (const T& device)
 	{
 		for (typename std::list<DeviceGrab<T>>::reverse_iterator rit = stack_.rbegin (); rit != stack_.rend (); ++rit)
 		{
 			DeviceGrab<T>& dg = *rit;
-			if (dg.contains (device)) return dg.getWidget();
+			if (dg.contains (device)) return &dg;
 		}
 
 		return nullptr;
@@ -256,6 +256,30 @@ public:
 
 };
 
+struct MouseDevice
+{
+	ButtonCode button;
+	BUtilities::Point position;
+
+	friend inline bool operator< (const MouseDevice& lhs, const MouseDevice& rhs)
+	{
+		if( lhs.button < rhs.button ) return true;
+		return false;
+	}
+
+	friend inline bool operator== (const MouseDevice& lhs, const MouseDevice& rhs)
+	{
+		if( lhs.button == rhs.button ) return true;
+		return false;
+	}
+
+	friend inline bool operator> (const MouseDevice& lhs, const MouseDevice& rhs) {return rhs < lhs;}
+	friend inline bool operator<=(const MouseDevice& lhs, const MouseDevice& rhs) {return !(lhs > rhs);}
+	friend inline bool operator>=(const MouseDevice& lhs, const MouseDevice& rhs) {return !(lhs < rhs);}
+	friend inline bool operator!=(const MouseDevice& lhs, const MouseDevice& rhs) {return !(lhs==rhs);}
+};
+
+
 }
 
-#endif /*BWIDGETS_BDEVICE_HPP_*/
+#endif /*BWIDGETS_BDEVICES_HPP_*/

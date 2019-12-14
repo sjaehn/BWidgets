@@ -42,7 +42,8 @@ namespace BWidgets
 class Window : public Widget
 {
 protected:
-	BDevice::DeviceGrabStack<uint32_t> keyGrabStack_;
+	BDevices::DeviceGrabStack<uint32_t> keyGrabStack_;
+	BDevices::DeviceGrabStack<BDevices::MouseDevice> buttonGrabStack_;
 
 public:
 	Window ();
@@ -107,33 +108,17 @@ public:
 	 */
 	virtual void onCloseRequest (BEvents::WidgetEvent* event) override;
 
-	/*
-	 * Links or unlinks a mouse button to a widget.
-	 * @param device	Button
-	 * @param widget	Pointer to the widget to be linked or nullptr to unlink
-	 * @param position	Position relative to the widgets origin where the button
-	 * 			was pressed
-	 */
-	void setInput (const BDevice::ButtonCode device, Widget* widget, const BUtilities::Point position);
-
-	/*
-	 * Gets the links from mouse button to a widget.
-	 * @param device Button
-	 * @return Pointer to the linked widget or nullptr
-	 */
-	Widget* getInputWidget (BDevice::ButtonCode device) const;
-
-	/*
-	 * Gets the button press position relative to the widgets origin
-	 * @param device	Button
-	 * @return		Position
-	 */
-	BUtilities::Point getInputPosition (BDevice::ButtonCode device) const;
-
-	/* Gets (the pointer to) the keyGrabStack.
+	/* Gets (the pointer to) the keyGrabStack and thus enables access to the
+	 * keyboard input.
 	 * @return	Pointer to keyGrabStack_.
 	 */
-	BDevice::DeviceGrabStack<uint32_t>* getKeyGrabStack ();
+	BDevices::DeviceGrabStack<uint32_t>* getKeyGrabStack ();
+
+	/* Gets (the pointer to) the buttonGrabStack and thus enables access to
+	 * the mouse buttons pressed.
+	 * @return	Pointer to buttonGrabStack_.
+	 */
+	BDevices::DeviceGrabStack<BDevices::MouseDevice>* getButtonGrabStack ();
 
 	/*
 	 * Removes events (emited by a given widget) from the event queue
@@ -166,19 +151,6 @@ protected:
 	};
 
 	Pointer pointer_;
-
-	struct Input
-	{
-		Widget* widget;
-		BUtilities::Point position;
-	};
-
-	/**
-	 * Stores either nullptr or (a pointer to) the widget that emitted the
-	 * BEvents::BUTTON_PRESS_EVENT until a BEvents::BUTTON_RELEASE_EVENT or
-	 * the linked widget is released or destroyed.
-	 */
-	std::array<Input, BDevice::ButtonCode::NR_OF_BUTTONS> input_;
 
 	std::deque<BEvents::Event*> eventQueue_;		// TODO: std::list ?
 };

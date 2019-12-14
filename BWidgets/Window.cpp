@@ -25,13 +25,12 @@ namespace BWidgets
 Window::Window () : Window (BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT, "window", 0.0) {}
 
 Window::Window (const double width, const double height, const std::string& title, PuglNativeWindow nativeWindow, bool resizable) :
-		Widget (0.0, 0.0, width, height, title), keyGrabStack_ (),
+		Widget (0.0, 0.0, width, height, title),
+		keyGrabStack_ (), buttonGrabStack_ (),
 		title_ (title), view_ (NULL), nativeWindow_ (nativeWindow),
 		quit_ (false),
 		pointer_ {nullptr, BUtilities::Point (), false, std::chrono::steady_clock::now()}, eventQueue_ ()
 {
-	input_.fill({nullptr, BUtilities::Point ()});
-
 	main_ = this;
 	view_ = puglInit(NULL, NULL);
 
@@ -207,28 +206,9 @@ void Window::addEventToQueue (BEvents::Event* event)
 	eventQueue_.push_back (event);
 }
 
-void Window::setInput (const BDevice::ButtonCode device, Widget* widget, const BUtilities::Point position)
-{
-	if ((device > BDevice::NO_BUTTON) && (device < BDevice::NR_OF_BUTTONS))
-	{
-		input_[device].widget = widget;
-		input_[device].position = position;
-	}
-}
+BDevices::DeviceGrabStack<uint32_t>* Window::getKeyGrabStack () {return &keyGrabStack_;}
 
-Widget* Window::getInputWidget (BDevice::ButtonCode device) const
-{
-	if ((device > BDevice::NO_BUTTON) && (device < BDevice::NR_OF_BUTTONS)) return input_[device].widget;
-	else return nullptr;
-}
-
-BUtilities::Point Window::getInputPosition (BDevice::ButtonCode device) const
-{
-	if ((device > BDevice::NO_BUTTON) && (device < BDevice::NR_OF_BUTTONS)) return input_[device].position;
-	else return BUtilities::Point ();
-}
-
-BDevice::DeviceGrabStack<uint32_t>* Window::getKeyGrabStack () {return &keyGrabStack_;}
+BDevices::DeviceGrabStack<BDevices::MouseDevice>* Window::getButtonGrabStack () {return &buttonGrabStack_;}
 
 void Window::handleEvents ()
 {
@@ -273,7 +253,14 @@ void Window::handleEvents ()
 				case BEvents::BUTTON_PRESS_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
-						setInput (be->getButton (), widget, be->getPosition());
+						buttonGrabStack_.add
+						(
+							BDevices::DeviceGrab<BDevices::MouseDevice>
+							(
+								widget,
+								BDevices::MouseDevice{be->getButton (), be->getPosition()}
+							)
+						);
 						widget->onButtonPressed (be);
 					}
 					break;
@@ -281,7 +268,14 @@ void Window::handleEvents ()
 				case BEvents::BUTTON_RELEASE_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
-						setInput (be->getButton (), nullptr, BUtilities::Point ());
+						buttonGrabStack_.remove
+						(
+							BDevices::DeviceGrab<BDevices::MouseDevice>
+							(
+								widget,
+								BDevices::MouseDevice{be->getButton (), be->getPosition()}
+							)
+						);
 						widget->onButtonReleased (be);
 					}
 					break;
@@ -289,7 +283,14 @@ void Window::handleEvents ()
 				case BEvents::BUTTON_CLICK_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
-						setInput (be->getButton (), nullptr, BUtilities::Point ());
+						buttonGrabStack_.remove
+						(
+							BDevices::DeviceGrab<BDevices::MouseDevice>
+							(
+								widget,
+								BDevices::MouseDevice{be->getButton (), be->getPosition()}
+							)
+						);
 						widget->onButtonClicked (be);
 					}
 					break;
@@ -342,7 +343,8 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 	case PUGL_KEY_PRESS:
 		{
 			uint32_t key = (puglEvent->key.character != 0 ? puglEvent->key.character : puglEvent->key.special);
-			Widget* widget = w->getKeyGrabStack()->getGrabWidget (key);
+			BDevices::DeviceGrab<uint32_t>* grab = w->getKeyGrabStack()->getGrab(key);
+			Widget* widget = (grab ? grab->getWidget() : nullptr);
 			w->addEventToQueue
 			(
 				new BEvents::KeyEvent
@@ -360,7 +362,8 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 	case PUGL_KEY_RELEASE:
 		{
 			uint32_t key = (puglEvent->key.character != 0 ? puglEvent->key.character : puglEvent->key.special);
-			Widget* widget = w->getKeyGrabStack()->getGrabWidget (key);
+			BDevices::DeviceGrab<uint32_t>* grab = w->getKeyGrabStack()->getGrab(key);
+			Widget* widget = (grab ? grab->getWidget() : nullptr);
 			w->addEventToQueue
 			(
 				new BEvents::KeyEvent
@@ -390,7 +393,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 						position - widget->getAbsolutePosition (),
 						position - widget->getAbsolutePosition (),
 						BUtilities::Point (),
-						(BDevice::ButtonCode) puglEvent->button.button
+						(BDevices::ButtonCode) puglEvent->button.button
 					)
 				);
 			}
@@ -402,41 +405,49 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 	case PUGL_BUTTON_RELEASE:
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->button.x, puglEvent->button.y);
-			BDevice::ButtonCode device = (BDevice::ButtonCode) puglEvent->button.button;
-			Widget* widget = w->getInputWidget (device);
-			if (widget)
+			BDevices::ButtonCode button = (BDevices::ButtonCode) puglEvent->button.button;
+			BDevices::MouseDevice mouse = BDevices::MouseDevice {button, BUtilities::Point()};
+			BDevices::DeviceGrab<BDevices::MouseDevice>* grab = w->getButtonGrabStack()->getGrab(mouse);
+			if (grab)
 			{
-				BUtilities::Point origin = (widget->getMainWindow() ? widget->getMainWindow()->getInputPosition (device) : BUtilities::Point ());
-				w->addEventToQueue
-				(
-					new BEvents::PointerEvent
-					(
-						widget,
-						BEvents::BUTTON_RELEASE_EVENT,
-						position - widget->getAbsolutePosition (),
-						origin,
-						BUtilities::Point (),
-						device
-					)
-				);
-
-
-				// Also emit BUTTON_CLICK_EVENT ?
-				Widget* widget2 = w->getWidgetAt (position, true, true, false, false, false);
-				if (widget == widget2)
+				Widget* widget = grab->getWidget();
+				if (widget)
 				{
+					std::set<BDevices::MouseDevice> buttonDevices = grab->getDevices();
+					std::set<BDevices::MouseDevice>::iterator it = buttonDevices.find(mouse);
+					BUtilities::Point origin = (it != buttonDevices.end() ? it->position : BUtilities::Point ());
+
 					w->addEventToQueue
 					(
 						new BEvents::PointerEvent
 						(
 							widget,
-							BEvents::BUTTON_CLICK_EVENT,
+							BEvents::BUTTON_RELEASE_EVENT,
 							position - widget->getAbsolutePosition (),
 							origin,
 							BUtilities::Point (),
-							device
+							button
 						)
 					);
+
+
+					// Also emit BUTTON_CLICK_EVENT ?
+					Widget* widget2 = w->getWidgetAt (position, true, true, false, false, false);
+					if (widget == widget2)
+					{
+						w->addEventToQueue
+						(
+							new BEvents::PointerEvent
+							(
+								widget,
+								BEvents::BUTTON_CLICK_EVENT,
+								position - widget->getAbsolutePosition (),
+								origin,
+								BUtilities::Point (),
+								button
+							)
+						);
+					}
 				}
 			}
 
@@ -446,20 +457,25 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 
 	case PUGL_MOTION_NOTIFY:
 		{
-			BDevice::ButtonCode device = BDevice::NO_BUTTON;
-			Widget* widget = nullptr;
 			BUtilities::Point position = BUtilities::Point (puglEvent->motion.x, puglEvent->motion.y);
+			BDevices::ButtonCode button = BDevices::NO_BUTTON;
 
 			// Scan for pressed buttons associated with a widget
-			for (int i = BDevice::NO_BUTTON + 1; i < BDevice::NR_OF_BUTTONS; ++i)
+			for (int i = BDevices::NO_BUTTON + 1; i < BDevices::NR_OF_BUTTONS; ++i)
 			{
-				if (w->getInputWidget ((BDevice::ButtonCode) i))
+				button = BDevices::ButtonCode (i);
+				BDevices::MouseDevice mouse = BDevices::MouseDevice {button, BUtilities::Point()};
+				BDevices::DeviceGrab<BDevices::MouseDevice>* grab = w->getButtonGrabStack()->getGrab(mouse);
+
+				if (grab)
 				{
-					device = (BDevice::ButtonCode) i;
-					widget = w->getInputWidget (device);
-					if (widget->isDraggable ())
+					Widget* widget = grab->getWidget();
+
+					if (widget && widget->isDraggable())
 					{
-						BUtilities::Point origin = w->getInputPosition (device);
+						std::set<BDevices::MouseDevice> buttonDevices = grab->getDevices();
+						std::set<BDevices::MouseDevice>::iterator it = buttonDevices.find(mouse);
+						BUtilities::Point origin = (it != buttonDevices.end() ? it->position : BUtilities::Point ());
 
 						// new
 						w->addEventToQueue
@@ -471,7 +487,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 								position - widget->getAbsolutePosition (),
 								origin,
 								position - w->pointer_.position,
-								device
+								button
 							)
 						);
 					}
@@ -479,9 +495,9 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 			}
 
 			// No button associated with a widget? Only POINTER_MOTION_EVENT
-			if (device == BDevice::NO_BUTTON)
+			if (button == BDevices::NO_BUTTON)
 			{
-				widget = w->getWidgetAt (position, true, false, false, false, false);
+				Widget* widget = w->getWidgetAt (position, true, false, false, false, false);
 				if (widget)
 				{
 					w->addEventToQueue
@@ -493,7 +509,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 							position - widget->getAbsolutePosition (),
 							BUtilities::Point (),
 							position - w->pointer_.position,
-							device));
+							button));
 				}
 			}
 

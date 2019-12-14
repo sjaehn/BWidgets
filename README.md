@@ -54,6 +54,11 @@ namespace BStyles
  ├── StyleSet
  ╰── Theme
 
+namespace BDevices
+ ├── MouseDevice
+ ├── DeviceGrab
+ ╰── DeviceGrabStack
+
 namespace BEvents
  ╰── Event
       ├── WidgetEvent

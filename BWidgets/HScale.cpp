@@ -84,7 +84,7 @@ void HScale::onButtonPressed (BEvents::PointerEvent* event)
 		(getHeight () >= 1) &&
 		(getWidth () >= 1) &&
 		(scaleArea.getWidth () > 0) &&
-		(event->getButton() == BDevice::LEFT_BUTTON)
+		(event->getButton() == BDevices::LEFT_BUTTON)
 	)
 	{
 		double min = getMin ();
@@ -150,7 +150,7 @@ void HScale::draw (const BUtilities::RectArea& area)
 
 		if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 		{
-			cairo_pattern_t* pat;
+			cairo_pattern_t* pat = nullptr;
 
 			// Limit cairo-drawing area
 			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());

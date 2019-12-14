@@ -164,14 +164,8 @@ void Widget::release (Widget* child)
 		{
 			if (w->main_)
 			{
-				for (int i = (int) BDevice::NO_BUTTON; i < (int) BDevice::NR_OF_BUTTONS; ++i)
-				{
-					if (w->main_-> getInputWidget ((BDevice::ButtonCode) i) == w)
-					{
-						w->main_->setInput ((BDevice::ButtonCode) i, nullptr, BUtilities::Point ());
-					}
-				}
 				w->main_->purgeEventQueue (w);
+				w->main_->getButtonGrabStack()->remove (w);
 				w->main_->getKeyGrabStack()->remove (w);
 				w->main_ = nullptr;
 			}

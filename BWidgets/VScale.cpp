@@ -83,7 +83,7 @@ void VScale::onButtonPressed (BEvents::PointerEvent* event)
 		(getHeight() >= 1) &&
 		(getWidth() >= 1) &&
 		(scaleArea.getHeight() > 0) &&
-		(event->getButton() == BDevice::LEFT_BUTTON)
+		(event->getButton() == BDevices::LEFT_BUTTON)
 	)
 	{
 		double min = getMin ();
@@ -142,6 +142,7 @@ void VScale::updateCoords ()
 
 void VScale::draw (const BUtilities::RectArea& area)
 {
+
 	if ((!widgetSurface_) || (cairo_surface_status (widgetSurface_) != CAIRO_STATUS_SUCCESS)) return;
 
 	// Draw super class widget elements first
@@ -155,7 +156,8 @@ void VScale::draw (const BUtilities::RectArea& area)
 
 		if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 		{
-			cairo_pattern_t* pat;
+
+			cairo_pattern_t* pat = nullptr;
 
 			// Limit cairo-drawing area
 			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
@@ -208,12 +210,12 @@ void VScale::draw (const BUtilities::RectArea& area)
 				if (getStep () >= 0)
 				{
 					cairo_rectangle_rounded (cr, x3 + 0.5 * BWIDGETS_DEFAULT_VSCALE_DEPTH,
-											 y3 + 0.5 * BWIDGETS_DEFAULT_VSCALE_DEPTH, x4 - x3, y4 - y3, (x4 - x3) / 2, 0b1100);
+								 y3 + 0.5 * BWIDGETS_DEFAULT_VSCALE_DEPTH, x4 - x3, y4 - y3, (x4 - x3) / 2, 0b1100);
 				}
 				else
 				{
 					cairo_rectangle_rounded (cr, x1 + 0.5 * BWIDGETS_DEFAULT_VSCALE_DEPTH,
-											 y1 + 0.5 * BWIDGETS_DEFAULT_VSCALE_DEPTH, x2 - x1, y2 - y1, (x2 - x1) / 2, 0b0011);
+								 y1 + 0.5 * BWIDGETS_DEFAULT_VSCALE_DEPTH, x2 - x1, y2 - y1, (x2 - x1) / 2, 0b0011);
 				}
 				cairo_set_source (cr, pat);
 				cairo_fill (cr);
@@ -236,6 +238,7 @@ void VScale::draw (const BUtilities::RectArea& area)
 
 		cairo_destroy (cr);
 	}
+
 }
 
 }

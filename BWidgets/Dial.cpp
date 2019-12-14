@@ -130,7 +130,7 @@ void Dial::applyTheme (BStyles::Theme& theme, const std::string& name)
 void Dial::onButtonPressed (BEvents::PointerEvent* event)
 {
 	// Perform only if minimum requirements are satisfied
-	if (main_ && isVisible () && (event->getButton () == BDevice::LEFT_BUTTON))
+	if (main_ && isVisible () && (event->getButton () == BDevices::LEFT_BUTTON))
 	{
 		BUtilities::Point pos = event->getPosition ();
 		double dist = (sqrt (pow (pos.x - dialCenter.x, 2) + pow (pos.y - dialCenter.y, 2)));

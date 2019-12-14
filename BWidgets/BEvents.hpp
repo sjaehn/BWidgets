@@ -20,7 +20,7 @@
 
 #include <cstdint>
 #include <string>
-#include "BDevice.hpp"
+#include "BDevices.hpp"
 #include "../BUtilities/Any.hpp"
 #include "../BUtilities/RectArea.hpp"
 
@@ -263,19 +263,19 @@ class PointerEvent : public Event
 {
 protected:
 	BUtilities::Point point, origin, delta;
-	BDevice::ButtonCode buttonNr;
+	BDevices::ButtonCode buttonNr;
 
 
 public:
 	PointerEvent () :
-		PointerEvent (nullptr, NO_EVENT, 0, 0, 0, 0, 0, 0, BDevice::NO_BUTTON) {}
+		PointerEvent (nullptr, NO_EVENT, 0, 0, 0, 0, 0, 0, BDevices::NO_BUTTON) {}
 	PointerEvent (BWidgets::Widget* widget, const EventType type,
 			const double x, const double y, const double xOrigin, const double yOrigin,
-			const double deltaX, const double deltaY, const BDevice::ButtonCode button) :
+			const double deltaX, const double deltaY, const BDevices::ButtonCode button) :
 		PointerEvent (widget, type, BUtilities::Point (x, y), BUtilities::Point (xOrigin, yOrigin), BUtilities::Point (deltaX, deltaY), button) {}
 	PointerEvent (BWidgets::Widget* widget, const EventType type, const BUtilities::Point& point,
 			const BUtilities::Point& origin, const BUtilities::Point& delta,
-			const BDevice::ButtonCode button) :
+			const BDevices::ButtonCode button) :
 		Event (widget, type), point (point), origin (origin), delta (delta), buttonNr (button) {}
 
 	/**
@@ -327,14 +327,14 @@ public:
 	 * Redefines the button pressed of the pointer event
 	 * @param button Button pressed
 	 */
-	void setButton (const BDevice::ButtonCode button)
+	void setButton (const BDevices::ButtonCode button)
 	{buttonNr = button;}
 
 	/**
 	 * Gets the button pressed of the pointer event
 	 * @return Button pressed
 	 */
-	BDevice::ButtonCode getButton () const
+	BDevices::ButtonCode getButton () const
 	{return buttonNr;}
 };
 /*

@@ -225,7 +225,7 @@ void Label::onKeyPressed (BEvents::KeyEvent* event)
 		event &&
 		(event->getWidget () == this) &&
 		main_ &&
-		(main_->getKeyGrabStack()->getGrabWidget (0) == this)
+		(main_->getKeyGrabStack()->getGrab(0)->getWidget() == this)
 	)
 	{
 		uint32_t key = event->getKey ();
@@ -329,7 +329,7 @@ void Label::onPointerDragged (BEvents::PointerEvent* event)
 		(event) &&
 		(event->getWidget () == this) &&
 		(main_) &&
-		(main_->getKeyGrabStack()->getGrabWidget (0) == this)
+		(main_->getKeyGrabStack()->getGrab(0)->getWidget() == this)
 	)
 	{
 		size_t cursor = getCursorFromCoords (event->getPosition ());
