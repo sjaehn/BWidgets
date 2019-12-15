@@ -155,11 +155,17 @@ public:
 	 * stack.
 	 * @param widget	All DeviceGrabs with this widget will be removed
 	 *			from the stack.
+	 * @param device 	Devices device from all DeviceGrabs of the stack
+	 *			will be removed.
+	 * @param devices	All given devices will be removed from all
+	 *			DeviceGrabs of the stack.
 	 * @param deviceGrab	For all DeviceGrabs of the stack that match with
 	 *			deviceGrab.widget all deviceGrab.devices will be
 	 *			removed.
 	 */
 	void remove (BWidgets::Widget* widget) {remove (DeviceGrab<T> (widget));}
+	void remove (const T& device) {remove (DeviceGrab<T> (nullptr, device));}
+	void remove (const std::set<T>& devices) {remove (DeviceGrab<T> (nullptr, devices));}
 	void remove (const DeviceGrab<T>& deviceGrab)
 	{
 		bool done = true;
@@ -173,7 +179,7 @@ public:
 			for (typename std::list<DeviceGrab<T>>::iterator it = stack_.begin(); it != stack_.end(); ++it)
 			{
 				DeviceGrab<T>& dg = *it;
-				if (dg.getWidget() == widget)
+				if ((!widget) || (dg.getWidget() == widget))
 				{
 					// Erase list item if joker (std::set<T>{}) used
 					if (devices.empty())
@@ -209,7 +215,7 @@ public:
 						}
 
 						// Otherwise replace list item
-						else dg = DeviceGrab<T> (widget, diff);
+						else dg = DeviceGrab<T> (dg.getWidget(), diff);
 					}
 				}
 			}
@@ -256,10 +262,23 @@ public:
 
 };
 
-struct MouseDevice
+class MouseDevice
 {
+public:
 	ButtonCode button;
 	BUtilities::Point position;
+
+protected:
+	std::chrono::steady_clock::time_point time_;
+
+public:
+	MouseDevice () : MouseDevice (NO_BUTTON, BUtilities::Point ()) {}
+	MouseDevice (const ButtonCode but) : MouseDevice (but, BUtilities::Point ()) {}
+	MouseDevice (const ButtonCode but, const BUtilities::Point& pos) :
+			button (but), position (pos),
+			time_ (std::chrono::steady_clock::now()) {}
+
+	std::chrono::steady_clock::time_point getTime () const {return time_;}
 
 	friend inline bool operator< (const MouseDevice& lhs, const MouseDevice& rhs)
 	{

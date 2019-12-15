@@ -28,8 +28,8 @@ Window::Window (const double width, const double height, const std::string& titl
 		Widget (0.0, 0.0, width, height, title),
 		keyGrabStack_ (), buttonGrabStack_ (),
 		title_ (title), view_ (NULL), nativeWindow_ (nativeWindow),
-		quit_ (false),
-		pointer_ {nullptr, BUtilities::Point (), false, std::chrono::steady_clock::now()}, eventQueue_ ()
+		quit_ (false), focused_ (false), pointer_ (),
+		eventQueue_ ()
 {
 	main_ = this;
 	view_ = puglInit(NULL, NULL);
@@ -242,23 +242,25 @@ void Window::handleEvents ()
 					break;
 
 				case BEvents::KEY_PRESS_EVENT:
-
+					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 					widget->onKeyPressed ((BEvents::KeyEvent*) event);
 					break;
 
 				case BEvents::KEY_RELEASE_EVENT:
+					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 					widget->onKeyReleased ((BEvents::KeyEvent*) event);
 					break;
 
 				case BEvents::BUTTON_PRESS_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
+						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 						buttonGrabStack_.add
 						(
 							BDevices::DeviceGrab<BDevices::MouseDevice>
 							(
 								widget,
-								BDevices::MouseDevice{be->getButton (), be->getPosition()}
+								BDevices::MouseDevice(be->getButton (), be->getPosition())
 							)
 						);
 						widget->onButtonPressed (be);
@@ -268,12 +270,13 @@ void Window::handleEvents ()
 				case BEvents::BUTTON_RELEASE_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
+						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 						buttonGrabStack_.remove
 						(
 							BDevices::DeviceGrab<BDevices::MouseDevice>
 							(
 								widget,
-								BDevices::MouseDevice{be->getButton (), be->getPosition()}
+								BDevices::MouseDevice(be->getButton (), be->getPosition())
 							)
 						);
 						widget->onButtonReleased (be);
@@ -283,12 +286,13 @@ void Window::handleEvents ()
 				case BEvents::BUTTON_CLICK_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
+						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 						buttonGrabStack_.remove
 						(
 							BDevices::DeviceGrab<BDevices::MouseDevice>
 							(
 								widget,
-								BDevices::MouseDevice{be->getButton (), be->getPosition()}
+								BDevices::MouseDevice(be->getButton (), be->getPosition())
 							)
 						);
 						widget->onButtonClicked (be);
@@ -296,14 +300,33 @@ void Window::handleEvents ()
 					break;
 
 				case BEvents::POINTER_MOTION_EVENT:
-					widget->onPointerMotion((BEvents::PointerEvent*) event);
+					{
+						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
+						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
+						BUtilities::Point p = widget->getAbsolutePosition() + be->getPosition();
+						Widget* w = getWidgetAt (p, true, false, false, false, true);
+						if (w)
+						{
+							buttonGrabStack_.add
+							(
+								BDevices::DeviceGrab<BDevices::MouseDevice>
+								(
+									w,
+									BDevices::MouseDevice(BDevices::NO_BUTTON, p - w->getAbsolutePosition())
+								)
+							);
+						}
+						widget->onPointerMotion (be);
+					}
 					break;
 
 				case BEvents::POINTER_DRAG_EVENT:
+					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 					widget->onPointerDragged((BEvents::PointerEvent*) event);
 					break;
 
 				case BEvents::WHEEL_SCROLL_EVENT:
+					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 					widget->onWheelScrolled((BEvents::WheelEvent*) event);
 					break;
 
@@ -397,8 +420,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 					)
 				);
 			}
-
-			w->pointer_.position = position;
+			w->pointer_ = position;
 		}
 		break;
 
@@ -406,7 +428,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->button.x, puglEvent->button.y);
 			BDevices::ButtonCode button = (BDevices::ButtonCode) puglEvent->button.button;
-			BDevices::MouseDevice mouse = BDevices::MouseDevice {button, BUtilities::Point()};
+			BDevices::MouseDevice mouse = BDevices::MouseDevice (button);
 			BDevices::DeviceGrab<BDevices::MouseDevice>* grab = w->getButtonGrabStack()->getGrab(mouse);
 			if (grab)
 			{
@@ -450,8 +472,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 					}
 				}
 			}
-
-			w->pointer_.position = position;
+			w->pointer_ = position;
 		}
 		break;
 
@@ -464,7 +485,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 			for (int i = BDevices::NO_BUTTON + 1; i < BDevices::NR_OF_BUTTONS; ++i)
 			{
 				button = BDevices::ButtonCode (i);
-				BDevices::MouseDevice mouse = BDevices::MouseDevice {button, BUtilities::Point()};
+				BDevices::MouseDevice mouse = BDevices::MouseDevice (button);
 				BDevices::DeviceGrab<BDevices::MouseDevice>* grab = w->getButtonGrabStack()->getGrab(mouse);
 
 				if (grab)
@@ -486,7 +507,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 								BEvents::POINTER_DRAG_EVENT,
 								position - widget->getAbsolutePosition (),
 								origin,
-								position - w->pointer_.position,
+								position - w->pointer_,
 								button
 							)
 						);
@@ -508,12 +529,11 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 							BEvents::POINTER_MOTION_EVENT,
 							position - widget->getAbsolutePosition (),
 							BUtilities::Point (),
-							position - w->pointer_.position,
+							position - w->pointer_,
 							button));
 				}
 			}
-
-			w->pointer_.position = position;
+			w->pointer_ = position;
 		}
 		break;
 
@@ -535,6 +555,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 					)
 				);
 			}
+			w->pointer_ = position;
 		}
 		break;
 
@@ -564,51 +585,57 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 	default:
 		break;
 	}
-
-	w->pointer_.widget = w->getWidgetAt (w->pointer_.position, true, false, false, false, true);
-	w->pointer_.time = std::chrono::steady_clock::now();
-
 }
 
 void Window::translateTimeEvent ()
 {
-	if (pointer_.widget)
+	BDevices::MouseDevice mouse = BDevices::MouseDevice (BDevices::NO_BUTTON);
+	BDevices::DeviceGrab<BDevices::MouseDevice>* grab = buttonGrabStack_.getGrab(mouse);
+	if (grab)
 	{
-		Focusable* focus = dynamic_cast<Focusable*> (pointer_.widget);
-
-		if (focus)
+		Widget* widget = grab->getWidget();
+		if (widget)
 		{
-			std::chrono::steady_clock::time_point nowTime = std::chrono::steady_clock::now();
-			std::chrono::milliseconds diffMs = std::chrono::duration_cast<std::chrono::milliseconds> (nowTime - pointer_.time);
 
-			if ((!pointer_.status) && focus->isFocusActive (diffMs))
+			Focusable* focus = dynamic_cast<Focusable*> (widget);
+			if (focus)
 			{
-				addEventToQueue
-				(
-					new BEvents::FocusEvent
+				std::set<BDevices::MouseDevice> buttonDevices = grab->getDevices();
+				std::set<BDevices::MouseDevice>::iterator it = buttonDevices.find(mouse);
+				BUtilities::Point position = (it != buttonDevices.end() ? it->position : BUtilities::Point ());
+				std::chrono::steady_clock::time_point nowTime = std::chrono::steady_clock::now();
+				std::chrono::steady_clock::time_point pointerTime = (it != buttonDevices.end() ? it->getTime() : nowTime);
+				std::chrono::milliseconds diffMs = std::chrono::duration_cast<std::chrono::milliseconds> (nowTime - pointerTime);
+
+				if ((!focused_) && focus->isFocusActive (diffMs))
+				{
+					addEventToQueue
 					(
-						pointer_.widget,
-						BEvents::FOCUS_IN_EVENT,
-						pointer_.position - pointer_.widget->getAbsolutePosition ()
-					)
-				);
+						new BEvents::FocusEvent
+						(
+							widget,
+							BEvents::FOCUS_IN_EVENT,
+							position
+						)
+					);
 
-				pointer_.status = true;
-			}
+					focused_ = true;
+				}
 
-			else if (pointer_.status && (!focus->isFocusActive (diffMs)))
-			{
-				addEventToQueue
-				(
-					new BEvents::FocusEvent
+				else if (focused_ && (!focus->isFocusActive (diffMs)))
+				{
+					addEventToQueue
 					(
-						pointer_.widget,
-						BEvents::FOCUS_OUT_EVENT,
-						pointer_.position - pointer_.widget->getAbsolutePosition ()
-					)
-				);
+						new BEvents::FocusEvent
+						(
+							widget,
+							BEvents::FOCUS_OUT_EVENT,
+							position
+						)
+					);
 
-				pointer_.status = false;
+					focused_ = false;
+				}
 			}
 		}
 	}

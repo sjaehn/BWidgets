@@ -636,7 +636,7 @@ void Widget::draw (const BUtilities::RectArea& area)
 				if (fillSurface && cairo_surface_status (fillSurface) == CAIRO_STATUS_SUCCESS) cairo_set_source_surface (cr, fillSurface, 0, 0);
 
 				// Plain Background color ?
-				else cairo_set_source_rgba (cr, bc.getRed(), bc.getGreen(), bc.getBlue(), bc.getAlpha());
+				else cairo_set_source_rgba (cr, CAIRO_RGBA(bc));
 
 				// If drawing area < background are, draw only a rectangle for the drawing area (faster)
 				if
@@ -677,7 +677,7 @@ void Widget::draw (const BUtilities::RectArea& area)
 				getWidth () - 2 * outerBorders - lw,
 				getHeight () - 2 * outerBorders - lw, radius);
 
-			cairo_set_source_rgba (cr, lc.getRed(), lc.getGreen(), lc.getBlue(), lc.getAlpha());
+			cairo_set_source_rgba (cr, CAIRO_RGBA (lc));
 			cairo_set_line_width (cr, lw);
 			cairo_stroke (cr);
 		}

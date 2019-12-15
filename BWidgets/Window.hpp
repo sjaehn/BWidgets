@@ -141,16 +141,8 @@ protected:
 	PuglView* view_;
 	PuglNativeWindow nativeWindow_;
 	bool quit_;
-
-	struct Pointer
-	{
-		Widget* widget;
-		BUtilities::Point position;
-		bool status;
-		std::chrono::steady_clock::time_point time;
-	};
-
-	Pointer pointer_;
+	bool focused_;
+	BUtilities::Point pointer_;
 
 	std::deque<BEvents::Event*> eventQueue_;		// TODO: std::list ?
 };
