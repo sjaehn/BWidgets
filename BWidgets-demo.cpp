@@ -1,5 +1,5 @@
 /* Demonstration of BWidgets TK
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -125,11 +125,8 @@ int main ()
 		},
 		{"Slider/focus",
 				  {{"background", STYLEPTR (&BStyles::darkgreyFill)},
-				   {"border", STYLEPTR (&defaultBorder)}}
-		},
-
-		{"Slider/focus/label",
-				  {{"textcolors", STYLEPTR (&BColors::whites)},
+				   {"border", STYLEPTR (&BStyles::noBorder)},
+				   {"textcolors", STYLEPTR (&BColors::whites)},
 				   {"font", STYLEPTR (&labelFont)}}
 		},
 		{"Dial", {{"uses", STYLEPTR (&defaultStyles)},
@@ -138,11 +135,8 @@ int main ()
 		},
 		{"Dial/focus",
 				  {{"background", STYLEPTR (&BStyles::darkgreyFill)},
-				   {"border", STYLEPTR (&defaultBorder)}}
-		},
-
-		{"Dial/focus/label",
-				  {{"textcolors", STYLEPTR (&BColors::whites)},
+				   {"border", STYLEPTR (&BStyles::noBorder)},
+				   {"textcolors", STYLEPTR (&BColors::whites)},
 				   {"font", STYLEPTR (&labelFont)}}
 		},
 
@@ -155,11 +149,8 @@ int main ()
 
 		{"DialVal/focus",
 				  {{"background", STYLEPTR (&BStyles::darkgreyFill)},
-				   {"border", STYLEPTR (&defaultBorder)}}
-		},
-
-		{"DialVal/focus/label",
-				  {{"textcolors", STYLEPTR (&BColors::whites)},
+				   {"border", STYLEPTR (&BStyles::noBorder)},
+				   {"textcolors", STYLEPTR (&BColors::whites)},
 				   {"font", STYLEPTR (&labelFont)}}
 		},
 		{"Button", {{"uses", STYLEPTR (&defaultStyles)},

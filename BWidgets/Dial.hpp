@@ -22,6 +22,7 @@
 #include "Knob.hpp"
 #include "DrawingSurface.hpp"
 #include "Label.hpp"
+#include "Focusable.hpp"
 
 #define BWIDGETS_DEFAULT_DIAL_WIDTH 50.0
 #define BWIDGETS_DEFAULT_DIAL_HEIGHT 50.0
@@ -37,7 +38,7 @@ namespace BWidgets
  * RangeWidget class dial.
  * The Widget is clickable by default.
  */
-class Dial : public RangeWidget
+class Dial : public RangeWidget, public Focusable
 {
 public:
 	Dial ();
@@ -64,6 +65,14 @@ public:
 	 * its properties.
 	 */
 	virtual Widget* clone () const override;
+
+	/**
+	 * Changes the value of the widget and keeps it within the defined range.
+	 * Passes the value to its predefined child widgets.
+	 * Emits a value changed event and (if visible) an expose event.
+	 * @param val Value
+	 */
+	virtual void setValue (const double val) override;
 
 	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the
@@ -113,6 +122,20 @@ public:
 	 */
 	virtual void onWheelScrolled (BEvents::WheelEvent* event) override;
 
+	/**
+	 * Predefined empty method to handle a
+	 * BEvents::EventType::FOCUS_IN_EVENT.
+	 * @param event Focus event
+	 */
+	virtual void onFocusIn (BEvents::FocusEvent* event) override;
+
+	/**
+	 * Predefined empty method to handle a
+	 * BEvents::EventType::FOCUS_OUT_EVENT.
+	 * @param event Focus event
+	 */
+	virtual void onFocusOut (BEvents::FocusEvent* event) override;
+
 
 protected:
 	void drawDot ();
@@ -124,6 +147,7 @@ protected:
 
 	Knob knob;
 	DrawingSurface dot;
+	Label focusLabel;
 	BColors::ColorSet fgColors;
 	BColors::ColorSet bgColors;
 };

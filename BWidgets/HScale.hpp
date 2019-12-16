@@ -19,7 +19,6 @@
 #define BWIDGETS_HSCALE_HPP_
 
 #include "RangeWidget.hpp"
-#include "Label.hpp"
 
 #define BWIDGETS_DEFAULT_HSCALE_WIDTH 100.0
 #define BWIDGETS_DEFAULT_HSCALE_HEIGHT 6.0

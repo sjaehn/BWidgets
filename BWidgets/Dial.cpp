@@ -16,6 +16,7 @@
  */
 
 #include "Dial.hpp"
+#include "../BUtilities/to_string.hpp"
 
 namespace BWidgets
 {
@@ -25,6 +26,8 @@ Dial::Dial () : Dial (0.0, 0.0, BWIDGETS_DEFAULT_DIAL_WIDTH, BWIDGETS_DEFAULT_DI
 Dial::Dial (const double x, const double y, const double width, const double height, const std::string& name,
 			const double value, const double min, const double max, const double step) :
 		RangeWidget (x, y, width, height, name, value, min, max, step),
+		Focusable (std::chrono::milliseconds (BWIDGETS_DEFAULT_FOCUS_IN_MS),
+			std::chrono::milliseconds (BWIDGETS_DEFAULT_FOCUS_OUT_MS)),
 		dialCenter (width / 2, height / 2), dialRadius (width < height ? width / 2 : height / 2),
 		knob ((1 - BWIDGETS_DEFAULT_DIAL_KNOB_SIZE) / 2 * width, (1 - BWIDGETS_DEFAULT_DIAL_KNOB_SIZE) / 2 * height,
 			   BWIDGETS_DEFAULT_DIAL_KNOB_SIZE * width, BWIDGETS_DEFAULT_DIAL_KNOB_SIZE * height, BWIDGETS_DEFAULT_KNOB_DEPTH,
@@ -32,53 +35,79 @@ Dial::Dial (const double x, const double y, const double width, const double hei
 		dot (0, 0, (width < height ? BWIDGETS_DEFAULT_DIAL_DOT_SIZE * width : BWIDGETS_DEFAULT_DIAL_DOT_SIZE * height),
 			 (width < height ? BWIDGETS_DEFAULT_DIAL_DOT_SIZE * width : BWIDGETS_DEFAULT_DIAL_DOT_SIZE * height),
 			 name),
+		focusLabel(0 ,0, 40, 20, name_ + BWIDGETS_DEFAULT_FOCUS_NAME, ""),
 		fgColors (BWIDGETS_DEFAULT_FGCOLORS), bgColors (BWIDGETS_DEFAULT_BGCOLORS)
 {
 
 	setClickable (true);
 	setDraggable (true);
 	setScrollable (true);
+	setFocusable (true);
 	knob.setClickable (false);
 	knob.setDraggable (false);
 	knob.setScrollable (false);
+	knob.setFocusable (false);
 	dot.setClickable (false);
 	dot.setDraggable (false);
 	dot.setScrollable (false);
+	dot.setFocusable (false);
 	add (knob);
 	add (dot);
+
+	std::string valstr = BUtilities::to_string (getValue());
+	focusLabel.setText (valstr);
+	focusLabel.resize (focusLabel.getTextWidth (valstr) + 10, 20);
+	focusLabel.hide ();
+	add (focusLabel);
 }
 
 Dial::Dial (const Dial& that) :
 		RangeWidget (that),
+		Focusable (that),
 		dialCenter (that.dialCenter), dialRadius (that.dialRadius),
-		knob (that.knob), dot (that.dot),
+		knob (that.knob), dot (that.dot), focusLabel (that.focusLabel),
 		fgColors (that.fgColors), bgColors (that.bgColors)
 {
 	add (knob);
 	add (dot);
+	focusLabel.hide();
+	add (focusLabel);
 }
 
 Dial& Dial::operator= (const Dial& that)
 {
 	release (&knob);
 	release (&dot);
+	release (&focusLabel);
 
 	knob = that.knob;
 	dot = that.dot;
+	focusLabel = that.focusLabel;
+	focusLabel.hide();
 	fgColors = that.fgColors;
 	bgColors = that.bgColors;
 	dialCenter = that.dialCenter;
 	dialRadius = that.dialRadius;
 
 	RangeWidget::operator= (that);
+	Focusable::operator= (that);
 
 	add (knob);
 	add (dot);
+	add (focusLabel);
 
 	return *this;
 }
 
 Widget* Dial::clone () const {return new Dial (*this);}
+
+void Dial::setValue (const double val)
+{
+	RangeWidget::setValue (val);
+	std::string valstr = BUtilities::to_string (value);
+	focusLabel.setText(valstr);
+	focusLabel.resize (focusLabel.getTextWidth (valstr) + 10, 20);
+}
 
 void Dial::update ()
 {
@@ -112,6 +141,7 @@ void Dial::applyTheme (BStyles::Theme& theme, const std::string& name)
 {
 	Widget::applyTheme (theme, name);
 	knob.applyTheme (theme, name);
+	focusLabel.applyTheme (theme, name + BWIDGETS_DEFAULT_FOCUS_NAME);
 
 	// Foreground colors (active part arc, dot)
 	void* fgPtr = theme.getStyle(name, BWIDGETS_KEYWORD_FGCOLORS);
@@ -184,6 +214,22 @@ void Dial::onWheelScrolled (BEvents::WheelEvent* event)
 		double step = (getStep () != 0 ? getStep () : (max - min) / (dialRadius * 1.5 * M_PI));
 		setValue (getValue() + event->getDelta ().y * step);
 	}
+}
+
+void Dial::onFocusIn (BEvents::FocusEvent* event)
+{
+	if (event && event->getWidget())
+	{
+		BUtilities::Point pos = event->getPosition();
+		focusLabel.moveTo (pos.x - 0.5 * focusLabel.getWidth(), pos.y - focusLabel.getHeight());
+		focusLabel.show();
+	}
+	Widget::onFocusIn (event);
+}
+void Dial::onFocusOut (BEvents::FocusEvent* event)
+{
+	if (event && event->getWidget()) focusLabel.hide();
+	Widget::onFocusOut (event);
 }
 
 void Dial::drawDot ()

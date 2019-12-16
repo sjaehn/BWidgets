@@ -18,6 +18,10 @@
 #ifndef BWIDGETS_FOCUSABLE_HPP_
 #define BWIDGETS_FOCUSABLE_HPP_
 
+#define BWIDGETS_DEFAULT_FOCUS_IN_MS 1000
+#define BWIDGETS_DEFAULT_FOCUS_OUT_MS 5000
+#define BWIDGETS_DEFAULT_FOCUS_NAME "/focus"
+
 #include <chrono>
 
 class Focusable

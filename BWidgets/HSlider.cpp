@@ -16,6 +16,7 @@
  */
 
 #include "HSlider.hpp"
+#include "../BUtilities/to_string.hpp"
 
 namespace BWidgets
 {
@@ -25,36 +26,65 @@ HSlider::HSlider () : HSlider (0.0, 0.0, BWIDGETS_DEFAULT_HSLIDER_WIDTH, BWIDGET
 HSlider::HSlider (const double  x, const double y, const double width, const double height, const std::string& name,
 				  const double value, const double min, const double max, const double step) :
 		HScale (x, y, width, height, name, value, min, max, step),
-		knob (0, 0, 0, 0, BWIDGETS_DEFAULT_KNOB_DEPTH, name), knobRadius (0), knobPosition ()
+		Focusable (std::chrono::milliseconds (BWIDGETS_DEFAULT_FOCUS_IN_MS),
+			std::chrono::milliseconds (BWIDGETS_DEFAULT_FOCUS_OUT_MS)),
+		knob (0, 0, 0, 0, BWIDGETS_DEFAULT_KNOB_DEPTH, name),
+		focusLabel(0 ,0, 40, 20, name_ + BWIDGETS_DEFAULT_FOCUS_NAME, ""),
+		knobRadius (0), knobPosition ()
 {
+	setFocusable (true);
+
 	knob.setClickable (false);
 	knob.setDraggable (false);
 	knob.setScrollable (false);
-
+	knob.setFocusable (false);
 	add (knob);
+
+	std::string valstr = BUtilities::to_string (getValue());
+	focusLabel.setText (valstr);
+	focusLabel.resize (focusLabel.getTextWidth (valstr) + 10, 20);
+	focusLabel.hide ();
+	add (focusLabel);
 }
 
 HSlider::HSlider (const HSlider& that) :
-		HScale (that), knob (that.knob), knobRadius (that.knobRadius), knobPosition (that.knobPosition)
+		HScale (that), Focusable (that),
+		knob (that.knob), focusLabel (that.focusLabel),
+		knobRadius (that.knobRadius), knobPosition (that.knobPosition)
 {
 	add (knob);
+	focusLabel.hide();
+	add (focusLabel);
 }
 
 HSlider& HSlider::operator= (const HSlider& that)
 {
 	release (&knob);
+	release (&focusLabel);
 
 	knob = that.knob;
+	focusLabel = that.focusLabel;
+	focusLabel.hide();
 	knobRadius = that.knobRadius;
 	knobPosition = that.knobPosition;
 	HScale::operator= (that);
+	Focusable::operator= (that);
 
 	add (knob);
+	add (focusLabel);
 
 	return *this;
 }
 
 Widget* HSlider::clone () const {return new HSlider (*this);}
+
+void HSlider::setValue (const double val)
+{
+	RangeWidget::setValue (val);
+	std::string valstr = BUtilities::to_string (value);
+	focusLabel.setText(valstr);
+	focusLabel.resize (focusLabel.getTextWidth (valstr) + 10, 20);
+}
 
 void HSlider::update ()
 {
@@ -72,6 +102,23 @@ void HSlider::applyTheme (BStyles::Theme& theme, const std::string& name)
 {
 	HScale::applyTheme (theme, name);
 	knob.applyTheme (theme, name);
+	focusLabel.applyTheme (theme, name + BWIDGETS_DEFAULT_FOCUS_NAME);
+}
+
+void HSlider::onFocusIn (BEvents::FocusEvent* event)
+{
+	if (event && event->getWidget())
+	{
+		BUtilities::Point pos = event->getPosition();
+		focusLabel.moveTo (pos.x - 0.5 * focusLabel.getWidth(), pos.y - focusLabel.getHeight());
+		focusLabel.show();
+	}
+	Widget::onFocusIn (event);
+}
+void HSlider::onFocusOut (BEvents::FocusEvent* event)
+{
+	if (event && event->getWidget()) focusLabel.hide();
+	Widget::onFocusOut (event);
 }
 
 void HSlider::updateCoords ()

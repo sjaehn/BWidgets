@@ -16,8 +16,17 @@
  */
 
 #include "to_string.hpp"
+#include <sstream>
 
 namespace BUtilities {
+
+std::string to_string (const double value)
+{
+	std::ostringstream os;
+	os << value;
+	std::string str = os.str();
+	return str;
+}
 
 std::string to_string (const double value, const std::string& format)
 {

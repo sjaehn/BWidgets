@@ -133,9 +133,11 @@ protected:
 	 * BEvents::Event derived objects.
 	 */
 	static void translatePuglEvent (PuglView* view, const PuglEvent* event);
-	void translateTimeEvent ();
 
+	void translateTimeEvent ();
 	void mergeEvents ();
+
+	void unfocus();
 
 	std::string title_;
 	PuglView* view_;

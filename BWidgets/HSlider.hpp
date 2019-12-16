@@ -20,6 +20,8 @@
 
 #include "Knob.hpp"
 #include "HScale.hpp"
+#include "Label.hpp"
+#include "Focusable.hpp"
 
 #define BWIDGETS_DEFAULT_HSLIDER_WIDTH BWIDGETS_DEFAULT_HSCALE_WIDTH
 #define BWIDGETS_DEFAULT_HSLIDER_HEIGHT (BWIDGETS_DEFAULT_HSCALE_HEIGHT * 2)
@@ -33,7 +35,7 @@ namespace BWidgets
  * RangeWidget class for a horizontal slider.
  * The Widget is clickable by default.
  */
-class HSlider : public HScale
+class HSlider : public HScale, public Focusable
 {
 public:
 	HSlider ();
@@ -52,6 +54,14 @@ public:
 	 * its properties.
 	 */
 	virtual Widget* clone () const override;
+
+	/**
+	 * Changes the value of the widget and keeps it within the defined range.
+	 * Passes the value to its predefined child widgets.
+	 * Emits a value changed event and (if visible) an expose event.
+	 * @param val Value
+	 */
+	virtual void setValue (const double val) override;
 
 	/**
 	 * Assignment. Copies the slider properties from a source slider and keeps
@@ -83,10 +93,25 @@ public:
 	virtual void applyTheme (BStyles::Theme& theme) override;
 	virtual void applyTheme (BStyles::Theme& theme, const std::string& name) override;
 
+	/**
+	 * Predefined empty method to handle a
+	 * BEvents::EventType::FOCUS_IN_EVENT.
+	 * @param event Focus event
+	 */
+	virtual void onFocusIn (BEvents::FocusEvent* event) override;
+
+	/**
+	 * Predefined empty method to handle a
+	 * BEvents::EventType::FOCUS_OUT_EVENT.
+	 * @param event Focus event
+	 */
+	virtual void onFocusOut (BEvents::FocusEvent* event) override;
+
 protected:
 	virtual void updateCoords () override;
 
 	Knob knob;
+	Label focusLabel;
 	double knobRadius;
 	BUtilities::Point knobPosition;
 };

@@ -22,6 +22,7 @@
 
 namespace BUtilities {
 
+std::string to_string (const double value);
 std::string to_string (const double value, const std::string& format);
 
 }

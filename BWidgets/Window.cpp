@@ -254,6 +254,7 @@ void Window::handleEvents ()
 				case BEvents::BUTTON_PRESS_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
+						unfocus();
 						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 						buttonGrabStack_.add
 						(
@@ -270,6 +271,7 @@ void Window::handleEvents ()
 				case BEvents::BUTTON_RELEASE_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
+						unfocus ();
 						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 						buttonGrabStack_.remove
 						(
@@ -286,6 +288,7 @@ void Window::handleEvents ()
 				case BEvents::BUTTON_CLICK_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
+						unfocus ();
 						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 						buttonGrabStack_.remove
 						(
@@ -302,6 +305,7 @@ void Window::handleEvents ()
 				case BEvents::POINTER_MOTION_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
+						unfocus ();
 						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 						BUtilities::Point p = widget->getAbsolutePosition() + be->getPosition();
 						Widget* w = getWidgetAt (p, true, false, false, false, true);
@@ -321,11 +325,13 @@ void Window::handleEvents ()
 					break;
 
 				case BEvents::POINTER_DRAG_EVENT:
+					unfocus ();
 					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 					widget->onPointerDragged((BEvents::PointerEvent*) event);
 					break;
 
 				case BEvents::WHEEL_SCROLL_EVENT:
+					unfocus ();
 					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 					widget->onWheelScrolled((BEvents::WheelEvent*) event);
 					break;
@@ -484,12 +490,13 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 			// Scan for pressed buttons associated with a widget
 			for (int i = BDevices::NO_BUTTON + 1; i < BDevices::NR_OF_BUTTONS; ++i)
 			{
-				button = BDevices::ButtonCode (i);
-				BDevices::MouseDevice mouse = BDevices::MouseDevice (button);
+				BDevices::ButtonCode b = BDevices::ButtonCode (i);
+				BDevices::MouseDevice mouse = BDevices::MouseDevice (b);
 				BDevices::DeviceGrab<BDevices::MouseDevice>* grab = w->getButtonGrabStack()->getGrab(mouse);
 
 				if (grab)
 				{
+					button = b;
 					Widget* widget = grab->getWidget();
 
 					if (widget && widget->isDraggable())
@@ -514,7 +521,6 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 					}
 				}
 			}
-
 			// No button associated with a widget? Only POINTER_MOTION_EVENT
 			if (button == BDevices::NO_BUTTON)
 			{
@@ -596,7 +602,6 @@ void Window::translateTimeEvent ()
 		Widget* widget = grab->getWidget();
 		if (widget)
 		{
-
 			Focusable* focus = dynamic_cast<Focusable*> (widget);
 			if (focus)
 			{
@@ -609,35 +614,45 @@ void Window::translateTimeEvent ()
 
 				if ((!focused_) && focus->isFocusActive (diffMs))
 				{
-					addEventToQueue
-					(
-						new BEvents::FocusEvent
-						(
-							widget,
-							BEvents::FOCUS_IN_EVENT,
-							position
-						)
-					);
-
+					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::FOCUS_IN_EVENT, position));
 					focused_ = true;
 				}
 
 				else if (focused_ && (!focus->isFocusActive (diffMs)))
 				{
-					addEventToQueue
-					(
-						new BEvents::FocusEvent
-						(
-							widget,
-							BEvents::FOCUS_OUT_EVENT,
-							position
-						)
-					);
-
+					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::FOCUS_OUT_EVENT, position));
 					focused_ = false;
 				}
 			}
+			else focused_ = false;
 		}
+		else focused_ = false;
+	}
+	else focused_ = false;
+}
+
+void Window::unfocus ()
+{
+	if (focused_)
+	{
+		BDevices::MouseDevice mouse = BDevices::MouseDevice (BDevices::NO_BUTTON);
+		BDevices::DeviceGrab<BDevices::MouseDevice>* grab = buttonGrabStack_.getGrab (mouse);
+		if (grab)
+		{
+			Widget* widget = grab->getWidget();
+			if (widget)
+			{
+				Focusable* focus = dynamic_cast<Focusable*> (widget);
+				if (focus)
+				{
+					std::set<BDevices::MouseDevice> buttonDevices = grab->getDevices();
+					std::set<BDevices::MouseDevice>::iterator it = buttonDevices.find(mouse);
+					BUtilities::Point position = (it != buttonDevices.end() ? it->position : BUtilities::Point ());
+					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::FOCUS_OUT_EVENT, position));
+				}
+			}
+		}
+		focused_ = false;
 	}
 }
 

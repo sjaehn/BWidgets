@@ -19,7 +19,6 @@
 #define BWIDGETS_VSCALE_HPP_
 
 #include "RangeWidget.hpp"
-#include "Label.hpp"
 
 #define BWIDGETS_DEFAULT_VSCALE_WIDTH 100.0
 #define BWIDGETS_DEFAULT_VSCALE_HEIGHT 6.0
@@ -117,7 +116,6 @@ protected:
 	BColors::ColorSet bgColors;
 	BUtilities::RectArea scaleArea;
 	double scaleYValue;
-	Label focusLabel;
 };
 
 }
