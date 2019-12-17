@@ -72,7 +72,7 @@ Widget* HSliderValue::clone () const {return new HSliderValue (*this);}
 
 void HSliderValue::setValue (const double val)
 {
-	HScale::setValue (val);
+	HSlider::setValue (val);
 	valueDisplay.setText(BUtilities::to_string (value, valFormat));
 }
 

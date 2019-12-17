@@ -74,95 +74,92 @@ int main ()
 	BStyles::Fill bgPicture = BStyles::Fill ("example-romedalen.png");
 
 	BStyles::StyleSet defaultStyles = {"Widget", {{"background", STYLEPTR (&BStyles::noFill)},
-											 	  {"border", STYLEPTR (&BStyles::noBorder)}}};
+					   {"border", STYLEPTR (&BStyles::noBorder)}}};
 
 	BStyles::Border frameBorder = {BStyles::whiteLine1pt, 3.0, 3.0, 10.0};
 	BStyles::Border defaultBorder = {BStyles::whiteLine1pt, 0.0, 1.0, 0.0};
 
 	BStyles::Font defaultFont = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0,
-											   BStyles::TEXT_ALIGN_LEFT, BStyles::TEXT_VALIGN_TOP);
+						   BStyles::TEXT_ALIGN_LEFT, BStyles::TEXT_VALIGN_TOP);
 	BStyles::Font labelFont = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0,
-											 BStyles::TEXT_ALIGN_CENTER, BStyles::TEXT_VALIGN_MIDDLE);
+						 BStyles::TEXT_ALIGN_CENTER, BStyles::TEXT_VALIGN_MIDDLE);
 	BStyles::Font bigFont = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 20.0,
-											 BStyles::TEXT_ALIGN_CENTER, BStyles::TEXT_VALIGN_MIDDLE);
+					       BStyles::TEXT_ALIGN_CENTER, BStyles::TEXT_VALIGN_MIDDLE);
 	BStyles::Font smallFont = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 8.0,
-											 BStyles::TEXT_ALIGN_CENTER, BStyles::TEXT_VALIGN_MIDDLE);
+						 BStyles::TEXT_ALIGN_CENTER, BStyles::TEXT_VALIGN_MIDDLE);
 
 	// And a theme makes global definition of styles much easier
 	BStyles::Theme defaultTheme = BStyles::Theme ({
 		defaultStyles,
-		{"Window", {{"background", STYLEPTR (&BStyles::blackFill)},
-					{"border", STYLEPTR (&BStyles::noBorder)}}
+		{"Window",	{{"background", STYLEPTR (&BStyles::blackFill)},
+				 {"border", STYLEPTR (&BStyles::noBorder)}}
 		},
-		{"Blank", {{"uses", STYLEPTR (&defaultStyles)}}
+		{"Blank",	{{"uses", STYLEPTR (&defaultStyles)}}},
+		{"Frame", 	{{"background", STYLEPTR (&BStyles::greyFill)},
+				 {"border", STYLEPTR (&frameBorder)}}
 		},
-		{"Frame", {{"background", STYLEPTR (&BStyles::greyFill)},
-				   {"border", STYLEPTR (&frameBorder)}}
+		{"Surface", 	{{"background", STYLEPTR (&BStyles::redFill)},
+				 {"border", STYLEPTR (&frameBorder)}}
 		},
-		{"Surface", {{"background", STYLEPTR (&BStyles::redFill)},
-					 {"border", STYLEPTR (&frameBorder)}}
+		{"Label",	{{"uses", STYLEPTR (&defaultStyles)},
+				 {"textcolors", STYLEPTR (&BColors::blues)},
+				 {"font", STYLEPTR (&labelFont)}}
 		},
-		{"Label", {{"uses", STYLEPTR (&defaultStyles)},
-				   {"textcolors", STYLEPTR (&BColors::blues)},
-				   {"font", STYLEPTR (&labelFont)}}
+		{"bigLabel", 	{{"uses", STYLEPTR (&defaultStyles)},
+				 {"textcolors", STYLEPTR (&BColors::darks)},
+				 {"font", STYLEPTR (&bigFont)}}
 		},
-		{"bigLabel", {{"uses", STYLEPTR (&defaultStyles)},
-				   {"textcolors", STYLEPTR (&BColors::darks)},
-				   {"font", STYLEPTR (&bigFont)}}
+		{"smallLabel", 	{{"uses", STYLEPTR (&defaultStyles)},
+				 {"textcolors", STYLEPTR (&BColors::blues)},
+				 {"font", STYLEPTR (&smallFont)}}
 		},
-		{"smallLabel", {{"uses", STYLEPTR (&defaultStyles)},
-				   {"textcolors", STYLEPTR (&BColors::blues)},
-				   {"font", STYLEPTR (&smallFont)}}
+		{"Text", 	{{"uses", STYLEPTR (&defaultStyles)},
+				 {"border", STYLEPTR (&defaultBorder)},
+				 {"textcolors", STYLEPTR (&BColors::whites)},
+				 {"font", STYLEPTR (&defaultFont)}}
 		},
-		{"Text", {{"uses", STYLEPTR (&defaultStyles)},
-				   {"border", STYLEPTR (&defaultBorder)},
-				   {"textcolors", STYLEPTR (&BColors::whites)},
-				   {"font", STYLEPTR (&defaultFont)}}
+		{"Slider", 	{{"uses", STYLEPTR (&defaultStyles)},
+				 {"fgcolors", STYLEPTR (&defaultFgColors)},
+				 {"bgcolors", STYLEPTR (&BColors::darks)}}
 		},
-		{"Slider", {{"uses", STYLEPTR (&defaultStyles)},
-					{"fgcolors", STYLEPTR (&defaultFgColors)},
-					{"bgcolors", STYLEPTR (&BColors::darks)}}
+		{"Slider/focus",{{"background", STYLEPTR (&BStyles::darkgreyFill)},
+				  {"border", STYLEPTR (&BStyles::noBorder)},
+				  {"textcolors", STYLEPTR (&BColors::whites)},
+				  {"font", STYLEPTR (&labelFont)}}
 		},
-		{"Slider/focus",
-				  {{"background", STYLEPTR (&BStyles::darkgreyFill)},
-				   {"border", STYLEPTR (&BStyles::noBorder)},
-				   {"textcolors", STYLEPTR (&BColors::whites)},
-				   {"font", STYLEPTR (&labelFont)}}
+		{"Dial", 	{{"uses", STYLEPTR (&defaultStyles)},
+				 {"fgcolors", STYLEPTR (&defaultFgColors)},
+				 {"bgcolors", STYLEPTR (&BColors::darks)}}
 		},
-		{"Dial", {{"uses", STYLEPTR (&defaultStyles)},
-				  {"fgcolors", STYLEPTR (&defaultFgColors)},
-				  {"bgcolors", STYLEPTR (&BColors::darks)}}
-		},
-		{"Dial/focus",
-				  {{"background", STYLEPTR (&BStyles::darkgreyFill)},
-				   {"border", STYLEPTR (&BStyles::noBorder)},
-				   {"textcolors", STYLEPTR (&BColors::whites)},
-				   {"font", STYLEPTR (&labelFont)}}
+		{"Dial/focus",	{{"background", STYLEPTR (&BStyles::darkgreyFill)},
+				 {"border", STYLEPTR (&BStyles::noBorder)},
+				 {"textcolors", STYLEPTR (&BColors::whites)},
+				 {"font", STYLEPTR (&labelFont)}}
 		},
 
-		{"DialVal", {{"uses", STYLEPTR (&defaultStyles)},
-			   	     {"fgcolors", STYLEPTR (&defaultFgColors)},
-					 {"bgcolors", STYLEPTR (&BColors::darks)},
-					 {"textcolors", STYLEPTR (&BColors::darks)},
-					 {"font", STYLEPTR (&labelFont)}}
+		{"DialVal", 	{{"uses", STYLEPTR (&defaultStyles)},
+			   	 {"fgcolors", STYLEPTR (&defaultFgColors)},
+				 {"bgcolors", STYLEPTR (&BColors::darks)},
+				 {"textcolors", STYLEPTR (&BColors::darks)},
+				 {"font", STYLEPTR (&labelFont)}}
 		},
 
 		{"DialVal/focus",
-				  {{"background", STYLEPTR (&BStyles::darkgreyFill)},
-				   {"border", STYLEPTR (&BStyles::noBorder)},
-				   {"textcolors", STYLEPTR (&BColors::whites)},
-				   {"font", STYLEPTR (&labelFont)}}
+				{{"background", STYLEPTR (&BStyles::darkgreyFill)},
+				 {"border", STYLEPTR (&BStyles::noBorder)},
+				 {"textcolors", STYLEPTR (&BColors::whites)},
+				 {"font", STYLEPTR (&labelFont)}}
 		},
-		{"Button", {{"uses", STYLEPTR (&defaultStyles)},
-					{"buttoncolors", STYLEPTR (&BColors::darks)},
-					{"bgcolors", STYLEPTR (&BColors::darks)},
-					{"textcolors", STYLEPTR (&defaultFgColors)},
-					{"font", STYLEPTR (&labelFont)}}
+		{"Button", 	{{"uses", STYLEPTR (&defaultStyles)},
+				 {"buttoncolors", STYLEPTR (&BColors::darks)},
+				 {"bgcolors", STYLEPTR (&BColors::darks)},
+				 {"textcolors", STYLEPTR (&defaultFgColors)},
+				 {"font", STYLEPTR (&labelFont)}}
 		},
-		{"Switch", {{"uses", STYLEPTR (&defaultStyles)},
-					{"buttoncolors", STYLEPTR (&BColors::darks)},
-					{"bgcolors", STYLEPTR (&BColors::darks)},
-					{"textcolors", STYLEPTR (&defaultFgColors)}}
+		{"Switch", 	{{"uses", STYLEPTR (&defaultStyles)},
+				 {"buttoncolors", STYLEPTR (&BColors::darks)},
+				 {"bgcolors", STYLEPTR (&BColors::darks)},
+				 {"textcolors", STYLEPTR (&defaultFgColors)}}
 		}
 	});
 

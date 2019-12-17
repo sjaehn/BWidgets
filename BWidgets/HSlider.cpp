@@ -42,6 +42,7 @@ HSlider::HSlider (const double  x, const double y, const double width, const dou
 
 	std::string valstr = BUtilities::to_string (getValue());
 	focusLabel.setText (valstr);
+	focusLabel.setOversize (true);
 	focusLabel.resize (focusLabel.getTextWidth (valstr) + 10, 20);
 	focusLabel.hide ();
 	add (focusLabel);

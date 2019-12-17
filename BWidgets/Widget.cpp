@@ -116,8 +116,21 @@ void Widget::show ()
 void Widget::hide ()
 {
 	bool wasVisible = isVisible ();
+	BUtilities::RectArea hideArea = area_.moveTo (getAbsolutePosition ());
+	std::vector<Widget*> queue = getChildrenAsQueue ();
+	for (Widget* w : queue)
+	{
+		if (w->isVisible () && w->isOversize ())
+		{
+			hideArea.extend (BUtilities::RectArea (w->getAbsolutePosition(), w->getAbsolutePosition() + w->getExtends()));
+		}
+	}
+
 	visible_ = false;
-	if (wasVisible && parent_) parent_->postRedisplay ();
+	if (wasVisible && main_)
+	{
+		main_->postRedisplay (hideArea);
+	}
 }
 
 void Widget::add (Widget& child)
@@ -150,15 +163,20 @@ void Widget::release (Widget* child)
 {
 	if (child)
 	{
-		//std::cerr << "Release " << child->name_ << ":" << &(*child) << "\n";
+		// Store redisplay area information
 		bool wasVisible = child->isVisible ();
-
-		// Delete child's connection to this widget
-		child->parent_ = nullptr;
+		std::vector<Widget*> queue = child->getChildrenAsQueue ();
+		BUtilities::RectArea hideArea = BUtilities::RectArea (child->getAbsolutePosition(), child->getAbsolutePosition() + child->getExtends());
+		for (Widget* w : queue)
+		{
+			if (w->isVisible () && w->isOversize ())
+			{
+				hideArea.extend (BUtilities::RectArea (w->getAbsolutePosition(), w->getAbsolutePosition() + w->getExtends()));
+			}
+		}
 
 		// Release child and all children of child
 		// from main window and from main windows input connections
-		std::vector<Widget*> queue = child->getChildrenAsQueue ();
 		queue.push_back (child);
 		for (Widget* w : queue)
 		{
@@ -171,13 +189,16 @@ void Widget::release (Widget* child)
 			}
 		}
 
+		// Delete child's connection to this widget
+		child->parent_ = nullptr;
+
 		// Delete connection to released child
 		for (std::vector<Widget*>::iterator it = children_.begin (); it !=children_.end (); ++it)
 		{
 			if ((Widget*) *it == child)
 			{
 				children_.erase (it);
-				if (wasVisible) postRedisplay ();
+				if (wasVisible && main_) main_->postRedisplay (hideArea);
 				return;
 			}
 		}
@@ -408,6 +429,10 @@ void Widget::setMergeable (const BEvents::EventType eventType, const bool status
 
 bool Widget::isMergeable (const BEvents::EventType eventType) const {return mergeable_[eventType];}
 
+void Widget::setOversize (const bool status) {oversized_ = status;}
+
+bool Widget::isOversize () const {return oversized_;};
+
 void Widget::update ()
 {
 	//draw (0, 0, width_, height_);
@@ -575,31 +600,34 @@ void Widget::postCloseRequest (Widget* handle)
 
 void Widget::redisplay (cairo_surface_t* surface, const BUtilities::RectArea& area)
 {
-	BUtilities::RectArea a = area;
-	a.intersect (BUtilities::RectArea (0, 0, area_.getWidth(), area_.getHeight()));
+	if (isVisible())
+	{
+		// Calculate absolute area position and start private core method
+		BUtilities::RectArea absArea = area; absArea.moveTo (absArea.getPosition() + getAbsolutePosition());
+		redisplay (surface, absArea, absArea);
+	}
+}
+
+void Widget::redisplay (cairo_surface_t* surface, const BUtilities::RectArea& outerArea, const BUtilities::RectArea& area)
+{
+	BUtilities::RectArea a = (oversized_ ? outerArea : area);
+	BUtilities::RectArea thisArea = area_.moveTo (getAbsolutePosition());
+	a.intersect (thisArea);
 	if (main_ && visible_ && (a != BUtilities::RectArea ()))
 	{
 		// Update draw
 		if (scheduleDraw_) draw (BUtilities::RectArea (0, 0, getWidth (), getHeight ()));
 
 		// Copy widgets surface onto main surface
-		BUtilities::Point absPos = getAbsolutePosition ();
 		cairo_t* cr = cairo_create (surface);
-		cairo_set_source_surface (cr, widgetSurface_, absPos.x, absPos.y);
-		cairo_rectangle (cr, a.getX () + absPos.x, a.getY () + absPos.y, a.getWidth (), a.getHeight ());
+		cairo_set_source_surface (cr, widgetSurface_, thisArea.getX(), thisArea.getY());
+		cairo_rectangle (cr, a.getX (), a.getY (), a.getWidth (), a.getHeight ());
 		cairo_fill (cr);
 		cairo_destroy (cr);
 
 		for (Widget* w : children_)
 		{
-			if (w)
-			{
-				BUtilities::Point pNew = {a.getX () - w->area_.getX (), a.getY () - w->area_.getY ()};
-				if (filter (w))
-				{
-					w->redisplay (surface, BUtilities::RectArea (pNew, pNew + a.getExtends ()));
-				}
-			}
+			if (w && filter (w)) w->redisplay (surface, outerArea, a);
 		}
 	}
 }

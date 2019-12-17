@@ -48,15 +48,20 @@ public:
 	double getWidth () const {return (p2.x - p1.x);}
 	double getHeight () const {return (p2.y - p1.y);}
 
-	void moveTo (const double x, const double y) {moveTo (Point (x, y));}
-	void moveTo (const Point& position)
+	RectArea moveTo (const double x, const double y) {return moveTo (Point (x, y));}
+	RectArea moveTo (const Point& position)
 	{
 		p2 = p2 - p1 + position;
 		p1 = position;
+		return *this;
 	}
 
-	void resize (const double width, const double height) {resize (Point (width, height));}
-	void resize (const Point& extends) {p2 = p1 + extends;}
+	RectArea resize (const double width, const double height) {return resize (Point (width, height));}
+	RectArea resize (const Point& extends)
+	{
+		p2 = p1 + extends;
+		return *this;
+	}
 
 	bool contains (const Point& p) const
 	{
@@ -71,13 +76,17 @@ public:
 
 	void extend (const RectArea& ra)
 	{
-		p1 = Point ((p1.x < ra.p1.x ? p1.x : ra.p1.x), (p1.y < ra.p1.y ? p1.y : ra.p1.y));
-		p2 = Point ((p2.x > ra.p2.x ? p2.x : ra.p2.x), (p2.y > ra.p2.y ? p2.y : ra.p2.y));
+		if (*this == RectArea ()) *this = ra;
+		else if (ra != RectArea ())
+		{
+			p1 = Point ((p1.x < ra.p1.x ? p1.x : ra.p1.x), (p1.y < ra.p1.y ? p1.y : ra.p1.y));
+			p2 = Point ((p2.x > ra.p2.x ? p2.x : ra.p2.x), (p2.y > ra.p2.y ? p2.y : ra.p2.y));
+		}
 	}
 
 	void intersect (const RectArea& ra)
 	{
-		if (!overlaps (ra)) *this = RectArea ();
+		if ((*this == RectArea ()) || (ra == RectArea ()) || (!overlaps (ra))) *this = RectArea ();
 
 		else
 		{

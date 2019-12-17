@@ -72,7 +72,7 @@ Widget* VSliderValue::clone () const {return new VSliderValue (*this);}
 
 void VSliderValue::setValue (const double val)
 {
-	VScale::setValue (val);
+	VSlider::setValue (val);
 	valueDisplay.setText(BUtilities::to_string (value, valFormat));
 }
 

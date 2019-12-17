@@ -463,6 +463,10 @@ public:
 	 */
 	bool isMergeable (const BEvents::EventType eventType) const;
 
+	void setOversize (const bool status);
+
+	bool isOversize () const;
+
 	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the
 	 * Widget is visible.
@@ -653,7 +657,6 @@ protected:
 
 	void postMessage (const std::string& name, const BUtilities::Any content);
 	void postRedisplay (const BUtilities::RectArea& area);
-	void redisplay (cairo_surface_t* surface, const BUtilities::RectArea& area);
 
 	virtual bool filter (Widget* widget);
 
@@ -665,6 +668,7 @@ protected:
 	bool draggable_;
 	bool scrollable_;
 	bool focusable_;
+	bool oversized_;
 	bool scheduleDraw_;
 	std::array<bool, BEvents::EventType::NO_EVENT> mergeable_;
 	Window* main_;
@@ -676,6 +680,9 @@ protected:
 	std::array<std::function<void (BEvents::Event*)>, BEvents::EventType::NO_EVENT> cbfunction_;
 	cairo_surface_t* widgetSurface_;
 	BColors::State widgetState_;
+
+protected: void redisplay (cairo_surface_t* surface, const BUtilities::RectArea& area);
+private: void redisplay (cairo_surface_t* surface, const BUtilities::RectArea& outerArea, const BUtilities::RectArea& area);
 };
 }
 
