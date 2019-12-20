@@ -48,30 +48,29 @@ public:
 	double getWidth () const {return (p2.x - p1.x);}
 	double getHeight () const {return (p2.y - p1.y);}
 
-	RectArea moveTo (const double x, const double y) {return moveTo (Point (x, y));}
-	RectArea moveTo (const Point& position)
+	void moveTo (const double x, const double y) {return moveTo (Point (x, y));}
+	void moveTo (const Point& position)
 	{
 		p2 = p2 - p1 + position;
 		p1 = position;
-		return *this;
 	}
 
-	RectArea resize (const double width, const double height) {return resize (Point (width, height));}
-	RectArea resize (const Point& extends)
-	{
-		p2 = p1 + extends;
-		return *this;
-	}
+	void resize (const double width, const double height) {return resize (Point (width, height));}
+	void resize (const Point& extends) {p2 = p1 + extends;}
 
 	bool contains (const Point& p) const
 	{
 		return ((p.x > p1.x) && (p.x < p2.x) && (p.y > p1.y) && (p.y < p2.y));
 	}
 
+	bool includes (const RectArea& ra) const
+	{
+		return ((ra.p1.x >= p1.x) && (ra.p1.y >= p1.y) && (ra.p2.x <= p2.x) && (ra.p2.y <= p2.y));
+	}
+
 	bool overlaps (const RectArea& ra) const
 	{
-		if ((ra.p2.x < p1.x) || (ra.p2.y < p1.y) || (ra.p1.x > p2.x) || (ra.p1.y > p2.y)) return false;
-		return true;
+		return !((ra.p2.x < p1.x) || (ra.p2.y < p1.y) || (ra.p1.x > p2.x) || (ra.p1.y > p2.y));
 	}
 
 	void extend (const RectArea& ra)

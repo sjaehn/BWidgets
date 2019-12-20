@@ -308,7 +308,7 @@ void Window::handleEvents ()
 						unfocus ();
 						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
 						BUtilities::Point p = widget->getAbsolutePosition() + be->getPosition();
-						Widget* w = getWidgetAt (p, true, false, false, false, true);
+						Widget* w = getWidgetAt (p, [] (Widget* f) {return f->isVisible() && f->isFocusable();});
 						if (w)
 						{
 							buttonGrabStack_.add
@@ -410,7 +410,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 	case PUGL_BUTTON_PRESS:
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->button.x, puglEvent->button.y);
-			Widget* widget = w->getWidgetAt (position, true, true, false, false, false);
+			Widget* widget = w->getWidgetAt (position, [] (Widget* w) {return w->isVisible () && w->isClickable ();});
 			if (widget)
 			{
 				w->addEventToQueue
@@ -460,7 +460,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 
 
 					// Also emit BUTTON_CLICK_EVENT ?
-					Widget* widget2 = w->getWidgetAt (position, true, true, false, false, false);
+					Widget* widget2 = w->getWidgetAt (position, [] (Widget* w) {return w->isVisible () && w->isClickable ();});
 					if (widget == widget2)
 					{
 						w->addEventToQueue
@@ -524,7 +524,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 			// No button associated with a widget? Only POINTER_MOTION_EVENT
 			if (button == BDevices::NO_BUTTON)
 			{
-				Widget* widget = w->getWidgetAt (position, true, false, false, false, false);
+				Widget* widget = w->getWidgetAt (position, BWidgets::isVisible);
 				if (widget)
 				{
 					w->addEventToQueue
@@ -547,7 +547,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->scroll.x, puglEvent->scroll.y);
 			BUtilities::Point scroll = BUtilities::Point (puglEvent->scroll.dx, puglEvent->scroll.dy);
-			Widget* widget = w->getWidgetAt (position, true, false, false, true, false);
+			Widget* widget = w->getWidgetAt (position, BWidgets::isScrollable);
 			if (widget)
 			{
 				w->addEventToQueue

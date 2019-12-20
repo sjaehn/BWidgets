@@ -160,7 +160,7 @@ public:
 	 * Gets the widgets position relative to the position of its main window.
 	 * @return Position
 	 */
-	BUtilities::Point getAbsolutePosition ();
+	BUtilities::Point getAbsolutePosition () const;
 
 	/**
 	 * Pushes this widget one step backwards if it is linked to a
@@ -643,20 +643,23 @@ public:
 
 protected:
 
-	/**
-	 * Linearizes the whole children tree.
-	 * @param queue Vector to which all (pointers to) children shall be added.
-	 * 		Default = empty.
-	 * @return	Vector of pointers to all children.
-	 */
-	std::vector <Widget*> getChildrenAsQueue (std::vector <Widget*> queue = {}) const;
+	BUtilities::RectArea getArea () const;
+	BUtilities::RectArea getAbsoluteArea () const;
+	BUtilities::RectArea getTotalArea (std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
+	BUtilities::RectArea getAbsoluteTotalArea (std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
 
-	Widget* getWidgetAt (const BUtilities::Point& position, const bool checkVisibility,
-			     const bool checkClickability, const bool checkDraggability,
-			     const bool checkScrollability, const bool checkFocusability);
+	void forEachChild (std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
+	void forEachChild (std::vector<Widget*>::iterator first, std::vector<Widget*>::iterator last,
+			   std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
+
+
+	Widget* getWidgetAt (const BUtilities::Point& position, std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
 
 	void postMessage (const std::string& name, const BUtilities::Any content);
+
 	void postRedisplay (const BUtilities::RectArea& area);
+
+	void redisplay (cairo_surface_t* surface, const BUtilities::RectArea& area);
 
 	virtual bool filter (Widget* widget);
 
@@ -681,9 +684,22 @@ protected:
 	cairo_surface_t* widgetSurface_;
 	BColors::State widgetState_;
 
-protected: void redisplay (cairo_surface_t* surface, const BUtilities::RectArea& area);
-private: void redisplay (cairo_surface_t* surface, const BUtilities::RectArea& outerArea, const BUtilities::RectArea& area);
+private:
+	void redisplay (cairo_surface_t* surface, const BUtilities::RectArea& outerArea, const BUtilities::RectArea& area);
+	Widget* getWidgetAt (const BUtilities::Point& abspos, const BUtilities::RectArea& outerArea,
+			     const BUtilities::RectArea& area, std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
 };
+
+bool isVisible (Widget* widget);
+
+bool isClickable (Widget* widget);
+
+bool isDraggable (Widget* widget);
+
+bool isScrollable (Widget* widget);
+
+bool isFocusable (Widget* widget);
+
 }
 
 #endif /* BWIDGETS_WIDGET_HPP_ */

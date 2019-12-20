@@ -18,6 +18,7 @@
 
 #include "Widget.hpp"
 #include "Window.hpp"
+#include <algorithm>
 
 namespace BWidgets
 {
@@ -29,7 +30,7 @@ Widget::Widget (const double x, const double y, const double width, const double
 Widget::Widget(const double x, const double y, const double width, const double height, const std::string& name) :
 		extensionData (nullptr), area_ (x, y, width, height),
 		visible_ (true), clickable_ (true), draggable_ (false),
-		scrollable_ (true), focusable_ (true), scheduleDraw_ (false),
+		scrollable_ (true), focusable_ (true), oversized_ (false), scheduleDraw_ (false),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (BWIDGETS_DEFAULT_BORDER), background_ (BWIDGETS_DEFAULT_BACKGROUND),
 		name_ (name), widgetSurface_ (), widgetState_ (BWIDGETS_DEFAULT_STATE)
 {
@@ -46,7 +47,7 @@ Widget::Widget(const double x, const double y, const double width, const double 
 Widget::Widget (const Widget& that) :
 		extensionData (that.extensionData), area_ (that.area_),
 		visible_ (that.visible_), clickable_ (that.clickable_), draggable_ (that.draggable_), scrollable_ (that.scrollable_),
-		focusable_ (that.focusable_), mergeable_ (that.mergeable_),
+		focusable_ (that.focusable_), oversized_ (that.oversized_), mergeable_ (that.mergeable_),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (that.border_), background_ (that.background_), name_ (that.name_),
 		cbfunction_ (that.cbfunction_), widgetSurface_ (), widgetState_ (that.widgetState_)
 {
@@ -81,6 +82,7 @@ Widget& Widget::operator= (const Widget& that)
 	scrollable_ = that.scrollable_;
 	focusable_ = that.focusable_;
 	mergeable_ = that.mergeable_;
+	oversized_ = that.oversized_;
 	border_ = that.border_;
 	background_ = that.background_;
 	name_ = that.name_;
@@ -102,11 +104,11 @@ void Widget::show ()
 	if (isVisible ())
 	{
 		// (Re-)draw children as they may become visible too
-		std::vector<Widget*> queue = getChildrenAsQueue ();
-		for (Widget* w : queue)
+		forEachChild ([] (Widget* w)
 		{
 			if (w->isVisible ()) w->draw (BUtilities::RectArea (0, 0, w->area_.getWidth (), w->area_.getHeight ()));
-		}
+			return w->isVisible ();
+		});
 
 		// (Re-)draw this widget and post redisplay
 		update ();
@@ -116,20 +118,23 @@ void Widget::show ()
 void Widget::hide ()
 {
 	bool wasVisible = isVisible ();
-	BUtilities::RectArea hideArea = area_.moveTo (getAbsolutePosition ());
-	std::vector<Widget*> queue = getChildrenAsQueue ();
-	for (Widget* w : queue)
-	{
-		if (w->isVisible () && w->isOversize ())
-		{
-			hideArea.extend (BUtilities::RectArea (w->getAbsolutePosition(), w->getAbsolutePosition() + w->getExtends()));
-		}
-	}
 
+	// Get area occupied by this widget and its children
+	BUtilities::RectArea hideArea = getAbsoluteTotalArea (BWidgets::isVisible);
 	visible_ = false;
+
 	if (wasVisible && main_)
 	{
-		main_->postRedisplay (hideArea);
+		// Limit area to main boundaries
+		hideArea.intersect (main_->getAbsoluteArea());
+
+		// Find closest parent that includes the area
+		Widget* p = getParent();
+		for ( ; p && (!p->getAbsoluteArea().includes (hideArea)); p = p->getParent()) {}
+
+		// Redisplay hidden area
+		if (p) p->postRedisplay ();
+		else main_->postRedisplay (hideArea);
 	}
 }
 
@@ -147,12 +152,12 @@ void Widget::add (Widget& child)
 	// they may become visible too
 	if (main_)
 	{
-		std::vector<Widget*> queue = child.getChildrenAsQueue ();
-		for (Widget* w : queue)
+		forEachChild ([this] (Widget* w)
 		{
-			w->main_ = main_;
+			w->main_ = this->main_;
 			w->update ();
-		}
+			return true;
+		});
 	}
 
 	// (Re-)draw child widget and post redisplay
@@ -163,48 +168,45 @@ void Widget::release (Widget* child)
 {
 	if (child)
 	{
-		// Store redisplay area information
-		bool wasVisible = child->isVisible ();
-		std::vector<Widget*> queue = child->getChildrenAsQueue ();
-		BUtilities::RectArea hideArea = BUtilities::RectArea (child->getAbsolutePosition(), child->getAbsolutePosition() + child->getExtends());
-		for (Widget* w : queue)
+		std::vector<Widget*>::iterator it = std::find (children_.begin(), children_.end(), child);
+
+		if (it != children_.end())
 		{
-			if (w->isVisible () && w->isOversize ())
+			// Store redisplay area information
+			bool wasVisible = child->isVisible ();
+
+			// Hide child
+			child->hide();
+
+			// Release child and all children of child
+			// from main window and from main windows input connections
+			forEachChild (it, it + 1, [] (Widget* w)
 			{
-				hideArea.extend (BUtilities::RectArea (w->getAbsolutePosition(), w->getAbsolutePosition() + w->getExtends()));
-			}
+				if (w->main_)
+				{
+					w->main_->purgeEventQueue (w);
+					w->main_->getButtonGrabStack()->remove (w);
+					w->main_->getKeyGrabStack()->remove (w);
+					w->main_ = nullptr;
+				}
+				return true;
+			});
+
+			// Delete child's connection to this widget
+			child->parent_ = nullptr;
+
+			// Delete from children_ vector
+			children_.erase (it);
+
+			// Restore visibility information
+			if (wasVisible) child->show();
 		}
 
-		// Release child and all children of child
-		// from main window and from main windows input connections
-		queue.push_back (child);
-		for (Widget* w : queue)
+		else
 		{
-			if (w->main_)
-			{
-				w->main_->purgeEventQueue (w);
-				w->main_->getButtonGrabStack()->remove (w);
-				w->main_->getKeyGrabStack()->remove (w);
-				w->main_ = nullptr;
-			}
+			std::cerr << "Msg from BWidgets::Widget::release(): Child " << child->name_ << ":" << &(*child)
+				  << " is not a child of " << name_ << ":" << &(*this) << std::endl;
 		}
-
-		// Delete child's connection to this widget
-		child->parent_ = nullptr;
-
-		// Delete connection to released child
-		for (std::vector<Widget*>::iterator it = children_.begin (); it !=children_.end (); ++it)
-		{
-			if ((Widget*) *it == child)
-			{
-				children_.erase (it);
-				if (wasVisible && main_) main_->postRedisplay (hideArea);
-				return;
-			}
-		}
-
-		std::cerr << "Msg from BWidgets::Widget::release(): Child " << child->name_ << ":" << &(*child)
-			  << " is not a child of " << name_ << ":" << &(*this) << std::endl;
 	}
 }
 
@@ -221,10 +223,10 @@ void Widget::moveTo (const BUtilities::Point& position)
 
 BUtilities::Point Widget::getPosition () const {return area_.getPosition();}
 
-BUtilities::Point Widget::getAbsolutePosition ()
+BUtilities::Point Widget::getAbsolutePosition () const
 {
 	BUtilities::Point p = BUtilities::Point (0, 0);
-	for (Widget* w = this; w->parent_; w = w->parent_) p += w->area_.getPosition ();
+	for (const Widget* w = this; w->parent_; w = w->parent_) p += w->area_.getPosition ();
 	return p;
 }
 
@@ -440,36 +442,72 @@ void Widget::update ()
 	if (isVisible ()) postRedisplay ();
 }
 
-Widget* Widget::getWidgetAt (const BUtilities::Point& position, const bool checkVisibility, const bool checkClickability,
-			     const bool checkDraggability, const bool checkScrollability, const bool checkFocusability)
+BUtilities::RectArea Widget::getArea () const {return area_;}
+
+BUtilities::RectArea Widget::getAbsoluteArea () const
 {
-	BUtilities::RectArea a = BUtilities::RectArea (0, 0, getWidth (), getHeight ());
-	if (main_ && a.contains (position) && ((!checkVisibility) || visible_))
+	BUtilities::RectArea a = area_;
+	a.moveTo (getAbsolutePosition ());
+	return a;
+}
+
+void Widget::forEachChild (std::function<bool (Widget* widget)> func)
+{
+	forEachChild (children_.begin(), children_.end(), func);
+}
+
+void Widget::forEachChild (std::vector<Widget*>::iterator first, std::vector<Widget*>::iterator last,
+		   std::function<bool (Widget* widget)> func)
+{
+	for (std::vector<Widget*>::iterator it = first; it != last; ++it)
 	{
-		Widget* finalw =
-		(
-			(
-				((!checkVisibility) || visible_) &&
-				((!checkClickability) || clickable_) &&
-				((!checkDraggability) || draggable_) &&
-				((!checkScrollability) || scrollable_) &&
-				((!checkFocusability) || focusable_)
-			) ? this : nullptr
-		);
+		Widget* w = *it;
+		if (w && func(w)) w->forEachChild (func);
+	}
+}
+
+BUtilities::RectArea Widget::getTotalArea (std::function<bool (Widget* widget)> func)
+{
+	BUtilities::RectArea a = getAbsoluteTotalArea (func);
+	a.moveTo (a.getPosition() - getAbsolutePosition());
+	return a;
+}
+
+BUtilities::RectArea Widget::getAbsoluteTotalArea (std::function<bool (Widget* widget)> func)
+{
+	BUtilities::RectArea a = getAbsoluteArea();
+	forEachChild ([&a, func] (Widget* w)
+	{
+		bool check = func (w);
+		if (check && w->isOversize()) a.extend (w->getAbsoluteArea());
+		return check;
+	});
+
+	return a;
+}
+
+Widget* Widget::getWidgetAt (const BUtilities::Point& position, std::function<bool (Widget* widget)> func)
+{
+	BUtilities::RectArea absarea = getAbsoluteArea ();
+	return getWidgetAt (getAbsolutePosition () + position, absarea, absarea, func);
+}
+
+Widget* Widget::getWidgetAt (const BUtilities::Point& abspos, const BUtilities::RectArea& outerArea,
+			     const BUtilities::RectArea& area, std::function<bool (Widget* widget)> func)
+{
+	BUtilities::RectArea a = (oversized_ ? outerArea : area);
+	BUtilities::RectArea thisArea = area_; thisArea.moveTo (getAbsolutePosition());
+	a.intersect (thisArea);
+	if (main_)
+	{
+		Widget* finalw = (((a != BUtilities::RectArea ()) && a.contains (abspos) && func (this)) ? this : nullptr);
 
 		for (Widget* w : children_)
 		{
 			if (w)
 			{
-				BUtilities::Point nPos = position - w->getPosition ();
 				Widget* nextw = nullptr;
-				if (filter (w))
-				{
-					nextw = w->getWidgetAt (nPos, checkVisibility,
-								checkClickability, checkDraggability,
-								checkScrollability, checkFocusability);
-				}
-
+				if (filter (w)) nextw = w->getWidgetAt (abspos, outerArea, thisArea, func);
 				if (nextw) finalw = nextw;
 			}
 		}
@@ -557,16 +595,6 @@ double Widget::getEffectiveHeight ()
 	return (getHeight () > 2 * totalBorderHeight ? getHeight () - 2 * totalBorderHeight : 0);
 }
 
-std::vector <Widget*> Widget::getChildrenAsQueue (std::vector <Widget*> queue) const
-{
-	for (Widget* w : children_)
-	{
-		queue.push_back (w);
-		if (!w->children_.empty()) queue = w->getChildrenAsQueue (queue);
-	}
-	return queue;
-}
-
 void Widget::postMessage (const std::string& name, const BUtilities::Any content)
 {
 	if (main_)
@@ -576,7 +604,12 @@ void Widget::postMessage (const std::string& name, const BUtilities::Any content
 	}
 }
 
-void Widget::postRedisplay () {postRedisplay (BUtilities::RectArea (getAbsolutePosition (), getAbsolutePosition () + area_.getExtends ()));}
+void Widget::postRedisplay ()
+{
+	BUtilities::RectArea area = getTotalArea (BWidgets::isVisible);
+	area.moveTo (getAbsolutePosition ());
+	postRedisplay (area);
+}
 
 void Widget::postRedisplay (const BUtilities::RectArea& area)
 {
@@ -603,7 +636,8 @@ void Widget::redisplay (cairo_surface_t* surface, const BUtilities::RectArea& ar
 	if (isVisible())
 	{
 		// Calculate absolute area position and start private core method
-		BUtilities::RectArea absArea = area; absArea.moveTo (absArea.getPosition() + getAbsolutePosition());
+		BUtilities::RectArea absArea = area;
+		absArea.moveTo (absArea.getPosition() + getAbsolutePosition());
 		redisplay (surface, absArea, absArea);
 	}
 }
@@ -611,7 +645,7 @@ void Widget::redisplay (cairo_surface_t* surface, const BUtilities::RectArea& ar
 void Widget::redisplay (cairo_surface_t* surface, const BUtilities::RectArea& outerArea, const BUtilities::RectArea& area)
 {
 	BUtilities::RectArea a = (oversized_ ? outerArea : area);
-	BUtilities::RectArea thisArea = area_.moveTo (getAbsolutePosition());
+	BUtilities::RectArea thisArea = area_; thisArea.moveTo (getAbsolutePosition());
 	a.intersect (thisArea);
 	if (main_ && visible_ && (a != BUtilities::RectArea ()))
 	{
@@ -713,5 +747,11 @@ void Widget::draw (const BUtilities::RectArea& area)
 
 	cairo_destroy (cr);
 }
+
+bool isVisible (Widget* widget) {return widget->isVisible();}
+bool isClicklable (Widget* widget) {return widget->isClickable();}
+bool isDraggable (Widget* widget) {return widget->isDraggable();}
+bool isScrollable (Widget* widget) {return widget->isScrollable();}
+bool isFocusable (Widget* widget) {return widget->isFocusable();}
 
 }
