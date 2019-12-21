@@ -635,12 +635,6 @@ public:
 	 */
 	virtual void applyTheme (BStyles::Theme& theme, const std::string& name);
 
-
-	/**
-	 * Pointer to optional extension data.
-	 */
-	void* extensionData;
-
 protected:
 
 	BUtilities::RectArea getArea () const;

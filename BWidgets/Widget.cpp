@@ -28,7 +28,7 @@ Widget::Widget () : Widget (0.0, 0.0, BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_H
 Widget::Widget (const double x, const double y, const double width, const double height) : Widget (x, y, width, height, "widget") {}
 
 Widget::Widget(const double x, const double y, const double width, const double height, const std::string& name) :
-		extensionData (nullptr), area_ (x, y, width, height),
+		area_ (x, y, width, height),
 		visible_ (true), clickable_ (true), draggable_ (false),
 		scrollable_ (true), focusable_ (true), oversized_ (false), scheduleDraw_ (false),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (BWIDGETS_DEFAULT_BORDER), background_ (BWIDGETS_DEFAULT_BACKGROUND),
@@ -45,7 +45,7 @@ Widget::Widget(const double x, const double y, const double width, const double 
 }
 
 Widget::Widget (const Widget& that) :
-		extensionData (that.extensionData), area_ (that.area_),
+		area_ (that.area_),
 		visible_ (that.visible_), clickable_ (that.clickable_), draggable_ (that.draggable_), scrollable_ (that.scrollable_),
 		focusable_ (that.focusable_), oversized_ (that.oversized_), mergeable_ (that.mergeable_),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (that.border_), background_ (that.background_), name_ (that.name_),
@@ -74,7 +74,6 @@ Widget::~Widget()
 
 Widget& Widget::operator= (const Widget& that)
 {
-	extensionData = that.extensionData;
 	area_ = that.area_;
 	visible_ = that.visible_;
 	clickable_ = that.clickable_;
