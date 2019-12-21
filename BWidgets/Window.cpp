@@ -547,7 +547,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEvent)
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->scroll.x, puglEvent->scroll.y);
 			BUtilities::Point scroll = BUtilities::Point (puglEvent->scroll.dx, puglEvent->scroll.dy);
-			Widget* widget = w->getWidgetAt (position, BWidgets::isScrollable);
+			Widget* widget = w->getWidgetAt (position, [] (Widget* wid) {return wid->isVisible() && wid->isScrollable();});
 			if (widget)
 			{
 				w->addEventToQueue
