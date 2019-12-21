@@ -47,8 +47,7 @@ PopupListBox::PopupListBox (const double x, const double y, const double width,
 			    const BItems::ItemList& items, double preselection) :
 		ItemBox (x, y, width, height, name, {UNSELECTED, nullptr}),
 		downButton (0, 0, 0, 0, name + BWIDGETS_DEFAULT_POPUPLISTBOX_BUTTON_NAME, 0.0),
-		listBox (0, 0, 0, 0, name + BWIDGETS_DEFAULT_POPUPLISTBOX_LISTBOX_NAME, items, preselection),
-		listBoxArea (listXOffset, listYOffset, listXOffset + listWidth, listYOffset + listHeight)
+		listBox (listXOffset, listYOffset, listWidth, listHeight, name + BWIDGETS_DEFAULT_POPUPLISTBOX_LISTBOX_NAME, items, preselection)
 
 {
 	setScrollable (true);
@@ -71,19 +70,17 @@ PopupListBox::PopupListBox (const double x, const double y, const double width,
 	}
 
 	downButton.setCallbackFunction (BEvents::EventType::BUTTON_PRESS_EVENT, PopupListBox::handleDownButtonClicked);
-	listBox.extensionData = this;
 	listBox.setCallbackFunction (BEvents::EventType::VALUE_CHANGED_EVENT, PopupListBox::handleValueChanged);
-
+	listBox.setOversize (true);
 	listBox.hide ();
 
 	add (downButton);
+	add (listBox);
 }
 
 PopupListBox::PopupListBox (const PopupListBox& that) :
-		ItemBox (that), downButton (that.downButton), listBox (that.listBox),
-		listBoxArea (that.listBoxArea)
+		ItemBox (that), downButton (that.downButton), listBox (that.listBox)
 {
-	listBox.extensionData = this;
 	initItem ();
 	if (item.getWidget ()) add (*item.getWidget ());
 	add (downButton);
@@ -94,13 +91,11 @@ PopupListBox& PopupListBox::operator= (const PopupListBox& that)
 	downButton = that.downButton;
 
 	listBox = that.listBox;
-	listBoxArea = that.listBoxArea;
 
 	ItemBox::operator= (that);
 	initItem ();
 	if (item.getWidget ()) add (*item.getWidget ());
 
-	listBox.extensionData = this;
 	return *this;
 }
 
@@ -124,9 +119,9 @@ void PopupListBox::setValue (const double val)
 	if (val != listBox.getValue ()) listBox.setValue (val);
 	if (value != listBox.getValue ())
 	{
-		BItems::Item* it = listBox.getItem (listBox.getValue ());
-		item.setValue (it->getValue ());
-		item.cloneWidgetFrom (it->getWidget ());
+		BItems::Item* listboxItem = listBox.getItem (listBox.getValue ());
+		item.setValue (listboxItem ->getValue ());
+		item.cloneWidgetFrom (listboxItem ->getWidget ());
 		initItem ();
 		if (item.getWidget ()) add (*item.getWidget ());
 		ValueWidget::setValue (listBox.getValue ());
@@ -135,14 +130,12 @@ void PopupListBox::setValue (const double val)
 
 void PopupListBox::moveListBox (const BUtilities::Point& offset)
 {
-	listBoxArea.moveTo (offset);
-	if (listBox.isVisible()) update ();
+	listBox.moveTo (offset);
 }
 
 void PopupListBox::resizeListBox (const BUtilities::Point& extends)
 {
-	listBoxArea.resize (extends);
-	if (listBox.isVisible()) update ();
+	listBox.resize (extends);
 }
 
 void PopupListBox::resizeListBoxItem (const double value, const BUtilities::Point& extends)
@@ -194,18 +187,7 @@ void PopupListBox::update ()
 	downButton.resize (dw, h);
 
 	// List box
-	if ((main_) && (!listBox.getMainWindow()))
-	{
-		main_->add (listBox);
-	}
-	if ((!main_) && (listBox.getMainWindow())) listBox.getMainWindow()->release (&listBox);
-	if ((listBoxArea.getPosition ().x == 0.0) && (listBoxArea.getPosition ().y == 0.0))
-	{
-		listBox.moveTo (getAbsolutePosition ().x, getAbsolutePosition ().y + getHeight ());
-	}
-	else listBox.moveTo (getAbsolutePosition () + listBoxArea.getPosition ());
-	listBox.resize (listBoxArea.getExtends ());
-
+	if (listBox.getPosition() == BUtilities::Point()) listBox.moveTo (BUtilities::Point (0, getHeight()));
 }
 
 void PopupListBox::onButtonPressed (BEvents::PointerEvent* event)
@@ -266,18 +248,18 @@ void PopupListBox::handleValueChanged (BEvents::Event* event)
 if (event && (event->getEventType () == BEvents::EventType::VALUE_CHANGED_EVENT) && event->getWidget ())
 	{
 		BEvents::ValueChangedEvent* ev = (BEvents::ValueChangedEvent*) event;
-		ValueWidget* w = (ValueWidget*) ev->getWidget ();
-		if (w->extensionData)
+		ListBox* w = (ListBox*) ev->getWidget ();
+
+		if (w)
 		{
-			PopupListBox* p = (PopupListBox*) w->extensionData;
-			if (p->getParent () && (w == (ValueWidget*) &(p->listBox)))
+			PopupListBox* p = (PopupListBox*) w->getParent();
+			if (p)
 			{
 				p->setValue (w->getValue ());
 				p->listBox.hide ();
 			}
 		}
 	}
-
 }
 
 }

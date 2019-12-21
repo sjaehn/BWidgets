@@ -151,8 +151,6 @@ protected:
 	DownButton downButton;
 	ListBox listBox;
 
-	BUtilities::RectArea listBoxArea;
-
 };
 
 }
