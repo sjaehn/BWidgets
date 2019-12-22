@@ -60,7 +60,7 @@ PopupListBox::PopupListBox (const double x, const double y, const double width,
 			if (i.getValue() == preselection)
 			{
 				value = i.getValue ();
-				item.setValue (value);
+				item.setValue (i.getValue ());
 				item.cloneWidgetFrom (i.getWidget ());
 				initItem ();
 				if (item.getWidget ()) add (*item.getWidget ());
@@ -81,7 +81,6 @@ PopupListBox::PopupListBox (const double x, const double y, const double width,
 PopupListBox::PopupListBox (const PopupListBox& that) :
 		ItemBox (that), downButton (that.downButton), listBox (that.listBox)
 {
-	initItem ();
 	if (item.getWidget ()) add (*item.getWidget ());
 	add (downButton);
 }
@@ -89,12 +88,10 @@ PopupListBox::PopupListBox (const PopupListBox& that) :
 PopupListBox& PopupListBox::operator= (const PopupListBox& that)
 {
 	downButton = that.downButton;
-
 	listBox = that.listBox;
 
 	ItemBox::operator= (that);
 	initItem ();
-	if (item.getWidget ()) add (*item.getWidget ());
 
 	return *this;
 }
@@ -119,10 +116,17 @@ void PopupListBox::setValue (const double val)
 	if (val != listBox.getValue ()) listBox.setValue (val);
 	if (value != listBox.getValue ())
 	{
+		// Release old item.widget
+		Widget* oldW = item.getWidget ();
+		if (oldW && isChild (oldW)) release (oldW);
+
+		// Copy value and clone widget from listbox item
 		BItems::Item* listboxItem = listBox.getItem (listBox.getValue ());
 		item.setValue (listboxItem ->getValue ());
 		item.cloneWidgetFrom (listboxItem ->getWidget ());
 		initItem ();
+
+		// Add new item.widget and set value
 		if (item.getWidget ()) add (*item.getWidget ());
 		ValueWidget::setValue (listBox.getValue ());
 	}
