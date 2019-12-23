@@ -78,6 +78,7 @@ int main ()
 
 	BStyles::Border frameBorder = {BStyles::whiteLine1pt, 3.0, 3.0, 10.0};
 	BStyles::Border defaultBorder = {BStyles::whiteLine1pt, 0.0, 1.0, 0.0};
+	BStyles::Border darkgreyborder = {BStyles::Line (BColors::darkgrey, 2.0), 0.0, 0.0, 0.0};
 
 	BStyles::Font defaultFont = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0,
 						   BStyles::TEXT_ALIGN_LEFT, BStyles::TEXT_VALIGN_TOP);
@@ -123,7 +124,7 @@ int main ()
 				 {"bgcolors", STYLEPTR (&BColors::darks)}}
 		},
 		{"Slider/focus",{{"background", STYLEPTR (&BStyles::darkgreyFill)},
-				  {"border", STYLEPTR (&BStyles::noBorder)},
+				  {"border", STYLEPTR (&darkgreyborder)},
 				  {"textcolors", STYLEPTR (&BColors::whites)},
 				  {"font", STYLEPTR (&labelFont)}}
 		},
@@ -132,7 +133,7 @@ int main ()
 				 {"bgcolors", STYLEPTR (&BColors::darks)}}
 		},
 		{"Dial/focus",	{{"background", STYLEPTR (&BStyles::darkgreyFill)},
-				 {"border", STYLEPTR (&BStyles::noBorder)},
+				 {"border", STYLEPTR (&darkgreyborder)},
 				 {"textcolors", STYLEPTR (&BColors::whites)},
 				 {"font", STYLEPTR (&labelFont)}}
 		},
@@ -146,7 +147,7 @@ int main ()
 
 		{"DialVal/focus",
 				{{"background", STYLEPTR (&BStyles::darkgreyFill)},
-				 {"border", STYLEPTR (&BStyles::noBorder)},
+				 {"border", STYLEPTR (&darkgreyborder)},
 				 {"textcolors", STYLEPTR (&BColors::whites)},
 				 {"font", STYLEPTR (&labelFont)}}
 		},
