@@ -62,7 +62,7 @@ namespace BDevices
 namespace BEvents
  ╰── Event
       ├── WidgetEvent
-           ╰── ExposeEvent
+      │    ╰── ExposeEvent
       ├── KeyEvent
       ├── PointerEvent
       ├── WheelEvent
@@ -75,6 +75,7 @@ namespace BItems
  ╰── ItemList
 
 namespace BWidgets
+ ├── Focusable
  ╰── Widget
       ├── Window
       ├── DrawingSurface
@@ -120,6 +121,6 @@ All widget classes of BWidgets are derived from **BWidgets::Widget**. This widge
 
 The most important class of BWidgets is **BWidgets::Window**. An object of this class is not only the main window to add all other widget to. Is also hosts the event handler and represents the connection to the system. Therefore, only one BWidgets::Window is allowed.
 
-**BWidgets::ValueWidget**s extends BWidgets::Widgets by a value and their ability to emit ValueChangedEvents.
+**BWidgets::ValueWidget** extends BWidgets::Widgets by a value and their ability to emit ValueChangedEvents.
 
-In **BWidgets::RangeWidget**s, the value is additionally kept within a defines range.
+In **BWidgets::RangeWidget**, the value is additionally kept within a defines range.
