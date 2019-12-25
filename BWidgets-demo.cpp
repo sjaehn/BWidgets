@@ -195,7 +195,6 @@ int main ()
 	Widget.setClickable (true);
 	Widget.setDraggable (true);
 
-
 	// Label and text widgets
 	BWidgets::Label Label1 = BWidgets::Label (100, 120, 340, 16, "This is a label text for testing widget copying");
 	Label1.applyTheme (defaultTheme, "Label");
@@ -230,6 +229,7 @@ int main ()
 	BWidgets::VSlider Slider1 = BWidgets::VSlider (10, 50, 20, 220, "Slider", 80.0, 0.0, 100.0, 0.0);
 	Slider1.applyTheme (defaultTheme);
 	Slider1.setFocusable (true);
+
 	BWidgets::VSlider Slider2 = BWidgets::VSlider (40, 50, 20, 220, "Slider", 80.0, 0.0, 100.0, -10.0);
 	Slider2.applyTheme (defaultTheme);
 	Slider2.setFocusable (true);
@@ -253,6 +253,7 @@ int main ()
 	DialLabel2.applyTheme (defaultTheme, "smallLabel");
 	BWidgets::Label DialLabel3 = BWidgets::Label (200, 220, 80, 16, "focusable = true");
 	DialLabel3.applyTheme (defaultTheme, "smallLabel");
+
 	BWidgets::Dial Dial1 = BWidgets::Dial (100, 150, 80, 80, "Dial", 80.0, 0.0, 100.0, 0.0);
 	Dial1.applyTheme (defaultTheme);
 	Dial1.setHardChangeable (false);
@@ -267,6 +268,7 @@ int main ()
 	ScaleLabel.applyTheme (defaultTheme, "Label");
 	BWidgets::Label ScaleLabel2 = BWidgets::Label (360, 26, 120, 16, "hardChangeable = false");
 	ScaleLabel2.applyTheme (defaultTheme, "smallLabel");
+
 	BWidgets::VScale Scale1 (380, 50, 10, 80, "Slider", 80.0, 0.0, 100.0, -1);
 	Scale1.applyTheme (defaultTheme);
 	Scale1.setHardChangeable (false);
@@ -342,7 +344,6 @@ int main ()
 	Widget2.add (Label4);
 	Widget2.add (Label5);
 	Widget2.add (Text1);
-
 	Widget2.add (Switch1);
 	Widget2.add (Switch2);
 
@@ -391,10 +392,9 @@ int main ()
 	Widget.add (Button2);
 	Widget.add (Button3);
 	Widget.add (Button4);
-
 	Widget.add (Scale1);
-
 	Widget.add (Scale2);
+
 	Dial2.setCallbackFunction (BEvents::EventType::VALUE_CHANGED_EVENT, showValue);
 	Label4.moveTo (150, 200);
 
@@ -417,6 +417,9 @@ int main ()
 
 	// Run until main window is closed
 	MainWindow->run ();
+	if (mBox3) delete mBox3;
+	if (mBox2) delete mBox2;
+	if (mBox) delete mBox;
 	delete MainWindow;
 
 }
