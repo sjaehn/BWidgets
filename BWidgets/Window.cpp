@@ -54,13 +54,15 @@ Window::Window (const double width, const double height, const std::string& titl
 
 Window::~Window ()
 {
-	purgeEventQueue ();
-	keyGrabStack_.clear ();
+	hide();
 	while (!children_.empty ())
 	{
 		Widget* w = children_.front ();
 		if (w) release (w);
 	}
+	purgeEventQueue ();
+	keyGrabStack_.clear ();
+	buttonGrabStack_.clear ();
 	puglDestroy(view_);
 	main_ = nullptr;	// Important switch for the super destructor. It took
 				// days of debugging ...
