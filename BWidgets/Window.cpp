@@ -142,6 +142,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 				area.extend (nextEvent->getArea ());
 				firstEvent->setArea (area);
 
+				delete event;
 				return;
 			}
 		}
@@ -159,6 +160,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 				firstEvent->setPosition (nextEvent->getPosition ());
 				firstEvent->setDelta (firstEvent->getDelta () + nextEvent->getDelta ());
 
+				delete event;
 				return;
 			}
 		}
@@ -179,6 +181,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 				firstEvent->setPosition (nextEvent->getPosition ());
 				firstEvent->setDelta (firstEvent->getDelta () + nextEvent->getDelta ());
 
+				delete event;
 				return;
 			}
 		}
@@ -198,6 +201,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 			{
 				firstEvent->setDelta (firstEvent->getDelta () + nextEvent->getDelta ());
 
+				delete event;
 				return;
 			}
 		}
@@ -665,7 +669,7 @@ void Window::purgeEventQueue (Widget* widget)
 		(
 			(event) &&
 			(
-				// Invalid events
+				// Nullptr = joker
 				(widget == nullptr) ||
 				// Hit
 				(widget == event->getWidget ()) ||
