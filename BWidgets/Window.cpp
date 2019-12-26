@@ -72,6 +72,8 @@ Window::~Window ()
 				// days of debugging ...
 
 	// Cleanup debug information for memory checkers
+	// Remove if cairo may still be live at this timepoint of call.
+	// (e.g. within plugins !!!)
 	cairo_debug_reset_static_data();
 #ifdef PKG_HAVE_FONTCONFIG
 	FcFini();
