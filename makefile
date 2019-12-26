@@ -1,9 +1,15 @@
 SHELL = /bin/sh
 
 PKG_CONFIG ?= pkg-config
+PKG_LIBS += x11 cairo
+ifneq ($(shell $(PKG_CONFIG) --exists fontconfig || echo no), no)
+  PKG_LIBS += fontconfig
+  CPPFLAGS += -DPKG_HAVE_FONTCONFIG
+endif
+
 CXX ?= g++
-CPPFLAGS += -DPIC
-CXXFLAGS += -std=c++11 -g -Wall -fPIC -DPUGL_HAVE_CAIRO `$(PKG_CONFIG) --cflags --libs x11 cairo`
+CPPFLAGS += -DPIC -DPUGL_HAVE_CAIRO
+CXXFLAGS += -std=c++11 -g -Wall -fPIC `$(PKG_CONFIG) --cflags --libs $(PKG_LIBS)`
 LDFLAGS +=
 
 SRC = BWidgets-demo.cpp

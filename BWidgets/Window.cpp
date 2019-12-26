@@ -16,6 +16,10 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef PKG_HAVE_FONTCONFIG
+#include <fontconfig/fontconfig.h>
+#endif /*PKG_HAVE_FONTCONFIG*/
+
 #include "Window.hpp"
 #include "Focusable.hpp"
 
@@ -66,6 +70,12 @@ Window::~Window ()
 	puglDestroy(view_);
 	main_ = nullptr;	// Important switch for the super destructor. It took
 				// days of debugging ...
+
+	// Cleanup debug information for memory checkers
+	cairo_debug_reset_static_data();
+#ifdef PKG_HAVE_FONTCONFIG
+	FcFini();
+#endif /*PKG_HAVE_FONTCONFIG*/
 }
 
 PuglView* Window::getPuglView () {return view_;}
