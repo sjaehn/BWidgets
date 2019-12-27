@@ -328,10 +328,10 @@ void Widget::resize ()
 		if (w->getPosition ().x + w->getWidth() > width) width = w->getPosition ().x + w->getWidth();
 		if (w->getPosition ().y + w->getHeight() > height) height = w->getPosition ().y + w->getHeight();
 	}
-	resize (BUtilities::Point (width, height));
+	Widget::resize (BUtilities::Point (width, height));
 }
 
-void Widget::resize (const double width, const double height) {resize (BUtilities::Point (width, height));}
+void Widget::resize (const double width, const double height) {Widget::resize (BUtilities::Point (width, height));}
 
 void Widget::resize (const BUtilities::Point extends)
 {
