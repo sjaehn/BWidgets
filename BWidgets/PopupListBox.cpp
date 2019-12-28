@@ -199,6 +199,7 @@ void PopupListBox::onButtonPressed (BEvents::PointerEvent* event)
 	if (listBox.isVisible ()) listBox.hide ();
 	else
 	{
+		raiseToTop ();
 		update ();
 		listBox.show ();
 		listBox.raiseToTop ();
