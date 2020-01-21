@@ -90,6 +90,10 @@ namespace BWidgets
       │    ├── Button
       │    │    ├── UpButton
       │    │    ├── DownButton
+      │    │    ├── LeftButton
+      │    │    ├── RightButton
+      │    │    ├── PlusButton
+      │    │    ├── MinusButton
       │    │    ├── TextButton
       │    │    ╰── ToggleButton
       │    │         ╰── TextToggleButton
