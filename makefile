@@ -15,6 +15,7 @@ LDFLAGS +=
 SRC = BWidgets-demo.cpp
 INCL = \
 BUtilities/to_string.cpp \
+BWidgets/FileChooser.cpp \
 BWidgets/HPianoRoll.cpp \
 BWidgets/PianoWidget.cpp \
 BWidgets/ImageIcon.cpp \

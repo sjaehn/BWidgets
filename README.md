@@ -98,6 +98,7 @@ namespace BWidgets
       │    │    ╰── ToggleButton
       │    │         ╰── TextToggleButton
       │    ├── MessageBox
+      │    ├── FileChooser
       │    ├── ItemBox
       │    │    ╰── PopupListBox
       │    ├── ChoiceBox

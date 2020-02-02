@@ -55,14 +55,24 @@ static void showMessage (BEvents::Event* event)
 // Displays the button pressed to close the message box widget
 static void closeRequest (BEvents::Event* event)
 {
-	if ((event) && (event->getWidget ()))
+	if (!event) return;
+	BWidgets::Window* w = (BWidgets::Window*)event->getWidget ();
+	if (!w) return;
+	BEvents::WidgetEvent* wev = (BEvents::WidgetEvent*)event;
+	if (!wev) return;
+
+	BWidgets::Widget* ww =  wev->getRequestWidget ();
+	if (ww->getName() == "mbox")
 	{
-		BEvents::WidgetEvent* wev = (BEvents::WidgetEvent*)event;
-		if (wev)
-		{
-			BWidgets::MessageBox* ww = (BWidgets::MessageBox*) wev->getRequestWidget ();
-			std::cout << "Messagebox closed with " << ww->getButtonText (ww->getValue ()) << "\n";
-		}
+		BWidgets::MessageBox* wmb = (BWidgets::MessageBox*) ww;
+		std::cout << "Messagebox closed with " << wmb->getButtonText (wmb->getValue ()) << "\n";
+	}
+
+	else if (ww->getName() == "filechooser")
+	{
+		BWidgets::FileChooser* wfc = (BWidgets::FileChooser*) ww;
+		if (wfc->getValue() == 0.0) std::cout << "FileChooser cancelled\n";
+		else std::cout << "File selected: " << wfc->getFileName() << " from " << wfc->getPath() << "\n";
 	}
 }
 
@@ -400,6 +410,9 @@ int main ()
 
 	Surface.raiseFrontwards ();
 
+	BWidgets::FileChooser* fileChooser = new BWidgets::FileChooser (120, 120, 400, 320, "filechooser");
+	MainWindow->add (*fileChooser);
+
 	// Message Box with default settings
 	BWidgets::MessageBox* mBox = new BWidgets::MessageBox(260, 230, 200, 120, "mbox", "Message Box", "This is a message box. Press on OK to continue.");
 	MainWindow->add (*mBox);
@@ -420,6 +433,7 @@ int main ()
 	if (mBox3) delete mBox3;
 	if (mBox2) delete mBox2;
 	if (mBox) delete mBox;
+	if (fileChooser) delete fileChooser;
 	delete MainWindow;
 
 }
