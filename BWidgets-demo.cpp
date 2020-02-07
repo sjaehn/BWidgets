@@ -410,7 +410,18 @@ int main ()
 
 	Surface.raiseFrontwards ();
 
-	BWidgets::FileChooser* fileChooser = new BWidgets::FileChooser (120, 120, 400, 320, "filechooser");
+	BWidgets::FileChooser* fileChooser = new BWidgets::FileChooser
+	(
+		120, 120, 400, 320, "filechooser", ".",
+		std::vector<BWidgets::FileFilter>
+		{
+			BWidgets::FileFilter {"All files", std::regex (".*")},
+			BWidgets::FileFilter {"Text files", std::regex (".*\\.txt$")},
+			BWidgets::FileFilter {"PNG files", std::regex (".*\\.png$")},
+			BWidgets::FileFilter {"Images", std::regex (".*\\.((jpg)|(jpeg)|(png)|(gif)|(bmp))$")}
+		},
+		"Open"
+	);
 	MainWindow->add (*fileChooser);
 
 	// Message Box with default settings
