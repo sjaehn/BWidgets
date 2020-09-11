@@ -30,7 +30,7 @@ Widget::Widget (const double x, const double y, const double width, const double
 Widget::Widget(const double x, const double y, const double width, const double height, const std::string& name) :
 		area_ (x, y, width, height),
 		visible_ (true), clickable_ (true), draggable_ (false),
-		scrollable_ (true), focusable_ (true), oversized_ (false), scheduleDraw_ (false),
+		scrollable_ (true), focusable_ (true), scheduleDraw_ (false), stacking_ (STACKING_NORMAL),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (BWIDGETS_DEFAULT_BORDER), background_ (BWIDGETS_DEFAULT_BACKGROUND),
 		name_ (name), widgetSurface_ (), widgetState_ (BWIDGETS_DEFAULT_STATE)
 {
@@ -47,7 +47,7 @@ Widget::Widget(const double x, const double y, const double width, const double 
 Widget::Widget (const Widget& that) :
 		area_ (that.area_),
 		visible_ (that.visible_), clickable_ (that.clickable_), draggable_ (that.draggable_), scrollable_ (that.scrollable_),
-		focusable_ (that.focusable_), oversized_ (that.oversized_), mergeable_ (that.mergeable_),
+		focusable_ (that.focusable_), mergeable_ (that.mergeable_), stacking_ (that.stacking_),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (that.border_), background_ (that.background_), name_ (that.name_),
 		cbfunction_ (that.cbfunction_), widgetSurface_ (), widgetState_ (that.widgetState_)
 {
@@ -81,7 +81,7 @@ Widget& Widget::operator= (const Widget& that)
 	scrollable_ = that.scrollable_;
 	focusable_ = that.focusable_;
 	mergeable_ = that.mergeable_;
-	oversized_ = that.oversized_;
+	stacking_ = that.stacking_;
 	border_ = that.border_;
 	background_ = that.background_;
 	name_ = that.name_;
@@ -433,9 +433,9 @@ void Widget::setMergeable (const BEvents::EventType eventType, const bool status
 
 bool Widget::isMergeable (const BEvents::EventType eventType) const {return mergeable_[eventType];}
 
-void Widget::setOversize (const bool status) {oversized_ = status;}
+void Widget::setStacking (const WidgetStacking stacking) {stacking_ = stacking;}
 
-bool Widget::isOversize () const {return oversized_;};
+WidgetStacking Widget::getStacking () const {return stacking_;};
 
 void Widget::update ()
 {
@@ -481,7 +481,7 @@ BUtilities::RectArea Widget::getAbsoluteTotalArea (std::function<bool (Widget* w
 	forEachChild ([&a, func] (Widget* w)
 	{
 		bool check = func (w);
-		if (check && w->isOversize()) a.extend (w->getAbsoluteArea());
+		if (check && (w->getStacking() == STACKING_OVERSIZE)) a.extend (w->getAbsoluteArea());
 		return check;
 	});
 
@@ -497,7 +497,7 @@ Widget* Widget::getWidgetAt (const BUtilities::Point& position, std::function<bo
 Widget* Widget::getWidgetAt (const BUtilities::Point& abspos, const BUtilities::RectArea& outerArea,
 			     const BUtilities::RectArea& area, std::function<bool (Widget* widget)> func)
 {
-	BUtilities::RectArea a = (oversized_ ? outerArea : area);
+	BUtilities::RectArea a = (getStacking() == STACKING_OVERSIZE? outerArea : area);
 	BUtilities::RectArea thisArea = area_;
 	thisArea.moveTo (getAbsolutePosition());
 	thisArea.intersect (a);
@@ -647,7 +647,7 @@ void Widget::redisplay (cairo_surface_t* surface, const BUtilities::RectArea& ar
 
 void Widget::redisplay (cairo_surface_t* surface, const BUtilities::RectArea& outerArea, const BUtilities::RectArea& area)
 {
-	BUtilities::RectArea a = (oversized_ ? outerArea : area);
+	BUtilities::RectArea a = (getStacking() == STACKING_OVERSIZE ? outerArea : area);
 	BUtilities::RectArea thisArea = area_; thisArea.moveTo (getAbsolutePosition());
 	a.intersect (thisArea);
 	if (main_ && visible_)
