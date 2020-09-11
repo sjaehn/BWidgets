@@ -204,6 +204,7 @@ int main ()
 	Widget.setBackground(bgPicture);
 	Widget.setClickable (true);
 	Widget.setDraggable (true);
+	Widget.setStacking (BWidgets::STACKING_CATCH);
 
 	// Label and text widgets
 	BWidgets::Label Label1 = BWidgets::Label (100, 120, 340, 16, "This is a label text for testing widget copying");

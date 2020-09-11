@@ -74,7 +74,7 @@ namespace BWidgets
 enum WidgetStacking
 {
 	STACKING_NORMAL,
-	//STACKING_CATCH,
+	STACKING_CATCH,
 	//STACKING_FIT,
 	//STACKING_RESIZE_TO_FIT,
 	//STACKING_RESIZE_PARENT_TO_FIT,
@@ -273,7 +273,7 @@ public:
 	 * Gets the widgets area without its borders
 	 * @return	Effective widgets area
 	 */
-	BUtilities::RectArea getEffectiveArea () const;
+	BUtilities::RectArea getEffectiveArea ();
 
 	/**
 	 * Sets the widgets state
@@ -659,6 +659,8 @@ protected:
 
 
 	Widget* getWidgetAt (const BUtilities::Point& position, std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
+
+	void stackingCatch ();
 
 	void postMessage (const std::string& name, const BUtilities::Any content);
 

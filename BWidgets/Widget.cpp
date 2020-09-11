@@ -159,6 +159,8 @@ void Widget::add (Widget& child)
 		});
 	}
 
+	//TODO Stacking
+
 	// (Re-)draw child widget and post redisplay
 	if (child.isVisible ()) child.update ();
 }
@@ -216,6 +218,7 @@ void Widget::moveTo (const BUtilities::Point& position)
 	if ((area_.getX () != position.x) || (area_.getY () != position.y))
 	{
 		area_.moveTo (position);
+		if (stacking_ == STACKING_CATCH) stackingCatch();
 		if (isVisible () && parent_) parent_->postRedisplay ();
 	}
 }
@@ -298,6 +301,11 @@ void Widget::setWidth (const double width)
 		cairo_surface_destroy (widgetSurface_);	// destroy old surface first
 		widgetSurface_ = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, getWidth (), getHeight ());
 		update ();
+		if (stacking_ == STACKING_CATCH) stackingCatch();
+		for (Widget* c : children_)
+		{
+			if (c && (c->getStacking() == STACKING_CATCH)) c->stackingCatch();
+		}
 		if (isVisible () && parent_) parent_->postRedisplay ();
 	}
 }
@@ -312,6 +320,11 @@ void Widget::setHeight (const double height)
 		cairo_surface_destroy (widgetSurface_);	// destroy old surface first
 		widgetSurface_ = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, getWidth (), getHeight ());
 		update ();
+		if (stacking_ == STACKING_CATCH) stackingCatch();
+		for (Widget* c : children_)
+		{
+			if (c && (c->getStacking() == STACKING_CATCH)) c->stackingCatch();
+		}
 		if (isVisible () && parent_) parent_->postRedisplay ();
 	}
 }
@@ -341,6 +354,11 @@ void Widget::resize (const BUtilities::Point extends)
 		cairo_surface_destroy (widgetSurface_);	// destroy old surface first
 		widgetSurface_ = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, getWidth (), getHeight ());
 		update ();
+		if (stacking_ == STACKING_CATCH) stackingCatch();
+		for (Widget* c : children_)
+		{
+			if (c && (c->getStacking() == STACKING_CATCH)) c->stackingCatch();
+		}
 		if (isVisible () && parent_) parent_->postRedisplay ();
 	}
 }
@@ -361,6 +379,11 @@ BColors::State Widget::getState () const {return widgetState_;}
 void Widget::setBorder (const BStyles::Border& border)
 {
 	border_ = border;
+	if (stacking_ == STACKING_CATCH) stackingCatch();
+	for (Widget* c : children_)
+	{
+		if (c && (c->getStacking() == STACKING_CATCH)) c->stackingCatch();
+	}
 	update ();
 }
 
@@ -598,6 +621,11 @@ double Widget::getEffectiveHeight ()
 	return (getHeight () > 2 * totalBorderHeight ? getHeight () - 2 * totalBorderHeight : 0);
 }
 
+BUtilities::RectArea Widget::getEffectiveArea ()
+{
+	return BUtilities::RectArea (getPosition().x + getXOffset(), getPosition().y + getYOffset(), getEffectiveWidth(), getEffectiveHeight());
+}
+
 void Widget::postMessage (const std::string& name, const BUtilities::Any content)
 {
 	if (main_)
@@ -668,6 +696,26 @@ void Widget::redisplay (cairo_surface_t* surface, const BUtilities::RectArea& ou
 		for (Widget* w : children_)
 		{
 			if (w && filter (w)) w->redisplay (surface, outerArea, a);
+		}
+	}
+}
+
+void Widget::stackingCatch ()
+{
+	if (parent_)
+	{
+		BUtilities::RectArea a = area_;
+		BUtilities::RectArea pea = BUtilities::RectArea (parent_->getXOffset(), parent_->getYOffset(), parent_->getEffectiveWidth(), parent_->getEffectiveHeight());
+
+		if (a.getX() + a.getWidth() - getXOffset() <= parent_->getXOffset()) a.setX (parent_->getXOffset() - a.getWidth() + getXOffset());
+		if (a.getY() + a.getHeight() - getYOffset() <= parent_->getYOffset()) a.setY (parent_->getYOffset() - a.getHeight() + getYOffset());
+		if (a.getX() >= parent_->getXOffset() + parent_->getEffectiveWidth() - getXOffset()) a.setX (parent_->getXOffset() + parent_->getEffectiveWidth() - getXOffset());
+		if (a.getY() >= parent_->getYOffset() + pea.getHeight() - getYOffset()) a.setY (parent_->getYOffset() + pea.getHeight() - getYOffset());
+
+		if (a != area_)
+		{
+			area_ = a;
+			if (isVisible()) parent_->postRedisplay ();
 		}
 	}
 }
