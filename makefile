@@ -56,8 +56,10 @@ BWidgets/BStyles.cpp \
 BWidgets/BColors.cpp \
 BWidgets/BItems.cpp \
 BWidgets/cairoplus.c \
-BWidgets/pugl/pugl_x11_cairo.c \
-BWidgets/pugl/pugl_x11.c
+BWidgets/pugl/implementation.c \
+BWidgets/pugl/x11_stub.c \
+BWidgets/pugl/x11_cairo.c \
+BWidgets/pugl/x11.c
 
 all:
 	$(CXX) -iquote ./ -o demo $(SRC) $(INCL) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
