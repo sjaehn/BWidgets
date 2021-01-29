@@ -135,6 +135,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 		(
 			(event->getWidget ()->isMergeable(eventType)) &&
 			(
+				(eventType == BEvents::CONFIGURE_REQUEST_EVENT) ||
 				(eventType == BEvents::EXPOSE_REQUEST_EVENT) ||
 				(eventType == BEvents::POINTER_MOTION_EVENT) ||
 				(eventType == BEvents::POINTER_DRAG_EVENT) ||
@@ -150,6 +151,18 @@ void Window::addEventToQueue (BEvents::Event* event)
 
 				if ((precursor->getEventType() == eventType) && (event->getWidget () == precursor->getWidget ()))
 				{
+					// CONFIGURE_EVENT
+					if (eventType == BEvents::CONFIGURE_REQUEST_EVENT)
+					{
+						BEvents::ExposeEvent* firstEvent = (BEvents::ExposeEvent*) precursor;
+						BEvents::ExposeEvent* nextEvent = (BEvents::ExposeEvent*) event;
+
+						BUtilities::RectArea area = nextEvent->getArea ();
+						firstEvent->setArea (area);
+
+						delete event;
+						return;
+					}
 
 					// EXPOSE_EVENT
 					if (eventType == BEvents::EXPOSE_REQUEST_EVENT)
