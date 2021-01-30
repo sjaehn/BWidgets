@@ -55,7 +55,8 @@ Window::Window (const double width, const double height, const std::string& titl
 	puglRealize (view_);
 	puglShow (view_);
 
-	setBackground (BWIDGETS_DEFAULT_WINDOW_BACKGROUND);
+	background_ = (BWIDGETS_DEFAULT_WINDOW_BACKGROUND);
+	postRedisplay();
 }
 
 Window::~Window ()
