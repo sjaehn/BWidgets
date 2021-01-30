@@ -46,10 +46,8 @@ Window::Window (const double width, const double height, const std::string& titl
 	if (nativeWindow_ != 0) puglSetParentWindow(view_, nativeWindow_);
 	puglSetWindowTitle(view_, title.c_str());
 	puglSetDefaultSize (view_, getWidth (), getHeight ());
-	puglSetMinSize (view_, getWidth () / 4.0, getHeight () / 4.0);
-	if (getWidth() != 0) puglSetAspectRatio (view_, getWidth(), getHeight(), getWidth(), getHeight());
 	puglSetViewHint(view_, PUGL_RESIZABLE, PUGL_TRUE);
-	puglSetViewHint(view_, PUGL_IGNORE_KEY_REPEAT, PUGL_TRUE);
+	puglSetViewHint(view_, PUGL_RESIZABLE, resizable ? PUGL_TRUE : PUGL_FALSE);
 	puglSetWorldHandle(world_, this);
 	puglSetHandle (view_, this);
 	puglSetBackend(view_, puglCairoBackend());
