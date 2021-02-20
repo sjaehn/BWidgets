@@ -22,14 +22,13 @@
 
 #include "Window.hpp"
 #include "Focusable.hpp"
-#include "pugl/pugl/cairo.h"
 
 namespace BWidgets
 {
 
-Window::Window () : Window (BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT, "window", 0.0) {}
+Window::Window () : Window (BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT, "window", 0) {}
 
-Window::Window (const double width, const double height, const std::string& title, PuglNativeWindow nativeWindow, bool resizable,
+Window::Window (const double width, const double height, const std::string& title, PuglNativeView nativeWindow, bool resizable,
 		PuglWorldType worldType, int worldFlag) :
 		Widget (0.0, 0.0, width, height, title),
 		keyGrabStack_ (), buttonGrabStack_ (),
@@ -46,8 +45,8 @@ Window::Window (const double width, const double height, const std::string& titl
 	if (nativeWindow_ != 0) puglSetParentWindow(view_, nativeWindow_);
 	puglSetWindowTitle(view_, title.c_str());
 	puglSetDefaultSize (view_, getWidth (), getHeight ());
-	puglSetViewHint(view_, PUGL_RESIZABLE, PUGL_TRUE);
 	puglSetViewHint(view_, PUGL_RESIZABLE, resizable ? PUGL_TRUE : PUGL_FALSE);
+	puglSetViewHint(view_, PUGL_IGNORE_KEY_REPEAT, PUGL_TRUE);
 	puglSetWorldHandle(world_, this);
 	puglSetHandle (view_, this);
 	puglSetBackend(view_, puglCairoBackend());
@@ -99,7 +98,7 @@ void Window::run ()
 
 void Window::onConfigureRequest (BEvents::ExposeEvent* event)
 {
-	if (getExtends () != event->getArea().getExtends ()) resize (event->getArea().getExtends ());
+	if (getExtends () != event->getArea().getExtends ()) Widget::resize (event->getArea().getExtends ());
 }
 
 void Window::onCloseRequest (BEvents::WidgetEvent* event)

@@ -55,6 +55,7 @@
 #include <cairo/cairo.h>
 #include "cairoplus.h"
 #include "pugl/pugl/pugl.h"
+#include "pugl/pugl/cairo.h"
 #include <stdint.h>
 #include <array>
 #include <vector>
@@ -184,6 +185,12 @@ public:
 	 * parent widget. Emits a BEvents::ExposeEvent if the widget is visible.
 	 */
 	void raiseFrontwards ();
+
+	/**
+	 * Pushes this widget to the bottom if it is linked to a
+	 * parent widget. Emits a BEvents::ExposeEvent if the widget is visible.
+	 */
+	void pushToBottom ();
 
 	/**
 	 * Raises this widget to the front if it is linked to a

@@ -7,13 +7,17 @@ ifneq ($(shell $(PKG_CONFIG) --exists fontconfig || echo no), no)
   CPPFLAGS += -DPKG_HAVE_FONTCONFIG
 endif
 
+CC ?= gcc
 CXX ?= g++
 CPPFLAGS += -DPIC -DPUGL_HAVE_CAIRO
-CXXFLAGS += -std=c++11 -g -Wall -fPIC `$(PKG_CONFIG) --cflags --libs $(PKG_LIBS)`
+CXXFLAGS += -std=c++11 -g -Wall -fPIC
+CFLAGS += -std=c99 -g -Wall -fPIC
+PKGCFLAGS = `$(PKG_CONFIG) --cflags $(PKG_LIBS)`
+PKGLFLAGS = `$(PKG_CONFIG) --libs $(PKG_LIBS)`
 LDFLAGS +=
 
 SRC = BWidgets-demo.cpp
-INCL = \
+CXX_INCL = \
 BUtilities/to_string.cpp \
 BUtilities/stof.cpp \
 BWidgets/FileChooser.cpp \
@@ -54,7 +58,9 @@ BWidgets/Window.cpp \
 BWidgets/Widget.cpp \
 BWidgets/BStyles.cpp \
 BWidgets/BColors.cpp \
-BWidgets/BItems.cpp \
+BWidgets/BItems.cpp
+
+C_INCL = \
 BWidgets/cairoplus.c \
 BWidgets/pugl/implementation.c \
 BWidgets/pugl/x11_stub.c \
@@ -62,4 +68,8 @@ BWidgets/pugl/x11_cairo.c \
 BWidgets/pugl/x11.c
 
 all:
-	$(CXX) -iquote ./ -o demo $(SRC) $(INCL) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+	mkdir -p tmp
+	cd tmp ; $(CC) $(CPPFLAGS) $(CFLAGS) $(PKGCFLAGS) $(addprefix ../, $(C_INCL)) -c
+	cd tmp ; $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(PKGCFLAGS) $(addprefix ../, $(SRC) $(CXX_INCL)) -c
+	$(CXX) $(CPPFLAGS) -iquote $(CXXFLAGS) $(LDFLAGS) -Wl,--start-group $(PKGLFLAGS) tmp/*.o -Wl,--end-group -o demo
+	rm -rf tmp

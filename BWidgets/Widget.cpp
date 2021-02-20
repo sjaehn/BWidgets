@@ -201,7 +201,7 @@ void Widget::release (Widget* child)
 			children_.erase (it);
 
 			// Restore visibility information
-			if (wasVisible) child->show();
+			if (wasVisible) postRedisplay (child->getArea());
 		}
 
 		else
@@ -272,6 +272,27 @@ void Widget::pushBackwards ()
 				return;
 			}
 		}
+	}
+}
+
+
+
+void Widget::pushToBottom ()
+{
+	if (parent_)
+	{
+		// Delete old connection from parent to this widget
+		for (std::vector<Widget*>::iterator it = parent_->children_.begin (); it !=parent_->children_.end (); ++it)
+		{
+			if ((Widget*) *it == this)
+			{
+				parent_->children_.erase (it);
+				break;
+			}
+		}
+		parent_->children_.insert (parent_->children_.begin(), this);
+
+		if (parent_->isVisible ()) parent_->postRedisplay ();
 	}
 }
 
@@ -766,7 +787,7 @@ void Widget::draw (const BUtilities::RectArea& area)
 				}
 				else
 				{
-					cairo_rectangle_rounded (cr, innerBorders, innerBorders, getEffectiveWidth (), getEffectiveHeight (), innerRadius);
+					cairo_rectangle_rounded (cr, innerBorders, innerBorders, getEffectiveWidth (), getEffectiveHeight (), innerRadius, 0b1111);
 				}
 				cairo_fill (cr);
 			}
@@ -792,7 +813,8 @@ void Widget::draw (const BUtilities::RectArea& area)
 				outerBorders + lw / 2,
 				outerBorders + lw / 2,
 				getWidth () - 2 * outerBorders - lw,
-				getHeight () - 2 * outerBorders - lw, radius);
+				getHeight () - 2 * outerBorders - lw,
+				radius, 0b1111);
 
 			cairo_set_source_rgba (cr, CAIRO_RGBA (lc));
 			cairo_set_line_width (cr, lw);
