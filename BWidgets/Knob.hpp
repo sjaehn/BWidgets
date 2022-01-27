@@ -1,5 +1,5 @@
 /* Knob.hpp
- * Copyright (C) 2018, 2019  Sven Jähnichen
+ * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,75 +18,220 @@
 #ifndef BWIDGETS_KNOB_HPP_
 #define BWIDGETS_KNOB_HPP_
 
-#include "RangeWidget.hpp"
+#include "Button.hpp"
+#include "Draws/drawKnob.hpp"
 
 #define BWIDGETS_DEFAULT_KNOB_WIDTH 20.0
 #define BWIDGETS_DEFAULT_KNOB_HEIGHT 20.0
-#define BWIDGETS_DEFAULT_KNOB_DEPTH 1.0
 
 namespace BWidgets
 {
+
 /**
- * Class BWidgets::Knob
+ *  @brief  %Knob Button widget.
  *
- * Drawing widget. Draws a 3d knob.
+ *  %Knob is a Button Widget. It is a pseudo 3D visualization of a knob which
+ *  can change its status (bool value) upon user interaction via  Clickable. 
+ *  Its appearance is defined by the BgColors parameter (static elements, 
+ *  false) and by the FgColors parameter (active elements, true).
  */
-class Knob : public Widget
+class Knob : public Button
 {
+protected:
+	double depth_;
+
 public:
+
+	/**
+	 * @brief  Constructs an empty %Knob object.
+	 * 
+	 */
 	Knob ();
-	Knob (const double x, const double y, const double width, const double height, const double depth, const std::string& name);
 
 	/**
-	 * Creates a new (orphan) knob and copies the knob properties from a
-	 * source knob. This method doesn't copy any parent or child widgets.
-	 * @param that Source knob
+	 *  @brief  Creates a %Knob with default size.
+	 *  @param depth  Pseudo 3D %Knob depth.
+	 *  @param toggleable  Support of button toggling.
+	 *  @param clicked  Default click status.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	Knob (const Knob& that);
-
-	~Knob ();
+	Knob	(const double depth, bool toggleable = false, bool clicked = false, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 * Assignment. Copies the knob properties from a source knob and keeps
-	 * its name and its position within the widget tree. Emits an expose event
-	 * if the widget is visible.
-	 * @param that Source knob
+	 *  @brief  Creates a %Knob.
+	 *  @param x  %Widget X origin coordinate.
+	 *  @param y  %Widget Y origin coordinate.
+	 *  @param width  %Widget width.
+	 *  @param height  %Widget height.
+	 *  @param depth  Pseudo 3D %Knob depth.
+	 *  @param toggleable  Support of button toggling.
+	 *  @param clicked  Default click status.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	Knob& operator= (const Knob& that);
+	Knob	(const double x, const double y, const double width, const double height, 
+			 const double depth = 1.0, bool toggleable = false, bool clicked = false,
+			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 * Pattern cloning. Creates a new instance of the widget and copies all
-	 * its properties.
+	 *  @brief  Creates a clone of the %Knob. 
+	 *  @return  Pointer to the new %Knob.
+	 *
+	 *  Creates a clone of this %Knob by copying all properties. But NOT its
+	 *  linkage.
+	 *
+	 *  Allocated heap memory needs to be freed using @c delete if the clone
+	 *  in not needed anymore!
 	 */
-	virtual Widget* clone () const override;
+	virtual Widget* clone () const override; 
 
 	/**
-	 * Sets the depth of the 3d knob
-	 * @param depth Depth
+	 *  @brief  Copies from another %Knob. 
+	 *  @param that  Other %Knob.
+	 *
+	 *  Copies all properties from another %Knob. But NOT its linkage.
+	 */
+	void copy (const Knob* that);
+
+	/**
+     *  @brief  Method to be called following an object state change.
+     */
+    virtual void update () override;
+
+	/**
+	 *  @brief  Sets the pseudo 3D depth of the knob.
+	 *  @param depth  Pseudo 3D depth.
 	 */
 	void setDepth (const double depth);
 
 	/**
-	 * Sets the depth of the 3d knob
-	 * @return Depth
+	 *  @brief  Gets the pseudo 3D depth of the knob.
+	 *  @return  Pseudo 3D depth.
 	 */
 	double getDepth () const;
 
-	/**
-	 * Scans theme for widget properties and applies these properties.
-	 * @param theme Theme to be scanned.
-	 * @param name Name of the BStyles::StyleSet within the theme to be
-	 * 		  	   applied.
-	 */
-	virtual void applyTheme (BStyles::Theme& theme) override;
-	virtual void applyTheme (BStyles::Theme& theme, const std::string& name) override;
-
 protected:
-	virtual void draw (const BUtilities::RectArea& area) override;
+	/**
+     *  @brief  Unclipped draw a %Knob to the surface.
+     */
+    virtual void draw () override;
 
-	double knobDepth;
-	BColors::ColorSet bgColors;
+    /**
+     *  @brief  Clipped draw a %Knob to the surface.
+     *  @param x0  X origin of the clipped area. 
+     *  @param y0  Y origin of the clipped area. 
+     *  @param width  Width of the clipped area.
+     *  @param height  Height of the clipped area. 
+     */
+    virtual void draw (const double x0, const double y0, const double width, const double height) override;
+
+    /**
+     *  @brief  Clipped draw a %Knob to the surface.
+     *  @param area  Clipped area. 
+     */
+    virtual void draw (const BUtilities::RectArea& area) override;
 };
+
+inline Knob::Knob () :
+	Knob (0.0, 0.0, 0.0, 0.0, 0.0, false, false, URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline Knob::Knob (const double depth, bool toggleable, bool clicked, uint32_t urid, std::string title) : 
+	Knob (0.0, 0.0, BWIDGETS_DEFAULT_KNOB_WIDTH, BWIDGETS_DEFAULT_KNOB_HEIGHT, depth, toggleable, clicked, urid, title) 
+{
+
+}
+
+inline Knob::Knob (const double  x, const double y, const double width, const double height, double depth, bool toggleable, bool clicked, uint32_t urid, std::string title) :
+		Button (x, y, width, height, toggleable, clicked, urid, title),
+		depth_ (depth)
+{
+	setBackground (BStyles::noFill);
+	setBorder (BStyles::noBorder);
+}
+
+inline Widget* Knob::clone () const 
+{
+	Widget* f = new Knob ();
+	f->copy (this);
+	return f;
+}
+
+inline void Knob::copy (const Knob* that)
+{
+	depth_ = that->depth_;
+    Widget::copy (that);
+}
+
+inline void Knob::update()
+{
+	Widget::update();
+}
+
+inline void Knob::setDepth (const double depth)
+{
+	if (depth != depth_)
+	{
+		depth_ = depth;
+		update ();
+	}
+}
+
+inline double Knob::getDepth () const 
+{
+	return depth_;
+}
+
+inline void Knob::draw ()
+{
+	draw (0, 0, getWidth(), getHeight());
+}
+
+inline void Knob::draw (const double x0, const double y0, const double width, const double height)
+{
+	draw (BUtilities::RectArea (x0, y0, width, height));
+}
+
+inline void Knob::draw (const BUtilities::RectArea& area)
+{
+	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
+
+	// Draw super class widget elements first
+	Widget::draw (area);
+
+	const double x0 = getXOffset();
+	const double y0 = getYOffset();
+	const double heff = getEffectiveHeight ();
+	const double weff = getEffectiveWidth ();
+
+	// Draw knob
+	// only if minimum requirements satisfied
+	if ((getHeight () >= 1) && (getWidth () >= 1))
+	{
+		cairo_t* cr = cairo_create (surface_);
+
+		if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
+		{
+			// Limit cairo-drawing area
+			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
+			cairo_clip (cr);
+
+			// Calculate aspect ratios first
+			const double radius = (heff < weff ? 0.5 * heff : 0.5 * weff) - depth_;
+			const double xc = x0 + 0.5 * weff + depth_;
+			const double yc = y0 + 0.5 * heff + depth_;
+
+			const BStyles::Color color = (getValue() ? getFgColors() : getBgColors()) [getStatus()];
+			const double depth = (getValue() ? 0.5 * depth_ : depth_);
+			drawKnob(cr, xc, yc, radius, depth, color, getBgColors()[getStatus()]);
+		}
+
+		cairo_destroy (cr);
+	}
+}
 
 }
 

@@ -1,5 +1,5 @@
 /* VSlider.hpp
- * Copyright (C) 2018, 2019  Sven Jähnichen
+ * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,103 +18,199 @@
 #ifndef BWIDGETS_VSLIDER_HPP_
 #define BWIDGETS_VSLIDER_HPP_
 
-#define BWIDGETS_DEFAULT_VSLIDER_WIDTH (BWIDGETS_DEFAULT_VSCALE_WIDTH * 2)
-#define BWIDGETS_DEFAULT_VSLIDER_HEIGHT BWIDGETS_DEFAULT_VSCALE_HEIGHT
-#define BWIDGETS_DEFAULT_VSLIDER_DEPTH 1.0
-
-#include "Knob.hpp"
 #include "VScale.hpp"
-#include "Label.hpp"
-#include "Focusable.hpp"
+#include "Draws/drawKnob.hpp"
+
+#define BWIDGETS_DEFAULT_VSLIDER_WIDTH 20.0
+#define BWIDGETS_DEFAULT_VSLIDER_HEIGHT 80.0
 
 namespace BWidgets
 {
+
 /**
- * Class BWidgets::VSlider
+ *  @brief  %VSlider widget.
  *
- * RangeWidget class for a vertical slider.
- * The Widget is clickable by default.
+ *  %VSlider is a VScale Widget. It displays a value as a horizontal
+ *  slider and supports user interaction via Clickable, Draggable, and
+ *  Scrollable. Its appearance is defined by the BgColors parameter (static
+ *  elements, knob) and by the FgColors parameter (value).
  */
-class VSlider : public VScale, public Focusable
+class VSlider :	public VScale
 {
 public:
+
+	/**
+	 * @brief  Constructs an empty %VSlider object.
+	 * 
+	 */
 	VSlider ();
-	VSlider (const double  x, const double y, const double width, const double height, const std::string& name,
-			 const double value, const double min, const double max, const double step);
 
 	/**
-	 * Creates a new (orphan) slider and copies the slider properties from a
-	 * source slider.
-	 * @param that Source slider
+	 *  @brief  Creates a %VSlider with default size.
+	 *  @param value  Initial value.
+	 *  @param min  Lower value limit.
+	 *  @param max  Upper value limit.
+	 *  @param step  Optional, value increment steps.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	VSlider (const VSlider& that);
+	VSlider	(const double value, const double min, const double max, double step = 0.0, 
+			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 * Assignment. Copies the slider properties from a source slider and keeps
-	 * its name and its position within the widget tree. Emits an expose event
-	 * if the widget is visible and a value changed event.
-	 * @param that Source slider
+	 *  @brief  Creates a %VSlider.
+	 *  @param x  %VSlider X origin coordinate.
+	 *  @param y  %VSlider Y origin coordinate.
+	 *  @param width  %VSlider width.
+	 *  @param height  %VSlider height.
+	 *  @param value  Initial value.
+	 *  @param min  Lower value limit.
+	 *  @param max  Upper value limit.
+	 *  @param step  Optional, value increment steps.
+	 *  @param transferFunc  Optinonal, function to transfer a value from an
+	 *  external context to the internal context.
+	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
+	 *  internal context to an external context.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %VSlider title (default = "").
 	 */
-	VSlider& operator= (const VSlider& that);
+	VSlider	(const double x, const double y, const double width, const double height, 
+			 const double value, const double min, const double max, double step = 0.0,
+			 std::function<double (const double& x)> transferFunc = ValueTransferable<double>::noTransfer,
+			 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
+			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 * Pattern cloning. Creates a new instance of the widget and copies all
-	 * its properties.
+	 *  @brief  Creates a clone of the %VSlider. 
+	 *  @return  Pointer to the new %VSlider.
+	 *
+	 *  Creates a clone of this %VSlider by copying all properties. But NOT its
+	 *  linkage.
+	 *
+	 *  Allocated heap memory needs to be freed using @c delete if the clone
+	 *  in not needed anymore!
 	 */
-	virtual Widget* clone () const override;
+	virtual Widget* clone () const override; 
 
 	/**
-	 * Changes the value of the widget and keeps it within the defined range.
-	 * Passes the value to its predefined child widgets.
-	 * Emits a value changed event and (if visible) an expose event.
-	 * @param val Value
+	 *  @brief  Copies from another %VSlider. 
+	 *  @param that  Other %VSlider.
+	 *
+	 *  Copies all properties from another %VSlider. But NOT its linkage.
 	 */
-	virtual void setValue (const double val) override;
+	void copy (const VSlider* that);
 
 	/**
-	 * Calls a redraw of the widget and calls postRedisplay () if the the
-	 * Widget is visible.
-	 * This method should be called if the widgets properties are indirectly
-	 * changed.
-	 */
-	virtual void update () override;
-
-	/**
-	 * Scans theme for widget properties and applies these properties.
-	 * @param theme Theme to be scanned.
-	 * 				styles used are:
-	 * 				BWIDGETS_KEYWORD_BORDER
-	 * 				BWIDGETS_KEYWORD_BACKGROUND
-	 * 				BWIDGETS_KEYWORD_FGCOLORS
-	 * 				BWIDGETS_KEYWORD_BGCOLORS
-	 * @param name Name of the BStyles::StyleSet within the theme to be
-	 * 		  	   applied.
-	 */
-	virtual void applyTheme (BStyles::Theme& theme) override;
-	virtual void applyTheme (BStyles::Theme& theme, const std::string& name) override;
-
-	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::FOCUS_IN_EVENT.
-	 * @param event Focus event
-	 */
-	virtual void onFocusIn (BEvents::FocusEvent* event) override;
-
-	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::FOCUS_OUT_EVENT.
-	 * @param event Focus event
-	 */
-	virtual void onFocusOut (BEvents::FocusEvent* event) override;
+     *  @brief  Method to be called following an object state change.
+     */
+    virtual void update () override;
 
 protected:
-	virtual void updateCoords () override;
+	/**
+     *  @brief  Unclipped draw a %VSlider to the surface.
+     */
+    virtual void draw () override;
 
-	Knob knob;
-	Label focusLabel;
-	double knobRadius;
-	BUtilities::Point knobPosition;
+    /**
+     *  @brief  Clipped draw a %VSlider to the surface.
+     *  @param x0  X origin of the clipped area. 
+     *  @param y0  Y origin of the clipped area. 
+     *  @param width  Width of the clipped area.
+     *  @param height  Height of the clipped area. 
+     */
+    virtual void draw (const double x0, const double y0, const double width, const double height) override;
+
+    /**
+     *  @brief  Clipped draw a %VSlider to the surface.
+     *  @param area  Clipped area. 
+     */
+    virtual void draw (const BUtilities::RectArea& area) override;
 };
+
+inline VSlider::VSlider () :
+	VSlider (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline VSlider::VSlider (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+	VSlider	(0.0, 0.0, BWIDGETS_DEFAULT_VSLIDER_WIDTH, BWIDGETS_DEFAULT_VSLIDER_HEIGHT, 
+			 value, min, max, step, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 urid, title) 
+{
+
+}
+
+inline VSlider::VSlider	(const double  x, const double y, const double width, const double height, 
+						 double value, const double min, const double max, double step, 
+						 std::function<double (const double& x)> transferFunc,
+			 			 std::function<double (const double& x)> reTransferFunc,
+						 uint32_t urid, std::string title) :
+		VScale (x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title)
+{
+	scale_ = BUtilities::RectArea (0.25 * width, 0.5 * width, 0.5 * width, height - width);
+}
+
+inline Widget* VSlider::clone () const 
+{
+	Widget* f = new VSlider ();
+	f->copy (this);
+	return f;
+}
+
+inline void VSlider::copy (const VSlider* that)
+{
+	VScale::copy (that);
+}
+
+inline void VSlider::update ()
+{
+	scale_ = BUtilities::RectArea 
+	(
+		getXOffset() + 0.25 * getEffectiveWidth(), 
+		getYOffset() + 0.5 * getEffectiveWidth(), 
+		0.5 * getEffectiveWidth(),
+		getEffectiveHeight() - getEffectiveWidth()
+	);
+	Widget::update();
+}
+
+inline void VSlider::draw ()
+{
+	draw (0, 0, getWidth(), getHeight());
+}
+
+inline void VSlider::draw (const double x0, const double y0, const double width, const double height)
+{
+	draw (BUtilities::RectArea (x0, y0, width, height));
+}
+
+inline void VSlider::draw (const BUtilities::RectArea& area)
+{
+	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
+
+	// Draw super class widget elements first
+	VScale::draw (area);
+
+	// Draw only if minimum requirements satisfied
+	if ((getHeight () >= 1) && (getWidth () >= 1))
+	{
+		cairo_t* cr = cairo_create (surface_);
+		if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
+		{
+			// Limit cairo-drawing area
+			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
+			cairo_clip (cr);
+
+			const BStyles::Color bgColor = getBgColors()[getStatus()];
+			const double rval = getRatioFromValue (getValue(), transfer_);
+			drawKnob (cr, scale_.getX() + 0.5 * scale_.getWidth() + 0.5, scale_.getY() + (1 - rval) * scale_.getHeight(), scale_.getWidth() - 1.0, 1.0, bgColor, bgColor);
+		}
+
+		cairo_destroy (cr);
+	}
+}
 
 }
 

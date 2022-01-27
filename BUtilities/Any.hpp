@@ -1,5 +1,5 @@
 /* Any.hpp
- * Copyright (C) 2019  Sven Jähnichen
+ * Copyright (C) 2019 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,41 +41,43 @@ protected:
                 T data;
         };
 
-        Envelope* dataptr = nullptr;
-        size_t dataTypeHash = typeid (void).hash_code ();
+        Envelope* dataptr_ = nullptr;
+        size_t dataTypeHash_ = typeid (void).hash_code ();
 
         Envelope* clone () const
         {
-                if (dataptr == nullptr) return nullptr;
-                return dataptr->clone ();
+                if (dataptr_ == nullptr) return nullptr;
+                return dataptr_->clone ();
         }
 
 public:
         Any () {}
-        Any (const Any& that) : dataTypeHash (that.dataTypeHash)
-        {dataptr = that.clone ();}
+        Any (const Any& that) : dataTypeHash_ (that.dataTypeHash_)
+        {dataptr_ = that.clone ();}
 
-        ~Any () {if (dataptr) delete dataptr;}
+        ~Any () {if (dataptr_) delete dataptr_;}
 
         Any& operator= (const Any& that)
         {
-                if (dataptr) delete dataptr;
-                dataptr = that.clone ();
-                dataTypeHash = that.dataTypeHash;
+                if (dataptr_) delete dataptr_;
+                dataptr_ = that.clone ();
+                dataTypeHash_ = that.dataTypeHash_;
                 return *this;
         }
 
+        size_t dataTypeHash () const {return dataTypeHash_;}
+
         template <class T> void set (const T& t)
         {
-                if (dataptr) delete dataptr;
-                dataptr = new Data<T> (t);
-                dataTypeHash = typeid (T).hash_code ();
+                if (dataptr_) delete dataptr_;
+                dataptr_ = new Data<T> (t);
+                dataTypeHash_ = typeid (T).hash_code ();
         }
 
         template <class T> T get () const
         {
-                if ((!dataptr) || (typeid (T).hash_code () != dataTypeHash)) return T ();        // Return () better throw exception
-                return ((Data<T>*)dataptr)->data;
+                if ((!dataptr_) || (typeid (T).hash_code () != dataTypeHash_)) return T ();        // Return () better throw exception
+                return ((Data<T>*)dataptr_)->data;
         }
 
 };

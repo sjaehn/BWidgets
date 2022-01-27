@@ -16,60 +16,29 @@ PKGCFLAGS = `$(PKG_CONFIG) --cflags $(PKG_LIBS)`
 PKGLFLAGS = `$(PKG_CONFIG) --libs $(PKG_LIBS)`
 LDFLAGS +=
 
-SRC = BWidgets-demo.cpp
+BUNDLE = widgetgallery helloworld buttontest
+
 CXX_INCL = \
-BUtilities/to_string.cpp \
-BUtilities/stof.cpp \
-BWidgets/FileChooser.cpp \
-BWidgets/HPianoRoll.cpp \
-BWidgets/PianoWidget.cpp \
-BWidgets/ImageIcon.cpp \
-BWidgets/Icon.cpp \
-BWidgets/PopupListBox.cpp \
-BWidgets/ListBox.cpp \
-BWidgets/ChoiceBox.cpp \
-BWidgets/MessageBox.cpp \
-BWidgets/ItemBox.cpp \
-BWidgets/DrawingSurface.cpp \
-BWidgets/VSwitch.cpp \
-BWidgets/HSwitch.cpp \
-BWidgets/DownButton.cpp \
-BWidgets/UpButton.cpp \
-BWidgets/TextToggleButton.cpp \
-BWidgets/TextButton.cpp \
-BWidgets/ToggleButton.cpp \
-BWidgets/Button.cpp \
-BWidgets/DialValue.cpp \
-BWidgets/VSliderValue.cpp \
-BWidgets/HSliderValue.cpp \
-BWidgets/Dial.cpp \
-BWidgets/VSlider.cpp \
-BWidgets/VScale.cpp \
-BWidgets/HSlider.cpp \
-BWidgets/HScale.cpp \
-BWidgets/RangeWidget.cpp \
-BWidgets/ValueWidget.cpp \
-BWidgets/Text.cpp \
-BWidgets/Knob.cpp \
-BWidgets/Label.cpp \
-BWidgets/StateDisplay.cpp \
-BWidgets/Display.cpp \
+BUtilities/Urid.cpp \
+BWidgets/Supports/Closeable.cpp \
+BWidgets/Supports/Linkable.cpp \
+BWidgets/Supports/Messagable.cpp \
+BWidgets/Supports/Visualizable.cpp \
 BWidgets/Window.cpp \
-BWidgets/Widget.cpp \
-BWidgets/BStyles.cpp \
-BWidgets/BColors.cpp \
-BWidgets/BItems.cpp
+BWidgets/Widget.cpp 
 
 C_INCL = \
-BWidgets/cairoplus.c \
+BUtilities/cairoplus.c \
 BWidgets/pugl/implementation.c \
 BWidgets/pugl/x11_stub.c \
 BWidgets/pugl/x11_cairo.c \
 BWidgets/pugl/x11.c
 
-all:
-	mkdir -p tmp
-	cd tmp ; $(CC) $(CPPFLAGS) $(CFLAGS) $(PKGCFLAGS) $(addprefix ../, $(C_INCL)) -c
-	cd tmp ; $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(PKGCFLAGS) $(addprefix ../, $(SRC) $(CXX_INCL)) -c
-	$(CXX) $(CPPFLAGS) -iquote $(CXXFLAGS) $(LDFLAGS) -Wl,--start-group $(PKGLFLAGS) tmp/*.o -Wl,--end-group -o demo
-	rm -rf tmp
+all: $(BUNDLE)
+
+$(BUNDLE):
+	mkdir -p $@.tmp
+	cd $@.tmp ; $(CC) $(CPPFLAGS) $(CFLAGS) $(PKGCFLAGS) $(addprefix ../, $(C_INCL)) -c
+	cd $@.tmp ; $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(PKGCFLAGS) $(addprefix ../, examples/$@.cpp $(CXX_INCL)) -c
+	$(CXX) $(CPPFLAGS) -iquote $(CXXFLAGS) $(LDFLAGS) -Wl,--start-group $(PKGLFLAGS) $@.tmp/*.o -Wl,--end-group -o $@
+	rm -rf $@.tmp

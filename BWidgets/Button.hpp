@@ -1,5 +1,5 @@
 /* Button.hpp
- * Copyright (C) 2018, 2019  Sven Jähnichen
+ * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,84 +15,185 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BUTTON_HPP_
-#define BUTTON_HPP_
+#ifndef BWIDGETS_BUTTON_HPP_
+#define BWIDGETS_BUTTON_HPP_
 
-#include "ValueWidget.hpp"
+#include "Widget.hpp"
+#include "Supports/Clickable.hpp"
+#include "Supports/ValueableTyped.hpp"
+#include "Supports/Toggleable.hpp"
+#include "../BEvents/Event.hpp"
 
+#ifndef BWIDGETS_DEFAULT_BUTTON_WIDTH
 #define BWIDGETS_DEFAULT_BUTTON_WIDTH 50.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_BUTTON_HEIGHT
 #define BWIDGETS_DEFAULT_BUTTON_HEIGHT 20.0
-#define BWIDGETS_KEYWORD_BUTTONCOLORS "buttoncolors"
-#define BWIDGETS_DEFAULT_BUTTON_BORDER 1.0
-#define BWIDGETS_DEFAULT_BUTTON_RAD 4.0
+#endif
 
 namespace BWidgets
 {
+
 /**
- * Class BWidgets::Button
+ *  @brief  Base Widget for drawing a %button. 
  *
- * Basic button widget drawing a button. Is is a BWidgets::ValueWidget having
- * two conditions: on (value != 0) or off (value == 0). The Widget is clickable
- * by default.
+ *  %Button is a Clickable Valueable Widget. The value represents its two
+ *  possible conditions: on (true) or off (false). The visualble content of
+ *  the %Button is represented by its background and its border. The border
+ *  color itself is represented by the BgColor and is changed upon changing
+ *  the %Button condition (on: highLighted, off: darkened).
  */
-class Button : public ValueWidget
+class Button : public Widget, public Clickable, public ValueableTyped<bool>, public Toggleable
 {
 public:
+
+	/**
+	 * @brief Constructs a new Button object with default parameters.
+	 */
 	Button ();
-	Button (const double x, const double y, const double width, const double height, const std::string& name, double defaultValue = 0.0);
 
 	/**
-	 * Creates a new (orphan) button and copies the button properties from a
-	 * source button. This method doesn't copy any parent or child widgets.
-	 * @param that Source button
+	 *  @brief  Creates a %Button with default size.
+	 *  @param toggleable  Support of button toggling.
+	 *  @param clicked  Default click status.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	Button (const Button& that);
-
-	~Button ();
+	Button	(bool toggleable, bool clicked = false, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 * Assignment. Copies the widget properties from a source button and keeps
-	 * its name and its position within the widget tree. Emits a
-	 * BEvents::ExposeEvent if the widget is visible.
-	 * @param that Source button
+	 *  @brief  Creates a %Button.
+	 *  @param x  %Widget X origin coordinate.
+	 *  @param y  %Widget Y origin coordinate.
+	 *  @param width  %Widget width.
+	 *  @param height  %Widget height.
+	 *  @param toggleable  Support of button toggling.
+	 *  @param clicked  Default click status.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	Button& operator= (const Button& that);
+	Button	(const double x, const double y, const double width, const double height, 
+			 bool toggleable = false, bool clicked = false,
+			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 * Pattern cloning. Creates a new instance of the widget and copies all
-	 * its properties.
+	 *  @brief  Creates a clone of the %Button. 
+	 *  @return  Pointer to the new %Button.
+	 *
+	 *  Creates a clone of this %Button by copying all properties. But NOT its
+	 *  linkage.
+	 *
+	 *  Allocated heap memory needs to be freed using @c delete if the clone
+	 *  in not needed anymore!
 	 */
-	virtual Widget* clone () const override;
+	virtual Widget* clone () const override; 
 
 	/**
-	 * Scans theme for widget properties and applies these properties.
-	 * @param theme Theme to be scanned.
-	 * 				Styles used are:
-	 * 				"buttoncolors" for BStyles::ColorSet
-	 * @param name Name of the BStyles::StyleSet within the theme to be
-	 * 		  	   applied.
+	 *  @brief  Copies from another %Button. 
+	 *  @param that  Other %Button.
+	 *
+	 *  Copies all properties from another %Button. But NOT its linkage.
 	 */
-	virtual void applyTheme (BStyles::Theme& theme) override;
-	virtual void applyTheme (BStyles::Theme& theme, const std::string& name) override;
+	void copy (const Button* that);
 
 	/**
-	 * Handles the BEvents::BUTTON_PRESS_EVENT.
-	 * @param event Pointer to a pointer event emitted by the same widget.
-	 */
-	virtual void onButtonPressed (BEvents::PointerEvent* event) override;
+     *  @brief  Method called when pointer button pressed.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  pointer button pressed. Sets the %Button value to true (or inverts
+	 *  the value if @c isToggleable() ), and calls its static callback 
+     *  function.
+     */
+	virtual void onButtonPressed (BEvents::Event* event) override;
 
 	/**
-	 * Handles the BEvents::BUTTON_RELEASED_EVENT.
-	 * @param event Pointer to a pointer event emitted by the same widget.
-	 */
-	virtual void onButtonReleased (BEvents::PointerEvent* event) override;
+     *  @brief  Method called when pointer button released.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  pointer button released. Sets the %Button value to back to false
+	 *  (if not @c isToggleable() ), and calls its static callback function.
+     */
+	virtual void onButtonReleased (BEvents::Event* event) override;
 
-protected:
-	virtual void draw (const BUtilities::RectArea& area) override;
+	/**
+     *  @brief  Method called when pointer button clicked (pressed and 
+     *  released).
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  pointer button cklicked. Inverts the %Button value (if 
+	 *  @c isToggleable() ) and calls its static callback function.
+     */
+    virtual void onButtonClicked (BEvents::Event* event) override;
 
-	BColors::ColorSet bgColors;
+	/**
+     *  @brief  Method to be called following an object state change.
+     */
+    virtual void update () override;
 };
+
+inline Button::Button () : Button (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, false, false, URID_UNKNOWN_URID, "") {}
+
+inline Button::Button	(bool toggleable, bool clicked, uint32_t urid, std::string title) :
+	Button (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, toggleable, clicked, urid, title) {}
+
+inline Button::Button	(const double x, const double y, const double width, const double height, 
+			 	 bool toggleable, bool clicked, uint32_t urid, std::string title) :
+	Widget (x, y, width, height, urid, title),
+	Clickable (),
+	ValueableTyped<bool> (clicked),
+	Toggleable ()
+{
+	setToggleable (toggleable);
+	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::STATUS_NORMAL]));
+	setBorder	(BStyles::Border 
+				 (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (clicked ? BStyles::Color::highLighted : BStyles::Color::darkened), 1.0), 
+				 0.0, 0.0, 3.0));
+}
+
+inline Widget* Button::clone () const 
+{
+	Widget* f = new Button ();
+	f->copy (this);
+	return f;
+}
+
+inline void Button::copy (const Button* that)
+{
+	Clickable::operator= (*that);
+	ValueableTyped<bool>::operator= (*that);
+    Widget::copy (that);
+}
+
+inline void Button::onButtonPressed (BEvents::Event* event)
+{
+	if (!isToggleable()) setValue (true);
+	Clickable::onButtonPressed (event);
+}
+
+inline void Button::onButtonReleased (BEvents::Event* event)
+{
+	if (!isToggleable()) setValue (false);
+	Clickable::onButtonReleased (event);
+}
+
+inline void Button::onButtonClicked (BEvents::Event* event)
+{
+	if (isToggleable()) setValue (!getValue());
+	Clickable::onButtonClicked (event);
+}
+
+inline void Button::update ()
+{
+	BStyles::Border border = getBorder();
+	border.line.color = getBgColors()[getStatus()].illuminate (getValue() ? BStyles::Color::highLighted : BStyles::Color::darkened);
+	setBorder (border);
+	Widget::update();
+}
 
 }
 
-#endif /* BUTTON_HPP_ */
+#endif /* BWIDGETS_BUTTON_HPP_ */

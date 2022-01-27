@@ -22,92 +22,147 @@
 #define BWIDGETS_DEFAULT_WINDOW_BACKGROUND BStyles::blackFill
 
 #include <chrono>
-#include <deque>
-#include <list>
 #include "Widget.hpp"
+#include "pugl/pugl/pugl.h"
+#include "../BDevices/BDevices.hpp"
+#include "Supports/Closeable.hpp"
 
 namespace BWidgets
 {
 
 /**
- * Class BWidgets::Window
+ *  @brief  Main %Window class of BWidgets.
  *
- * Main window class of BWidgets. Add all other widgets (directly or
- * indirectly) to this window.
- * A BWidgets::Window is the BWidgets::Widget that is controlled by the host
- * via Pugl, receives host events via Pugl and coordinates handling of all
- * events. Configure, expose, and close events will be handled directly and
- * exclusively by this widget.
+ *  The main %Window object controls the visibility of all linked Widgets. All
+ *  Widgets need be be linked to the main %Window object to become visible.
+ *
+ *  The main %Window object also controls and routes the events emitted by the
+ *  linked Widgets and by the host system in its event queue and its event
+ *  handler. 
+ *
+ *  The full event routing process is:
+ *  1.  Emission of an event either by a Widget either
+ *      * by a host event and an assignment to a Widget by the main %Window
+ *        translate function, or
+ *      * by the Widget directly
+ *      to the main %Window event queue.
+ *  2.  Analyzing, merging and routing in the main %Window event handler and
+ *      calling the Widget onXXX() method.
+ *  3.  Responding in the Widget onXXX() method and optional call of a linked
+ *      Callback function.
+ *  4.  Optional, respond to the effect in a Callback function.
+ *
+ *  Note: There should only be one %Window object!
  */
-class Window : public Widget
+class Window : public Widget, public Closeable
 {
 protected:
 	BDevices::DeviceGrabStack<uint32_t> keyGrabStack_;
 	BDevices::DeviceGrabStack<BDevices::MouseDevice> buttonGrabStack_;
+	PuglWorld* world_;
+	PuglWorldType worldType_;
+	PuglView* view_;
+	PuglNativeView nativeWindow_;
+	bool quit_;
+	bool focused_;
+	BUtilities::Point pointer_;
+	std::list<BEvents::Event*> eventQueue_;
 
 public:
-	Window ();
-	Window (const double width, const double height, const std::string& title,
-		PuglNativeView nativeWindow, bool resizable = false,
-		PuglWorldType worldType = PUGL_PROGRAM, int worldFlag = 0);
 
-	Window (const Window& that) = delete;			// Only one window in this version
+	/**
+	 *  @brief  Construct a %Window object with default parameters.
+	 */
+	Window ();
+
+	/**
+	 *  @brief  Construct a %Window object.
+	 *  @param width  Window width.
+	 *  @param height  Window height.
+	 *  @param nativeWindow  Pointer to the host provided native window or
+	 *  NULL.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, Window title.
+	 *  @param resizable  Optional, Window resizable or fixed size (default).
+	 *  @param worldType  Optional, Program (default) or module / plugin.
+	 *  @param worldFlag  Optional, PuglWorldFlags (default = 0).
+	 */
+	Window (const double width, const double height, PuglNativeView nativeWindow, 
+		uint32_t urid = URID_UNKNOWN_URID, std::string title = "BWidgets", bool resizable = false,
+		PuglWorldType worldType = PUGL_PROGRAM, int worldFlag = 0);
 
 	~Window ();
 
-	Window& operator= (const Window& that) = delete;	// Only one Window in this version
-
-	virtual Widget* clone () = delete;			// Only one Window in this version
-
 	/**
-	 * Gets in contact to the host system via Pugl
-	 * @return Pointer to the PuglView
+	 *  @brief  Get in contact to the host system via Pugl.
+	 *  @return  Pointer to the PuglView.
 	 */
 	PuglView* getPuglView ();
 
 	/**
-	 * Gets the Cairo context provided by the host system via Pugl
-	 * @return Pointer to the Cairo context
+	 *  @brief  Gets the (Cairo) context provided by the host system via Pugl.
+	 *  @return  Pointer to the (Cairo) context.
 	 */
 	cairo_t* getPuglContext ();
 
 	/**
-	 * Runs the window until the close flag is set and thus it will be closed.
-	 * For stand-alone applications.
+	 *  @brief  Runs the %Window until it get closed.
+	 *
+	 *  For stand-alone applications.
 	 */
 	void run ();
 
 	/**
-	 * Queues an event until the next call of the handleEvents method.
-	 * @param event Event
+	 *  @brief  Queues an event until the next call of the @c handleEvents() 
+	 *  method.
+	 *  @param event  Event.
+	 *
+	 *  Add the @a event to the event queue. Also tries to merge the @a event
+	 *  with the previous event of the queue if:
+	 *  1. Both events are the same type.
+	 *  2. The event type is eligible for merging.
+	 *  3. Both events are emitted by the same widget.
+	 *  4. The emitting widget allows event merging for the respective event
+	 *     type (see @c EventMergeable::setEventMergeable() ).
 	 */
 	void addEventToQueue (BEvents::Event* event);
 
 	/**
-	 * Main Event handler. Walks through the event queue and sorts the events
-	 * to their respective onXXX handling methods
+	 *  @brief  Main Event handler. 
+	 *
+	 *  Iterates through the event queue, analyzes the events, and and routes
+	 *  them to their respective @c onXXX() handling methods.
 	 */
 	void handleEvents ();
 
 	/**
-	 * Executes an reexposure of the area given by the expose event.
-	 * @param event Expose event containing the widget that emitted the event
-	 * 		and the area that should be reexposed.
+	 *  @brief  Method called upon an expose request event. Exposes the visual 
+	 *  content.
+	 *  @param event  Expose request event containing the Widget that emitted
+	 *  the event and the area that should be exposed.
+	 *
+	 *  This method calls the host system to emit a host-provided expose event
+	 *  which is then interpreted in the @c translatePuglEvent() method where
+	 *  it calls drawing of all linked child widget RGBA surfaces to the host
+	 *  provided RGBA surface.
 	 */
-	virtual void onExposeRequest (BEvents::ExposeEvent* event) override;
+	virtual void onExposeRequest (BEvents::Event* event) override;
 
 	/**
-	 * Predefined empty method to handle a BEvents::EventType::CONFIGURE_EVENT.
-	 * @param event Expose event containing the widget that emitted the event
-	 * 		and the area that should be reexposed.
+	 *  @brief  Method called upon a configure request event. Resizes the
+	 *  %Window.
+	 *  @param event  Configure event containing the Widget that emitted the 
+	 *  event and the new area of the Widget.
 	 */
-	virtual void onConfigureRequest (BEvents::ExposeEvent* event) override;
+	virtual void onConfigureRequest (BEvents::Event* event) override;
 
 	/**
-	 * Sets the close flag and thus ends the run method.
-	 * @param event Widget event containing the widget that emitted the event
+	 *  @brief  Method called upon a close request event. Sets the close flag
+	 *  and thus ends the @c run() method.
+	 *  @param event  Widget event containing the Widget that emitted the 
+	 *  event.
 	 */
-	virtual void onCloseRequest (BEvents::WidgetEvent* event) override;
+	virtual void onCloseRequest (BEvents::Event* event) override;
 
 	/* Gets (the pointer to) the keyGrabStack and thus enables access to the
 	 * keyboard input.
@@ -121,34 +176,34 @@ public:
 	 */
 	BDevices::DeviceGrabStack<BDevices::MouseDevice>* getButtonGrabStack ();
 
-	/*
-	 * Removes events (emited by a given widget) from the event queue
-	 * @param widget	Emitting widget (nullptr for all widgets)
+	/**
+	 *  @brief  Removes events from the event queue.
+	 *  @param widget  Emitting widget (nullptr for all widgets).
 	 */
 	void purgeEventQueue (Widget* widget = nullptr);
 
 protected:
 
 	/**
-	 * Communication interface to the host via Pugl. Translates PuglEvents to
-	 * BEvents::Event derived objects.
+	 *  @brief  Static event translation method to be called by Pugl.
+	 *  @param view  Pointer to the PuglView.
+	 *  @param event  Pointer to the PuglEvent.
+	 *  @return  PuglStatus.
+	 *
+	 *  Event translation is performed in a multi step process and includes
+	 *  analyzing the host-provided event and emission of an event of the
+	 *  BEvent family:
+	 *  1. Identify the host-provided event and analyze its parameters.
+	 *  2. Create a new event of the BEvents family in the name of an 
+	 *     associated widget (e.g., the top level clickable widget in the
+	 *     case of a mouse click) or the main %Window.
+	 *  3. Add this new event to the event queue.
 	 */
 	static PuglStatus translatePuglEvent (PuglView* view, const PuglEvent* event);
 
 	void translateTimeEvent ();
-	void mergeEvents ();
 
 	void unfocus();
-
-	std::string title_;
-	PuglWorld* world_;
-	PuglView* view_;
-	PuglNativeView nativeWindow_;
-	bool quit_;
-	bool focused_;
-	BUtilities::Point pointer_;
-
-	std::deque<BEvents::Event*> eventQueue_;		// TODO: std::list ?
 };
 
 }

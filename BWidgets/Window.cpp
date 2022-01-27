@@ -21,19 +21,42 @@
 #endif /*PKG_HAVE_FONTCONFIG*/
 
 #include "Window.hpp"
-#include "Focusable.hpp"
+#include "pugl/pugl/cairo.h"
+#include "../BEvents/ExposeEvent.hpp"
+#include "../BEvents/PointerEvent.hpp"
+#include "../BEvents/ValueChangedEvent.hpp"
+#include "../BEvents/WheelEvent.hpp"
+#include "../BEvents/KeyEvent.hpp"
+#include "../BEvents/FocusEvent.hpp"
+#include "Supports/Closeable.hpp"
+#include "Supports/Clickable.hpp"
+#include "Supports/Draggable.hpp"
+#include "Supports/Focusable.hpp"
+#include "Supports/KeyPressable.hpp"
+#include "Supports/Messagable.hpp"
+#include "Supports/Pointable.hpp"
+#include "Supports/Scrollable.hpp"
+#include "Supports/Valueable.hpp"
+
 
 namespace BWidgets
 {
 
-Window::Window () : Window (BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT, "window", 0) {}
+Window::Window () : Window (BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT, 0) {}
 
-Window::Window (const double width, const double height, const std::string& title, PuglNativeView nativeWindow, bool resizable,
+Window::Window (const double width, const double height, PuglNativeView nativeWindow, 
+		uint32_t urid, std::string title, bool resizable,
 		PuglWorldType worldType, int worldFlag) :
-		Widget (0.0, 0.0, width, height, title),
-		keyGrabStack_ (), buttonGrabStack_ (),
-		title_ (title), world_ (NULL), view_ (NULL), nativeWindow_ (nativeWindow),
-		quit_ (false), focused_ (false), pointer_ (),
+		Widget (0.0, 0.0, width, height, urid, title),
+		keyGrabStack_ (), 
+		buttonGrabStack_ (),
+		world_ (NULL), 
+		worldType_ (worldType),
+		view_ (NULL), 
+		nativeWindow_ (nativeWindow),
+		quit_ (false), 
+		focused_ (false), 
+		pointer_ (),
 		eventQueue_ ()
 {
 	main_ = this;
@@ -54,8 +77,7 @@ Window::Window (const double width, const double height, const std::string& titl
 	puglRealize (view_);
 	puglShow (view_);
 
-	background_ = (BWIDGETS_DEFAULT_WINDOW_BACKGROUND);
-	postRedisplay();
+	emitExposeEvent();
 }
 
 Window::~Window ()
@@ -63,7 +85,7 @@ Window::~Window ()
 	hide();
 	while (!children_.empty ())
 	{
-		Widget* w = children_.front ();
+		Widget* w = dynamic_cast<Widget*>(children_.front ());
 		if (w) release (w);
 	}
 	purgeEventQueue ();
@@ -72,15 +94,18 @@ Window::~Window ()
 	puglFreeView (view_);
 	puglFreeWorld (world_);
 	main_ = nullptr;	// Important switch for the super destructor. It took
-				// days of debugging ...
+						// days of debugging ...
 
 	// Cleanup debug information for memory checkers
 	// Remove if cairo may still be live at this timepoint of call.
 	// (e.g. within plugins !!!)
-	cairo_debug_reset_static_data();
+	if (worldType_ == PUGL_PROGRAM) 
+	{
+		cairo_debug_reset_static_data();
 #ifdef PKG_HAVE_FONTCONFIG
-	FcFini();
+		FcFini();
 #endif /*PKG_HAVE_FONTCONFIG*/
+	}
 }
 
 PuglView* Window::getPuglView () {return view_;}
@@ -96,24 +121,23 @@ void Window::run ()
 	while (!quit_) handleEvents();
 }
 
-void Window::onConfigureRequest (BEvents::ExposeEvent* event)
+void Window::onConfigureRequest (BEvents::Event* event)
 {
-	if (getExtends () != event->getArea().getExtends ()) Widget::resize (event->getArea().getExtends ());
+	BEvents::ExposeEvent* ev = dynamic_cast<BEvents::ExposeEvent*>(event);
+	if (ev && (getExtends () != ev->getArea().getExtends ())) Widget::resize (ev->getArea().getExtends ());
 }
 
-void Window::onCloseRequest (BEvents::WidgetEvent* event)
+void Window::onCloseRequest (BEvents::Event* event)
 {
-	if ((event) && (event->getRequestWidget () == this)) quit_ = true;
-	else Widget::onCloseRequest (event);
+	BEvents::WidgetEvent* ev = dynamic_cast<BEvents::WidgetEvent*>(event);
+	if (ev && (ev->getRequestWidget () == this)) quit_ = true;
+	else Closeable::onCloseRequest (event);
 }
 
-void Window::onExposeRequest (BEvents::ExposeEvent* event)
+void Window::onExposeRequest (BEvents::Event* event)
 {
-	if (event)
-	{
-		BEvents::ExposeEvent* ee = (BEvents::ExposeEvent*)event;
-		puglPostRedisplayRect (view_, {ee->getArea().getX(), ee->getArea().getY(), ee->getArea().getWidth(), ee->getArea().getHeight()});
-	}
+	BEvents::ExposeEvent* ev = dynamic_cast<BEvents::ExposeEvent*>(event);
+	if (ev) puglPostRedisplayRect (view_, {ev->getArea().getX(), ev->getArea().getY(), ev->getArea().getWidth(), ev->getArea().getHeight()});
 }
 
 void Window::addEventToQueue (BEvents::Event* event)
@@ -127,30 +151,30 @@ void Window::addEventToQueue (BEvents::Event* event)
 		(eventQueue_.back())
 	)
 	{
-		BEvents::EventType eventType = event->getEventType();
+		BEvents::Event::EventType eventType = event->getEventType();
 
 		if
 		(
-			(event->getWidget ()->isMergeable(eventType)) &&
+			(event->getWidget()->isEventMergeable(eventType)) &&
 			(
-				(eventType == BEvents::CONFIGURE_REQUEST_EVENT) ||
-				(eventType == BEvents::EXPOSE_REQUEST_EVENT) ||
-				(eventType == BEvents::POINTER_MOTION_EVENT) ||
-				(eventType == BEvents::POINTER_DRAG_EVENT) ||
-				(eventType == BEvents::WHEEL_SCROLL_EVENT) ||
-				(eventType == BEvents::VALUE_CHANGED_EVENT)
+				(eventType == BEvents::Event::CONFIGURE_REQUEST_EVENT) ||
+				(eventType == BEvents::Event::EXPOSE_REQUEST_EVENT) ||
+				(eventType == BEvents::Event::POINTER_MOTION_EVENT) ||
+				(eventType == BEvents::Event::POINTER_DRAG_EVENT) ||
+				(eventType == BEvents::Event::WHEEL_SCROLL_EVENT) ||
+				(eventType == BEvents::Event::VALUE_CHANGED_EVENT)
 			)
 		)
 		{
 			// Check for mergeable precursor events
-			for (std::deque<BEvents::Event*>::reverse_iterator rit = eventQueue_.rbegin(); rit != eventQueue_.rend(); ++rit)
+			for (std::list<BEvents::Event*>::reverse_iterator rit = eventQueue_.rbegin(); rit != eventQueue_.rend(); ++rit)
 			{
 				BEvents::Event* precursor = *rit;
 
 				if ((precursor->getEventType() == eventType) && (event->getWidget () == precursor->getWidget ()))
 				{
 					// CONFIGURE_EVENT
-					if (eventType == BEvents::CONFIGURE_REQUEST_EVENT)
+					if (eventType == BEvents::Event::CONFIGURE_REQUEST_EVENT)
 					{
 						BEvents::ExposeEvent* firstEvent = (BEvents::ExposeEvent*) precursor;
 						BEvents::ExposeEvent* nextEvent = (BEvents::ExposeEvent*) event;
@@ -163,7 +187,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 					}
 
 					// EXPOSE_EVENT
-					if (eventType == BEvents::EXPOSE_REQUEST_EVENT)
+					if (eventType == BEvents::Event::EXPOSE_REQUEST_EVENT)
 					{
 						BEvents::ExposeEvent* firstEvent = (BEvents::ExposeEvent*) precursor;
 						BEvents::ExposeEvent* nextEvent = (BEvents::ExposeEvent*) event;
@@ -178,7 +202,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 
 
 					// POINTER_MOTION_EVENT
-					else if (eventType == BEvents::POINTER_MOTION_EVENT)
+					else if (eventType == BEvents::Event::POINTER_MOTION_EVENT)
 					{
 						BEvents::PointerEvent* firstEvent = (BEvents::PointerEvent*) precursor;
 						BEvents::PointerEvent* nextEvent = (BEvents::PointerEvent*) event;
@@ -191,7 +215,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 					}
 
 					// POINTER_DRAG_EVENT
-					else if (eventType == BEvents::POINTER_DRAG_EVENT)
+					else if (eventType == BEvents::Event::POINTER_DRAG_EVENT)
 					{
 						BEvents::PointerEvent* firstEvent = (BEvents::PointerEvent*) precursor;
 						BEvents::PointerEvent* nextEvent = (BEvents::PointerEvent*) event;
@@ -212,7 +236,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 
 
 					// WHEEL_SCROLL_EVENT
-					else if (eventType == BEvents::WHEEL_SCROLL_EVENT)
+					else if (eventType == BEvents::Event::WHEEL_SCROLL_EVENT)
 					{
 						BEvents::WheelEvent* firstEvent = (BEvents::WheelEvent*) precursor;
 						BEvents::WheelEvent* nextEvent = (BEvents::WheelEvent*) event;
@@ -227,13 +251,14 @@ void Window::addEventToQueue (BEvents::Event* event)
 					}
 
 					// VALUE_CHANGED_EVENT
-					else if (eventType == BEvents::VALUE_CHANGED_EVENT)
+					else if (eventType == BEvents::Event::VALUE_CHANGED_EVENT)
 					{
-						BEvents::ValueChangedEvent* firstEvent = (BEvents::ValueChangedEvent*) precursor;
-						BEvents::ValueChangedEvent* nextEvent = (BEvents::ValueChangedEvent*) event;
-
-						firstEvent->setValue (nextEvent->getValue());
-						delete event;
+						if (dynamic_cast<BEvents::ValueChangedEvent*>(precursor))
+						{
+							dynamic_cast<BEvents::ValueChangedEvent*>(precursor)->setValue (event);
+							delete event;
+						}
+						
 						return;
 					}
 				}
@@ -263,38 +288,38 @@ void Window::handleEvents ()
 			Widget* widget = event->getWidget ();
 			if (widget)
 			{
-				BEvents::EventType eventType = event->getEventType ();
+				BEvents::Event::EventType eventType = event->getEventType ();
 
 				switch (eventType)
 				{
-				case BEvents::CONFIGURE_REQUEST_EVENT:
-					widget->onConfigureRequest ((BEvents::ExposeEvent*) event);
+				case BEvents::Event::CONFIGURE_REQUEST_EVENT:
+					widget->onConfigureRequest (event);
 					break;
 
 				// Expose events: Forward to pugl!
-				case BEvents::EXPOSE_REQUEST_EVENT:
-					widget->onExposeRequest ((BEvents::ExposeEvent*) event);
+				case BEvents::Event::EXPOSE_REQUEST_EVENT:
+					widget->onExposeRequest (event);
 					break;
 
-				case BEvents::CLOSE_REQUEST_EVENT:
-					widget->onCloseRequest ((BEvents::WidgetEvent*) event);
+				case BEvents::Event::CLOSE_REQUEST_EVENT:
+					if (widget->is<Closeable>()) dynamic_cast<Closeable*> (widget)->onCloseRequest (event);
 					break;
 
-				case BEvents::KEY_PRESS_EVENT:
-					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
-					widget->onKeyPressed ((BEvents::KeyEvent*) event);
+				case BEvents::Event::KEY_PRESS_EVENT:
+					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON));
+					if (widget->is<KeyPressable>()) dynamic_cast<KeyPressable*> (widget)->onKeyPressed (event);
 					break;
 
-				case BEvents::KEY_RELEASE_EVENT:
-					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
-					widget->onKeyReleased ((BEvents::KeyEvent*) event);
+				case BEvents::Event::KEY_RELEASE_EVENT:
+					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON));
+					if (widget->is<KeyPressable>()) dynamic_cast<KeyPressable*> (widget)->onKeyReleased (event);
 					break;
 
-				case BEvents::BUTTON_PRESS_EVENT:
+				case BEvents::Event::BUTTON_PRESS_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus();
-						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
+						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON));
 						buttonGrabStack_.add
 						(
 							BDevices::DeviceGrab<BDevices::MouseDevice>
@@ -303,15 +328,15 @@ void Window::handleEvents ()
 								BDevices::MouseDevice(be->getButton (), be->getPosition())
 							)
 						);
-						widget->onButtonPressed (be);
+						if (widget->is<Clickable>()) dynamic_cast<Clickable*> (widget)->onButtonPressed (be);
 					}
 					break;
 
-				case BEvents::BUTTON_RELEASE_EVENT:
+				case BEvents::Event::BUTTON_RELEASE_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus ();
-						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
+						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON));
 						buttonGrabStack_.remove
 						(
 							BDevices::DeviceGrab<BDevices::MouseDevice>
@@ -320,15 +345,15 @@ void Window::handleEvents ()
 								BDevices::MouseDevice(be->getButton (), be->getPosition())
 							)
 						);
-						widget->onButtonReleased (be);
+						if (widget->is<Clickable>()) dynamic_cast<Clickable*> (widget)->onButtonReleased (be);
 					}
 					break;
 
-				case BEvents::BUTTON_CLICK_EVENT:
+				case BEvents::Event::BUTTON_CLICK_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus ();
-						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
+						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON));
 						buttonGrabStack_.remove
 						(
 							BDevices::DeviceGrab<BDevices::MouseDevice>
@@ -337,17 +362,24 @@ void Window::handleEvents ()
 								BDevices::MouseDevice(be->getButton (), be->getPosition())
 							)
 						);
-						widget->onButtonClicked (be);
+						if (widget->is<Clickable>()) dynamic_cast<Clickable*> (widget)->onButtonClicked (be);
 					}
 					break;
 
-				case BEvents::POINTER_MOTION_EVENT:
+				case BEvents::Event::POINTER_MOTION_EVENT:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus ();
-						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
+						buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON));
 						BUtilities::Point p = widget->getAbsolutePosition() + be->getPosition();
-						Widget* w = getWidgetAt (p, [] (Widget* f) {return f->isVisible() && f->isFocusable();});
+						Widget* w = getWidgetAt 
+						(
+							p, 
+							[] (const Widget* f) 
+							{
+								return f->isVisible() && dynamic_cast<const Focusable*>(f) && dynamic_cast<const Focusable*>(f)->isFocusable();
+							}
+						);
 						if (w)
 						{
 							buttonGrabStack_.add
@@ -355,40 +387,40 @@ void Window::handleEvents ()
 								BDevices::DeviceGrab<BDevices::MouseDevice>
 								(
 									w,
-									BDevices::MouseDevice(BDevices::NO_BUTTON, p - w->getAbsolutePosition())
+									BDevices::MouseDevice(BDevices::MouseDevice::NO_BUTTON, p - w->getAbsolutePosition())
 								)
 							);
 						}
-						widget->onPointerMotion (be);
+						if (widget->is<Pointable>()) dynamic_cast<Pointable*> (widget)->onPointerMotion (be);
 					}
 					break;
 
-				case BEvents::POINTER_DRAG_EVENT:
+				case BEvents::Event::POINTER_DRAG_EVENT:
 					unfocus ();
-					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
-					widget->onPointerDragged((BEvents::PointerEvent*) event);
+					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON));
+					if (widget->is<Draggable>()) dynamic_cast<Draggable*> (widget)->onPointerDragged(event);
 					break;
 
-				case BEvents::WHEEL_SCROLL_EVENT:
+				case BEvents::Event::WHEEL_SCROLL_EVENT:
 					unfocus ();
-					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::NO_BUTTON));
-					widget->onWheelScrolled((BEvents::WheelEvent*) event);
+					buttonGrabStack_.remove (BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON));
+					if (widget->is<Scrollable>()) dynamic_cast<Scrollable*> (widget)->onWheelScrolled(event);
 					break;
 
-				case BEvents::VALUE_CHANGED_EVENT:
-					widget->onValueChanged((BEvents::ValueChangedEvent*) event);
+				case BEvents::Event::VALUE_CHANGED_EVENT:
+					if (widget->is<Valueable>()) dynamic_cast<Valueable*>(widget)->onValueChanged(event);
 					break;
 
-				case BEvents::FOCUS_IN_EVENT:
-					widget->onFocusIn((BEvents::FocusEvent*) event);
+				case BEvents::Event::FOCUS_IN_EVENT:
+					if (widget->is<Focusable>()) dynamic_cast<Focusable*> (widget)->onFocusIn(event);
 					break;
 
-				case BEvents::FOCUS_OUT_EVENT:
-					widget->onFocusOut((BEvents::FocusEvent*) event);
+				case BEvents::Event::FOCUS_OUT_EVENT:
+					if (widget->is<Focusable>()) dynamic_cast<Focusable*> (widget)->onFocusOut(event);
 					break;
 
-				case BEvents::MESSAGE_EVENT:
-					widget->onMessage ((BEvents::MessageEvent*) event);
+				case BEvents::Event::MESSAGE_EVENT:
+					if (widget->is<Messagable>()) dynamic_cast<Messagable*> (widget)->onMessage (event);
 					break;
 
 				default:
@@ -415,17 +447,10 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 				uint32_t key = puglEvent->key.key;
 				BDevices::DeviceGrab<uint32_t>* grab = w->getKeyGrabStack()->getGrab(key);
 				Widget* widget = (grab ? grab->getWidget() : nullptr);
-				w->addEventToQueue
-				(
-					new BEvents::KeyEvent
-					(
-						widget,
-						BEvents::KEY_PRESS_EVENT,
-						puglEvent->key.x,
-						puglEvent->key.y,
-						key
-					)
-				);
+				if (widget && widget->is<KeyPressable>())
+				{
+					w->addEventToQueue(new BEvents::KeyEvent (widget, BEvents::Event::KEY_PRESS_EVENT, puglEvent->key.x, puglEvent->key.y, key));
+				}
 			}
 		}
 		break;
@@ -437,17 +462,10 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 				uint32_t key = puglEvent->key.key;
 				BDevices::DeviceGrab<uint32_t>* grab = w->getKeyGrabStack()->getGrab(key);
 				Widget* widget = (grab ? grab->getWidget() : nullptr);
-				w->addEventToQueue
-				(
-					new BEvents::KeyEvent
-					(
-						widget,
-						BEvents::KEY_RELEASE_EVENT,
-						puglEvent->key.x,
-						puglEvent->key.y,
-						key
-					)
-				);
+				if (widget && widget->is<KeyPressable>())
+				{
+					w->addEventToQueue(new BEvents::KeyEvent (widget, BEvents::Event::KEY_RELEASE_EVENT, puglEvent->key.x, puglEvent->key.y, key));
+				}
 			}
 		}
 		break;
@@ -457,24 +475,17 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 				uint32_t key = puglEvent->text.character;
 				BDevices::DeviceGrab<uint32_t>* grab = w->getKeyGrabStack()->getGrab(key);
 				Widget* widget = (grab ? grab->getWidget() : nullptr);
-				w->addEventToQueue
-				(
-					new BEvents::KeyEvent
-					(
-						widget,
-						BEvents::KEY_PRESS_EVENT,
-						puglEvent->text.x,
-						puglEvent->text.y,
-						key
-					)
-				);
+				if (widget && widget->is<KeyPressable>())
+				{
+					w->addEventToQueue(new BEvents::KeyEvent (widget, BEvents::Event::KEY_PRESS_EVENT, puglEvent->text.x, puglEvent->text.y, key));
+				}
 			}
 			break;
 
 		case PUGL_BUTTON_PRESS:
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->button.x, puglEvent->button.y);
-			Widget* widget = w->getWidgetAt (position, [] (Widget* w) {return w->isVisible () && w->isClickable ();});
+			Widget* widget = w->getWidgetAt (position, [] (Widget* w) {return w->isVisible () && (w->is<Clickable>() || w->is<Draggable>());});
 			if (widget)
 			{
 				w->addEventToQueue
@@ -482,11 +493,11 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 					new BEvents::PointerEvent
 					(
 						widget,
-						BEvents::BUTTON_PRESS_EVENT,
+						BEvents::Event::BUTTON_PRESS_EVENT,
 						position - widget->getAbsolutePosition (),
 						position - widget->getAbsolutePosition (),
 						BUtilities::Point (),
-						(BDevices::ButtonCode) puglEvent->button.button
+						(BDevices::MouseDevice::ButtonCode) puglEvent->button.button
 					)
 				);
 			}
@@ -497,7 +508,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 	case PUGL_BUTTON_RELEASE:
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->button.x, puglEvent->button.y);
-			BDevices::ButtonCode button = (BDevices::ButtonCode) puglEvent->button.button;
+			BDevices::MouseDevice::ButtonCode button = (BDevices::MouseDevice::ButtonCode) puglEvent->button.button;
 			BDevices::MouseDevice mouse = BDevices::MouseDevice (button);
 			BDevices::DeviceGrab<BDevices::MouseDevice>* grab = w->getButtonGrabStack()->getGrab(mouse);
 			if (grab)
@@ -514,7 +525,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 						new BEvents::PointerEvent
 						(
 							widget,
-							BEvents::BUTTON_RELEASE_EVENT,
+							BEvents::Event::BUTTON_RELEASE_EVENT,
 							position - widget->getAbsolutePosition (),
 							origin,
 							BUtilities::Point (),
@@ -524,7 +535,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 
 					// Also emit BUTTON_CLICK_EVENT ?
-					Widget* widget2 = w->getWidgetAt (position, [] (Widget* w) {return w->isVisible () && w->isClickable ();});
+					Widget* widget2 = w->getWidgetAt (position, [] (Widget* w) {return w->isVisible () && (w->is<Clickable>() || w->is<Draggable>());});
 					if (widget == widget2)
 					{
 						w->addEventToQueue
@@ -532,7 +543,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 							new BEvents::PointerEvent
 							(
 								widget,
-								BEvents::BUTTON_CLICK_EVENT,
+								BEvents::Event::BUTTON_CLICK_EVENT,
 								position - widget->getAbsolutePosition (),
 								origin,
 								BUtilities::Point (),
@@ -549,12 +560,12 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 	case PUGL_MOTION:
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->motion.x, puglEvent->motion.y);
-			BDevices::ButtonCode button = BDevices::NO_BUTTON;
+			BDevices::MouseDevice::ButtonCode button = BDevices::MouseDevice::NO_BUTTON;
 
 			// Scan for pressed buttons associated with a widget
-			for (int i = BDevices::NO_BUTTON + 1; i < BDevices::NR_OF_BUTTONS; ++i)
+			for (int i = BDevices::MouseDevice::NO_BUTTON + 1; i < BDevices::MouseDevice::NR_OF_BUTTONS; ++i)
 			{
-				BDevices::ButtonCode b = BDevices::ButtonCode (i);
+				BDevices::MouseDevice::ButtonCode b = BDevices::MouseDevice::ButtonCode (i);
 				BDevices::MouseDevice mouse = BDevices::MouseDevice (b);
 				BDevices::DeviceGrab<BDevices::MouseDevice>* grab = w->getButtonGrabStack()->getGrab(mouse);
 
@@ -563,7 +574,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 					button = b;
 					Widget* widget = grab->getWidget();
 
-					if (widget && widget->isDraggable())
+					if (widget && widget->is<Draggable>())
 					{
 						std::set<BDevices::MouseDevice> buttonDevices = grab->getDevices();
 						std::set<BDevices::MouseDevice>::iterator it = buttonDevices.find(mouse);
@@ -575,7 +586,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 							new BEvents::PointerEvent
 							(
 								widget,
-								BEvents::POINTER_DRAG_EVENT,
+								BEvents::Event::POINTER_DRAG_EVENT,
 								position - widget->getAbsolutePosition (),
 								origin,
 								position - w->pointer_,
@@ -586,9 +597,9 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 				}
 			}
 			// No button associated with a widget? Only POINTER_MOTION_EVENT
-			if (button == BDevices::NO_BUTTON)
+			if (button == BDevices::MouseDevice::NO_BUTTON)
 			{
-				Widget* widget = w->getWidgetAt (position, BWidgets::isVisible);
+				Widget* widget = w->getWidgetAt (position, [] (Widget* widget) {return widget->isVisible() && widget->is<Pointable>();});
 				if (widget)
 				{
 					w->addEventToQueue
@@ -596,7 +607,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 						new BEvents::PointerEvent
 						(
 							widget,
-							BEvents::POINTER_MOTION_EVENT,
+							BEvents::Event::POINTER_MOTION_EVENT,
 							position - widget->getAbsolutePosition (),
 							BUtilities::Point (),
 							position - w->pointer_,
@@ -611,7 +622,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->scroll.x, puglEvent->scroll.y);
 			BUtilities::Point scroll = BUtilities::Point (puglEvent->scroll.dx, puglEvent->scroll.dy);
-			Widget* widget = w->getWidgetAt (position, [] (Widget* wid) {return wid->isVisible() && wid->isScrollable();});
+			Widget* widget = w->getWidgetAt (position, [] (Widget* widget) {return widget->isVisible() && widget->is<Scrollable>();});
 			if (widget)
 			{
 				w->addEventToQueue
@@ -619,7 +630,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 					new BEvents::WheelEvent
 					(
 						widget,
-						BEvents::WHEEL_SCROLL_EVENT,
+						BEvents::Event::WHEEL_SCROLL_EVENT,
 						position - widget->getAbsolutePosition (),
 						scroll
 					)
@@ -630,18 +641,21 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 		break;
 
 	case PUGL_CONFIGURE:
-		w->addEventToQueue
-		(
-			new BEvents::ExposeEvent
+		if (w->is<Visualizable>())
+		{
+			w->addEventToQueue
 			(
-				w, w,
-				BEvents::CONFIGURE_REQUEST_EVENT,
-				puglEvent->configure.x,
-				puglEvent->configure.y,
-				puglEvent->configure.width,
-				puglEvent->configure.height
-			)
-		);
+				new BEvents::ExposeEvent
+				(
+					w, w,
+					BEvents::Event::CONFIGURE_REQUEST_EVENT,
+					puglEvent->configure.x,
+					puglEvent->configure.y,
+					puglEvent->configure.width,
+					puglEvent->configure.height
+				)
+			);
+		}
 		break;
 
 	// Expose events handled HERE
@@ -653,7 +667,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 			cairo_surface_t* storageSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w->getWidth(), w->getHeight());
 			if (cairo_surface_status (storageSurface) == CAIRO_STATUS_SUCCESS)
 			{
-				w->redisplay (storageSurface, area);
+				w->display (storageSurface, area);
 
 				// Copy storage surface onto pugl provided surface
 				cairo_t* cr = w->getPuglContext ();
@@ -670,7 +684,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 		break;
 
 	case PUGL_CLOSE:
-		w->addEventToQueue (new BEvents::WidgetEvent (w, w, BEvents::CLOSE_REQUEST_EVENT));
+		if (w->is<Closeable>()) w->addEventToQueue (new BEvents::WidgetEvent (w, w, BEvents::Event::CLOSE_REQUEST_EVENT));
 		break;
 
 	default:
@@ -682,7 +696,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 void Window::translateTimeEvent ()
 {
-	BDevices::MouseDevice mouse = BDevices::MouseDevice (BDevices::NO_BUTTON);
+	BDevices::MouseDevice mouse = BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON);
 	BDevices::DeviceGrab<BDevices::MouseDevice>* grab = buttonGrabStack_.getGrab(mouse);
 	if (grab)
 	{
@@ -701,13 +715,13 @@ void Window::translateTimeEvent ()
 
 				if ((!focused_) && focus->isFocusActive (diffMs))
 				{
-					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::FOCUS_IN_EVENT, position));
+					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::Event::FOCUS_IN_EVENT, position));
 					focused_ = true;
 				}
 
 				else if (focused_ && (!focus->isFocusActive (diffMs)))
 				{
-					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::FOCUS_OUT_EVENT, position));
+					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::Event::FOCUS_OUT_EVENT, position));
 					focused_ = false;
 				}
 			}
@@ -722,7 +736,7 @@ void Window::unfocus ()
 {
 	if (focused_)
 	{
-		BDevices::MouseDevice mouse = BDevices::MouseDevice (BDevices::NO_BUTTON);
+		BDevices::MouseDevice mouse = BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON);
 		BDevices::DeviceGrab<BDevices::MouseDevice>* grab = buttonGrabStack_.getGrab (mouse);
 		if (grab)
 		{
@@ -735,7 +749,7 @@ void Window::unfocus ()
 					std::set<BDevices::MouseDevice> buttonDevices = grab->getDevices();
 					std::set<BDevices::MouseDevice>::iterator it = buttonDevices.find(mouse);
 					BUtilities::Point position = (it != buttonDevices.end() ? it->position : BUtilities::Point ());
-					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::FOCUS_OUT_EVENT, position));
+					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::Event::FOCUS_OUT_EVENT, position));
 				}
 			}
 		}
@@ -745,7 +759,7 @@ void Window::unfocus ()
 
 void Window::purgeEventQueue (Widget* widget)
 {
-	for (std::deque<BEvents::Event*>::iterator it = eventQueue_.begin (); it != eventQueue_.end (); )
+	for (std::list<BEvents::Event*>::iterator it = eventQueue_.begin (); it != eventQueue_.end (); /* empty */)
 	{
 		BEvents::Event* event = *it;
 		if
@@ -759,9 +773,9 @@ void Window::purgeEventQueue (Widget* widget)
 				(
 					// Hit in request widgets
 					(
-						(event->getEventType () == BEvents::CONFIGURE_REQUEST_EVENT) ||
-						(event->getEventType () == BEvents::EXPOSE_REQUEST_EVENT) ||
-						(event->getEventType () == BEvents::CLOSE_REQUEST_EVENT)
+						(event->getEventType () == BEvents::Event::CONFIGURE_REQUEST_EVENT) ||
+						(event->getEventType () == BEvents::Event::EXPOSE_REQUEST_EVENT) ||
+						(event->getEventType () == BEvents::Event::CLOSE_REQUEST_EVENT)
 					) &&
 					(widget == ((BEvents::WidgetEvent*)event)->getRequestWidget ())
 				)

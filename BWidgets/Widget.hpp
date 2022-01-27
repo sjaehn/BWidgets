@@ -1,5 +1,5 @@
 /* Widget.hpp
- * Copyright (C) 2018, 2019  Sven Jähnichen
+ * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,701 +18,652 @@
 #ifndef BWIDGETS_WIDGET_HPP_
 #define BWIDGETS_WIDGET_HPP_
 
-// Default basic widget settings
-#define BWIDGETS_DEFAULT_BORDER BStyles::noBorder
-#define BWIDGETS_DEFAULT_BACKGROUND BStyles::noFill
-#define BWIDGETS_DEFAULT_WIDTH 200
-#define BWIDGETS_DEFAULT_HEIGHT 200
-#define BWIDGETS_DEFAULT_STATE BColors::NORMAL
-#define BWIDGETS_DEFAULT_FGCOLORS BColors::greens
-#define BWIDGETS_DEFAULT_BGCOLORS BColors::darks
-#define BWIDGETS_DEFAULT_FONT BStyles::sans12pt
-#define BWIDGETS_DEFAULT_ILLUMINATED 0.333
-#define BWIDGETS_DEFAULT_NORMALLIGHTED 0.0
-#define BWIDGETS_DEFAULT_SHADOWED -0.333
-#define BWIDGETS_DEFAULT_DARKENED -0.5
-
-// Default settings for all text containing widgets
-#define BWIDGETS_DEFAULT_TEXT_COLORS BColors::lights
-#define BWIDGETS_DEFAULT_TEXT_ALIGN BStyles::TEXT_ALIGN_LEFT
-#define BWIDGETS_DEFAULT_TEXT_VALIGN BStyles::TEXT_VALIGN_TOP
-
-// Default settings for all menu widgets
-#define BWIDGETS_DEFAULT_MENU_PADDING 10
-#define BWIDGETS_DEFAULT_MENU_BORDER BStyles::greyBorder1pt
-#define BWIDGETS_DEFAULT_MENU_TEXTBORDER {{BColors::invisible, 4.0}, 0.0, 0.0, 0.0}
-#define BWIDGETS_DEFAULT_MENU_BACKGROUND BStyles::grey20Fill
-
-// BWidgets theme keywords
-#define BWIDGETS_KEYWORD_BORDER "border"
-#define BWIDGETS_KEYWORD_BACKGROUND "background"
-#define BWIDGETS_KEYWORD_FONT "font"
-#define BWIDGETS_KEYWORD_FGCOLORS "fgcolors"
-#define BWIDGETS_KEYWORD_BGCOLORS "bgcolors"
-#define BWIDGETS_KEYWORD_TEXTCOLORS "textcolors"
-
-
-#include <cairo/cairo.h>
-#include "cairoplus.h"
-#include "pugl/pugl/pugl.h"
-#include "pugl/pugl/cairo.h"
-#include <stdint.h>
-#include <array>
-#include <vector>
-#include <string>
-#include <iostream>
+#include <cstdint>
 #include <functional>
-#include <chrono>
 
-#include "../BUtilities/RectArea.hpp"
-#include "BColors.hpp"
-#include "BStyles.hpp"
-#include "BEvents.hpp"
+#include "Supports/Linkable.hpp"
+#include "Supports/Visualizable.hpp"
+#include "Supports/EventMergeable.hpp"
+
+#include "../BUtilities/Any.hpp"
+
+#include "../BStyles/Style.hpp"
+#include "../BStyles/Status.hpp"
+
+#include "../BEvents/Event.hpp"
+
+// Default basic widget settings
+#define BWIDGETS_DEFAULT_WIDTH 200
+#define BWIDGETS_DEFAULT_HEIGHT 100
+#define BWIDGETS_DEFAULT_STATUS BStyles::STATUS_NORMAL
 
 namespace BWidgets
 {
 
-enum WidgetStacking
-{
-	STACKING_NORMAL,
-	STACKING_CATCH,
-	//STACKING_FIT,
-	//STACKING_RESIZE_TO_FIT,
-	//STACKING_RESIZE_PARENT_TO_FIT,
-	STACKING_OVERSIZE
-};
-
 class Window; // Forward declaration
 
 /**
- * Class BWidgets::Widget
+ *  @brief  Root widget class of BWidgets. All other widgets (including Window)
+ *  are derived from this class.
  *
- * Root widget class of BWidgets. All other widget (including BWidgets::Window)
- * are derived from this class.
- * A BWidgets::Widget (and all derived widgets) are drawable and may have a
- * border and a background. A BWidgets::Widget (and all derived widgets) may
- * also be containers for other widgets (= have children).
+ *  A %Widget (and all derived widgets) is Drawable and may have got (at 
+ *  least) a border and a background. The widget is displayed embedded in its
+ *  parent widget area on default STACKING_NORMAL, see Stacking). 
+ *
+ *  A %Widget is Linkable and thus it can be linked to another parent widget.
+ *  And it can take up other widgets as childs. The last added child is 
+ *  displayed on the top.
+ *
+ *  Widgets also support EventMergeable. Thus, the main Window event handler
+ *  may merge events of the same type.
+ *
+ *  A %Widget has got:
+ *  * an @a URID to identify the %Widget,
+ *  * a @a position to be placed (relative to its parent %Widget),
+ *  * an infomation about its @a stacking type,
+ *  * a @a status ,
+ *  * a @a title , and
+ *  * a @a style .
+ * 
+ *  Note: The class %Widget is devoid of any copy constructor or assignment
+ *  operator. 
  */
-
-class Widget
+class Widget : public Linkable, public Visualizable, public EventMergeable
 {
+
+protected:
+
+	/**
+	 *  @brief  %Widget stacking types.
+	 *
+	 *  Way of positioning / displaying the widget in relation to its parent 
+	 *  widget. On default, the widget is displayed embedded into its parent 
+	 *  widget (STACKING_NORMAL). This means it is placed relative to its 
+	 *  parent widget origin and any overhang is cut.
+	 */
+	enum Stacking
+	{
+		STACKING_NORMAL,					// Embedded in parent, overhang cut
+		//STACKING_CATCH,
+		//STACKING_FIT,
+		//STACKING_RESIZE_TO_FIT,
+		//STACKING_RESIZE_PARENT_TO_FIT,
+		STACKING_EXCEED						// May exceed the parent widget area
+	};
+
+	const uint32_t urid_;
+	BUtilities::Point position_;
+	Stacking stacking_;
+	BStyles::Status status_;
+	std::string title_;
+	BStyles::Style style_;
+
 public:
+	/**
+	 *  @brief  Creates a default %Widget.
+
+	 *  Creates a default %Widget with default dimensions 
+	 *  (BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT).
+	 */
 	Widget ();
-	Widget (const double x, const double y, const double width, const double height);
-	Widget (const double x, const double y, const double width, const double height, const std::string& name);
 
 	/**
-	 * Creates a new (orphan) widget and copies the widget properties from a
-	 * source widget. This method doesn't copy any parent or child widgets.
-	 * @param that Source widget
+	 *  @brief  Creates a widget.
+	 *  @param x  %Widget X origin coordinate.
+	 *  @param y  %Widget Y origin coordinate.
+	 *  @param width  %Widget width.
+	 *  @param height  %Widget height.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	Widget (const Widget& that);
+	Widget (const double x, const double y, const double width, const double height, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
-	virtual ~Widget ();
+	Widget (const Widget& that) = delete;
+	virtual ~Widget();
+	Widget& operator= (const Widget& that) = delete;
 
 	/**
-	 * Assignment. Copies the widget properties from a source widget and keeps
-	 * its position within the widget tree. Emits a
-	 * BEvents::ExposeEvent if the widget is visible.
-	 * @param that Source widget
+	 *  @brief  Creates a clone of the %Widget. 
+	 *  @return  Pointer to the new widget.
+	 *
+	 *  Creates a clone of this widget by copying all properties (including
+	 *  URID, Style, Supports (excluding Linkable), position, extends, 
+	 *  stacking, status, title, ...). But NOT its linkage.
+	 *
+	 *  Allocated heap memory needs to be freed using @c delete if the clone
+	 *  in not needed anymore!
 	 */
-	Widget& operator= (const Widget& that);
+	virtual Widget* clone () const; 
 
 	/**
-	 * Pattern cloning. Creates a new instance of the widget and copies all
-	 * its properties.
+	 *  @brief  Copies from another %Widget. 
+	 *  @param that  Other %Widget.
+	 *
+	 *  Copies all properties from another %Widget (including Style, Supports
+	 *  (excluding Linkable), position, extends, stacking, status, title, 
+	 *  ...). But NOT its URID (immutable) and its linkage.
 	 */
-	virtual Widget* clone () const;
+	void copy (const Widget* that);
 
 	/**
-	 * Makes the widget visible (if its parents are visible too) and emits an
-	 * BEvents::ExposeEvent to the main window.
+	 *  @brief Gets the %Widget URID.
+	 *  @return  URID.
 	 */
-	void show ();
+	uint32_t getUrid () const;
 
 	/**
-	 * Makes the widget invisible and emits an
-	 * BEvents::ExposeEvent to the main window.
+	 *  @brief  Changes the %Widget title.
+	 *  @param title  New title.
 	 */
-	void hide ();
+	void rename (std::string& title);
 
 	/**
-	 * Adds a child widget to the widget (container function). A
-	 * BEvents::ExposeEvent will be emitted if the child widget will be
-	 * unveiled due to the addition.
-	 * @param child Child widget
+	 *  @brief  Gets the %Widget title.
+	 *  @return  %Widget title.
 	 */
-	void add (Widget& child);
+	std::string getTitle () const;
 
 	/**
-	 * Releases (but not deletes) a child widget from the container of this
-	 * widget. A BEvents::ExposeEvent will be emitted if a visible child is
-	 * released.
-	 * @param child Pointer to the child widget
+	 *  @brief  Adds a child widget to the %Widget.
+	 *  @param child  Child widget.
+	 *  @param addfunc  Optional, function to be executed once a child object
+	 *  is added.
+	 *  @return  Iterator for the inserted child.
+	 *
+	 *  New child objects are appended to the end of list of children objects
+	 *  (see @c getChildren() ).
+	 *
+	 *  Returns @c getChildren().end() if noting inserted (e.g, trying to add
+	 *  a @c nullptr or linking is switched off).
 	 */
-	void release (Widget* child);
+	virtual std::list<Linkable*>::iterator 
+	add	(Linkable* child, std::function<void (Linkable* obj)> addfunc = [] (Linkable* obj) {}) 
+	override;
 
 	/**
-	 * Moves the widget and emits a BEvents::ExposeEvent if the widget is
-	 * visible.
-	 * @param x 		New x coordinate
-	 * @param y 		New y coordinate
-	 * @param position	New position
+	 *  @brief  Releases (but not deletes) ALL child objects.
+	 *  @param releasefunc  Optional, function to be executed once a child
+	 *  object is released.
 	 */
-	virtual void moveTo (const double x, const double y);
-	virtual void moveTo (const BUtilities::Point& position);
+	virtual void release (std::function<void (Linkable* obj)> addfunc = [] (Linkable* obj) {}) 
+	override;
 
 	/**
-	 * Gets the widgets position
-	 * @return Position
+	 *  @brief  Releases (but not deletes) a child widget from this %Widget.
+	 *  @param child  Pointer to the child %Widget.
+	 *  @param releasefunc  Optional, function to be executed once a child
+	 *  object is released.
 	 */
-	BUtilities::Point getPosition () const;
+	virtual void 
+	release (Linkable* child, std::function<void (Linkable* obj)> releasefunc = [] (Linkable* obj) {}) 
+	override;
 
 	/**
-	 * Gets the widgets position relative to the position of its main window.
-	 * @return Position
+	 *  @brief  Drops this %Widget one step towards the background.
 	 */
-	BUtilities::Point getAbsolutePosition () const;
+	void drop ();
 
 	/**
-	 * Pushes this widget one step backwards if it is linked to a
-	 * parent widget. Emits a BEvents::ExposeEvent if the widget is visible.
+	 *  @brief  Raises this %Widget one step towards the foreground.
 	 */
-	void pushBackwards ();
+	void raise ();
 
 	/**
-	 * Raises this widget one step frontwards if it is linked to a
-	 * parent widget. Emits a BEvents::ExposeEvent if the widget is visible.
+	 *  @brief  Drops this %Widget to the background.
 	 */
-	void raiseFrontwards ();
+	void dropToBack ();
 
 	/**
-	 * Pushes this widget to the bottom if it is linked to a
-	 * parent widget. Emits a BEvents::ExposeEvent if the widget is visible.
+	 *  @brief  Raises this %Widget to the foreground.
 	 */
-	void pushToBottom ();
+	void raiseToFront ();
 
 	/**
-	 * Raises this widget to the front if it is linked to a
-	 * parent widget. Emits a BEvents::ExposeEvent if the widget is visible.
-	 */
-	void raiseToTop ();
-
-	/**
-	 * Pushs this widget to the bottom if it is linked to a
-	 * parent widget. Emits a BEvents::ExposeEvent if the widget is visible.
-	 */
-	// TODO void pushToBottom ();
-
-	/**
-	 * Resizes the widget, redraw and emits a BEvents::ExposeEvent if the
-	 * widget is visible.
-	 * @param width New widgets width
-	 */
-	virtual void setWidth (const double width);
-
-	/**
-	 * Gets the width of the widget
-	 * @return Width
-	 */
-	double getWidth () const;
-
-	/**
-	 * Resizes the widget, redraw and emits a BEvents::ExposeEvent if the
-	 * widget is visible.
-	 * @param height New widgets height
-	 */
-	virtual void setHeight (const double height);
-
-	/**
-	 * Gets the height of the widget
-	 * @return Height
-	 */
-	double getHeight () const;
-
-	/**
-	 * Resizes the widget, redraw and emits a BEvents::ExposeEvent if the
-	 * widget is visible. If no parameters are given, the widget will be
-	 * resized to the size of the containing child widgets.
-	 * @param width		New widgets width
-	 * @param height	New widgets height
-	 * @param extends	New widget extends
-	 */
-	virtual void resize ();
-	virtual void resize (const double width, const double height);
-	virtual void resize (const BUtilities::Point extends);
-
-	/**
-	 * Gets the width and the height of the widget
-	 * @return Point containing width and height
-	 */
-	BUtilities::Point getExtends () const;
-
-	/**
-	 * Gets the x offset of the widget content. This is distance between the
-	 * outer border and the widget content. It is also the sum of margin,
-	 * border, and padding.
-	 * @return X offset of the widget
-	 */
-	double getXOffset ();
-
-	/**
-	 * Gets the y offset of the widget content. This is distance between the
-	 * outer border and the widget content. It is also the sum of margin,
-	 * border, and padding.
-	 * @return Y offset of the widget
-	 */
-	double getYOffset ();
-
-	/**
-	 * Gets the effective width of the widget content without its borders.
-	 * @return Effective width of the widget
-	 */
-	double getEffectiveWidth ();
-
-	/**
-	 * Gets the effective height of the widget content without its borders.
-	 * @return Effective height of the widget
-	 */
-	double getEffectiveHeight ();
-
-	/**
-	 * Gets the widgets area without its borders
-	 * @return	Effective widgets area
-	 */
-	BUtilities::RectArea getEffectiveArea ();
-
-	/**
-	 * Sets the widgets state
-	 * @param state Widget state
-	 */
-	void setState (const BColors::State state);
-
-	/**
-	 * Gets the widgets state
-	 * @return Widget state
-	 */
-	BColors::State getState () const;
-
-	/**
-	 * Sets the filter for display and event handling.
-	 * @param ()		All widget states
-	 * @param state		Widget state
-	 * @param states	Vector of widget states
-	 */
-	void setStateFilter ();
-	void setStateFilter (const BColors::State state);
-	void setStateFilter (const std::vector<BColors::State>& states);
-
-	/**
-	 * Clears the filter for display and event handling.
-	 * @param ()		All widget states
-	 * @param state		Widget state
-	 * @param states	Vector of widget states
-	 */
-	void clearStateFilter ();
-	void clearStateFilter (const BColors::State state);
-	void clearStateFilter (const std::vector<BColors::State>& states);
-
-	/**
-	 * Gets all set filters for display and event handling
-	 */
-	std::vector<BColors::State> getStateFilter () const;
-
-	/**
-	 * (Re-)Defines the border of the widget. Redraws widget and emits a
-	 * BEvents::ExposeEvent if the widget is visible.
-	 * @param border New widgets border
-	 */
-	virtual void setBorder (const BStyles::Border& border);
-
-	/**
-	 * Gets (a pointer to) the border of the widget.
-	 * @return Pointer to BStyles::Border
-	 */
-	BStyles::Border* getBorder ();
-
-	/**
-	 * (Re-)Defines the background of the widget. Redraws widget and emits a
-	 * BEvents::ExposeEvent if the widget is visible.
-	 * @param background New widgets background
-	 */
-	void setBackground (const BStyles::Fill& background);
-
-	/**
-	 * Gets (a pointer to) the background of the widget.
-	 * @return Pointer to BStyles::Fill
-	 */
-	BStyles::Fill* getBackground ();
-
-	/**
-	 * Gets a pointer to the widgets main window.
-	 * @return Pointer to the main window. Returns nullptr if the widget
-	 * isn't connected to a main window.
+	 *  @brief  Access to the main Window of this %Widget.
+	 *  @return  Pointer to the main window. 
+	 *
+	 *  Returns @c nullptr if the widget isn't connected to a main window or
+	 *  if this %Widget is the main window itself.
 	 */
 	Window* getMainWindow () const;
 
 	/**
-	 * Gets a pointer to the widgets parent widget.
-	 * @return Pointer to the parent widget. Returns nullptr if the widget
-	 * doesn't have any parents.
+	 *  @brief  Access to the parent %Widget of this %Widget.
+	 *  @return  Pointer to the parent %Widget. 
+	 *
+	 *  Returns @c nullptr if this %Widget doesn't have any parents or no
+	 *  parents of the type %Widget.
 	 */
-	Widget* getParent () const;
+	Widget* getParentWidget () const;
 
 	/**
-	 * Tests whether the widget has children or not.
-	 * @return TRUE if the widget has children, otherwise FALSE
-	 */
-	bool hasChildren () const;
+     *  @brief  Switch visibility on.
+	 *
+	 *  A widget becomes visible if (i) its visibility and the visibility of
+	 *  all its parent widgets is switched on, and (ii) it is connected to a
+	 *  main window, and (iii) it draws to its RGBA surface.
+     */
+    void show () override;
+
+    /**
+     *  @brief  Switch visibility off.
+	 *
+	 *  A widget is visible if (i) its visibility and the visibility of
+	 *  all its parent widgets is switched on, and (ii) it is connected to a
+	 *  main window, and (iii) it draws to its RGBA surface.
+     */
+    void hide () override;
 
 	/**
-	 * Tests whether child is on of children of the widget.
-	 * @param child		Pointer to the child widget.
-	 * @return 				TRUE if child is one of the children ofthe widget, otherwise
-	 *								FALSE.
+     *  @brief  Information about visibility.
+     *  @return  True if on, otherwise false.
+	 *
+	 *  A widget is visible if (i) its visibility and the visibility of
+	 *  all its parent widgets is switched on, and (ii) it is connected to a
+	 *  main window, and (iii) it draws to its RGBA surface.
+     */
+    bool isVisible () const override;
+
+    /**
+	 *  @brief  Generic setter method for Supports.
+	 *  @tparam T  Type of Support.
+	 *  @param status  Support on (true) or off (false).
+	 *
+	 *  Generic alternative for the setXXXable() methods.
 	 */
-	bool isChild (Widget* child);
+	template<class T>
+	void set (const bool status)
+	{
+		if (dynamic_cast<T*>(this)) T::setSupport (status);
+	}
 
 	/**
-	 * Gets the widgets children vector. The vector contains all children of
-	 * the widgets from background to foreground.
-	 * @return Children vector.
+	 *  @brief  Generic getter method for Supports.
+	 *  @tparam T  Type of Support
+	 *  @return  True if on, otherwise false.
+	 *
+	 *  Generic alternative for the isXXXable() methods.
 	 */
-	std::vector<Widget*> getChildren () const;
+	template<class T>
+	bool is ()
+	{
+		return (dynamic_cast<T*>(this) && dynamic_cast<T*>(this)->getSupport());
+	}
 
 	/**
-	 * Renames the widget.
-	 * @param name New name
+	 *  @brief  Moves the widget to a new position.
+	 *  @param x  New x coordinate.
+	 *  @param y  New y coordinate.
 	 */
-	void rename (const std::string& name);
+	virtual void moveTo (const double x, const double y);
 
 	/**
-	 * Gets the name of the widget
-	 * @return Name of the widget
+	 *  @brief  Moves the widget to a new position.
+	 *  @param position	 New position.
 	 */
-	std::string getName () const;
+	virtual void moveTo (const BUtilities::Point& position);
 
 	/**
-	 * Gets the visibility of the widget. Therefore, all its parents will be
-	 * checked for visibility too.
-	 * @return TRUE if the widget (and all its parents) are visible, otherwise
-	 * 		   FALSE.
+	 *  @brief  Moves the widget relative to its origin.
+	 *  @param dx  Change in x coordinate.
+	 *  @param dy  Change in y coordinate.
 	 */
-	bool isVisible ();
+	virtual void moveRel (const double dx, const double dy);
 
 	/**
-	 * Defines whether the widget may emit BEvents::BUTTON_PRESS_EVENT's
-	 * following a host button event.
-	 * @param status TRUE if widget is clickable, otherwise false
+	 *  @brief  Moves the widget relative to its origin.
+	 *  @param dpos	 Change in position.
 	 */
-	void setClickable (const bool status);
+	virtual void moveRel (const BUtilities::Point& dpos);
 
 	/**
-	 * Gets whether the widget may emit BEvents::BUTTON_PRESS_EVENT's or
-	 * BEvents::BUTTON_RELEASE_Event's following a host button event.
-	 * @return TRUE if widget is clickable, otherwise false
+	 *  @brief  X position of the %Widget to be placed on the parents left
+	 *  border.
+	 *  @return  X position.
 	 */
-	bool isClickable () const;
+	virtual double left ();
 
 	/**
-	 * Defines whether the widget may emit
-	 * BEvents::POINER_DRAG_EVENT's following a host pointer event.
-	 * By default, "draggable" widgets can be dragged over the window as
-	 * result of calling the default dragAndDropCallback method from the
-	 * onPointerDragged method. This behavior can be changed by overriding the
-	 * onPointerDragged method or by setting a callback function different from
-	 * dragAndDropCallback.
-	 * @param status TRUE if widget is draggable, otherwise false
+	 *  @brief  Moves the %Widget horizontally to the center of its parent.
+	 *
+	 *  This method only changes the %Widget position data if it is connected
+	 *  to a parent %Widget.
 	 */
-	void setDraggable (const bool status);
+	virtual double center ();
 
 	/**
-	 * Gets whether the widget may emit BEvents::POINTER_DRAG_EVENT's following
-	 * a host pointer event.
-	 * @return TRUE if widget is draggable, otherwise false
+	 *  @brief  X position of the %Widget to be placed on the parents right
+	 *  border.
+	 *  @return  X position.
 	 */
-	bool isDraggable () const;
+	virtual double right ();
 
 	/**
-	 * Defines whether the widget may emit
-	 * BEvents::WHEEL_SCROLL_EVENT's following a host (mouse) wheel event.
-	 * @param status TRUE if widget is scrollable, otherwise false
+	 *  @brief  Y position of the %Widget to be placed on the parents top
+	 *  border.
+	 *  @return  Y position.
 	 */
-	void setScrollable (const bool status);
+	virtual double top ();
 
 	/**
-	 * Gets whether the widget may emit BEvents::WHEEL_SCROLL_EVENT's following
-	 * a host (mouse) wheel event.
-	 * @return TRUE if widget is scrollable, otherwise false
+	 *  @brief  Y position of the %Widget to be placed in the vertical middle
+	 *  of the parent %Widget.
+	 *  @return  Y position.
 	 */
-	bool isScrollable () const;
+	virtual double middle ();
 
 	/**
-	 * Defines whether the widget may emit BEvents::FOCUS_EVENT's if the
-	 * pointer rests for a predefined time over the widget.
-	 * @param status TRUE if widget is focusable, otherwise false
+	 *  @brief  Y position of the %Widget to be placed on the parents top
+	 *  border.
+	 *  @return  Y position.
 	 */
-	void setFocusable (const bool status);
+	virtual double bottom ();
 
 	/**
-	 * Gets whether the widget may emit BEvents::FOCUS_EVENT's if the
-	 * pointer rests for a predefined time over the widget.
-	 * @return TRUE if widget is focusable, otherwise false
+	 *  @brief  Gets the %Widget position.
+	 *  @return  %Widget position relative to its parent %Widget.
 	 */
-	bool isFocusable () const;
+	BUtilities::Point getPosition () const;
 
 	/**
-	 * Defines whether events emitted by this widget MAY be merged to precursor
-	 * events of the same type (and (optional) the same widget and (optional)
-	 * the same position, depending on the event type) or not.
-	 * This flag is ignored if merging doesn't make sense (e.g., in case of
-	 * BEvents::CLOSE_EVENT).
-	 * @param eventType	BEvents::EventType for which the status is defined
-	 * @param status 	TRUE if the the events emitted by this widget and
-	 * 			specified by eventType may be merged, otherwise FALSE
+	 *  @brief  Gets the %Widget covered area.
+	 *  @return  %Widget area relative to its parent %Widget.
 	 */
-	void setMergeable (const BEvents::EventType eventType, const bool status);
+	BUtilities::RectArea getArea () const;
 
 	/**
-	 * Gets whether events emitted by this widget MAY be merged to precursor
-	 * events of the same type or not.
-	 * @return	TRUE if the the events emitted by this widget and specified by
-	 * 		eventType may be merged, otherwise FALSE
+	 *  @brief  Gets the %Widget position relative to the position of its root
+	 *  widget (e. g., the main Window)
+	 *  @return  %Widget position relative to its root widget.
 	 */
-	bool isMergeable (const BEvents::EventType eventType) const;
-
-	void setStacking (const WidgetStacking stacking);
-
-	WidgetStacking getStacking () const;
+	BUtilities::Point getAbsolutePosition () const;
 
 	/**
-	 * Calls a redraw of the widget and calls postRedisplay () if the the
-	 * Widget is visible.
-	 * This method should be called if the widgets properties are indirectly
-	 * changed.
+	 *  @brief  Gets the %Widget covered area relative to the position of its
+	 *  root widget (e. g., the main Window).
+	 *  @return  %Widget area relative to its root widet.
 	 */
-	virtual void update ();
+	BUtilities::RectArea getAbsoluteArea () const;
 
 	/**
-	 * Requests a redisplay of the widgets area (and all underlying widget
-	 * areas) by emitting a BEvents::ExposeEvent.
+	 *  @brief  X offset of the %Widget content relative to the %Widget X 
+	 *  position.
+	 *  @return  X offset of the %Widget.
+	 
+	 *  The X offset is distance between the outer border and the widget 
+	 *  content. It is the sum of border margin, line width, and padding if a
+	 *  border is defined.
 	 */
-	void postRedisplay ();
+	double getXOffset ();
 
 	/**
-	 * Requests close of this widget by emitting a BEvents::WidgetEvent
-	 * @param handle	Widget that will handle the close request event
-	 			(default = main_)
+	 *  @brief  Y offset of the %Widget content relative to the %Widget Y 
+	 *  position.
+	 *  @return  Y offset of the %Widget.
+	 
+	 *  The Y offset is distance between the outer border and the widget 
+	 *  content. It is the sum of border margin, line width, and padding if a
+	 *  border is defined.
 	 */
-	void postCloseRequest ();
-	void postCloseRequest (Widget* handle);
+	double getYOffset ();
 
 	/**
-	 * (Re-)Defines the callback function for an event. It is on the onXXX
-	 * methods whether a callback function will be called or not. By default,
-	 * the callback is set to defaultCallback.
-	 * @param eventType Enumeration of the event type.
-	 * @param callbackFunction Function that should be called if an onXXX
-	 * 						   method is called as response of an event and
-	 * 						   onXXX allows callbacks.
+	 *  @brief  Effective width to draw a %Widget.
+	 *  @return  Effective width of the widget.
+	 *
+	 *  The effective width is the width of the underlying RGB surface that
+	 *  can effectively be used for drawing a %Widget. It is the total surface
+	 *  width minus two times the sum of border margin, line width, and 
+	 *  padding.
 	 */
-	void setCallbackFunction (const BEvents::EventType eventType, const std::function<void (BEvents::Event*)>& callbackFunction);
+	double getEffectiveWidth ();
 
 	/**
-	 * Predefined empty callback function
-	 * @param event Placeholder, will not be interpreted by this method.
+	 *  @brief  Effective height to draw a %Widget.
+	 *  @return  Effective height of the widget.
+	 *
+	 *  The effective height is the height of the underlying RGB surface that
+	 *  can effectively be used for drawing a %Widget. It is the total surface
+	 *  height minus two times the sum of border margin, line width, and 
+	 *  padding.
 	 */
-	static void defaultCallback (BEvents::Event* event);
+	double getEffectiveHeight ();
 
 	/**
-	 * Predefined callback function, moves the Widget that emited the
-	 * event.
-	 * @param event Placeholder, will not be interpreted by this method.
+	 *  @brief  Effecitve area to draw a %Widget.
+	 *  @return	 Effective widget area.
+	 *
+	 *  The effective area is the area of the underlying RGB surface that
+	 *  can effectively be used for drawing a %Widget. It is the total surface
+	 *  area without the borders (defined as the sum of border margin, line 
+	 *  width, and padding) on each side.
 	 */
-	static void dragAndDropCallback (BEvents::Event* event);
-
-	static void focusInCallback (BEvents::Event* event);
-
-	static void focusOutCallback (BEvents::Event* event);
+	BUtilities::RectArea getEffectiveArea ();
 
 	/**
-	 * Predefined empty method to handle a BEvents::EventType::CONFIGURE_EVENT.
-	 * @param event Expose event
+	 *  @brief  Sets the %Widget status.
+	 *  @param status  %Widget status.
 	 */
-	virtual void onConfigureRequest (BEvents::ExposeEvent* event);
+	void setStatus (const BStyles::Status status);
 
 	/**
-	 * Predefined empty method to handle a BEvents::EventType::EXPOSE_EVENT.
-	 * @param event Expose event
+	 *  @brief  Gets the %Widgets status.
+	 *  @return  %Widget state
 	 */
-	virtual void onExposeRequest (BEvents::ExposeEvent* event);
+	BStyles::Status getStatus () const;
 
 	/**
-	 * Predefined method to handle a BEvents::EventType::CLOSE_EVENT.
-	 * Releases the request widget.
-	 * @param event Widget event
+	 *  @brief  Sets the type of stacking this %Widget.
+	 *  @param stacking  Stacking type.
+	 *
+	 *  Stacking is a behaviour of a %Widget relative to its parent %Widget.
+	 *  Widgets are clipped on default if they exceed the limits of their
+	 *  respective parent %Widget (STACKING_NORMAL).
 	 */
-	virtual void onCloseRequest (BEvents::WidgetEvent* event);
+	void setStacking (const Stacking stacking);
 
 	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::KEY_PRESS_EVENT.
-	 * @param event Key event
+	 *  @brief  Gets the type of stacking this %Widget.
+	 *  @return  Stacking type. 
 	 */
-	virtual void onKeyPressed (BEvents::KeyEvent* event);
+	Stacking getStacking () const;
 
 	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::KEY_RELEASE_EVENT.
-	 * @param event Key event
+	 *  @brief  Copies the style from another object.
+	 *  @param style  Other style.
+	 *
+	 *  Composite widgets should override this method to forward the passed
+	 *  @a style to embedded child widgets too.
 	 */
-	virtual void onKeyReleased (BEvents::KeyEvent* event);
+	virtual void setStyle (const BStyles::Style& style);
 
 	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::BUTTON_PRESS_EVENT.
-	 * @param event Pointer event
-	 */
-	virtual void onButtonPressed (BEvents::PointerEvent* event);
+     *  @brief  Gets the border Property from the base level.
+     *  @return  Border.
+     *
+     *  Gets the base level border Property using the default border URID.
+     *  Returns noBorder if the default border URID is not set.
+     */
+    BStyles::Border getBorder() const;
+
+    /**
+     *  @brief  Sets the border Property at the base level.
+     *  @param border  Border.
+     *
+     *  Sets the base level border Property using the default border URID.
+     */
+    virtual void setBorder(const BStyles::Border& border);
+
+    /**
+     *  @brief  Gets the background Property from the base level.
+     *  @return  Background.
+     *
+     *  Gets the base level background Property using the default background 
+     *  URID. Returns noFill if the default background URID is not set.
+     */
+    BStyles::Fill getBackground() const;
+
+    /**
+     *  @brief  Sets the background Property at the base level.
+     *  @param fill  Background.
+     *
+     *  Sets the base level background Property using the default background 
+     *  URID.
+     */
+    virtual void setBackground (const BStyles::Fill& fill);
+
+    /**
+     *  @brief  Gets the font Property from the base level.
+     *  @return  Font.
+     *
+     *  Gets the base level font property using the default font URID.
+     *  Returns sans12pt if the default font URID is not set.
+     */
+    BStyles::Font getFont() const;
+
+    /**
+     *  @brief  Sets the font property at the base level.
+     *  @param font  Font.
+     *
+     *  Sets the base level font Property using the default font URID.
+     */
+    virtual void setFont (const BStyles::Font& font);
+
+    /**
+     *  @brief  Gets the foreground colors Property from the base level.
+     *  @return  Foreground ColorMap.
+     *
+     *  Gets the base level foreground colors Property using the default 
+     *  foreground colors URID. Returns whites if the default foreground 
+     *  colors URID is not set.
+     */
+    BStyles::ColorMap getFgColors() const;
+
+    /**
+     *  @brief  Sets the foreground colors Property at the base level.
+     *  @param colors  Foreground ColorMap.
+     *
+     *  Sets the base level foreground colors Property using the default 
+     *  foreground colors URID.
+     */
+    virtual void setFgColors (const BStyles::ColorMap& colors);
+
+    /**
+     *  @brief  Gets the background colors Property from the base level.
+     *  @return  Background ColorMap.
+     *
+     *  Gets the base level background colors Property using the default 
+     *  background colors URID. Returns darks if the default background colors
+     *  URID is not set.
+     */
+    BStyles::ColorMap getBgColors() const;
+
+    /**
+     *  @brief  Sets the background colors Property at the base level.
+     *  @param colors  Background ColorMap.
+     *
+     *  Sets the base level background colors Property using the default 
+     *  background colors URID.
+     */
+    virtual void setBgColors (const BStyles::ColorMap& colors);
+
+    /**
+     *  @brief  Gets the text colors Property from the base level.
+     *  @return  Text ColorMap.
+     *
+     *  Gets the base level text colors Property using the default text colors
+     *  URID. Returns whites if the default text colors URID is not set.
+     */
+    BStyles::ColorMap getTxColors() const;
+
+    /**
+     *  @brief  Sets the text colors Property at the base level.
+     *  @param colors  Text ColorMap.
+     *
+     *  Sets the base level text colors Property using the default text
+     *  colors URID.
+     */
+    virtual void setTxColors (const BStyles::ColorMap& colors);
 
 	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::BUTTON_RELEASE_EVENT.
-	 * @param event Pointer event
+	 *  @brief  Requests a redisplay of the %Widget area.
+	 *
+	 *  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT to the main
+	 *  Window event queue. 
 	 */
-	virtual void onButtonReleased (BEvents::PointerEvent* event);
+	void emitExposeEvent () override;
 
 	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::BUTTON_CLICK_EVENT. This event is emitted i a button
-	 * is pressed and released over the same widget.
-	 * @param event Pointer event
+	 *  @brief  Requests a redisplay of a part of the %Widget area.
+	 *  @param area  Area to redisplay.
+	 *
+	 *  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT to the main
+	 *  Window event queue. 
 	 */
-	virtual void onButtonClicked (BEvents::PointerEvent* event);
-
-	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::POINTER_MOTION_EVENT.
-	 * @param event Pointer event
-	 */
-	virtual void onPointerMotion (BEvents::PointerEvent* event);
-
-	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::POINTER_DRAG_EVENT.
-	 * @param event Pointer event
-	 */
-	virtual void onPointerDragged (BEvents::PointerEvent* event);
-
-	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::WHEEL_SCROLL_EVENT.
-	 * @param event Value changed event
-	 */
-	virtual void onWheelScrolled (BEvents::WheelEvent* event);
-
-	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::VALUE_CHANGED_EVENT.
-	 * @param event Value changed event
-	 */
-	virtual void onValueChanged (BEvents::ValueChangedEvent* event);
-
-	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::FOCUS_IN_EVENT.
-	 * @param event Focus event
-	 */
-	virtual void onFocusIn (BEvents::FocusEvent* event);
-
-	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::FOCUS_OUT_EVENT.
-	 * @param event Focus event
-	 */
-	virtual void onFocusOut (BEvents::FocusEvent* event);
-
-	/**
-	 * Predefined empty method to handle a
-	 * BEvents::EventType::MESSAGE_EVENT.
-	 * @param event Event
-	 */
-	virtual void onMessage (BEvents::MessageEvent* event);
-
-	/**
-	 * Scans theme for widget properties and applies these properties.
-	 * @param theme Theme to be scanned
-	 */
-	virtual void applyTheme (BStyles::Theme& theme);
-
-	/**
-	 * Scans theme for widget properties and applies these properties.
-	 * @param theme Theme to be scanned
-	 * @param name Name of the BStyles::StyleSet within the theme to be
-	 * 		  	   applied.
-	 */
-	virtual void applyTheme (BStyles::Theme& theme, const std::string& name);
+	void emitExposeEvent (const BUtilities::RectArea& area) override;
 
 protected:
 
-	BUtilities::RectArea getArea () const;
-	BUtilities::RectArea getAbsoluteArea () const;
-	BUtilities::RectArea getTotalArea (std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
-	BUtilities::RectArea getAbsoluteTotalArea (std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
+	/**
+	 *  @brief  Gets the area covered by this %Widget and all its children.
+	 *  @param func  Optional, filter function.
+	 */
+	BUtilities::RectArea getFamilyArea (std::function<bool (const Widget* widget)> func = [] (const Widget* widget) {return true;}) const;
 
-	void forEachChild (std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
-	void forEachChild (std::vector<Widget*>::iterator first, std::vector<Widget*>::iterator last,
-			   std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
+	/**
+	 *  @brief  Gets the area covered by this %Widget and all its children
+	 *  relative to the root widget (e. g., the main Window).
+	 *  @param func  Optional, filter function.
+	 */
+	BUtilities::RectArea getAbsoluteFamilyArea (std::function<bool (const Widget* widget)> func = [] (const Widget* widget) {return true;}) const;
 
-
+	/**
+	 *  @brief  Gets the top %Widget at a given position.
+	 *  @param position  Position. 
+	 *  @param func  Optional, filter function.
+	 *  @return  Pointer to the %Widget. 
+	 */
 	Widget* getWidgetAt (const BUtilities::Point& position, std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
 
-	void stackingCatch ();
+	/**
+	 *  @brief  Draws %Widget surface and children surfaces to the provided
+	 *  target surface.
+	 *  @param surface  Target surface.
+	 *  @param area  Clipping area.
+	 *
+	 *  This method is called by the main Window system event handler upon an
+	 *  ExposeEvent of the type EXPOSE_REQUEST_EVENT. Thus, this method draws
+	 *  the visual content of this %Widget and all its children %Widgets stored
+	 *  in their respective RGBA surfaces to the system provided RGBA surface
+	 *  of the main %Window.  
+	 */
+	void display (cairo_surface_t* surface, const BUtilities::RectArea& area);
 
-	void postMessage (const std::string& name, const BUtilities::Any content);
+	/**
+     *  @brief  Unclipped draw a %Widget to the surface.
+     */
+    virtual void draw () override;
 
-	void postRedisplay (const BUtilities::RectArea& area);
+    /**
+     *  @brief  Clipped draw a %Widget to the surface.
+     *  @param x0  X origin of the clipped area. 
+     *  @param y0  Y origin of the clipped area. 
+     *  @param width  Width of the clipped area.
+     *  @param height  Height of the clipped area. 
+     */
+    virtual void draw (const double x0, const double y0, const double width, const double height) override;
 
-	void redisplay (cairo_surface_t* surface, const BUtilities::RectArea& area);
-
-	virtual bool filter (Widget* widget);
-
-	virtual void draw (const BUtilities::RectArea& area);
-
-	BUtilities::RectArea area_;
-	bool visible_;
-	bool clickable_;
-	bool draggable_;
-	bool scrollable_;
-	bool focusable_;
-	bool scheduleDraw_;
-	std::array<bool, BEvents::EventType::NO_EVENT> mergeable_;
-	WidgetStacking stacking_;
-	Window* main_;
-	Widget* parent_;
-	std::vector <Widget*> children_;
-	BStyles::Border border_;
-	BStyles::Fill background_;
-	std::string name_;
-	std::array<std::function<void (BEvents::Event*)>, BEvents::EventType::NO_EVENT> cbfunction_;
-	cairo_surface_t* widgetSurface_;
-	BColors::State widgetState_;
+    /**
+     *  @brief  Clipped draw a %Widget to the surface.
+     *  @param area  Clipped area. 
+     */
+    virtual void draw (const BUtilities::RectArea& area) override;
 
 private:
-	void redisplay (cairo_surface_t* surface, const BUtilities::RectArea& outerArea, const BUtilities::RectArea& area);
+	void display (cairo_surface_t* surface, const BUtilities::RectArea& outerArea, const BUtilities::RectArea& area);
 	Widget* getWidgetAt (const BUtilities::Point& abspos, const BUtilities::RectArea& outerArea,
 			     const BUtilities::RectArea& area, std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
 };
-
-bool isVisible (Widget* widget);
-
-bool isClickable (Widget* widget);
-
-bool isDraggable (Widget* widget);
-
-bool isScrollable (Widget* widget);
-
-bool isFocusable (Widget* widget);
 
 }
 

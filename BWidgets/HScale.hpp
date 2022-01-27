@@ -1,5 +1,5 @@
 /* HScale.hpp
- * Copyright (C) 2018, 2019  Sven Jähnichen
+ * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,106 +18,269 @@
 #ifndef BWIDGETS_HSCALE_HPP_
 #define BWIDGETS_HSCALE_HPP_
 
-#include "RangeWidget.hpp"
+#include "HMeter.hpp"
+#include "Supports/Clickable.hpp"
+#include "Supports/Draggable.hpp"
+#include "Supports/Scrollable.hpp"
+#include "../BEvents/WheelEvent.hpp"
+#include "Draws/drawHBar.hpp"
+#include "Draws/drawKnob.hpp"
 
-#define BWIDGETS_DEFAULT_HSCALE_WIDTH 100.0
-#define BWIDGETS_DEFAULT_HSCALE_HEIGHT 6.0
-#define BWIDGETS_DEFAULT_HSCALE_DEPTH 1.0
+#define BWIDGETS_DEFAULT_HSCALE_WIDTH 80.0
+#define BWIDGETS_DEFAULT_HSCALE_HEIGHT 10.0
 
 namespace BWidgets
 {
+
 /**
- * Class BWidgets::HScale
+ *  @brief  %HScale widget.
  *
- * RangeWidget class for a simple horizontal scale.
- * The Widget is clickable by default.
+ *  %HScale is a Valueable Widget derived from HMeter. It displays a value as 
+ *  a horizontal scale and supports user interaction via Clickable, Draggable, 
+ *  and Scrollable. Its appearance is defined by the BgColors parameter (static
+ *  elements) and by the FgColors parameter (value).
  */
-class HScale : public RangeWidget
+class HScale :	public HMeter, 
+				public Clickable, 
+				public Draggable, 
+				public Scrollable
 {
+protected:
+	BUtilities::RectArea scale_;
+
 public:
+
+	/**
+	 * @brief  Constructs an empty %HScale object.
+	 * 
+	 */
 	HScale ();
-	HScale (const double x, const double y, const double width, const double height, const std::string& name,
-			 const double value, const double min, const double max, const double step);
 
 	/**
-	 * Creates a new (orphan) scale and copies the scale properties from a
-	 * source scale. This method doesn't copy any parent or child widgets.
-	 * @param that Source scale
+	 *  @brief  Creates a %HScale with default size.
+	 *  @param value  Initial value.
+	 *  @param min  Lower value limit.
+	 *  @param max  Upper value limit.
+	 *  @param step  Optional, value increment steps.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	HScale (const HScale& that);
+	HScale	(const double value, const double min, const double max, double step = 0.0, 
+			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 * Assignment. Copies the scale properties from a source scale and keeps
-	 * its name and its position within the widget tree. Emits an expose event
-	 * if the widget is visible and a value changed event.
-	 * @param that Source slider
+	 *  @brief  Creates a %HScale.
+	 *  @param x  %HScale X origin coordinate.
+	 *  @param y  %HScale Y origin coordinate.
+	 *  @param width  %HScale width.
+	 *  @param height  %HScale height.
+	 *  @param value  Initial value.
+	 *  @param min  Lower value limit.
+	 *  @param max  Upper value limit.
+	 *  @param step  Optional, value increment steps.
+	 *  @param transferFunc  Optinonal, function to transfer a value from an
+	 *  external context to the internal context.
+	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
+	 *  internal context to an external context.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %HScale title (default = "").
 	 */
-	HScale& operator= (const HScale& that);
+	HScale	(const double x, const double y, const double width, const double height, 
+			 const double value, const double min, const double max, double step = 0.0,
+			 std::function<double (const double& x)> transferFunc = ValueTransferable<double>::noTransfer,
+			 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
+			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 * Pattern cloning. Creates a new instance of the widget and copies all
-	 * its properties.
+	 *  @brief  Creates a clone of the %HScale. 
+	 *  @return  Pointer to the new %HScale.
+	 *
+	 *  Creates a clone of this %HScale by copying all properties. But NOT its
+	 *  linkage.
+	 *
+	 *  Allocated heap memory needs to be freed using @c delete if the clone
+	 *  in not needed anymore!
 	 */
-	virtual Widget* clone () const override;
+	virtual Widget* clone () const override; 
 
 	/**
-	 * Calls a redraw of the widget and calls postRedisplay () if the the
-	 * Widget is visible.
-	 * This method should be called if the widgets properties are indirectly
-	 * changed.
+	 *  @brief  Copies from another %HScale. 
+	 *  @param that  Other %HScale.
+	 *
+	 *  Copies all properties from another %HScale. But NOT its linkage.
 	 */
-	virtual void update () override;
+	void copy (const HScale* that);
 
 	/**
-	 * Scans theme for widget properties and applies these properties.
-	 * @param theme Theme to be scanned.
-	 * 				Styles used are:
-	 * 				BWIDGETS_KEYWORD_BORDER
-	 * 				BWIDGETS_KEYWORD_BACKGROUND
-	 * 				BWIDGETS_KEYWORD_FGCOLORS
-	 * 				BWIDGETS_KEYWORD_BGCOLORS
-	 * @param name Name of the BStyles::StyleSet within the theme to be
-	 * 		  	   applied.
-	 */
-	virtual void applyTheme (BStyles::Theme& theme) override;
-	virtual void applyTheme (BStyles::Theme& theme, const std::string& name) override;
+     *  @brief  Method called when pointer button pressed.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  pointer button pressed. Sets the value and calls the widget static 
+	 *  callback function.
+     */
+    virtual void onButtonPressed (BEvents::Event* event) override;
 
 	/**
-	 * Handles the BEvents::BUTTON_PRESS_EVENT to move the slider.
-	 * @param event Pointer to a pointer event emitted by the same widget.
-	 */
-	virtual void onButtonPressed (BEvents::PointerEvent* event) override;
-
+     *  @brief  Method called upon pointer drag.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler upon
+     *  a pointer drag. Changes the value and calls the widget static callback
+	 *  function.
+     */
+    virtual void onPointerDragged (BEvents::Event* event) override;
+	
 	/**
-	 * Handles the BEvents::EventType::BUTTON_RELEASE_EVENT to move the slider.
-	 * @param event Pointer event
-	 */
-	virtual void onButtonReleased (BEvents::PointerEvent* event) override;
-
-	/**
-	 * Handles the BEvents::POINTER_DRAG_EVENT to move
-	 * the slider.
-	 * @param event Pointer to a pointer event emitted by the same widget.
-	 */
-	virtual void onPointerDragged (BEvents::PointerEvent* event) override;
-
-	/**
-	 * Handles the BEvents::WHEEL_SCROLL_EVENT to turn
-	 * the dial.
-	 * @param event Pointer to a wheel event emitted by the same widget.
-	 */
-	virtual void onWheelScrolled (BEvents::WheelEvent* event) override;
+     *  @brief  Method called upon (mouse) wheel scroll.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler upon
+     *  a (mouse) wheel scroll. Increases or decreases the value and calls the
+	 *  widget static callback function.
+     */
+    virtual void onWheelScrolled (BEvents::Event* event) override;
 
 protected:
-	virtual void updateCoords ();
-	virtual void draw (const BUtilities::RectArea& area) override;
+	/**
+     *  @brief  Unclipped draw a %HScale to the surface.
+     */
+    virtual void draw () override;
 
-	BColors::ColorSet fgColors;
-	BColors::ColorSet bgColors;
+    /**
+     *  @brief  Clipped draw a %HScale to the surface.
+     *  @param x0  X origin of the clipped area. 
+     *  @param y0  Y origin of the clipped area. 
+     *  @param width  Width of the clipped area.
+     *  @param height  Height of the clipped area. 
+     */
+    virtual void draw (const double x0, const double y0, const double width, const double height) override;
 
-	BUtilities::RectArea scaleArea;
-	double scaleXValue;
+    /**
+     *  @brief  Clipped draw a %HScale to the surface.
+     *  @param area  Clipped area. 
+     */
+    virtual void draw (const BUtilities::RectArea& area) override;
 };
+
+inline HScale::HScale () :
+	HScale (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline HScale::HScale (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+	HScale	(0.0, 0.0, BWIDGETS_DEFAULT_HSCALE_WIDTH, BWIDGETS_DEFAULT_HSCALE_HEIGHT, 
+			 value, min, max, step, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 urid, title) 
+{
+
+}
+
+inline HScale::HScale	(const double  x, const double y, const double width, const double height, 
+						 double value, const double min, const double max, double step, 
+						 std::function<double (const double& x)> transferFunc,
+			 			 std::function<double (const double& x)> reTransferFunc,
+						 uint32_t urid, std::string title) :
+		HMeter	(x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
+		Clickable(),
+		Draggable(),
+		Scrollable(),
+		scale_ (0, 0, width, height)
+{
+
+}
+
+inline Widget* HScale::clone () const 
+{
+	Widget* f = new HScale ();
+	f->copy (this);
+	return f;
+}
+
+inline void HScale::copy (const HScale* that)
+{
+	scale_ = that->scale_;
+	Scrollable::operator= (*that);
+	Draggable::operator= (*that);
+	Clickable::operator= (*that);
+	HMeter::copy (that);
+}
+
+inline void HScale::onButtonPressed (BEvents::Event* event)
+{
+	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
+	if (!pev) return;
+	if (scale_.getWidth()) setValue (getValueFromRatio ((pev->getPosition().x - scale_.getX()) / scale_.getWidth(), reTransfer_));
+	Clickable::onButtonPressed (event);
+}
+
+inline void HScale::onPointerDragged (BEvents::Event* event)
+{
+	if (isClickable()) onButtonPressed (event);
+	else
+	{
+		BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
+		if (!pev) return;
+		if (scale_.getWidth()) 
+		{
+			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
+			else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - pev->getDelta().y / scale_.getWidth(), reTransfer_));
+		}
+	}
+	Draggable::onPointerDragged (event);
+}
+
+inline void HScale::onWheelScrolled (BEvents::Event* event)
+{
+	BEvents::WheelEvent* wev = dynamic_cast<BEvents::WheelEvent*> (event);
+	if (!wev) return;
+	if (scale_.getWidth()) 
+	{
+		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
+		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - wev->getDelta().y / scale_.getWidth(), reTransfer_));
+	}
+	Scrollable::onWheelScrolled (event);
+}
+
+inline void HScale::draw ()
+{
+	draw (0, 0, getWidth(), getHeight());
+}
+
+inline void HScale::draw (const double x0, const double y0, const double width, const double height)
+{
+	draw (BUtilities::RectArea (x0, y0, width, height));
+}
+
+inline void HScale::draw (const BUtilities::RectArea& area)
+{
+	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
+
+	// Draw super class widget elements first
+	Widget::draw (area);
+
+	// Draw only if minimum requirements satisfied
+	if ((getHeight () >= 1) && (getWidth () >= 1))
+	{
+		cairo_t* cr = cairo_create (surface_);
+
+		if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
+		{
+			// Limit cairo-drawing area
+			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
+			cairo_clip (cr);
+
+			const double rval = getRatioFromValue (getValue(), transfer_);
+			const BStyles::Color fgColor = getFgColors()[getStatus()];
+			const BStyles::Color bgColor = getBgColors()[getStatus()];
+			drawHBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 0.0, rval, fgColor, bgColor);
+		}
+
+		cairo_destroy (cr);
+	}
+}
 
 }
 
