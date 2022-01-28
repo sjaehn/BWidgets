@@ -15,8 +15,6 @@ Widgets can be decorated using styles.
 
 ## Quickstart
 
-You can also find this source code at "../examples/buttontest.cpp".
-
 1. Include the header files of the widgets you need.
    ```
    #include "path/to/BWidgets/Window.hpp"
@@ -84,6 +82,9 @@ be) added to the main window).
    window.run ();
    ```
 
+Build and run. You can also find this source code at "../examples/buttontest.cpp".
+
+![buttontest](../suppl/buttontest.png)
 
 ## Namespaces
 
@@ -241,12 +242,16 @@ objects.
 
 ### Label
 
+![label](../suppl/Label.png)
+
 `Label` is a simple one line text output widget. It can be decorated by setting
 a font and a text color in addtion to the style properties supported by
 `Widget`. 
 
 
 ### LabelEdit
+
+![labeledit](../suppl/LabelEdit.png)
 
 `LabelEdit` is an editable version of `Label`. It additionally supports:
 * `Clickable` and `Draggable` to set the cursor,
@@ -258,21 +263,29 @@ a font and a text color in addtion to the style properties supported by
 
 ### Text
 
+![text](../suppl/Text.png)
+
 `Text` is a multi line text output widget. It can be decorated like a `Label`.
 
 
 ### Image
+
+![image](../suppl/Image.png)
 
 `Image` is an image displaying widget. It supports one image for each Status.
 
 
 ### Symbol
 
+![symbol](../suppl/Symbol.png)
+
 `Symbol` is a Widget that displays a symbol. It can be decorated by setting
 a TxColor in addtion to the StyleProperty settings supported by Widget. 
 
 
 ### Button
+
+![button](../suppl/Button.png)
 
 `Button` draws a simple button. It supports `Clickable` and `Valueable`. The
 value has two conditions: on (true) or off (false). A `Button` changes its 
@@ -281,6 +294,8 @@ border color upon changing the condition.
 
 ### TextButton
 
+![textbutton](../suppl/TextButton.png)
+
 `TextButton` is a `Button` containing a label. A `TextButton` changes its 
 label status (and thus its color) in addition to the change of its border
 color upon changing the condition.
@@ -288,11 +303,26 @@ color upon changing the condition.
 
 ### SymbolButton
 
+![symbolbutton](../suppl/SymbolButton.png)
+
 
 ### ImageButton
 
 
+### CheckBox
+
+![checkbutton](../suppl/CheckBox.png)
+
+
+### RadioButton
+
+![radiobutton](../suppl/RadioButton.png)
+
+
 ### Knob
+
+![knob](../suppl/Knob.png)
+
 `Knob` is a Button Widget. It is a pseudo 3D visualization of a knob which
 can change its status (bool value) upon user interaction via `Clickable`. 
 Its appearance is defined by the BgColors parameter (static elements, 
@@ -300,6 +330,8 @@ false) and by the FgColors parameter (active elements, true).
 
 
 ### HSwitch
+
+![hswitch](../suppl/HSwitch.png)
 
 `HSwitch` is a Button Widget. It displays its status (represented by its 
 bool value) as a horizontal switch. It supports user interaction via 
@@ -310,6 +342,8 @@ BgColors parameter (static elements, false) and by the FgColors parameter
 
 ### VSwitch
 
+![vswitch](../suppl/VSwitch.png)
+
 `VSwitch` is a Button Widget. It displays its status (represented by its 
 bool value) as a vertical switch. It supports user interaction via 
 `Clickable`, `Draggable`, and `Scrollable`. Its appearance is defined by the 
@@ -318,6 +352,8 @@ BgColors parameter (static elements, false) and by the FgColors parameter
 
 
 ### HMeter
+
+![hmeter](../suppl/HMeter.png)
 
 `HMeter` is a Valueable Widget and displays a value as a horizontal
 meter without user interaction. The value is kept within a defined range
@@ -332,11 +368,15 @@ to use non-line color gradients for display using gradient functions.
 
 ### ValueHMeter
 
+![valuehmeter](../suppl/ValueHMeter.png)
+
 `ValueHMeter` is a HMeter Widget with an additional label for
 displaying its value.
 
 
 ### HScale
+
+![hscale](../suppl/HScale.png)
 
 `HScale` is a Valueable Widget derived from `HMeter`. It displays a value as a 
 horizontal scale and supports user interaction via `Clickable`, `Draggable`, 
@@ -346,6 +386,8 @@ elements) and by the FgColors parameter (value).
 
 ### HSlider
 
+![hslider](../suppl/HSlider.png)
+
 `HSlider` is a HScale Widget. It displays a value as a horizontal
 slider and supports user interaction via `Clickable`, `Draggable`, and
 `Scrollable`. Its appearance is defined by the BgColors parameter (static
@@ -353,11 +395,16 @@ elements, knob) and by the FgColors parameter (value).
 
 
 ### ValueHSlider
+
+![valuehslider](../suppl/ValueHSlider.png)
+
 `ValueHSlider` is a HSlider Widget with an additional editable label for
 displaying its value.
 
 
 ### VMeter
+
+![vmeter](../suppl/VMeter.png)
 
 `VMeter` is a Valueable Widget and displays a value as a vertical
 meter without user interaction. The value is kept within a defined range
@@ -372,11 +419,15 @@ to use non-line color gradients for display using gradient functions.
 
 ### ValueVMeter
 
+![valuevmeter](../suppl/ValueVMeter.png)
+
 `ValueVMeter` is a VMeter Widget with an additional label for
 displaying its value.
 
 
 ### VScale
+
+![vscale](../suppl/VScale.png)
 
 `VScale` is a Valueable Widget derived from `VMeter`. It displays a value as a
 vertical scale and supports user interaction via `Clickable`, `Draggable`, and 
@@ -386,6 +437,8 @@ elements) and by the FgColors parameter (value).
 
 ### VSlider
 
+![vslider](../suppl/VSlider.png)
+
 `VSlider` is a VScale Widget. It displays a value as a vertical
 slider and supports user interaction via `Clickable`, `Draggable`, and
 `Scrollable`. Its appearance is defined by the BgColors parameter (static
@@ -393,11 +446,16 @@ elements, knob) and by the FgColors parameter (value).
 
 
 ### ValueVSlider
+
+![valuevslider](../suppl/ValueVSlider.png)
+
 `ValueVSlider` is a VSlider Widget with an additional editable label for
 displaying its value.
 
 
 ### RadialMeter
+
+![radialmeter](../suppl/RadialMeter.png)
 
 `RadialMeter` is a Valueable Widget and displays a value as a radial
 meter without user interaction. The value is kept within a defined range
@@ -412,11 +470,15 @@ to use non-line color gradients for display using gradient functions.
 
 ### ValueRadialMeter
 
+![valueradialmeter](../suppl/ValueRadialMeter.png)
+
 `ValueRadialMeter` is a RadialMeter Widget with an additional label for
 displaying its value.
 
 
 ### Dial
+
+![dial](../suppl/Dial.png)
 
 `Dial` is a Valueable Widget derived from `RadialMeter`. It displays a pseudo 
 3D dial consisting of a knob and an arc scale. It supports user interaction 
@@ -425,11 +487,16 @@ the BgColors parameter (static elements) and by the FgColors parameter (value).
 
 
 ### ValueDial
+
+![valuedial](../suppl/ValueDial.png)
+
 `ValueDial` is a Dial Widget with an additional editable label for
 displaying its value.
 
 
 ### HPianoRoll
+
+![hpianoroll](../suppl/HPianoRoll.png)
 
 
 ## Attributes and decorations

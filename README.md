@@ -1,7 +1,15 @@
 # B.Widgets
-Rewrite of the widget toolkit of the B.Music project. Work in progress.
+Rewrite of the widget toolkit of the B.Music project. Work in progress. And 
+still a lot of space to fill (as you can see):
 
 ![widgetgallery](suppl/widgetgallery.png)
+
+The toolkit uses tools from five namespaces (further info there):
+* `BDevices`
+* [`BEvents`](BEvents/README.md)
+* [`BStyles`](BStyles/README.md)
+* `BUtilities`
+* [`BWidgets`](BWidgets/README.md)
 
 
 ## Dependencies
@@ -9,7 +17,9 @@ Rewrite of the widget toolkit of the B.Music project. Work in progress.
 * Cairo
 * X11 (for Linux systems, for MacOS X and Windows see description)
 
-Install the developers versions of these packages first. BWidgets may also be adapted to MacOS X and Windows. For these systems, take hands on and adapt the parameter in the makefile.
+Install the developers versions of these packages first. BWidgets may also be 
+adapted to MacOS X and Windows. For these systems, take hands on and adapt 
+the parameter in the makefile.
 
 
 ## Installation
