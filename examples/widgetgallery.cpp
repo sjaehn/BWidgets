@@ -65,7 +65,7 @@ static void dragCallback (BEvents::Event* event)
 
 int main ()
 {
-    Window window (1200, 820, 0);
+    Window window (1200, 820, 0, URID_UNKNOWN_URID, "Window");
 
     // Widget
     Widget widget (10, 10, 80, 60);
