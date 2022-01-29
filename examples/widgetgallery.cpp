@@ -46,6 +46,8 @@
 #include "../BWidgets/ValueRadialMeter.hpp"
 #include "../BWidgets/ValueHMeter.hpp"
 #include "../BWidgets/ValueVMeter.hpp"
+#include "../BWidgets/Box.hpp"
+#include "../BWidgets/TextBox.hpp"
 #include <cairo/cairo.h>
 #include <iostream>
 #include <vector>
@@ -55,13 +57,7 @@ using namespace BStyles;
 
 Font labelFont ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, BStyles::Font::TEXT_ALIGN_CENTER, BStyles::Font::TEXT_VALIGN_MIDDLE);
 
-static void dragCallback (BEvents::Event* event)
-{
-    if (!event) return;
-    Widget* widget = event->getWidget();
-    if (!widget) return;
-    widget->raiseToFront();
-}
+const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
 int main ()
 {
@@ -79,7 +75,6 @@ int main ()
     Frame frame (110, 10, 80, 60);
     frame.setBackground(darkgreyFill);
     frame.setBorder (lightgreyBorder1pt);
-    frame.Draggable::setCallbackFunction(BEvents::Event::POINTER_DRAG_EVENT, &dragCallback);
     Label frameDragLabel ("Drag me");
     frame.add (&frameDragLabel);
     frameDragLabel.moveTo(frameDragLabel.center(), frameDragLabel.middle());
@@ -105,7 +100,7 @@ int main ()
     window.add (&labelEditLabel);
 
     // Text
-    Text text (410, 10, 180, 60, "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+    Text text (410, 10, 180, 60, loremipsum);
     Label textLabel (460, 80, 80, 20, "Text");
     textLabel.setFont (labelFont);
     window.add (&text);
@@ -157,7 +152,7 @@ int main ()
     window.add (&symbolButtonLabel);
 
     // ImageButton
-    ImageButton imageButton (1110, 30, 80, 20, std::vector<std::string>({"imgbut01.png", "imgbut02.png"}));
+    ImageButton imageButton (1110, 30, 80, 20, {"imgbut01.png", "imgbut02.png"});
     Label imageButtonLabel (1110, 80, 80, 20, "ImageButton");
     imageButtonLabel.setFont (labelFont);
     window.add (&imageButton);
@@ -323,6 +318,20 @@ int main ()
     valueVMeterLabel.setFont (labelFont);
     window.add (&valueVMeter);
     window.add (&valueVMeterLabel);
+
+    // Box
+    Box box (10, 130, 180, 60, {"Cancel", "OK"});
+    Label boxLabel (10, 200, 180, 20, "Box");
+    boxLabel.setFont (labelFont);
+    window.add (&box);
+    window.add (&boxLabel);
+
+    // TextBox
+    TextBox textBox (210, 130, 180, 170, loremipsum, {"Etiam"});
+    Label textBoxLabel (210, 320, 180, 20, "TextBox");
+    textBoxLabel.setFont (labelFont);
+    window.add (&textBox);
+    window.add (&textBoxLabel);
 
     window.run();
 }
