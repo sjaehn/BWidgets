@@ -543,7 +543,7 @@ Widget* Widget::getWidgetAt (const BUtilities::Point& position, std::function<bo
 Widget* Widget::getWidgetAt (const BUtilities::Point& abspos, const BUtilities::RectArea& outerArea,
 			     const BUtilities::RectArea& area, std::function<bool (Widget* widget)> func)
 {
-	BUtilities::RectArea a = (getStacking() == STACKING_EXCEED ? outerArea : area);
+	BUtilities::RectArea a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
 	BUtilities::RectArea thisArea = getArea();
 	thisArea.moveTo (getAbsolutePosition());
 	thisArea.intersect (a);
@@ -584,7 +584,7 @@ BUtilities::RectArea Widget::getAbsoluteFamilyArea (std::function<bool (const Wi
 			if (w)
 			{
 				bool check = func (w);
-				if (check && (w->getStacking() == STACKING_EXCEED )) a.extend (w->getAbsoluteArea());
+				if (check && (w->getStacking() == STACKING_ESCAPE )) a.extend (w->getAbsoluteArea());
 				return check;
 			}
 			return false;
@@ -607,7 +607,7 @@ void Widget::display (cairo_surface_t* surface, const BUtilities::RectArea& area
 
 void Widget::display (cairo_surface_t* surface, const BUtilities::RectArea& outerArea, const BUtilities::RectArea& area)
 {
-	BUtilities::RectArea a = (getStacking() == STACKING_EXCEED ? outerArea : area);
+	BUtilities::RectArea a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
 	BUtilities::RectArea thisArea = getArea(); 
 	thisArea.moveTo (getAbsolutePosition());
 	a.intersect (thisArea);

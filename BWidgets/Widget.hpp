@@ -88,7 +88,7 @@ protected:
 		//STACKING_FIT,
 		//STACKING_RESIZE_TO_FIT,
 		//STACKING_RESIZE_PARENT_TO_FIT,
-		STACKING_EXCEED						// May exceed the parent widget area
+		STACKING_ESCAPE						// May exceed the parent widget area
 	};
 
 	const uint32_t urid_;
