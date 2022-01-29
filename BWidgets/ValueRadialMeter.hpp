@@ -34,7 +34,9 @@ namespace BWidgets
  *  @brief  %ValueRadialMeter widget.
  *
  *  %ValueRadialMeter is a RadialMeter Widget with an additional label for
- *  displaying its value.
+ *  displaying its value. 
+ *
+ *  @todo Inverse range, negative step.
  */
 class ValueRadialMeter : public RadialMeter
 {

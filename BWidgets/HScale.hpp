@@ -38,7 +38,9 @@ namespace BWidgets
  *  %HScale is a Valueable Widget derived from HMeter. It displays a value as 
  *  a horizontal scale and supports user interaction via Clickable, Draggable, 
  *  and Scrollable. Its appearance is defined by the BgColors parameter (static
- *  elements) and by the FgColors parameter (value).
+ *  elements) and by the FgColors parameter (value). 
+ *
+ *  @todo Inverse range, negative step.
  */
 class HScale :	public HMeter, 
 				public Clickable, 

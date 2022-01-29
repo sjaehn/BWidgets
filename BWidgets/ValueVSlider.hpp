@@ -33,7 +33,9 @@ namespace BWidgets
  *  @brief  %ValueVSlider widget.
  *
  *  %ValueVSlider is a VSlider Widget with an additional editable label for
- *  displaying its value.
+ *  displaying its value. 
+ *
+ *  @todo Inverse range, negative step.
  */
 class ValueVSlider : public VSlider
 {

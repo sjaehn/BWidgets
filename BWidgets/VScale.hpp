@@ -38,7 +38,9 @@ namespace BWidgets
  *  %VScale is a Valueable Widget derived from VMeter. It displays a value as a 
  *  vertical scale and supports user interaction via Clickable, Draggable, and
  *  Scrollable. Its appearance is defined by the BgColors parameter (static
- *  elements) and by the FgColors parameter (value).
+ *  elements) and by the FgColors parameter (value). 
+ *
+ *  @todo Inverse range, negative step.
  */
 class VScale :	public VMeter,
 				public Clickable, 

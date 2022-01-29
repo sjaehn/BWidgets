@@ -33,7 +33,9 @@ namespace BWidgets
  *  @brief  %ValueHSlider widget.
  *
  *  %ValueHSlider is a HSlider Widget with an additional editable label for
- *  displaying its value.
+ *  displaying its value. 
+ *
+ *  @todo Inverse range, negative step.
  */
 class ValueHSlider : public HSlider
 {

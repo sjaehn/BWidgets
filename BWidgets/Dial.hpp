@@ -40,7 +40,9 @@ namespace BWidgets
  *  3D dial consisting of a knob and an arc scale. It supports user
  *  interaction via Clickable, Draggable, and Scrollable. Its appearance is 
  *  defined by the BgColors parameter (static elements) and by the FgColors 
- *  parameter (value).
+ *  parameter (value). 
+ *
+ *  @todo Inverse range, negative step.
  */
 class Dial :	public RadialMeter,
 				public Clickable, 

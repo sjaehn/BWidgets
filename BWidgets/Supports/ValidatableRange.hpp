@@ -34,6 +34,8 @@ namespace BWidgets
  *
  *  @a T MUST support the comparison operators and MUST be comparable with 0.0
  *  and 1.0. 
+ *
+ *  @todo Inverse range, negative step.
  */
 template <class T>
 class ValidatableRange : public Validatable<T>

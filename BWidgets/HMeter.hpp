@@ -46,7 +46,9 @@ namespace BWidgets
  *
  *  Advanced settings allow a %HMeter to display a value in a non-linear
  *  manner (e.g. for levels and frequencies) using transfer functions and / or
- *  to use non-line color gradients for display using gradient functions.
+ *  to use non-line color gradients for display using gradient functions. 
+ *
+ *  @todo Inverse range, negative step.
  */
 class HMeter :	public Widget, 
 				public ValueableTyped<double>, 

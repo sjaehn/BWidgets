@@ -34,7 +34,9 @@ namespace BWidgets
  *  @brief  %ValueHMeter widget.
  *
  *  %ValueHMeter is a HMeter Widget with an additional label for
- *  displaying its value.
+ *  displaying its value. 
+ *
+ *  @todo Inverse range, negative step.
  */
 class ValueHMeter : public HMeter
 {

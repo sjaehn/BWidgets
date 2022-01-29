@@ -33,7 +33,9 @@ namespace BWidgets
  *  %VSlider is a VScale Widget. It displays a value as a horizontal
  *  slider and supports user interaction via Clickable, Draggable, and
  *  Scrollable. Its appearance is defined by the BgColors parameter (static
- *  elements, knob) and by the FgColors parameter (value).
+ *  elements, knob) and by the FgColors parameter (value). 
+ *
+ *  @todo Inverse range, negative step.
  */
 class VSlider :	public VScale
 {
