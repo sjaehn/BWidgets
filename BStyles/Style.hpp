@@ -24,7 +24,7 @@
 #include "Types/Font.hpp"
 #include "Types/ColorMap.hpp"
 #include "../BUtilities/Urid.hpp"
-#include <vector>
+#include <initializer_list>
 
 #define STYLE_URI "https://github.com/sjaehn/BWidgets/BStyles/Style.hpp"
 
@@ -91,9 +91,9 @@ public:
     /**
      *  @brief  Constructs a %Style from a Property vector and an @a urid.
      *  @param urid  URID.
-     *  @param properties List of properties.
+     *  @param properties Initializer list of properties.
      */
-    Style (const std::vector<StyleProperty>& properties);
+    Style (const std::initializer_list<StyleProperty>& properties);
 
     /**
      *  @brief  Checks if an included element with the provided @a urid exists
@@ -267,7 +267,7 @@ inline Style::Style (const StyleProperty& property) :
     insert (property);
 }
 
-inline Style::Style (const std::vector<StyleProperty>& properties) :  
+inline Style::Style (const std::initializer_list<StyleProperty>& properties) :  
     std::map<uint32_t, BUtilities::Any> ()
 {
     for (const StyleProperty& s : properties) insert (s);

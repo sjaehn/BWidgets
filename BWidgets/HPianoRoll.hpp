@@ -26,6 +26,7 @@
 #include "../BEvents/WheelEvent.hpp"
 #include <cmath>
 #include <cstdint>
+#include <vector>
 
 #define BWIDGETS_DEFAULT_HPIANOROLL_WIDTH 400.0
 #define BWIDGETS_DEFAULT_HPIANOROLL_HEIGHT 40.0
@@ -35,6 +36,11 @@ namespace BWidgets
 
 /*
  *  @brief  Horizontal piano roll widget.
+ *
+ *  %HPianoRoll is a Valueable Widget displaying a horizontal piano roll.
+ *  It supports user interaction via Clickable, Draggable, and Toggleable. Its
+ *  appearance is defined by the BgColors parameter (inactive keys) and by the 
+ *  FgColors parameter (active keys).
  */
 class HPianoRoll : 	public Widget, 
 					public ValueableTyped<std::map<uint8_t, uint8_t>>,

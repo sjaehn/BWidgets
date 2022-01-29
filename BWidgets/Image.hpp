@@ -20,6 +20,7 @@
 
 #include "Widget.hpp"
 #include <cairo/cairo.h>
+#include <initializer_list>
 
 namespace BWidgets
 {
@@ -94,19 +95,20 @@ public:
 	 *  @param y  %Widget Y origin coordinate.
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
-	 *  @param surfaces  Vector of pointers to Cairo surfaces.
+	 *  @param surfaces  Initializer list of pointers to Cairo surfaces.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  Creates an %Image with visual contents for each Widget Status as
 	 *  defined by @a surfaces in the order STATUS_NORMAL, STATUS_ACTIVE,
      *  STATUS_INACTIVE, STATUS_OFF, STATUS_USER_DEFINED. The %Image behaves
-	 *  like an empty %Image if an empty vector of @a surfaces is provided.
-	 *  And it behaves like a single status %Image if a vector with only one
-	 *  element is passed. STATUS_NORMAL also acts for missing states.
+	 *  like an empty %Image if an empty initializer list of @a surfaces is 
+	 *  provided. And it behaves like a single status %Image if an initializer
+	 *  list with only one element is passed. STATUS_NORMAL also acts for 
+	 *  missing states.
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
-			 const std::vector<cairo_surface_t*>& surfaces, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 const std::initializer_list<cairo_surface_t*>& surfaces, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a multi Status %Image with defined coordinates and
@@ -135,19 +137,21 @@ public:
 	 *  @param y  %Widget Y origin coordinate.
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
-	 *  @param filenames  Vector of filenames. Supported file types are: PNG.
+	 *  @param filenames  Initializer list of filenames. Supported file types
+	 *  are: PNG.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  Creates an %Image with visual contents for each Widget Status as
 	 *  defined by @a filenames in the order STATUS_NORMAL, STATUS_ACTIVE,
      *  STATUS_INACTIVE, STATUS_OFF, STATUS_USER_DEFINED. The %Image behaves
-	 *  like an empty %Image if an empty vector of @a filenames is provided.
-	 *  And it behaves like a single status %Image if a vector with only one
-	 *  element is passed. STATUS_NORMAL also acts for missing states.
+	 *  like an empty %Image if an empty initializer list of @a filenames is 
+	 *  provided. And it behaves like a single status %Image if an initializer
+	 *  list with only one element is passed. STATUS_NORMAL also acts for 
+	 *  missing states.
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
-			 const std::vector<std::string>& filenames, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 const std::initializer_list<std::string>& filenames, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a multi Status %Image with defined coordinates and
@@ -271,10 +275,15 @@ inline Image::Image (const double x, const double y, const double width, const d
 }
 
 inline Image::Image (const double x, const double y, const double width, const double height,
-		      const std::vector<cairo_surface_t*>& surfaces, uint32_t urid, std::string title) :
+		      const std::initializer_list<cairo_surface_t*>& surfaces, uint32_t urid, std::string title) :
 		Image (x, y, width, height, urid, title)
 {
-	for (unsigned int i = 0; i < surfaces.size (); ++i) loadImage (BStyles::Status (i), surfaces[i]);
+	size_t i = 0;
+	for (cairo_surface_t* s : surfaces)
+	{
+		loadImage (BStyles::Status (i), s);
+		++i;
+	}
 }
 
 inline Image::Image (const double x, const double y, const double width, const double height,
@@ -285,10 +294,15 @@ inline Image::Image (const double x, const double y, const double width, const d
 }
 
 inline Image::Image (const double x, const double y, const double width, const double height,
-		      const std::vector<std::string>& filenames, uint32_t urid, std::string title) :
+		      const std::initializer_list<std::string>& filenames, uint32_t urid, std::string title) :
 		Image (x, y, width, height, urid, title)
 {
-	for (unsigned int i = 0; i < filenames.size (); ++i) loadImage (BStyles::Status (i), filenames[i]);
+	size_t i = 0;
+	for (const std::string& f : filenames)
+	{
+		loadImage (BStyles::Status (i), f);
+		++i;
+	}
 }
 
 inline Image::Image (const double x, const double y, const double width, const double height,

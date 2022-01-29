@@ -18,8 +18,8 @@
 #ifndef BSTYLES_COLORMAP_HPP_
 #define BSTYLES_COLORMAP_HPP_
 
+#include <initializer_list>
 #include <map>
-#include <vector>
 #include "Color.hpp"
 #include "../Status.hpp"
 
@@ -44,14 +44,19 @@ public:
 
     /**
      *  @brief  Creates a %ColorMap from a std::vector of BStyles::Color.
-     *  @param colors  std::vector of BStyles::Color containing a continuous
-     *  dataset of colors starting with BStyles::NORMAL.
+     *  @param colors  Initializer list of BStyles::Color containing a 
+     *  continuous dataset of colors starting with BStyles::NORMAL.
      *
      *  Data from the @a colors vector are copy construted.
      */
-    ColorMap (const std::vector<Color>& colors)
+    ColorMap (const std::initializer_list<const Color>& colors)
     {
-        for (size_t i = 0; i < colors.size(); ++i) operator[](static_cast<Status>(i)) = colors[i];
+        size_t i = 0;
+        for (const Color& c : colors)
+        {
+            operator[](static_cast<Status>(i)) = c;
+            ++i;
+        }
     }
 };
 

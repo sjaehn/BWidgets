@@ -79,14 +79,14 @@ public:
 	 *  @param y  %Widget Y origin coordinate.
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
-	 *  @param surfaces  Vector of pointers to Cairo surfaces.
+	 *  @param surfaces  Initializer list of pointers to Cairo surfaces.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	ImageButton	(const double x, const double y, const double width, const double height, 
-					 const std::vector<cairo_surface_t*>& surfaces, bool toggleable = false, bool clicked = false,
+					 const std::initializer_list<cairo_surface_t*>& surfaces, bool toggleable = false, bool clicked = false,
 					 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
@@ -111,14 +111,14 @@ public:
 	 *  @param y  %Widget Y origin coordinate.
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
-	 *  @param filenames  Vector of filenames. Supported file types are: PNG.
+	 *  @param filenames  Initializer list of filenames. Supported file types are: PNG.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	ImageButton	(const double x, const double y, const double width, const double height, 
-					 const std::vector<std::string>& filenames, bool toggleable = false, bool clicked = false,
+					 const std::initializer_list<std::string>& filenames, bool toggleable = false, bool clicked = false,
 					 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
@@ -218,7 +218,7 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 }
 
 inline ImageButton::ImageButton	(const double x, const double y, const double width, const double height, 
-			 	 		 	 const std::vector<cairo_surface_t*>& surfaces, bool toggleable, bool clicked, uint32_t urid, std::string title) :
+			 	 		 	 const std::initializer_list<cairo_surface_t*>& surfaces, bool toggleable, bool clicked, uint32_t urid, std::string title) :
 	Button (x, y, width, height, toggleable, clicked, urid, title),
 	image (0, 0, width, height, surfaces, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
@@ -238,7 +238,7 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 }
 
 inline ImageButton::ImageButton	(const double x, const double y, const double width, const double height, 
-			 	 		 	 const std::vector<std::string>& filenames, bool toggleable, bool clicked, uint32_t urid, std::string title) :
+			 	 		 	 const std::initializer_list<std::string>& filenames, bool toggleable, bool clicked, uint32_t urid, std::string title) :
 	Button (x, y, width, height, toggleable, clicked, urid, title),
 	image (0, 0, width, height, filenames, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {

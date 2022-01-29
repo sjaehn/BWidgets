@@ -19,6 +19,7 @@
 #define BWIDGETS_TEXT_HPP_
 
 #include "Label.hpp"
+#include <vector>
 
 namespace BWidgets
 {
