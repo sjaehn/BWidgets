@@ -112,7 +112,11 @@ inline void Frame::onPointerDragged (BEvents::Event* event)
     Draggable::onPointerDragged (event);
 
     BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
-    if (pev) moveTo (getPosition () + pev->getDelta ());
+    if (pev) 
+	{
+		raiseToFront();
+		moveTo (getPosition () + pev->getDelta ());
+	}
 }
 
 }
