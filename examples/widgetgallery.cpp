@@ -77,6 +77,8 @@ int main ()
     frame.setBackground(darkgreyFill);
     frame.setBorder (lightgreyBorder1pt);
     Label frameDragLabel ("Drag me");
+    frameDragLabel.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
+    frameDragLabel.setEventPassable(BEvents::Event::POINTER_DRAG_EVENT, true);
     frame.add (&frameDragLabel);
     frameDragLabel.moveTo(frameDragLabel.center(), frameDragLabel.middle());
     Label frameLabel (110, 80, 80, 20, "Frame");
@@ -125,8 +127,8 @@ int main ()
     window.add (&symbolLabel);
 
     // Image
-    Image image (710, 10, 80, 60, "example-romedalen.png");
-    Label imageLabel (710, 80, 80, 20, "Image");
+    Image image (710, 130, 80, 60, "example-romedalen.png");
+    Label imageLabel (710, 200, 80, 20, "Image");
     imageLabel.setFont (labelFont);
     window.add (&image);
     window.add (&imageLabel);

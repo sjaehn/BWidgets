@@ -202,7 +202,8 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	Button (x, y, width, height, toggleable, clicked, urid, title),
 	image (0, 0, width, height, surface, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
-	
+	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
+	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
@@ -212,7 +213,8 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	Button (x, y, width, height, toggleable, clicked, urid, title),
 	image (0, 0, width, height, filename, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
-	
+	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
+	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
@@ -222,7 +224,8 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	Button (x, y, width, height, toggleable, clicked, urid, title),
 	image (0, 0, width, height, surfaces, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
-	
+	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
+	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
@@ -232,7 +235,8 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	Button (x, y, width, height, toggleable, clicked, urid, title),
 	image (0, 0, width, height, surfaces, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
-	
+	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
+	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
@@ -242,7 +246,8 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	Button (x, y, width, height, toggleable, clicked, urid, title),
 	image (0, 0, width, height, filenames, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
-	
+	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
+	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
@@ -252,7 +257,8 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	Button (x, y, width, height, toggleable, clicked, urid, title),
 	image (0, 0, width, height, filenames, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
-	
+	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
+	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }

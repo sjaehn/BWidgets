@@ -24,6 +24,7 @@
 #include "Supports/Linkable.hpp"
 #include "Supports/Visualizable.hpp"
 #include "Supports/EventMergeable.hpp"
+#include "Supports/EventPassable.hpp"
 
 #include "../BUtilities/Any.hpp"
 
@@ -54,8 +55,9 @@ class Window; // Forward declaration
  *  And it can take up other widgets as childs. The last added child is 
  *  displayed on the top.
  *
- *  Widgets also support EventMergeable. Thus, the main Window event handler
- *  may merge events of the same type.
+ *  Widgets also support EventMergeable and EventPassable. Thus, the main 
+ *  Window event handler may merge events of the same type. And may pass events
+ *  to the next (subjacent) widget if not actively supported by the widget.
  *
  *  A %Widget has got:
  *  * an @a URID to identify the %Widget,
@@ -68,7 +70,7 @@ class Window; // Forward declaration
  *  Note: The class %Widget is devoid of any copy constructor or assignment
  *  operator. 
  */
-class Widget : public Linkable, public Visualizable, public EventMergeable
+class Widget : public Linkable, public Visualizable, public EventMergeable, public EventPassable
 {
 
 protected:
@@ -621,9 +623,13 @@ protected:
 	 *  @brief  Gets the top %Widget at a given position.
 	 *  @param position  Position. 
 	 *  @param func  Optional, filter function.
+	 *  @param passfunc  Optional, function to check whether to check the next
+	 *  lower level result if @a func returned false.
 	 *  @return  Pointer to the %Widget. 
 	 */
-	Widget* getWidgetAt (const BUtilities::Point& position, std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
+	Widget* getWidgetAt	(const BUtilities::Point& position, 
+						 std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;},
+						 std::function<bool (Widget* widget)> passfunc = [] (Widget* widget) {return true;});
 
 	/**
 	 *  @brief  Draws %Widget surface and children surfaces to the provided
@@ -661,8 +667,11 @@ protected:
 
 private:
 	void display (cairo_surface_t* surface, const BUtilities::RectArea& outerArea, const BUtilities::RectArea& area);
-	Widget* getWidgetAt (const BUtilities::Point& abspos, const BUtilities::RectArea& outerArea,
-			     const BUtilities::RectArea& area, std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;});
+	Widget* getWidgetAt	(const BUtilities::Point& abspos, 
+						 const BUtilities::RectArea& outerArea,
+			   			 const BUtilities::RectArea& area, 
+						 std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;},
+						 std::function<bool (Widget* widget)> passfunc = [] (Widget* widget) {return true;});
 };
 
 }

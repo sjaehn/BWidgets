@@ -485,8 +485,10 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 		case PUGL_BUTTON_PRESS:
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->button.x, puglEvent->button.y);
-			Widget* widget = w->getWidgetAt (position, [] (Widget* w) {return w->isVisible () && (w->is<Clickable>() || w->is<Draggable>());});
-			if (widget)
+			Widget* widget = w->getWidgetAt	(position, 
+											 [] (Widget* w) {return w->isVisible () && (w->is<Clickable>() || w->is<Draggable>());},
+											 [] (Widget* w) {return w->isEventPassable(BEvents::Event::BUTTON_PRESS_EVENT);});
+			if (widget && (widget != w))
 			{
 				w->addEventToQueue
 				(
@@ -535,7 +537,9 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 
 					// Also emit BUTTON_CLICK_EVENT ?
-					Widget* widget2 = w->getWidgetAt (position, [] (Widget* w) {return w->isVisible () && (w->is<Clickable>() || w->is<Draggable>());});
+					Widget* widget2 = w->getWidgetAt	(position, 
+														 [] (Widget* w) {return w->isVisible () && (w->is<Clickable>() || w->is<Draggable>());},
+														 [] (Widget* w) {return w->isEventPassable (BEvents::Event::BUTTON_CLICK_EVENT);});
 					if (widget == widget2)
 					{
 						w->addEventToQueue
@@ -599,8 +603,10 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 			// No button associated with a widget? Only POINTER_MOTION_EVENT
 			if (button == BDevices::MouseDevice::NO_BUTTON)
 			{
-				Widget* widget = w->getWidgetAt (position, [] (Widget* widget) {return widget->isVisible() && widget->is<Pointable>();});
-				if (widget)
+				Widget* widget = w->getWidgetAt	(position, 
+												 [] (Widget* widget) {return widget->isVisible() && widget->is<Pointable>();},
+												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::POINTER_MOTION_EVENT);});
+				if (widget && (widget != w))
 				{
 					w->addEventToQueue
 					(
@@ -622,8 +628,10 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 		{
 			BUtilities::Point position = BUtilities::Point (puglEvent->scroll.x, puglEvent->scroll.y);
 			BUtilities::Point scroll = BUtilities::Point (puglEvent->scroll.dx, puglEvent->scroll.dy);
-			Widget* widget = w->getWidgetAt (position, [] (Widget* widget) {return widget->isVisible() && widget->is<Scrollable>();});
-			if (widget)
+			Widget* widget = w->getWidgetAt	(position, 
+											 [] (Widget* widget) {return widget->isVisible() && widget->is<Scrollable>();},
+											 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::WHEEL_SCROLL_EVENT);});
+			if (widget && (widget != w))
 			{
 				w->addEventToQueue
 				(

@@ -22,8 +22,9 @@ Support
  ├── Closable           < Callback
  ╰── Linkable
  
-
-EventMergeable
+()
+ ├── EventMergeable
+ ╰── EventPassable
 ```
 
 ## Support
@@ -137,3 +138,14 @@ objects.
 ## EventMergeable
 
 Event merging support.
+
+
+## EventPassable
+
+By default, host events (e. g., PointerEvent, WheelEvent, FocusEvent) are
+associated with the most frontward visible widget for the respective
+position. The event is then emitted by this widget if this widget supports
+the respective event. Otherwise it blocks this event.
+
+EventPassable supports passing events to subjacent widgets even if (or
+if not) the widget doesn't support the respective event type.

@@ -135,6 +135,8 @@ inline TextButton::TextButton	(const double x, const double y, const double widt
 	font.align = BStyles::Font::TextAlign::TEXT_ALIGN_CENTER;
 	font.valign = BStyles::Font::TextVAlign::TEXT_VALIGN_MIDDLE;
 	label.setFont (font);
+	label.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
+	label.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
 	add (&label);
 }
 

@@ -534,14 +534,19 @@ void Widget::emitExposeEvent (const BUtilities::RectArea& area)
 	}
 }
 
-Widget* Widget::getWidgetAt (const BUtilities::Point& position, std::function<bool (Widget* widget)> func)
+Widget* Widget::getWidgetAt	(const BUtilities::Point& position, 
+							 std::function<bool (Widget* widget)> func,
+							 std::function<bool (Widget* widget)> passfunc)
 {
 	BUtilities::RectArea absarea = getAbsoluteArea ();
-	return getWidgetAt (getAbsolutePosition () + position, absarea, absarea, func);
+	return getWidgetAt (getAbsolutePosition () + position, absarea, absarea, func, passfunc);
 }
 
-Widget* Widget::getWidgetAt (const BUtilities::Point& abspos, const BUtilities::RectArea& outerArea,
-			     const BUtilities::RectArea& area, std::function<bool (Widget* widget)> func)
+Widget* Widget::getWidgetAt	(const BUtilities::Point& abspos, 
+							 const BUtilities::RectArea& outerArea,
+			    			 const BUtilities::RectArea& area, 
+							 std::function<bool (Widget* widget)> func,
+							 std::function<bool (Widget* widget)> passfunc)
 {
 	BUtilities::RectArea a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
 	BUtilities::RectArea thisArea = getArea();
@@ -549,14 +554,26 @@ Widget* Widget::getWidgetAt (const BUtilities::Point& abspos, const BUtilities::
 	thisArea.intersect (a);
 	if (getMainWindow())
 	{
-		Widget* finalw = (((thisArea != BUtilities::RectArea ()) && thisArea.contains (abspos) && func (this)) ? this : nullptr);
+		Widget* finalw =
+		(
+			((thisArea != BUtilities::RectArea ()) && thisArea.contains (abspos)) ? 
+			(
+				func (this) ?
+				this : 
+				(
+					passfunc (this) ?
+					nullptr :
+					getMainWindow() // "Sink" to block passing events
+				)
+			) :
+			nullptr);
 
 		for (Linkable* l : children_)
 		{
 			Widget* w = dynamic_cast<Widget*> (l);
 			if (w)
 			{
-				Widget* nextw = w->getWidgetAt (abspos, outerArea, thisArea, func);
+				Widget* nextw = w->getWidgetAt (abspos, outerArea, thisArea, func, passfunc);
 				if (nextw) finalw = nextw;
 			}
 		}

@@ -219,6 +219,7 @@ All widgets support the features:
 * Linkable (may got linked to parent and child widgets)
 * Visualizable (may draw to a RGBA surface and may become visible)
 * EventMergeable (may let the main `Window` merge its events)
+* EventPassable (may pass events to the subjacent widget)
 
 In addtion, widgets have got:
  * an *URID* to identify the widget,

@@ -59,16 +59,6 @@ public:
         NO_EVENT
     };
 
-    /**
-     *  @brief  Enumeration of hints for a widget how to deal with an %Event.
-     */
-    enum EventOpacity
-    {
-        EVENT_PASS,
-        EVENT_HANDLE,
-        EVENT_BLOCK
-    };
-
 protected:
 	BWidgets::Widget* eventWidget_;
 	EventType eventType_;

@@ -133,6 +133,8 @@ inline TextBox::TextBox	(const double x, const double y, const double width, con
 	Box (x, y, width, height, buttonlabels, urid, title),
 	text (txt, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/text"))
 {
+	text.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
+    text.setEventPassable(BEvents::Event::POINTER_DRAG_EVENT, true);
 	add (&text);
 }
 
