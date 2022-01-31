@@ -48,6 +48,7 @@
 #include "../BWidgets/ValueVMeter.hpp"
 #include "../BWidgets/Box.hpp"
 #include "../BWidgets/TextBox.hpp"
+#include "../BWidgets/MessageBox.hpp"
 #include <cairo/cairo.h>
 #include <iostream>
 #include <vector>
@@ -332,6 +333,14 @@ int main ()
     textBoxLabel.setFont (labelFont);
     window.add (&textBox);
     window.add (&textBoxLabel);
+
+    // MessageBox
+    MessageBox messageBox (410, 130, 280, 0, Symbol::INFO_SYMBOL, "Hello world is easy:", "Window window;\nLabel label (\"Hello World\");\nwindow.add (&label);\nwindow.run ();", {"Close"});
+    messageBox.resize();
+    Label messageBoxLabel (410, 320, 280, 20, "MessageBox");
+    messageBoxLabel.setFont (labelFont);
+    window.add (&messageBox);
+    window.add (&messageBoxLabel);
 
     window.run();
 }

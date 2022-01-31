@@ -179,8 +179,7 @@ inline void Text::copy (const Text* that)
 
 inline void Text::resize () 
 {
-	const double ySize = getTextBlockHeight (getTextBlock()) + 2 * getYOffset();
-	resize (getExtends().x, ySize);
+	resize (getExtends().x, getTextBlockHeight (getTextBlock()) + 2.0 * getYOffset());
 }
 
 inline void Text::resize (const double width, const double height) 

@@ -1,5 +1,5 @@
 /* MessageBox.hpp
- * Copyright (C) 2018  Sven Jähnichen
+ * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,180 +18,236 @@
 #ifndef BWIDGETS_MESSAGEBOX_HPP_
 #define BWIDGETS_MESSAGEBOX_HPP_
 
-#include "ValueWidget.hpp"
-#include "Text.hpp"
-#include "TextButton.hpp"
+#include "TextBox.hpp"
+#include "Symbol.hpp"
+#include <cairo/cairo.h>
 
-#define BWIDGETS_DEFAULT_MESSAGEBOX_TITLE_NAME "/title"
-#define BWIDGETS_DEFAULT_MESSAGEBOX_TEXT_NAME "/text"
-//TODO #define BWIDGETS_DEFAULT_MESSAGEBOX_ICON_NAME "/icon"
-#define BWIDGETS_DEFAULT_MESSAGEBOX_BUTTON_NAME "/button"
+#define BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH (BWIDGETS_DEFAULT_TEXTBOX_WIDTH + 100.0)
+#define BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT (BWIDGETS_DEFAULT_TEXTBOX_HEIGHT + 40.0)
 
 namespace BWidgets
 {
 
 /**
- * Class BWidgets::MessageBox
+ *  @brief  Composite widget with a symbol, a headline, a text and buttons.
  *
- * Message box. It is a composite value widget consisting of an optional title,
- * a Text, (TODO an optional icon) and an OK button. The widget is dragable.
- * The value of this widget is 0.0 until one of the buttons is pressed. At this
- * moment, the value reflects the number of the button starting with 1.0. Also
- * a value changed event is emitted and the message box is closed (released) on
- * button pressed.
+ *  %MessageBox is a composite Widget based on TextBox and additionally 
+ *  contains a symbol and a headline.
  */
-class MessageBox : public ValueWidget
+class MessageBox : public TextBox
 {
 public:
+
+	Symbol symbol;
+	Text headline;
+
+	/**
+	 *  @brief  Constructs an empty %MessageBox object.
+	 */
 	MessageBox ();
-	MessageBox (const double x, const double y, const double width, const double height,
-				const std::string& text, std::vector<std::string> buttons = {});
-	MessageBox (const double x, const double y, const double width, const double height,
-				const std::string& title, const std::string& text, std::vector<std::string> buttons = {});
-	MessageBox (const double x, const double y, const double width, const double height,
-				const std::string& name, const std::string& title, const std::string& text, std::vector<std::string> buttonLabels = {});
 
 	/**
-	 * Creates a new (orphan) message box and copies the properties from a
-	 * source message box widget.
-	 * @param that Source message box
+	 *  @brief  Construct a %MessageBox object with default size.
+	 *  @param symbol  Symbol index.
+	 *  @param headline  Headline sting.
+	 *  @param text  Optional, text string.
+	 *  @param buttonlabels  Optional, initializer list with butten label 
+	 *  strings.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %Widget title (default = "").
+	 *
+	 *  The box only hosts an OK button if no button labels are provided.
 	 */
-	MessageBox (const MessageBox& that);
-
-	~MessageBox ();
+	MessageBox	(const Symbol::SymbolType symbol, const std::string& headline, std::string text = "", 
+				 std::initializer_list<std::string> buttonlabels = {}, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 * Assignment. Copies the properties from a source message box widget
-	 *  and keeps its name and its position within the widget tree. Emits a
-	 * BEvents::ExposeEvent if the text widget is visible.
-	 * @param that Source text widget
+	 *  @brief  Construct a %MessageBox object.
+	 *  @param x  %Widget X origin coordinate.
+	 *  @param y  %Widget Y origin coordinate.
+	 *  @param width  %Widget width.
+	 *  @param height  %Widget height.
+	 *  @param symbol  Symbol index.
+	 *  @param headline  Headline sting.
+	 *  @param text  Optional, text string.
+	 *  @param buttonlabels  Optional, initializer list with button label 
+	 *  strings.
+	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %Widget title (default = "").
+	 *
+	 *  The box only hosts an OK button if no button labels are provided.
 	 */
-	MessageBox& operator= (const MessageBox& that);
+	MessageBox	(const double x, const double y, const double width, const double height,
+				 const Symbol::SymbolType symbol, const std::string& headline, std::string text = "", 
+				 std::initializer_list<std::string> buttons = {}, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 * Pattern cloning. Creates a new instance of the widget and copies all
-	 * its properties.
+	 *  @brief  Creates a clone of the %MessageBox. 
+	 *  @return  Pointer to the new %MessageBox.
+	 *
+	 *  Creates a clone of this %MessageBox by copying all properties. But NOT its
+	 *  linkage.
+	 *
+	 *  Allocated heap memory needs to be freed using @c delete if the clone
+	 *  in not needed anymore!
 	 */
-	virtual Widget* clone () const override;
-
-	//TODO virtual void setWidth (const double width) override;
-
-	//TODO virtual void setHeight (const double height) override;
+	virtual Widget* clone () const override; 
 
 	/**
-	 * Sets the title.
-	 * @param title Title
+	 *  @brief  Copies from another %MessageBox. 
+	 *  @param that  Other %MessageBox.
+	 *
+	 *  Copies all properties from another %MessageBox. But NOT its linkage.
 	 */
-	void setTitle (const std::string& title);
+	void copy (const MessageBox* that);
 
 	/**
-	 * Gets the title
-	 * @return Title
+     *  @brief  Optimizes the %Box widget extends.
 	 */
-	std::string getTitle () const;
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the object.
+	 *  @param width  New object width.
+	 *  @param height  New object height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the object.
+	 *  @param extends  New object extends.
+	 */
+	virtual void resize (const BUtilities::Point extends) override;
 
 	/**
-	 * Sets the output text.
-	 * @param text Output text
-	 */
-	void setText (const std::string& text);
-
-	/**
-	 * Gets the output text
-	 * @return Output text
-	 */
-	std::string getText () const;
-
-	/**
-	 * Creates a button and adds it to the message box from left to right.
-	 * @param label Label text string of the new button
-	 */
-	void addButton (const std::string& label);
-
-	/**
-	 * Creates and adds a series of buttons to the message box from left to
-	 * right.
-	 * @param labels Vector of label text strings of the new buttons
-	 */
-	void addButtons (std::vector<std::string> labels);
-
-	/**
-	 * Removes and deletes a button. Exception: the internal OK button can
-	 * only be removed. Removing may cause renumbering of the buttons.
-	 * @param label Label text of the button to be removed. If there is more
-	 * 				than one button with this label text, only the first one
-	 * 				will be removed
-	 */
-	void removeButton (const std::string& label);
-
-	/**
-	 * Gets the number of the button as in the order of addition (= order from
-	 * left to right. This is also the value that is be emitted if this button
-	 * is pressed.
-	 * @param label	Label text string of the button
-	 * @return		Number of the first button with the same label text string
-	 * 				as @param label. Starting from 1.
-	 * 				0 is returned, if there is no button with this label text.
-	 */
-	double getButtonValue  (const std::string& label) const;
-
-	std::string getButtonText (const double value) const;
-
-	//TODO virtual void setBorder (const BStyles::Border& border) override;
-
-	/**
-	 * Sets the BColors::ColorSet for this widget
-	 * @param colors Color set.
-	 */
-	void setTextColors (const BColors::ColorSet& colorset);
-
-	/**
-	 * Gets (a pointer to) the BColors::ColorSet of this widget.
-	 * @return Pointer to the color set.
-	 */
-	BColors::ColorSet* getTextColors ();
-
-	/**
-	 * Sets the font for the text output.
-	 * @param font Font
-	 */
-	void setFont (const BStyles::Font& font);
-
-	/**
-	 * Gets (a pointer to) the font for the text output.
-	 * @return Pointer to font
-	 */
-	BStyles::Font* getFont ();
-
-	/**
-	 * Calls a redraw of the widget and calls postRedisplay () if the the
-	 * Widget is visible.
-	 * This method should be called if the widgets properties are indirectly
-	 * changed.
-	 */
-	virtual void update () override;
-
-	/**
-	 * Scans theme for widget properties and applies these properties.
-	 * @param theme Theme to be scanned.
-	 * 				Styles used are:
-	 * 				"textcolors" for BColors::ColorSet
-	 * 				"font" for BStyles::Font
-	 * @param name Name of the BStyles::StyleSet within the theme to be
-	 * 		  	   applied.
-	 */
-	virtual void applyTheme (BStyles::Theme& theme) override;
-	virtual void applyTheme (BStyles::Theme& theme, const std::string& name) override;
-
-protected:
-	static void redirectPostValueChanged (BEvents::Event* event);
-
-	Text titleBox;
-	Text textBox;
-	// TODO Icon;
-	TextButton okButton;
-	std::vector<TextButton*> buttons;
+     *  @brief  Method to be called following an object state change.
+     */
+    virtual void update () override;
 };
+
+inline MessageBox::MessageBox () : MessageBox (0.0, 0.0, 0.0, 0.0, Symbol::NO_SYMBOL, "", "", {}, URID_UNKNOWN_URID, "") 
+{
+
+}
+
+inline MessageBox::MessageBox	(const Symbol::SymbolType symbol, const std::string& headline, std::string text, 
+								 std::initializer_list<std::string> buttonlabels, uint32_t urid, std::string title) :
+	MessageBox (0, 0, BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH, BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT, symbol, headline, text, buttonlabels, urid, title) 
+{
+
+}
+
+inline MessageBox::MessageBox	(const double x, const double y, const double width, const double height,
+								 const Symbol::SymbolType symbol, const std::string& headline, std::string text, 
+								 std::initializer_list<std::string> buttonlabels, uint32_t urid, std::string title) :
+	TextBox (x, y, width, height, text, buttonlabels, urid, title),
+	symbol (symbol, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/symbol")),
+	headline (headline, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/title"))
+{
+	BStyles::Font hFont = this->headline.getFont();
+	hFont.weight = CAIRO_FONT_WEIGHT_BOLD;
+	this->headline.setFont (hFont);
+	add (&this->symbol);
+	add (&this->headline);
+}
+
+inline Widget* MessageBox::clone () const 
+{
+	Widget* f = new MessageBox ();
+	f->copy (this);
+	return f;
+}
+
+inline void MessageBox::copy (const MessageBox* that)
+{
+	symbol.copy (&that->symbol);
+	headline.copy (&that->headline);
+	TextBox::copy (that);
+}
+
+inline void MessageBox::resize ()
+{
+	// Symbol
+	if (symbol.getSymbol() == Symbol::NO_SYMBOL)
+	{
+		symbol.moveTo (getXOffset(), getYOffset());
+		symbol.resize (0, 0);
+	}
+	else 
+	{
+		symbol.moveTo (getXOffset() + BWIDGETS_DEFAULT_MENU_PADDING, getYOffset() + BWIDGETS_DEFAULT_MENU_PADDING);
+		symbol.resize (4.0 * text.getFont().size, 4.0 * text.getFont().size);
+	}
+
+	// Headline
+	if (headline.getText() == "")
+	{
+		headline.moveTo (symbol.getPosition().x + symbol.getWidth() + BWIDGETS_DEFAULT_MENU_PADDING, getYOffset());
+		headline.resize (0, 0);
+	}
+	else 
+	{
+		headline.moveTo (symbol.getPosition().x + symbol.getWidth() + BWIDGETS_DEFAULT_MENU_PADDING, getYOffset() + BWIDGETS_DEFAULT_MENU_PADDING);
+		headline.resize	(getWidth() - symbol.getPosition().x - symbol.getWidth() - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING - getXOffset(), 
+						 getEffectiveHeight() - 3.0 * BWIDGETS_DEFAULT_MENU_PADDING - BWIDGETS_DEFAULT_BUTTON_HEIGHT);	// Set width
+		headline.resize ();		// Optimize Height
+	}
+
+	// Text
+	text.moveTo	(headline.getPosition().x, headline.getPosition().y + headline.getHeight() + BWIDGETS_DEFAULT_MENU_PADDING);
+	text.resize	(getWidth() - symbol.getPosition().x - symbol.getWidth() - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING - getXOffset(), 
+				 getHeight() - headline.getPosition().y - headline.getHeight() - 4.0 * BWIDGETS_DEFAULT_MENU_PADDING - getYOffset()); // Set width
+	text.resize (); // Optimize Height
+
+	Box::resize();
+}
+
+inline void MessageBox::resize (const double width, const double height)
+{
+	resize (BUtilities::Point (width, height));
+}
+
+inline void MessageBox::resize (const BUtilities::Point extends)
+{
+	Box::resize (extends);
+}
+
+inline void MessageBox::update ()
+{
+	// Symbol
+	if (symbol.getSymbol() == Symbol::NO_SYMBOL)
+	{
+		symbol.moveTo (getXOffset(), getYOffset());
+		symbol.resize (0, 0);
+	}
+	else 
+	{
+		symbol.moveTo (getXOffset() + BWIDGETS_DEFAULT_MENU_PADDING, getYOffset() + BWIDGETS_DEFAULT_MENU_PADDING);
+		symbol.resize (4.0 * text.getFont().size, 4.0 * text.getFont().size);
+	}
+
+	// Headline
+	if (headline.getText() == "")
+	{
+		headline.moveTo (symbol.getPosition().x + symbol.getWidth() + BWIDGETS_DEFAULT_MENU_PADDING, getYOffset());
+		headline.resize (0, 0);
+	}
+	else 
+	{
+		headline.moveTo (symbol.getPosition().x + symbol.getWidth() + BWIDGETS_DEFAULT_MENU_PADDING, getYOffset() + BWIDGETS_DEFAULT_MENU_PADDING);
+		headline.resize	(getWidth() - symbol.getPosition().x - symbol.getWidth() - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING - getXOffset(), 
+						 getEffectiveHeight() - 3.0 * BWIDGETS_DEFAULT_MENU_PADDING - BWIDGETS_DEFAULT_BUTTON_HEIGHT);	// Set width
+		headline.resize ();		// Optimize Height
+	}
+
+	// Text
+	text.moveTo	(headline.getPosition().x, headline.getPosition().y + headline.getHeight() + BWIDGETS_DEFAULT_MENU_PADDING);
+	text.resize	(getWidth() - symbol.getPosition().x - symbol.getWidth() - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING - getXOffset(), 
+				 getHeight() - headline.getPosition().y - headline.getHeight() - 4.0 * BWIDGETS_DEFAULT_MENU_PADDING - getYOffset());
+
+	// Buttons
+	Box::update ();
+}
 
 }
 

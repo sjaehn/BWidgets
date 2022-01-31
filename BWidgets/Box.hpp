@@ -87,7 +87,7 @@ public:
 
 	/**
 	 *  @brief  Creates a clone of the %Box. 
-	 *  @return  Pointer to the new %kBox.
+	 *  @return  Pointer to the new %Box.
 	 *
 	 *  Creates a clone of this %Box by copying all properties. But NOT its
 	 *  linkage.

@@ -512,6 +512,7 @@ It supports user interaction via `Clickable`, `Draggable`, and
 `Toggleable`. Its appearance is defined by the BgColors parameter 
 (inactive keys) and by the FgColors parameter (active keys).
 
+
 ### Box
 
 ![box](../suppl/Box.png)
@@ -522,12 +523,21 @@ and changes upon pressing one of the containing text buttons. On pressing
 one of the buttons, the widget value is set to the button index (starting)
 with 1 and a `CloseRequestEvent` is emitted.
 
+
 ### TextBox
 
 ![textbox](../suppl/TextBox.png)
 
 `TextBox` is a composite Widget based on `Box` and additionally contains a
 `Text`.
+
+
+### MessageBox
+
+![messagebox](../suppl/MessageBox.png)
+
+`MessageBox` is a composite Widget based on `TextBox` and additionally 
+contains a symbol and a headline.
 
 
 ## Attributes and decorations

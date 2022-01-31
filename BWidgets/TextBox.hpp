@@ -75,7 +75,7 @@ public:
 
 	/**
 	 *  @brief  Creates a clone of the %TextBox. 
-	 *  @return  Pointer to the new %kTextBox.
+	 *  @return  Pointer to the new %TextBox.
 	 *
 	 *  Creates a clone of this %TextBox by copying all properties. But NOT its
 	 *  linkage.
@@ -115,10 +115,6 @@ public:
      *  @brief  Method to be called following an object state change.
      */
     virtual void update () override;
-
-
-protected:
-	static void buttonClickCallback (BEvents::Event* event);
 };
 
 inline TextBox::TextBox () : TextBox (0.0, 0.0, 0.0, 0.0, "", {}, URID_UNKNOWN_URID, "") 
@@ -135,7 +131,7 @@ inline TextBox::TextBox (const std::string& txt, std::initializer_list<std::stri
 inline TextBox::TextBox	(const double x, const double y, const double width, const double height,
 				 const std::string& txt, std::initializer_list<std::string> buttonlabels, uint32_t urid, std::string title) :
 	Box (x, y, width, height, buttonlabels, urid, title),
-	text (BWIDGETS_DEFAULT_MENU_PADDING, BWIDGETS_DEFAULT_MENU_PADDING, width - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING, height - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING, txt)
+	text (txt, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/text"))
 {
 	add (&text);
 }
