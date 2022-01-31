@@ -19,6 +19,8 @@
 #define BWIDGETS_SYMBOL_HPP_
 
 #include "Widget.hpp"
+#include <cairo/cairo.h>
+#include <cmath>
 
 #define BWIDGETS_DEFAULT_SYMBOL_SIZE 12
 
@@ -48,7 +50,11 @@ public:
         RIGHT_SYMBOL,
         UP_SYMBOL, 
         DOWN_SYMBOL,
-        PLAY_SYMBOL
+        PLAY_SYMBOL,
+		QUESTION_SYMBOL,
+		INFO_SYMBOL,
+		WARN_SYMBOL,
+		ERROR_SYMBOL
 	};
 
 protected:
@@ -211,60 +217,123 @@ inline void Symbol::draw (const BUtilities::RectArea& area)
 		const double w = getEffectiveWidth ();
 		const double h = getEffectiveHeight ();
 		const double ext = (w < h ? w : h);
+		const double xc = x0 + 0.5 * w;
+		const double yc = y0 + 0.5 * h;
 
 		cairo_set_source_rgba (cr, CAIRO_RGBA (getTxColors()[getStatus()]));
 
 		switch (symbol_)
         {
-                case ADD_SYMBOL:        cairo_move_to (cr, x0 + w / 2 - ext / 2, y0 + h / 2);
-                                        cairo_line_to (cr, x0 + w / 2 + ext / 2, y0 + h / 2);
-                                        cairo_move_to (cr, x0 + w / 2, y0 + h / 2 - ext / 2);
-                                        cairo_line_to (cr, x0 + w / 2, y0 + h / 2 + ext / 2);
+                case ADD_SYMBOL:        cairo_move_to (cr, xc - ext / 2, yc);
+                                        cairo_line_to (cr, xc + ext / 2, yc);
+                                        cairo_move_to (cr, xc, yc - ext / 2);
+                                        cairo_line_to (cr, xc, yc + ext / 2);
                                         cairo_set_line_width (cr, 2.0);
                                         cairo_stroke (cr);
                                         break;
 
-                case MINUS_SYMBOL:      cairo_move_to (cr, x0 + w / 2 - ext / 2, y0 + h / 2);
-                                        cairo_line_to (cr, x0 + w / 2 + ext / 2, y0 + h / 2);
+                case MINUS_SYMBOL:      cairo_move_to (cr, xc - ext / 2, yc);
+                                        cairo_line_to (cr, xc + ext / 2, yc);
                                         cairo_set_line_width (cr, 2.0);
                                         cairo_stroke (cr);
                                         break;
 
-                case LEFT_SYMBOL:       cairo_move_to (cr, x0 + w / 2 + 0.25 * ext, y0 + h / 2 - ext / 2);
-                                        cairo_line_to (cr, x0 + w / 2 - 0.25 * ext, y0 + h / 2);
-                                        cairo_line_to (cr, x0 + w / 2 + 0.25 * ext, y0 + h / 2 + ext / 2);
+                case LEFT_SYMBOL:       cairo_move_to (cr, xc + 0.25 * ext, yc - ext / 2);
+                                        cairo_line_to (cr, xc - 0.25 * ext, yc);
+                                        cairo_line_to (cr, xc + 0.25 * ext, yc + ext / 2);
                                         cairo_set_line_width (cr, 2.0);
                                         cairo_stroke (cr);
                                         break;
 
-                case RIGHT_SYMBOL:      cairo_move_to (cr, x0 + w / 2 - 0.25 * ext, y0 + h / 2 - ext / 2);
-                                        cairo_line_to (cr, x0 + w / 2 + 0.25 * ext, y0 + h / 2);
-                                        cairo_line_to (cr, x0 + w / 2 - 0.25 * ext, y0 + h / 2 + ext / 2);
+                case RIGHT_SYMBOL:      cairo_move_to (cr, xc - 0.25 * ext, yc - ext / 2);
+                                        cairo_line_to (cr, xc + 0.25 * ext, yc);
+                                        cairo_line_to (cr, xc - 0.25 * ext, yc + ext / 2);
                                         cairo_set_line_width (cr, 2.0);
                                         cairo_stroke (cr);
                                         break;
 
-                case UP_SYMBOL:         cairo_move_to (cr, x0 + w / 2 - 0.5 * ext, y0 + h / 2 + 0.25 * ext);
-                                        cairo_line_to (cr, x0 + w / 2, y0 + h / 2 - 0.25 * ext);
-                                        cairo_line_to (cr, x0 + w / 2 + 0.5 * ext, y0 + h / 2 + 0.25 * ext);
+                case UP_SYMBOL:         cairo_move_to (cr, xc - 0.5 * ext, yc + 0.25 * ext);
+                                        cairo_line_to (cr, xc, yc - 0.25 * ext);
+                                        cairo_line_to (cr, xc + 0.5 * ext, yc + 0.25 * ext);
                                         cairo_set_line_width (cr, 2.0);
                                         cairo_stroke (cr);
                                         break;
 
-                case DOWN_SYMBOL:       cairo_move_to (cr, x0 + w / 2 - 0.5 * ext, y0 + h / 2 - 0.25 * ext);
-                                        cairo_line_to (cr, x0 + w / 2, y0 + h / 2 + 0.25 * ext);
-                                        cairo_line_to (cr, x0 + w / 2 + 0.5 * ext, y0 + h / 2 - 0.25 * ext);
+                case DOWN_SYMBOL:       cairo_move_to (cr, xc - 0.5 * ext, yc - 0.25 * ext);
+                                        cairo_line_to (cr, xc, yc + 0.25 * ext);
+                                        cairo_line_to (cr, xc + 0.5 * ext, yc - 0.25 * ext);
                                         cairo_set_line_width (cr, 2.0);
                                         cairo_stroke (cr);
                                         break;
 
-                case PLAY_SYMBOL:       cairo_move_to (cr, x0 + w / 2 - 0.5 * ext, y0 + h / 2 - 0.5 * ext);
-                                        cairo_line_to (cr, x0 + w / 2 + 0.5 * ext, y0 + h / 2);
-                                        cairo_line_to (cr, x0 + w / 2 - 0.5 * ext, y0 + h / 2 + 0.5 * ext);
+                case PLAY_SYMBOL:       cairo_move_to (cr, xc - 0.5 * ext, yc - 0.5 * ext);
+                                        cairo_line_to (cr, xc + 0.5 * ext, yc);
+                                        cairo_line_to (cr, xc - 0.5 * ext, yc + 0.5 * ext);
                                         cairo_close_path (cr);
                                         cairo_set_line_width (cr, 0.0);
                                         cairo_fill (cr);
                                         break;
+
+				case QUESTION_SYMBOL:	cairo_move_to (cr, xc + 0.45 * ext, yc);
+										cairo_arc (cr, xc, yc, 0.45 * ext, 0.0, 2.0 * M_PI);
+										cairo_set_line_width (cr, 2.0);
+                                        cairo_stroke (cr);
+										cairo_move_to (cr, xc - 0.15 * ext, yc - 0.15 * ext);
+										cairo_arc (cr, xc, yc - 0.15 * ext, 0.15 * ext, M_PI, 2.25 * M_PI);
+										cairo_arc_negative (cr, xc + 0.15 * ext, yc + 0.15 * ext, 0.15 * ext, 1.25 * M_PI, M_PI);
+										cairo_set_line_width (cr, 0.1 * ext);
+										cairo_stroke (cr);
+										cairo_arc (cr, xc, yc + 0.3 * ext, 0.075 * ext, 0.0, 2.0 * M_PI);
+										cairo_set_line_width (cr, 0.0);
+                                        cairo_fill (cr);
+										break;
+
+				case WARN_SYMBOL:		cairo_arc (cr, xc, yc - 0.3 * ext, 0.05 * ext, 1.1667 * M_PI, 1.8333 * M_PI);
+										cairo_arc (cr, xc + 0.3464 * ext, yc + 0.3 * ext, 0.05 * ext, 1.8333 * M_PI, 2.5 * M_PI);
+										cairo_arc (cr, xc - 0.3464 * ext, yc + 0.3 * ext, 0.05 * ext, 0.5 * M_PI, 1.1667 * M_PI);
+										cairo_close_path (cr);
+										cairo_set_line_width (cr, 2.0);
+										cairo_stroke (cr);
+										cairo_arc (cr, xc, yc - 0.15 * ext, 0.05 * ext, M_PI, 2.0 * M_PI);
+										cairo_line_to (cr, xc + 0.025 * ext, yc + 0.1 * ext);
+										cairo_line_to (cr, xc - 0.025 * ext, yc + 0.1 * ext);
+										cairo_close_path (cr);
+										cairo_set_line_width (cr, 0.0);
+										cairo_fill (cr);
+										cairo_arc (cr, xc, yc + 0.2 * ext, 0.0375 * ext, 0.0, 2.0 * M_PI);
+										cairo_fill (cr);
+										break;
+
+
+				case INFO_SYMBOL:		cairo_move_to (cr, xc + 0.1 * ext, yc - 0.3 * ext);
+										cairo_arc (cr, xc, yc - 0.3 * ext, 0.1 * ext, 0.0, 2.0 * M_PI);
+										cairo_set_line_width (cr, 0.0);
+                                        cairo_fill (cr);
+										cairo_move_to (cr, xc - 0.2 * ext, yc - 0.1 * ext);
+										cairo_line_to (cr, xc + 0.1 * ext, yc - 0.1 * ext);
+										cairo_line_to (cr, xc + 0.1 * ext, yc + 0.45 * ext);
+										cairo_line_to (cr, xc + 0.2 * ext, yc + 0.45 * ext);
+										cairo_line_to (cr, xc + 0.2 * ext, yc + 0.5 * ext);
+										cairo_line_to (cr, xc - 0.2 * ext, yc + 0.5 * ext);
+										cairo_line_to (cr, xc - 0.2 * ext, yc + 0.45 * ext);
+										cairo_line_to (cr, xc - 0.1 * ext, yc + 0.45 * ext);
+										cairo_line_to (cr, xc - 0.1 * ext, yc - 0.05 * ext);
+										cairo_line_to (cr, xc - 0.2 * ext, yc - 0.05 * ext);
+										cairo_close_path (cr);
+                                        cairo_set_line_width (cr, 0.0);
+                                        cairo_fill (cr);
+										break;
+
+				case ERROR_SYMBOL:		cairo_move_to (cr, xc + 0.45 * ext, yc);
+										cairo_arc (cr, xc, yc, 0.45 * ext, 0.0, 2.0 * M_PI);
+										cairo_set_line_width (cr, 2.0);
+                                        cairo_stroke (cr);
+										cairo_move_to (cr, xc - 0.2 * ext, yc - 0.2 * ext);
+										cairo_line_to (cr, xc + 0.2 * ext, yc + 0.2 * ext);
+										cairo_move_to (cr, xc + 0.2 * ext, yc - 0.2 * ext);
+										cairo_line_to (cr, xc - 0.2 * ext, yc + 0.2 * ext);
+										cairo_set_line_width (cr, 0.1 * ext);
+										cairo_stroke (cr);
 
                 default:                break;
 		}
