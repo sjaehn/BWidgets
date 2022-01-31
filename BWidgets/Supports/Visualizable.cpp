@@ -134,10 +134,10 @@ void Visualizable::resize (const BUtilities::Point extends)
 {
     if ((extends.x != extends_.x) || (extends.y != extends_.y))
     {
-        extends_ = extends;
+        extends_ = BUtilities::Point (std::max (extends.x, 0.0), std::max (extends.y, 0.0));
 
         // Create new surface
-        cairo_surface_t* new_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends.x, extends.y);
+        cairo_surface_t* new_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends_.x, extends_.y);
 
         // Copy surface
 		if (new_surface && (cairo_surface_status (new_surface) == CAIRO_STATUS_SUCCESS))
