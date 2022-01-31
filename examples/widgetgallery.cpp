@@ -116,7 +116,12 @@ int main ()
     Symbol rightSymbol (610, 40, 20, 20, Symbol::RIGHT_SYMBOL);
     Symbol upSymbol (640, 40, 20, 20, Symbol::UP_SYMBOL);
     Symbol downSymbol (670, 40, 20, 20, Symbol::DOWN_SYMBOL);
-    Label symbolLabel (610, 80, 80, 20, "Symbol");
+    Symbol playSymbol (700, 10, 20, 20, Symbol::PLAY_SYMBOL);
+    Symbol questionSymbol (730, 10, 20, 20, Symbol::QUESTION_SYMBOL);
+    Symbol infoSymbol (760, 10, 20, 20, Symbol::INFO_SYMBOL);
+    Symbol warnSymbol (700, 40, 20, 20, Symbol::WARN_SYMBOL);
+    Symbol errorSymbol (730, 40, 20, 20, Symbol::ERROR_SYMBOL);
+    Label symbolLabel (610, 80, 180, 20, "Symbol");
     symbolLabel.setFont (labelFont);
     window.add (&addSymbol);
     window.add (&minusSymbol);
@@ -124,6 +129,11 @@ int main ()
     window.add (&rightSymbol);
     window.add (&upSymbol);
     window.add (&downSymbol);
+    window.add (&playSymbol);
+    window.add (&questionSymbol);
+    window.add (&infoSymbol);
+    window.add (&warnSymbol);
+    window.add (&errorSymbol);
     window.add (&symbolLabel);
 
     // Image
@@ -337,8 +347,7 @@ int main ()
     window.add (&textBoxLabel);
 
     // MessageBox
-    MessageBox messageBox (410, 130, 280, 0, Symbol::INFO_SYMBOL, "Hello world is easy:", "Window window;\nLabel label (\"Hello World\");\nwindow.add (&label);\nwindow.run ();", {"Close"});
-    messageBox.resize();
+    MessageBox messageBox (410, 130, 280, 180, Symbol::INFO_SYMBOL, "Hello world is easy:", "Window window;\nLabel label (\"Hello World\");\nwindow.add (&label);\nwindow.run ();", {"Close"});
     Label messageBoxLabel (410, 320, 280, 20, "MessageBox");
     messageBoxLabel.setFont (labelFont);
     window.add (&messageBox);
