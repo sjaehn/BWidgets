@@ -49,6 +49,7 @@
 #include "../BWidgets/Box.hpp"
 #include "../BWidgets/TextBox.hpp"
 #include "../BWidgets/MessageBox.hpp"
+#include "../BWidgets/SpinButton.hpp"
 #include <cairo/cairo.h>
 #include <iostream>
 #include <vector>
@@ -198,6 +199,13 @@ int main ()
     vSwitchLabel.setFont (labelFont);
     window.add (&vSwitch);
     window.add (&vSwitchLabel);
+
+    // SpinButton
+    SpinButton spinButton (840, 270, 20, 20);
+    Label spinButtonLabel (810, 320, 80, 20, "SpinButton");
+    checkBoxLabel.setFont (labelFont);
+    window.add (&spinButton);
+    window.add (&spinButtonLabel);
 
      // Knob
     Knob knob (930, 260, 40, 40, 2);

@@ -148,6 +148,7 @@ Widget
  |    ├── Knob
  |    ├── HSwitch
  |    ╰── VSwitch
+ ├── SpinButton
  ├── HMeter
  |    ├── ValueHMeter
  |    ╰── HScale
@@ -359,6 +360,16 @@ bool value) as a vertical switch. It supports user interaction via
 `Clickable`, `Draggable`, and `Scrollable`. Its appearance is defined by the 
 BgColors parameter (static elements, false) and by the FgColors parameter
 (active elements, true).
+
+
+### SpinButton
+
+![spinbutton](../suppl/SpinButton.png)
+
+`SpinButton` is a `Valueable` composite widget. It contains an up and a down
+`SymbolButton`. Its value can either be 0 (no button pressed) or -1 (up button
+pressed) or 1 (down button pressed). The visualble content of the SpinButton 
+is represented by its background and its border.
 
 
 ### HMeter
