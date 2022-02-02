@@ -221,7 +221,7 @@ T ValidatableRange<T>::validate (const T& value)
     
     if (getStep() && (getMax() >= getMin()))
     {
-        if (getStep() > getStep()) return LIMIT (getMin() + round ((value - getMin()) / getStep()) * getStep(), getMin(), getMax());
+        if (getStep() > 0) return LIMIT (getMin() + round ((value - getMin()) / getStep()) * getStep(), getMin(), getMax());
         return LIMIT (getMax() - round ((getMax() - value) / getStep()) * getStep(), getMin(), getMax());
     }
 
