@@ -596,6 +596,18 @@ The visualble content of the `SpinBox` is represented by its background and
 its border and by styles of the embedded widgets.
 
 
+### ListBox
+
+![listbox](../suppl/ListBox.png)
+
+`ListBox` is `Valueable` widget derived from `SpinBox`. This widget shows a 
+scrollable list content and allows to select an item. In contrast to `SpinBox`:
+* it shows its content in multiple lines and allow selection by clicking on
+  an item by the support of Clickable. The selected item is turned in its
+  active state.
+* it supports navigation via a scroll bar instead of `SpinButton`s.
+
+
 ## Attributes and decorations
 
 

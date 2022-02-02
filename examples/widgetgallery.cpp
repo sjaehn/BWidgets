@@ -52,6 +52,8 @@
 #include "../BWidgets/SpinButton.hpp"
 #include "../BWidgets/SpinBox.hpp"
 #include "../BWidgets/ListBox.hpp"
+#include "../BWidgets/HScrollBar.hpp"
+#include "../BWidgets/VScrollBar.hpp"
 #include <cairo/cairo.h>
 #include <iostream>
 #include <vector>
@@ -113,17 +115,17 @@ int main ()
     window.add (&textLabel);
 
     // Symbols
-    Symbol addSymbol (610, 10, 20, 20, Symbol::ADD_SYMBOL);
-    Symbol minusSymbol (640, 10, 20, 20, Symbol::MINUS_SYMBOL);
-    Symbol leftSymbol (670, 10, 20, 20, Symbol::LEFT_SYMBOL);
-    Symbol rightSymbol (610, 40, 20, 20, Symbol::RIGHT_SYMBOL);
-    Symbol upSymbol (640, 40, 20, 20, Symbol::UP_SYMBOL);
-    Symbol downSymbol (670, 40, 20, 20, Symbol::DOWN_SYMBOL);
-    Symbol playSymbol (700, 10, 20, 20, Symbol::PLAY_SYMBOL);
-    Symbol questionSymbol (730, 10, 20, 20, Symbol::QUESTION_SYMBOL);
-    Symbol infoSymbol (760, 10, 20, 20, Symbol::INFO_SYMBOL);
-    Symbol warnSymbol (700, 40, 20, 20, Symbol::WARN_SYMBOL);
-    Symbol errorSymbol (730, 40, 20, 20, Symbol::ERROR_SYMBOL);
+    Symbol addSymbol (610, 10, 12, 12, Symbol::ADD_SYMBOL);
+    Symbol minusSymbol (626, 10, 12, 12, Symbol::MINUS_SYMBOL);
+    Symbol leftSymbol (642, 10, 12, 12, Symbol::LEFT_SYMBOL);
+    Symbol rightSymbol (658, 10, 12, 12, Symbol::RIGHT_SYMBOL);
+    Symbol upSymbol (674, 10, 12, 12, Symbol::UP_SYMBOL);
+    Symbol downSymbol (610, 26, 12, 12, Symbol::DOWN_SYMBOL);
+    Symbol playSymbol (626, 26, 12, 12, Symbol::PLAY_SYMBOL);
+    Symbol questionSymbol (642, 26, 12, 12, Symbol::QUESTION_SYMBOL);
+    Symbol infoSymbol (658, 26, 12, 12, Symbol::INFO_SYMBOL);
+    Symbol warnSymbol (674, 26, 12, 12, Symbol::WARN_SYMBOL);
+    Symbol errorSymbol (610, 42, 12, 12, Symbol::ERROR_SYMBOL);
     Label symbolLabel (610, 80, 180, 20, "Symbol");
     symbolLabel.setFont (labelFont);
     window.add (&addSymbol);
@@ -140,8 +142,8 @@ int main ()
     window.add (&symbolLabel);
 
     // Image
-    Image image (710, 130, 80, 60, "example-romedalen.png");
-    Label imageLabel (710, 200, 80, 20, "Image");
+    Image image (710, 10, 80, 60, "example-romedalen.png");
+    Label imageLabel (710, 80, 80, 20, "Image");
     imageLabel.setFont (labelFont);
     window.add (&image);
     window.add (&imageLabel);
@@ -174,6 +176,13 @@ int main ()
     window.add (&imageButton);
     window.add (&imageButtonLabel);
 
+    // SpinButton
+    SpinButton spinButton (740, 150, 20, 20);
+    Label spinButtonLabel (710, 200, 80, 20, "SpinButton");
+    spinButtonLabel.setFont (labelFont);
+    window.add (&spinButton);
+    window.add (&spinButtonLabel);
+
     // CheckBox
     CheckBox checkBox (840, 150, 20, 20, true);
     Label checkBoxLabel (810, 200, 80, 20, "CheckBox");
@@ -202,13 +211,6 @@ int main ()
     window.add (&vSwitch);
     window.add (&vSwitchLabel);
 
-    // SpinButton
-    SpinButton spinButton (840, 270, 20, 20);
-    Label spinButtonLabel (810, 320, 80, 20, "SpinButton");
-    spinButtonLabel.setFont (labelFont);
-    window.add (&spinButton);
-    window.add (&spinButtonLabel);
-
     // SpinBox
     SpinBox spinBox (700, 270, 100, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
     spinBox.setValue (1);
@@ -223,6 +225,20 @@ int main ()
     listBoxLabel.setFont (labelFont);
     window.add (&listBox);
     window.add (&listBoxLabel);
+
+    // HScrollBar
+    HScrollBar hScrollBar (810, 275, 80, 10, 0.2, 0, 1, 0, 0.3);
+    Label hScrollBarLabel (810, 320, 80, 20, "HScrollBar");
+    hScrollBarLabel.setFont (labelFont);
+    window.add (&hScrollBar);
+    window.add (&hScrollBarLabel);
+
+    // VScrollBar
+    VScrollBar vScrollBar (845, 370, 10, 60, 0.2, 0, 1, 0, 0.3);
+    Label vScrollBarLabel (810, 440, 80, 20, "VScrollBar");
+    vScrollBarLabel.setFont (labelFont);
+    window.add (&vScrollBar);
+    window.add (&vScrollBarLabel);
 
      // Knob
     Knob knob (930, 260, 40, 40, 2);

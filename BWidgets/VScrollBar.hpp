@@ -114,14 +114,13 @@ public:
 	void copy (const VScrollBar* that);
 
 	/**
-	 *  @brief  Sets the values for both, the scrollbar start and the scrollbar
-	 *  end. 
-	 *  @param value  Scrollbar start value.
-	 * 	@param v2  Scrollbar end value.
+	 *  @brief  Sets the size of the value range. 
+	 *  @param vsize  Scrollbar value range size.
 	 *
-	 *  The scrollbar start value also represents the widget value.
+	 *  The value can be point value (vsize = 0) or a range value (start value
+	 *  = widget value; end value = start value + vsize).
 	 */
-	virtual void setValueRange (const double& value, const double v2);
+	virtual void setValueSize (const double& vsize);
 
 	/**
      *  @brief  Method called when pointer button pressed.
@@ -204,15 +203,13 @@ inline void VScrollBar::copy (const VScrollBar* that)
 	VScale::copy (that);
 }
 
-inline void VScrollBar::setValueRange (const double& value, const double v2)
+inline void VScrollBar::setValueSize (const double& vsize)
 {
-	if (vsize_ != v2 - value)
+	if (vsize_ != vsize)
 	{
-		vsize_ = v2 - value;
+		vsize_ = vsize;
 		update();
 	}
-
-	setValue (value);
 }
 
 inline void VScrollBar::onButtonPressed (BEvents::Event* event)
