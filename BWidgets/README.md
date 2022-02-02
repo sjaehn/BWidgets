@@ -461,6 +461,18 @@ vertical scale and supports user interaction via `Clickable`, `Draggable`, and
 elements) and by the FgColors parameter (value).
 
 
+### VScrollBar
+
+![vscrollbar](../suppl/VScrollBar.png)
+
+`VScrollBar` is a `Valueable` Widget derived from `VScale`. It displays a value
+as a vertical scrollbar and supports user interaction via `Draggable`, and 
+`Scrollable`. Its appearance is defined by the BgColors parameter.
+
+The value can be point value (vsize = 0) or a range value (start value
+= widget value; end value = start value + vsize).
+
+
 ### VSlider
 
 ![vslider](../suppl/VSlider.png)
