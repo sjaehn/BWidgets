@@ -152,11 +152,13 @@ Widget
  ├── HMeter
  |    ├── ValueHMeter
  |    ╰── HScale
+ |         ├── HScrollBar
  |         ╰── HSlider
  |              ╰── ValueHSlider
  ├── VMeter
  |    ├── ValueVMeter
  |    ╰── VScale
+ |         ├── VScrollBar
  |         ╰── VSlider
  |              ╰── ValueHSlider
  ├── RadialMeter
@@ -553,6 +555,21 @@ with 1 and a `CloseRequestEvent` is emitted.
 
 `MessageBox` is a composite Widget based on `TextBox` and additionally 
 contains a symbol and a headline.
+
+
+### SpinBox
+
+![spinbox](../suppl/SpinBox.png)
+
+`SpinBox` is a `Valueable` composite widget. It is a container widget. It has
+got a list of content widgets representing the items. And it has got a
+`SpinButton` to move between the items.
+
+The value of the `SpinBox` is the index of the active item starting with 1. A
+value of 0 is used if no item is selected (default empty item).
+
+The visualble content of the `SpinBox` is represented by its background and
+its border and by styles of the embedded widgets.
 
 
 ## Attributes and decorations

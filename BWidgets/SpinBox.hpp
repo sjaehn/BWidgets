@@ -41,7 +41,7 @@
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SPINBOX_BUTTON_WIDTH
-#define BWIDGETS_DEFAULT_SPINBOX_BUTTON_WIDTH (BWIDGETS_DEFAULT_SPINBOX_HEIGHT - 2.0)
+#define BWIDGETS_DEFAULT_SPINBOX_BUTTON_WIDTH (0.5 * BWIDGETS_DEFAULT_SPINBOX_HEIGHT)
 #endif
 
 namespace BWidgets
@@ -54,8 +54,8 @@ namespace BWidgets
  *  got a list of content widgets representing the items. And it has got a
  *  SpinButton to move between the items.
  *
- *  The value of the %SpinBox is the index of the item starting with 1. A
- *  value of 0 is used if no item is selected.
+ *  The value of the %SpinBox is the index of the active item starting with 1. 
+ *  A value of 0 is used if no item is selected (default empty item).
  *
  *  The visualble content of the %SpinBox is represented by its background and
  *  its border and by styles of the embedded widgets.
