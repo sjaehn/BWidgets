@@ -22,7 +22,6 @@
 #include "SymbolButton.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "../BEvents/Event.hpp"
-#include "TextButton.hpp"
 
 #ifndef BWIDGETS_DEFAULT_SPINBUTTON_WIDTH
 #define BWIDGETS_DEFAULT_SPINBUTTON_WIDTH 20.0
@@ -36,7 +35,7 @@ namespace BWidgets
 {
 
 /**
- *  @brief  Widget containind an up and a down button. 
+ *  @brief  Widget containing an up and a down button. 
  *
  *  %SpinButton is a Valueable composite widget. It contains an up and a down
  *  button. Its value can either be 0 (no button pressed) or -1 (up button
@@ -167,7 +166,6 @@ inline void SpinButton::valueChangedCallback (BEvents::Event* event)
 
 	if (w == &p->upButton_) p->setValue (w->getValue() * -1);
 	else if (w == &p->downButton_) p->setValue (w->getValue() * 1);
-	std::cerr << p->getValue() << "\n";
 }
 
 }
