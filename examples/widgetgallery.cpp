@@ -50,6 +50,8 @@
 #include "../BWidgets/TextBox.hpp"
 #include "../BWidgets/MessageBox.hpp"
 #include "../BWidgets/SpinButton.hpp"
+#include "../BWidgets/SpinBox.hpp"
+#include "../BWidgets/ListBox.hpp"
 #include <cairo/cairo.h>
 #include <iostream>
 #include <vector>
@@ -203,9 +205,24 @@ int main ()
     // SpinButton
     SpinButton spinButton (840, 270, 20, 20);
     Label spinButtonLabel (810, 320, 80, 20, "SpinButton");
-    checkBoxLabel.setFont (labelFont);
+    spinButtonLabel.setFont (labelFont);
     window.add (&spinButton);
     window.add (&spinButtonLabel);
+
+    // SpinBox
+    SpinBox spinBox (700, 270, 100, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
+    spinBox.setValue (1);
+    Label spinBoxLabel (710, 320, 80, 20, "SpinBox");
+    spinBoxLabel.setFont (labelFont);
+    window.add (&spinBox);
+    window.add (&spinBoxLabel);
+
+    // ListBox
+    ListBox listBox (700, 370, 100, 180, {"AC/DC", "Bon Jovi", "Helloween", "Iron Maiden", "KISS", "Metallica", "Manowar", "Pantera", "Scorpions", "Sepultura", "Slayer", "Van Halen"});
+    Label listBoxLabel (710, 560, 80, 20, "ListBox");
+    listBoxLabel.setFont (labelFont);
+    window.add (&listBox);
+    window.add (&listBoxLabel);
 
      // Knob
     Knob knob (930, 260, 40, 40, 2);
@@ -355,7 +372,7 @@ int main ()
     window.add (&textBoxLabel);
 
     // MessageBox
-    MessageBox messageBox (410, 130, 280, 180, Symbol::INFO_SYMBOL, "Hello world is easy:", "Window window;\nLabel label (\"Hello World\");\nwindow.add (&label);\nwindow.run ();", {"Close"});
+    MessageBox messageBox (410, 130, 280, 180, Symbol::INFO_SYMBOL, "Hello world is sooo easy:", "Window window;\nLabel label (\"Hello World\");\nwindow.add (&label);\nwindow.run ();", {"Close"});
     Label messageBoxLabel (410, 320, 280, 20, "MessageBox");
     messageBoxLabel.setFont (labelFont);
     window.add (&messageBox);

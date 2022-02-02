@@ -167,6 +167,9 @@ Widget
  ├── Box
  |    ╰── TextBox
  |         ╰── MessageBox
+ ├── SpinBox
+ |    ├── ListBox
+ |    ╰── ComboBox
  .
  .
  .
@@ -689,3 +692,4 @@ BWidgets uses the Cairo graphics context support of Pugl.
 
 * Use NanoVG.
 * Load images from SVG.
+* Layout widgets.
