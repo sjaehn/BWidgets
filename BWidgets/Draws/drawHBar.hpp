@@ -77,7 +77,7 @@ inline void drawHBar    (cairo_t* cr, const double x0, const double y0, const do
         cairo_pattern_add_color_stop_rgba (pat, 0.25, CAIRO_RGBA(fgHi));
         cairo_pattern_add_color_stop_rgba (pat, 1.0, CAIRO_RGBA(fgLo));
         cairo_save (cr);
-        cairo_rectangle_rounded (cr, x0 + 1, y0 + 1, width - 1, height - 1, 0.5 * height, 0b1111);
+        cairo_rectangle_rounded (cr, x0 + 0.1 * height, y0 + 0.1 * height, std::max (width - 0.2 * height, 0.0), 0.8 * height, 0.5 * 0.8 * height, 0b1111);
         cairo_clip (cr);
         cairo_rectangle (cr, x2, y0, x3 - x2, height);
         cairo_set_source (cr, pat);
@@ -94,7 +94,7 @@ inline void drawHBar    (cairo_t* cr, const double x0, const double y0, const do
         cairo_pattern_add_color_stop_rgba (pat, 1, CAIRO_RGBA(bgHi));
         cairo_rectangle_rounded (cr, x0, y0, width, height, 0.5 * height, 0b1111);
         cairo_set_source (cr, pat);
-        cairo_set_line_width (cr, 0.2);
+        cairo_set_line_width (cr, 0.05 * height);
         cairo_stroke (cr);
         cairo_pattern_destroy (pat);
     }

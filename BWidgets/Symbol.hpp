@@ -228,41 +228,41 @@ inline void Symbol::draw (const BUtilities::RectArea& area)
                                         cairo_line_to (cr, xc + ext / 2, yc);
                                         cairo_move_to (cr, xc, yc - ext / 2);
                                         cairo_line_to (cr, xc, yc + ext / 2);
-                                        cairo_set_line_width (cr, 2.0);
+                                        cairo_set_line_width (cr, 0.1 * ext);
                                         cairo_stroke (cr);
                                         break;
 
                 case MINUS_SYMBOL:      cairo_move_to (cr, xc - ext / 2, yc);
                                         cairo_line_to (cr, xc + ext / 2, yc);
-                                        cairo_set_line_width (cr, 2.0);
+                                        cairo_set_line_width (cr, 0.1 * ext);
                                         cairo_stroke (cr);
                                         break;
 
                 case LEFT_SYMBOL:       cairo_move_to (cr, xc + 0.25 * ext, yc - ext / 2);
                                         cairo_line_to (cr, xc - 0.25 * ext, yc);
                                         cairo_line_to (cr, xc + 0.25 * ext, yc + ext / 2);
-                                        cairo_set_line_width (cr, 2.0);
+                                        cairo_set_line_width (cr, 0.1 * ext);
                                         cairo_stroke (cr);
                                         break;
 
                 case RIGHT_SYMBOL:      cairo_move_to (cr, xc - 0.25 * ext, yc - ext / 2);
                                         cairo_line_to (cr, xc + 0.25 * ext, yc);
                                         cairo_line_to (cr, xc - 0.25 * ext, yc + ext / 2);
-                                        cairo_set_line_width (cr, 2.0);
+                                        cairo_set_line_width (cr, 0.1 * ext);
                                         cairo_stroke (cr);
                                         break;
 
                 case UP_SYMBOL:         cairo_move_to (cr, xc - 0.5 * ext, yc + 0.25 * ext);
                                         cairo_line_to (cr, xc, yc - 0.25 * ext);
                                         cairo_line_to (cr, xc + 0.5 * ext, yc + 0.25 * ext);
-                                        cairo_set_line_width (cr, 2.0);
+                                        cairo_set_line_width (cr, 0.1 * ext);
                                         cairo_stroke (cr);
                                         break;
 
                 case DOWN_SYMBOL:       cairo_move_to (cr, xc - 0.5 * ext, yc - 0.25 * ext);
                                         cairo_line_to (cr, xc, yc + 0.25 * ext);
                                         cairo_line_to (cr, xc + 0.5 * ext, yc - 0.25 * ext);
-                                        cairo_set_line_width (cr, 2.0);
+                                        cairo_set_line_width (cr, 0.1 * ext);
                                         cairo_stroke (cr);
                                         break;
 
@@ -276,7 +276,7 @@ inline void Symbol::draw (const BUtilities::RectArea& area)
 
 				case QUESTION_SYMBOL:	cairo_move_to (cr, xc + 0.45 * ext, yc);
 										cairo_arc (cr, xc, yc, 0.45 * ext, 0.0, 2.0 * M_PI);
-										cairo_set_line_width (cr, 2.0);
+										cairo_set_line_width (cr, 0.1 * ext);
                                         cairo_stroke (cr);
 										cairo_move_to (cr, xc - 0.15 * ext, yc - 0.15 * ext);
 										cairo_arc (cr, xc, yc - 0.15 * ext, 0.15 * ext, M_PI, 2.25 * M_PI);
@@ -292,7 +292,7 @@ inline void Symbol::draw (const BUtilities::RectArea& area)
 										cairo_arc (cr, xc + 0.3464 * ext, yc + 0.3 * ext, 0.05 * ext, 1.8333 * M_PI, 2.5 * M_PI);
 										cairo_arc (cr, xc - 0.3464 * ext, yc + 0.3 * ext, 0.05 * ext, 0.5 * M_PI, 1.1667 * M_PI);
 										cairo_close_path (cr);
-										cairo_set_line_width (cr, 2.0);
+										cairo_set_line_width (cr, 0.1 * ext);
 										cairo_stroke (cr);
 										cairo_arc (cr, xc, yc - 0.15 * ext, 0.05 * ext, M_PI, 2.0 * M_PI);
 										cairo_line_to (cr, xc + 0.025 * ext, yc + 0.1 * ext);
@@ -326,7 +326,7 @@ inline void Symbol::draw (const BUtilities::RectArea& area)
 
 				case ERROR_SYMBOL:		cairo_move_to (cr, xc + 0.45 * ext, yc);
 										cairo_arc (cr, xc, yc, 0.45 * ext, 0.0, 2.0 * M_PI);
-										cairo_set_line_width (cr, 2.0);
+										cairo_set_line_width (cr, 0.1 * ext);
                                         cairo_stroke (cr);
 										cairo_move_to (cr, xc - 0.2 * ext, yc - 0.2 * ext);
 										cairo_line_to (cr, xc + 0.2 * ext, yc + 0.2 * ext);
