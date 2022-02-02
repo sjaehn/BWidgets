@@ -410,6 +410,18 @@ and `Scrollable`. Its appearance is defined by the BgColors parameter (static
 elements) and by the FgColors parameter (value).
 
 
+### HScrollBar
+
+![hscrollbar](../suppl/HScrollBar.png)
+
+`HScrollBar` is a `Valueable` Widget derived from `HScale`. It displays a value
+as a horizontal scrollbar and supports user interaction via `Draggable`, and 
+`Scrollable`. Its appearance is defined by the BgColors parameter.
+
+The value can be point value (vsize = 0) or a range value (start value
+= widget value; end value = start value + vsize).
+
+
 ### HSlider
 
 ![hslider](../suppl/HSlider.png)
