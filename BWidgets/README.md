@@ -55,6 +55,7 @@ be) added to the main window).
    ```
    label.setTxColors (ColorMap ({black})); // Black label on ...
    window.setBackground (blackFill);       // black window background
+                                           // => Text invisible.
    
    label.moveTo (label.center(), label.bottom ()); // Move label to bottom
                                                    // center.
@@ -66,8 +67,14 @@ be) added to the main window).
    ```
    void valueChangedCallback (BEvents::Event* event)
    {
+      // Convert event to ValueChangeTypedEvent<bool>* 
       ValueChangeTypedEvent<bool>* e = dynamic_cast<ValueChangeTypedEvent<bool>*>(event);
+
+      // Set red background if button value is true (pressed) => Text becomes
+      // visible.
       if (e->getValue()) e->getWidget()->getMainWindow()->setBackground (redFill);
+
+      // Otherwise set black background => text becomes invisible
       else e->getWidget()->getMainWindow()->setBackground (blackFill);
    }
    ```
@@ -128,7 +135,8 @@ supporting interface classes.
 ## Widgets
 
 All widgets are located in the BWidgets namespace. And all widgets are
-derived from the `Widget` class. Including the main `Window`.
+derived from the `Widget` class. Including the main `Window`. Each class may
+additionally inherit from [Support](#Supports) classes to extend its features.
 
 ```
 Widget
@@ -176,6 +184,28 @@ Widget
  .
  .
 ```
+
+Each widget class Xxx has got at least three different constructors:
+* `Xxx ()` - The parameter free default constructor creates a zero-sized default
+  widget.
+* `Xxx (data, ...)` - Creates a default-sized widget from the passed data.
+* `Xxx (x, y, width, height, data, ...)` - Creates a widget at the position (x, 
+  y) relative to the parent widget with the extends (width, height) from the
+  passed data.
+
+You can re-define the widget default size used for `Xxx (data, ...)` by 
+defining the macros `BWIDGETS_DEFAULT_XXX_WIDTH` and 
+`BWIDGETS_DEFAULT_XXX_HEIGHT`.
+
+**Note: Widgets in B.Widgets don't have got any copy constructors or 
+assignment operators!**
+
+But all widgets have got the following two methods which you can use instead:
+* `copy (&other)` - Copies the content (but not the linkage) from another 
+  object.
+* `clone ()` - Clones this object by creating a new object on the heap (don't
+  forget to delete at the end) and copies the content (but not its linkage)
+  to the new object.
 
 
 ### Main Window
@@ -644,7 +674,7 @@ The order (level) can be changed using `raise()`, `raiseToFront()`, `drop()`,
 and `dropToBack()`.
 
 By default, child widgets are located within their parents and oversized child 
-widgets will be clipped to fit (`STACKING_NORMAL`). `STACKING_EXCEED` breaks
+widgets will be clipped to fit (`STACKING_NORMAL`). `STACKING_ESCAPE` breaks
 this limitation. Stacking behaviour can be changed using `setStacking()` and
 is returned by `getStacking()`
 
