@@ -116,7 +116,7 @@ void Widget::release (std::function<void (Linkable* obj)> releasefunc)
 void Widget::release (Linkable* child, std::function<void (Linkable* obj)> releasefunc)
 {
 	Widget* childWidget = dynamic_cast<Widget*> (child);
-	if (!child) return;
+	if (!childWidget) return;
 	if (!Linkable::contains (child))
 	{
 		//std::cerr << "Msg from BWidgets::Widget::release(): Child " << child->name_ << ":" << &(*child)
