@@ -52,7 +52,7 @@ public:
 
     /**
      *  @brief  Copiess the value from another %ValueableTyped object.
-     *  @param value  Value.
+     *  @param that  Other object.
      *
      *  Also emits a ValueChangeTyped<T> event.
      */

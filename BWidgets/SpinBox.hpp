@@ -59,6 +59,9 @@ namespace BWidgets
  *
  *  The visualble content of the %SpinBox is represented by its background and
  *  its border and by styles of the embedded widgets.
+ *
+ *  @todo  Resize()
+ *  @todo  Import item widgets.
  */
 class SpinBox : public Widget, public ValueableTyped<size_t>, public Scrollable
 {
@@ -207,7 +210,7 @@ inline SpinBox::SpinBox	(const double x, const double y, const double width, con
 	button_ (new SpinButton (x + width - height, y, height, height, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"))),
 	items_ ({new Label (0, 0, getWidth() - getHeight(), getHeight(), "")}),	// Init with Null item
 	top_ (0),
-	itemHeight_ (BWIDGETS_DEFAULT_SPINBOX_ITEM_HEIGHT),
+	itemHeight_ (std::max (height - 2.0, 0.0)),
 	buttonWidth_ (BWIDGETS_DEFAULT_SPINBOX_BUTTON_WIDTH)
 {
 	items_.front()->setEventPassable(BEvents::Event::WHEEL_SCROLL_EVENT, true);
@@ -219,6 +222,7 @@ inline SpinBox::SpinBox	(const double x, const double y, const double width, con
 	top_ = value_;
 	button_->setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, valueChangedCallback);
 	add (button_);
+	setBackground(BStyles::blackFill);
 	setBorder (BStyles::Border (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL], 1.0), 0.0, 0.0, 0.0));
 }
 
@@ -270,7 +274,7 @@ inline void SpinBox::copy (const SpinBox* that)
 
 inline void SpinBox::addItem (const std::string item, size_t pos)
 {
-	Label* l = new Label (0, 0, getWidth() - getHeight(), getHeight(), item);
+	Label* l = new Label (0, 0, getEffectiveWidth() - buttonWidth_, itemHeight_, item);
 	if (pos >= items_.size()) items_.push_back (l);
 	else if (pos <= 1) items_.insert(std::next (items_.begin(), 1), l);
 	else items_.insert(std::next (items_.begin(), pos), l);

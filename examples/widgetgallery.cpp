@@ -52,6 +52,7 @@
 #include "../BWidgets/SpinButton.hpp"
 #include "../BWidgets/SpinBox.hpp"
 #include "../BWidgets/ListBox.hpp"
+#include "../BWidgets/ComboBox.hpp"
 #include "../BWidgets/HScrollBar.hpp"
 #include "../BWidgets/VScrollBar.hpp"
 #include <cairo/cairo.h>
@@ -211,34 +212,44 @@ int main ()
     window.add (&vSwitch);
     window.add (&vSwitchLabel);
 
-    // SpinBox
-    SpinBox spinBox (700, 270, 100, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
-    spinBox.setValue (1);
-    Label spinBoxLabel (710, 320, 80, 20, "SpinBox");
-    spinBoxLabel.setFont (labelFont);
-    window.add (&spinBox);
-    window.add (&spinBoxLabel);
-
-    // ListBox
-    ListBox listBox (700, 370, 100, 180, {"AC/DC", "Bon Jovi", "Helloween", "Iron Maiden", "KISS", "Metallica", "Manowar", "Pantera", "Scorpions", "Sepultura", "Slayer", "Van Halen"});
-    Label listBoxLabel (710, 560, 80, 20, "ListBox");
-    listBoxLabel.setFont (labelFont);
-    window.add (&listBox);
-    window.add (&listBoxLabel);
-
     // HScrollBar
-    HScrollBar hScrollBar (810, 275, 80, 10, 0.2, 0, 1, 0, 0.3);
-    Label hScrollBarLabel (810, 320, 80, 20, "HScrollBar");
+    HScrollBar hScrollBar (710, 275, 80, 10, 0.2, 0, 1, 0, 0.3);
+    Label hScrollBarLabel (710, 320, 80, 20, "HScrollBar");
     hScrollBarLabel.setFont (labelFont);
     window.add (&hScrollBar);
     window.add (&hScrollBarLabel);
 
     // VScrollBar
-    VScrollBar vScrollBar (845, 370, 10, 60, 0.2, 0, 1, 0, 0.3);
-    Label vScrollBarLabel (810, 440, 80, 20, "VScrollBar");
+    VScrollBar vScrollBar (845, 250, 10, 60, 0.2, 0, 1, 0, 0.3);
+    Label vScrollBarLabel (810, 320, 80, 20, "VScrollBar");
     vScrollBarLabel.setFont (labelFont);
     window.add (&vScrollBar);
     window.add (&vScrollBarLabel);
+
+    // SpinBox
+    SpinBox spinBox (710, 390, 80, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
+    spinBox.setValue (1);
+    Label spinBoxLabel (710, 440, 80, 20, "SpinBox");
+    spinBoxLabel.setFont (labelFont);
+    window.add (&spinBox);
+    window.add (&spinBoxLabel);
+
+    // ComboBox
+    ComboBox comboBox (700, 510, 100, 20, {"Avicii", "Daft Punk", "M. Garrix", "D. Guetta", "Kygo", "Marshmello", "R. Schulz", "DJ Spooky", "Tiësto", "A. van Buren", "P. van Dyke", "S. Väth", "A. Walker"});
+    comboBox.setValue (1);
+    Label comboBoxLabel (710, 560, 80, 20, "ComboBox");
+    comboBoxLabel.setFont (labelFont);
+    window.add (&comboBox);
+    window.add (&comboBoxLabel);
+
+    // ListBox
+    ListBox listBox (810, 370, 80, 180, {"AC/DC", "Bon Jovi", "Helloween", "Iron Maiden", "KISS", "Metallica", "Manowar", "Pantera", "Scorpions", "Sepultura", "Slayer", "Van Halen"});
+    listBox.setValue (1);
+    listBox.setTop (1);
+    Label listBoxLabel (810, 560, 80, 20, "ListBox");
+    listBoxLabel.setFont (labelFont);
+    window.add (&listBox);
+    window.add (&listBoxLabel);
 
      // Knob
     Knob knob (930, 260, 40, 40, 2);

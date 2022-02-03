@@ -638,6 +638,15 @@ scrollable list content and allows to select an item. In contrast to `SpinBox`:
 * it supports navigation via a scroll bar instead of `SpinButton`s.
 
 
+### ComboBox
+
+![combobox](../suppl/ComboBox.png)
+
+`ComboBox` is `Valueable` widget derived from SpinBox. It shows a `SpinBox`
+with a single button. It opens a `ListBox` with the same content upon
+clicking on the button.
+
+
 ## Attributes and decorations
 
 

@@ -151,7 +151,7 @@ inline Button::Button	(const double x, const double y, const double width, const
 	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::STATUS_NORMAL]));
 	setBorder	(BStyles::Border 
 				 (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (clicked ? BStyles::Color::highLighted : BStyles::Color::darkened), 1.0), 
-				 0.0, 0.0, 3.0));
+				 0.0, 0.0, 0.15 * std::min (width, height)));
 }
 
 inline Widget* Button::clone () const 

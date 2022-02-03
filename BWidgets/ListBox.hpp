@@ -44,6 +44,9 @@ namespace BWidgets
  *  it shows its content in multiple lines and allow selection by clicking on
  *  an item by the support of Clickable. The selected item is turned in its
  *  active state.
+ *
+ *  @todo  Resize()
+ *  @todo  Import item widgets.
  */
 class ListBox : public SpinBox, public Clickable
 {
