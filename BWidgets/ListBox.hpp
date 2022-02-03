@@ -47,9 +47,6 @@ namespace BWidgets
  */
 class ListBox : public SpinBox, public Clickable
 {
-protected:
-	bool updateSlider_;
-
 public:
 
 	/**
@@ -109,6 +106,12 @@ public:
     virtual void update () override;
 
 	/**
+	 *  @brief  Scrolls the list and sets the visualized list top index.
+	 *  @param pos  Index of the item to be on list top position.
+	 */
+	virtual void setTop (const size_t pos);
+
+	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -146,8 +149,7 @@ inline ListBox::ListBox	(const std::initializer_list<const std::string> items, s
 inline ListBox::ListBox	(const double x, const double y, const double width, const double height, 
 			 	 		 std::initializer_list<const std::string> items, size_t value, uint32_t urid, std::string title) :
 	SpinBox (x, y, width, height, items, value, urid, title),
-	Clickable(),
-	updateSlider_ (true)
+	Clickable()
 {
 	buttonWidth_ = 0.5 * BWIDGETS_DEFAULT_SPINBOX_BUTTON_WIDTH;
 	if (button_) delete button_;
@@ -157,6 +159,7 @@ inline ListBox::ListBox	(const double x, const double y, const double width, con
 								 BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"));
 	button_->setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, ListBox::valueChangedCallback);
 	add (button_);
+	itemHeight_ = BWIDGETS_DEFAULT_SPINBOX_ITEM_HEIGHT;
 	for (Widget* w : items_) w->setHeight (itemHeight_);
 }
 
@@ -169,9 +172,17 @@ inline Widget* ListBox::clone () const
 
 inline void ListBox::copy (const ListBox* that)
 {
-	updateSlider_ = that->updateSlider_;
 	Clickable::operator= (*that);
 	SpinBox::copy (that);
+}
+
+inline void ListBox::setTop (const size_t pos)
+{
+	if (pos != top_)
+	{
+		top_ = pos;
+		update();
+	}
 }
 
 inline void ListBox::update ()
@@ -232,22 +243,17 @@ inline void ListBox::update ()
 
 	button_->moveTo (getEffectiveWidth() + getXOffset() - buttonWidth_, getYOffset());
 	button_->resize (buttonWidth_, getEffectiveHeight());
-
-	if (updateSlider_)
+	
+	const double y0 = items_.front()->getPosition().y;
+	const double ye = items_.back()->getPosition().y + items_.back()->getHeight();
+	std::list<Widget*>::iterator it = std::next (items_.begin(), top_);
+	const double y = (*it)->getPosition().y + 0.5 * (*it)->getHeight();
+	VScrollBar* vs = dynamic_cast<VScrollBar*>(button_);
+	if (vs && (ye > y0)) 
 	{
-		const double y0 = items_.front()->getPosition().y;
-		const double ye = items_.back()->getPosition().y + items_.back()->getHeight();
-		std::list<Widget*>::iterator it = std::next (items_.begin(), top_);
-		const double y = (*it)->getPosition().y + 0.5 * (*it)->getHeight();
-		VScrollBar* vs = dynamic_cast<VScrollBar*>(button_);
-		if (vs && (ye > y0)) 
-		{
-			vs->setValue ((y - y0) / (ye - y0));
-			vs->setValueSize ((lHeight - y + y0) / (ye - y0));
-		};
-	}
-
-	updateSlider_ = true;
+		vs->setValue ((y - y0) / (ye - y0));
+		vs->setValueSize ((lHeight - y) / (ye - y0));
+	};
 
 	Widget::update();
 }
@@ -285,8 +291,7 @@ inline void ListBox::onWheelScrolled (BEvents::Event* event)
 	if	(((top_ > 1) || (wev->getDelta().y < 0)) &&
 		 ((top_ + 1 < items_.size()) || (wev->getDelta().y > 0)))
 	{
-		top_ -= (wev->getDelta().y < 0 ? -1 : (wev->getDelta().y > 0 ? 1 : 0));
-		update();
+		setTop (top_ - (wev->getDelta().y < 0 ? -1 : (wev->getDelta().y > 0 ? 1 : 0)));
 	}
 
 	Scrollable::onWheelScrolled(event);
@@ -315,9 +320,9 @@ inline void ListBox::valueChangedCallback (BEvents::Event* event)
 				Widget* w2 = (*it);
 				if (y <= w2->getPosition().y + w2->getHeight())
 				{
-					p->top_ = count;
-					p->updateSlider_ = false;
-					p->update ();
+					w->setValueable (false);
+					p->setTop (count);
+					w->setValueable (true);
 					break;
 				} 
 				++count;
