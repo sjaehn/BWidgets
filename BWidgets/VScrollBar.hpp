@@ -51,7 +51,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %VScrollBar object.
+	 * @brief  Constructs a default %VScrollBar object.
 	 * 
 	 */
 	VScrollBar ();
@@ -165,7 +165,10 @@ protected:
 };
 
 inline VScrollBar::VScrollBar () :
-	VScrollBar (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+	VScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VSCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VSCROLLBAR_HEIGHT, 
+				 0.0, 0.0, 1.0, 0.0, 0.0, 
+				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+				 URID_UNKNOWN_URID, "")
 {
 
 }

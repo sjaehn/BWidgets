@@ -26,8 +26,13 @@
 #include "Draws/drawKnob.hpp"
 #include "Widget.hpp"
 
+#ifndef BWIDGETS_DEFAULT_VSWITCH_WIDTH
 #define BWIDGETS_DEFAULT_VSWITCH_WIDTH 20.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VSWITCH_HEIGHT
 #define BWIDGETS_DEFAULT_VSWITCH_HEIGHT 40.0
+#endif
 
 namespace BWidgets
 {
@@ -46,7 +51,7 @@ class VSwitch : public Button, public Draggable, public Scrollable
 public:
 
 	/**
-	 * @brief  Constructs an empty %VSwitch object.
+	 * @brief  Constructs a default %VSwitch object.
 	 * 
 	 */
 	VSwitch ();
@@ -155,7 +160,7 @@ protected:
 };
 
 inline VSwitch::VSwitch () :
-	VSwitch (0.0, 0.0, 0.0, 0.0, true, false, URID_UNKNOWN_URID, "")
+	VSwitch (0.0, 0.0, BWIDGETS_DEFAULT_VSWITCH_WIDTH, BWIDGETS_DEFAULT_VSWITCH_HEIGHT, true, false, URID_UNKNOWN_URID, "")
 {
 
 }

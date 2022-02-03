@@ -28,8 +28,13 @@
 #include <cstdint>
 #include <vector>
 
+#ifndef BWIDGETS_DEFAULT_HPIANOROLL_WIDTH
 #define BWIDGETS_DEFAULT_HPIANOROLL_WIDTH 400.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_HPIANOROLL_HEIGHT
 #define BWIDGETS_DEFAULT_HPIANOROLL_HEIGHT 40.0
+#endif
 
 namespace BWidgets
 {
@@ -56,7 +61,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %HPianoRoll object.
+	 * @brief  Constructs a default %HPianoRoll object.
 	 * 
 	 */
 	HPianoRoll ();
@@ -318,7 +323,7 @@ constexpr std::array<PianoKeyCoords, 12> keyCoords=
 
 
 inline HPianoRoll::HPianoRoll () :
-	HPianoRoll (0, 0, 0, 0, 0, 0, std::map<uint8_t, uint8_t>(), URID_UNKNOWN_URID, "")
+	HPianoRoll (0, 0, BWIDGETS_DEFAULT_HPIANOROLL_WIDTH, BWIDGETS_DEFAULT_HPIANOROLL_HEIGHT, 0, 127, std::map<uint8_t, uint8_t>(), URID_UNKNOWN_URID, "")
 {
 
 }

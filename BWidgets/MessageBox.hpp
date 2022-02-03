@@ -22,8 +22,13 @@
 #include "Symbol.hpp"
 #include <cairo/cairo.h>
 
+#ifndef BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH
 #define BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH (BWIDGETS_DEFAULT_TEXTBOX_WIDTH + 100.0)
+#endif
+
+#ifndef BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT
 #define BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT (BWIDGETS_DEFAULT_TEXTBOX_HEIGHT + 40.0)
+#endif
 
 namespace BWidgets
 {
@@ -42,7 +47,7 @@ public:
 	Text headline;
 
 	/**
-	 *  @brief  Constructs an empty %MessageBox object.
+	 *  @brief  Constructs an empty default %MessageBox object.
 	 */
 	MessageBox ();
 
@@ -125,7 +130,8 @@ public:
     virtual void update () override;
 };
 
-inline MessageBox::MessageBox () : MessageBox (0.0, 0.0, 0.0, 0.0, Symbol::NO_SYMBOL, "", "", {}, URID_UNKNOWN_URID, "") 
+inline MessageBox::MessageBox () : 
+	MessageBox (0.0, 0.0, BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH, BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT, Symbol::NO_SYMBOL, "", "", {}, URID_UNKNOWN_URID, "") 
 {
 
 }

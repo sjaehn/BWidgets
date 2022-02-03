@@ -22,6 +22,14 @@
 #include <cairo/cairo.h>
 #include <initializer_list>
 
+#ifndef BWIDGETS_DEFAULT_IMAGE_WIDTH
+#define BWIDGETS_DEFAULT_IMAGE_WIDTH BWIDGETS_DEFAULT_WIDGET_WIDTH
+#endif
+
+#ifndef BWIDGETS_DEFAULT_IMAGE_HEIGHT
+#define BWIDGETS_DEFAULT_IMAGE_HEIGHT BWIDGETS_DEFAULT_WIDGET_HEIGHT
+#endif
+
 namespace BWidgets
 {
 /**
@@ -36,7 +44,7 @@ protected:
 
 public:
 	/**
-	 *  @brief  Construct an empty %Image.
+	 *  @brief  Construct an empty default %Image.
 	 */
 	Image ();
 
@@ -246,7 +254,7 @@ protected:
 };
 
 inline Image::Image () : 
-	Image (0.0, 0.0, BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT) 
+	Image (0.0, 0.0, BWIDGETS_DEFAULT_IMAGE_WIDTH, BWIDGETS_DEFAULT_IMAGE_HEIGHT) 
 {
 
 }

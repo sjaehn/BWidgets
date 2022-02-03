@@ -27,8 +27,13 @@
 #include <initializer_list>
 #include <vector>
 
+#ifndef BWIDGETS_DEFAULT_BOX_WIDTH
 #define BWIDGETS_DEFAULT_BOX_WIDTH 200.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_BOX_HEIGHT
 #define BWIDGETS_DEFAULT_BOX_HEIGHT 60.0
+#endif
 
 #ifndef BWIDGETS_DEFAULT_MENU_PADDING
 #define BWIDGETS_DEFAULT_MENU_PADDING 20.0
@@ -54,7 +59,7 @@ protected:
 
 public:
 	/**
-	 *  @brief  Constructs an empty %Box object.
+	 *  @brief  Constructs a default %Box object.
 	 */
 	Box ();
 
@@ -189,7 +194,7 @@ protected:
 	static void buttonClickCallback (BEvents::Event* event);
 };
 
-inline Box::Box () : Box (0.0, 0.0, 0.0, 0.0, {}, URID_UNKNOWN_URID, "") 
+inline Box::Box () : Box (0.0, 0.0, BWIDGETS_DEFAULT_BOX_WIDTH, BWIDGETS_DEFAULT_BOX_HEIGHT, {}, URID_UNKNOWN_URID, "") 
 {
 
 }

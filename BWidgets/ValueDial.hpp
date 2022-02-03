@@ -23,8 +23,13 @@
 #include <exception>
 #include <functional>
 
+#ifndef BWIDGETS_DEFAULT_VALUEDIAL_WIDTH
 #define BWIDGETS_DEFAULT_VALUEDIAL_WIDTH 40.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUEDIAL_HEIGHT
 #define BWIDGETS_DEFAULT_VALUEDIAL_HEIGHT 50.0
+#endif
 
 namespace BWidgets
 {
@@ -55,7 +60,7 @@ public:
 	LabelEdit label;
 
 	/**
-	 * @brief  Constructs an empty %ValueDial object.
+	 * @brief  Constructs a default %ValueDial object.
 	 */
 	ValueDial ();
 
@@ -142,7 +147,7 @@ public:
 
 inline ValueDial::ValueDial () :
 	ValueDial	(
-				 0.0, 0.0, 0.0, 0.0, 
+				 0.0, 0.0, BWIDGETS_DEFAULT_VALUEDIAL_WIDTH, BWIDGETS_DEFAULT_VALUEDIAL_HEIGHT, 
 				 0.0, 0.0, 1.0, 0.0, 
 				 ValueTransferable<double>::noTransfer, 
 				 ValueTransferable<double>::noTransfer, 

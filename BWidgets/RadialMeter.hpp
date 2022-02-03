@@ -26,8 +26,13 @@
 #include <cairo/cairo.h>
 #include <cmath>
 
+#ifndef BWIDGETS_DEFAULT_RADIALMETER_WIDTH
 #define BWIDGETS_DEFAULT_RADIALMETER_WIDTH 40.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_RADIALMETER_HEIGHT
 #define BWIDGETS_DEFAULT_RADIALMETER_HEIGHT 40.0
+#endif
 
 #ifndef STYLEPROPERTY_HICOLORS_URI
 #define STYLEPROPERTY_HICOLORS_URI STYLEPROPERTY_URI "#HiColors"
@@ -63,7 +68,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %RadialMeter object.
+	 * @brief  Constructs a default %RadialMeter object.
 	 * 
 	 */
 	RadialMeter ();
@@ -183,25 +188,28 @@ protected:
 };
 
 inline RadialMeter::RadialMeter () :
-	RadialMeter (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+	RadialMeter	(0.0, 0.0, BWIDGETS_DEFAULT_RADIALMETER_WIDTH, BWIDGETS_DEFAULT_RADIALMETER_HEIGHT, 
+				 0.0, 0.0, 1.0, 0.0, 
+				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+				 URID_UNKNOWN_URID, "")
 {
 
 }
 
 inline RadialMeter::RadialMeter (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	RadialMeter	(0.0, 0.0, BWIDGETS_DEFAULT_RADIALMETER_WIDTH, BWIDGETS_DEFAULT_RADIALMETER_HEIGHT, 
-			 value, min, max, step, 
-			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
-			 urid, title) 
+				 value, min, max, step, 
+				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+				 urid, title) 
 {
 
 }
 
 inline RadialMeter::RadialMeter	(const double  x, const double y, const double width, const double height, 
-						 double value, const double min, const double max, double step, 
-						 std::function<double (const double& x)> transferFunc,
-			 			 std::function<double (const double& x)> reTransferFunc,
-						 uint32_t urid, std::string title) :
+								 double value, const double min, const double max, double step, 
+								 std::function<double (const double& x)> transferFunc,
+			 					 std::function<double (const double& x)> reTransferFunc,
+								 uint32_t urid, std::string title) :
 	Widget (x, y, width, height, urid, title),
 	ValueableTyped<double> (value),
 	ValidatableRange<double> (min, max, step),

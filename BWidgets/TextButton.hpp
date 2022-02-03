@@ -21,6 +21,14 @@
 #include "Button.hpp"
 #include "Label.hpp"
 
+#ifndef BWIDGETS_DEFAULT_TEXTBUTTON_WIDTH
+#define BWIDGETS_DEFAULT_TEXTBUTTON_WIDTH BWIDGETS_DEFAULT_BUTTON_WIDTH
+#endif
+
+#ifndef BWIDGETS_DEFAULT_TEXTBUTTON_HEIGHT
+#define BWIDGETS_DEFAULT_TEXTBUTTON_HEIGHT BWIDGETS_DEFAULT_BUTTON_HEIGHT
+#endif
+
 namespace BWidgets
 {
 /**
@@ -121,10 +129,10 @@ public:
     virtual void update () override;
 };
 
-inline TextButton::TextButton () : TextButton (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, "", false, false, URID_UNKNOWN_URID, "") {}
+inline TextButton::TextButton () : TextButton (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBUTTON_WIDTH, BWIDGETS_DEFAULT_TEXTBUTTON_HEIGHT, "", false, false, URID_UNKNOWN_URID, "") {}
 
 inline TextButton::TextButton	(const std::string& text, bool toggleable, bool clicked, uint32_t urid, std::string title) :
-	TextButton (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, text, toggleable, clicked, urid, title) {}
+	TextButton (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBUTTON_WIDTH, BWIDGETS_DEFAULT_TEXTBUTTON_HEIGHT, text, toggleable, clicked, urid, title) {}
 
 inline TextButton::TextButton	(const double x, const double y, const double width, const double height, 
 			 	 		const std::string& text, bool toggleable, bool clicked, uint32_t urid, std::string title) :

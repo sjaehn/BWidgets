@@ -25,8 +25,13 @@
 #include "Supports/ValueTransferable.hpp"
 #include <cairo/cairo.h>
 
+#ifndef BWIDGETS_DEFAULT_VMETER_WIDTH
 #define BWIDGETS_DEFAULT_VMETER_WIDTH 20.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VMETER_HEIGHT
 #define BWIDGETS_DEFAULT_VMETER_HEIGHT 80.0
+#endif
 
 #ifndef STYLEPROPERTY_HICOLORS_URI
 #define STYLEPROPERTY_HICOLORS_URI STYLEPROPERTY_URI "#HiColors"
@@ -182,7 +187,10 @@ protected:
 };
 
 inline VMeter::VMeter () :
-	VMeter (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+	VMeter	(0.0, 0.0, BWIDGETS_DEFAULT_VMETER_WIDTH, BWIDGETS_DEFAULT_VMETER_HEIGHT, 
+			0.0, 0.0, 1.0, 0.0, 
+			ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			URID_UNKNOWN_URID, "")
 {
 
 }

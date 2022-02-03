@@ -21,6 +21,14 @@
 #include "Button.hpp"
 #include "Symbol.hpp"
 
+#ifndef BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH
+#define BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH BWIDGETS_DEFAULT_BUTTON_WIDTH
+#endif
+
+#ifndef BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT
+#define BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT BWIDGETS_DEFAULT_BUTTON_HEIGHT
+#endif
+
 namespace BWidgets
 {
 /**
@@ -122,10 +130,10 @@ public:
 };
 
 inline SymbolButton::SymbolButton () : 
-	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, Symbol::NO_SYMBOL, false, false, URID_UNKNOWN_URID, "") {}
+	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH, BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT, Symbol::NO_SYMBOL, false, false, URID_UNKNOWN_URID, "") {}
 
 inline SymbolButton::SymbolButton	(const Symbol::SymbolType symbolIdx, bool toggleable, bool clicked, uint32_t urid, std::string title) :
-	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, symbolIdx, toggleable, clicked, urid, title) {}
+	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH, BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT, symbolIdx, toggleable, clicked, urid, title) {}
 
 inline SymbolButton::SymbolButton	(const double x, const double y, const double width, const double height, 
 			 	 		 	 const Symbol::SymbolType symbolIdx, bool toggleable, bool clicked, uint32_t urid, std::string title) :

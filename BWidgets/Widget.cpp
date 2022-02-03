@@ -26,7 +26,7 @@
 namespace BWidgets
 {
 
-Widget::Widget () : Widget (0.0, 0.0, BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT) {}
+Widget::Widget () : Widget (0.0, 0.0, BWIDGETS_DEFAULT_WIDGET_WIDTH, BWIDGETS_DEFAULT_WIDGET_HEIGHT) {}
 
 Widget::Widget (const double x, const double y, const double width, const double height, uint32_t urid, std::string title) :
 	Linkable(),
@@ -53,7 +53,7 @@ Widget::~Widget ()
 
 Widget* Widget::clone () const 
 {
-	Widget* w = new Widget (0.0, 0.0, BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT, getUrid());
+	Widget* w = new Widget (0.0, 0.0, BWIDGETS_DEFAULT_WIDGET_WIDTH, BWIDGETS_DEFAULT_WIDGET_HEIGHT, getUrid());
 	w->copy (this);
 	return w;
 }

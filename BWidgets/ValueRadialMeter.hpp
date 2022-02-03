@@ -24,8 +24,13 @@
 #include <exception>
 #include <functional>
 
+#ifndef BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH
 #define BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH 40.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT
 #define BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT 50.0
+#endif
 
 namespace BWidgets
 {
@@ -56,7 +61,7 @@ public:
 	Label label;
 
 	/**
-	 * @brief  Constructs an empty %ValueRadialMeter object.
+	 * @brief  Constructs a default %ValueRadialMeter object.
 	 */
 	ValueRadialMeter ();
 
@@ -143,7 +148,7 @@ public:
 
 inline ValueRadialMeter::ValueRadialMeter () :
 	ValueRadialMeter	(
-					 0.0, 0.0, 0.0, 0.0, 
+					 0.0, 0.0, BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH, BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT, 
 					 0.0, 0.0, 1.0, 0.0, 
 					 ValueTransferable<double>::noTransfer, 
 					 ValueTransferable<double>::noTransfer, 

@@ -26,8 +26,13 @@
 #include "Draws/drawVBar.hpp"
 #include "Draws/drawKnob.hpp"
 
+#ifndef BWIDGETS_DEFAULT_VSCALE_WIDTH
 #define BWIDGETS_DEFAULT_VSCALE_WIDTH 10.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VSCALE_HEIGHT
 #define BWIDGETS_DEFAULT_VSCALE_HEIGHT 80.0
+#endif
 
 namespace BWidgets
 {
@@ -53,7 +58,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %VScale object.
+	 * @brief  Constructs a default %VScale object.
 	 * 
 	 */
 	VScale ();
@@ -166,7 +171,10 @@ protected:
 };
 
 inline VScale::VScale () :
-	VScale (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+	VScale	(0.0, 0.0, BWIDGETS_DEFAULT_VSCALE_WIDTH, BWIDGETS_DEFAULT_VSCALE_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 URID_UNKNOWN_URID, "")
 {
 
 }

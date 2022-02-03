@@ -21,6 +21,14 @@
 #include "Button.hpp"
 #include "Image.hpp"
 
+#ifndef BWIDGETS_DEFAULT_IMAGEBUTTON_WIDTH
+#define BWIDGETS_DEFAULT_IMAGEBUTTON_WIDTH BWIDGETS_DEFAULT_BUTTON_WIDTH
+#endif
+
+#ifndef BWIDGETS_DEFAULT_IMAGEBUTTON_HEIGHT
+#define BWIDGETS_DEFAULT_IMAGEBUTTON_HEIGHT BWIDGETS_DEFAULT_BUTTON_HEIGHT
+#endif
+
 namespace BWidgets
 {
 /**
@@ -191,7 +199,7 @@ public:
 };
 
 inline ImageButton::ImageButton () : 
-	ImageButton (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, 
+	ImageButton (0.0, 0.0, BWIDGETS_DEFAULT_IMAGEBUTTON_WIDTH, BWIDGETS_DEFAULT_IMAGEBUTTON_HEIGHT, 
 	std::map<BStyles::Status, cairo_surface_t*>(), false, false, URID_UNKNOWN_URID, "") 
 {
 

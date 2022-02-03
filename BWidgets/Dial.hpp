@@ -27,8 +27,13 @@
 #include "Draws/drawKnob.hpp"
 #include <cairo/cairo.h>
 
+#ifndef BWIDGETS_DEFAULT_DIAL_WIDTH
 #define BWIDGETS_DEFAULT_DIAL_WIDTH 40.0
-#define BWIDGETS_DEFAULT_DIAL_HEIGHT 40.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_DIAL_HEIGHT
+#define BWIDGETS_DEFAULT_DIAL_HEIGHT BWIDGETS_DEFAULT_DIAL_WIDTH
+#endif
 
 namespace BWidgets
 {
@@ -55,7 +60,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %Dial object.
+	 * @brief  Constructs a default %Dial object.
 	 * 
 	 */
 	Dial ();
@@ -173,7 +178,10 @@ protected:
 };
 
 inline Dial::Dial () :
-	Dial (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+	Dial	(0.0, 0.0, BWIDGETS_DEFAULT_DIAL_WIDTH, BWIDGETS_DEFAULT_DIAL_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 URID_UNKNOWN_URID, "")
 {
 
 }

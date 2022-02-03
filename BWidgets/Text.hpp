@@ -21,6 +21,13 @@
 #include "Label.hpp"
 #include <vector>
 
+#ifndef BWIDGETS_DEFAULT_TEXT_WIDTH
+#define BWIDGETS_DEFAULT_TEXT_WIDTH BWIDGETS_DEFAULT_WIDGET_WIDTH
+#endif
+
+#ifndef BWIDGETS_DEFAULT_TEXT_HEIGHT
+#define BWIDGETS_DEFAULT_TEXT_HEIGHT BWIDGETS_DEFAULT_WIDGET_HEIGHT
+#endif
 namespace BWidgets
 {
 
@@ -37,7 +44,7 @@ class Text : public Label
 public:
 
 	/**
-	 * @brief Construct an empty %Text object.
+	 * @brief Construct an empty default %Text object.
 	 */
 	Text ();
 
@@ -148,13 +155,13 @@ protected:
 	virtual void draw (const BUtilities::RectArea& area) override;
 };
 
-inline Text::Text () : Text (0.0, 0.0, 0.0, 0.0, "", URID_UNKNOWN_URID, "") 
+inline Text::Text () : Text (0.0, 0.0, BWIDGETS_DEFAULT_TEXT_WIDTH, BWIDGETS_DEFAULT_TEXT_HEIGHT, "", URID_UNKNOWN_URID, "") 
 {
 
 }
 
 inline Text::Text (const std::string& text, uint32_t urid, std::string title) :
-	Text (0.0, 0.0, BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT, text, urid, title) 
+	Text (0.0, 0.0, BWIDGETS_DEFAULT_TEXT_WIDTH, BWIDGETS_DEFAULT_TEXT_HEIGHT, text, urid, title) 
 {
 	resize();
 }

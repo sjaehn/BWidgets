@@ -22,7 +22,13 @@
 #include <cairo/cairo.h>
 #include <cmath>
 
-#define BWIDGETS_DEFAULT_RADIOBUTTON_SIZE 20.0
+#ifndef BWIDGETS_DEFAULT_RADIOBUTTON_WIDTH
+#define BWIDGETS_DEFAULT_RADIOBUTTON_WIDTH 20.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_RADIOBUTTON_HEIGHT
+#define BWIDGETS_DEFAULT_RADIOBUTTON_HEIGHT BWIDGETS_DEFAULT_RADIOBUTTON_WIDTH
+#endif
 
 namespace BWidgets
 {
@@ -40,7 +46,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %RadioButton object.
+	 * @brief  Constructs a default %RadioButton object.
 	 * 
 	 */
 	RadioButton ();
@@ -117,13 +123,13 @@ protected:
 };
 
 inline RadioButton::RadioButton () :
-	RadioButton (0.0, 0.0, 0.0, 0.0, false, false, URID_UNKNOWN_URID, "")
+	RadioButton (0.0, 0.0, BWIDGETS_DEFAULT_RADIOBUTTON_WIDTH, BWIDGETS_DEFAULT_RADIOBUTTON_HEIGHT, false, false, URID_UNKNOWN_URID, "")
 {
 
 }
 
 inline RadioButton::RadioButton (bool toggleable, bool clicked, uint32_t urid, std::string title) : 
-	RadioButton (0.0, 0.0, BWIDGETS_DEFAULT_RADIOBUTTON_SIZE, BWIDGETS_DEFAULT_RADIOBUTTON_SIZE, toggleable, clicked, urid, title) 
+	RadioButton (0.0, 0.0, BWIDGETS_DEFAULT_RADIOBUTTON_WIDTH, BWIDGETS_DEFAULT_RADIOBUTTON_HEIGHT, toggleable, clicked, urid, title) 
 {
 
 }

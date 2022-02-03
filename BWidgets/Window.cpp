@@ -42,7 +42,7 @@
 namespace BWidgets
 {
 
-Window::Window () : Window (BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT, 0) {}
+Window::Window () : Window (BWIDGETS_DEFAULT_WINDOW_WIDTH, BWIDGETS_DEFAULT_WINDOW_HEIGHT, 0) {}
 
 Window::Window (const double width, const double height, PuglNativeView nativeWindow, 
 		uint32_t urid, std::string title, bool resizable,

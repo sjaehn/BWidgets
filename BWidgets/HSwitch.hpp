@@ -26,8 +26,13 @@
 #include "Draws/drawKnob.hpp"
 #include "Widget.hpp"
 
+#ifndef BWIDGETS_DEFAULT_HSWITCH_WIDTH
 #define BWIDGETS_DEFAULT_HSWITCH_WIDTH 40.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_HSWITCH_HEIGHT
 #define BWIDGETS_DEFAULT_HSWITCH_HEIGHT 20.0
+#endif
 
 namespace BWidgets
 {
@@ -46,7 +51,7 @@ class HSwitch : public Button, public Draggable, public Scrollable
 public:
 
 	/**
-	 * @brief  Constructs an empty %HSwitch object.
+	 * @brief  Constructs a default %HSwitch object.
 	 * 
 	 */
 	HSwitch ();
@@ -155,7 +160,7 @@ protected:
 };
 
 inline HSwitch::HSwitch () :
-	HSwitch (0.0, 0.0, 0.0, 0.0, true, false, URID_UNKNOWN_URID, "")
+	HSwitch (0.0, 0.0, BWIDGETS_DEFAULT_HSWITCH_WIDTH, BWIDGETS_DEFAULT_HSWITCH_HEIGHT, true, false, URID_UNKNOWN_URID, "")
 {
 
 }

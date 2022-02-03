@@ -26,8 +26,13 @@
 #include "Draws/drawHBar.hpp"
 #include "Draws/drawKnob.hpp"
 
+#ifndef BWIDGETS_DEFAULT_HSCALE_WIDTH
 #define BWIDGETS_DEFAULT_HSCALE_WIDTH 80.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_HSCALE_HEIGHT
 #define BWIDGETS_DEFAULT_HSCALE_HEIGHT 10.0
+#endif
 
 namespace BWidgets
 {
@@ -53,7 +58,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %HScale object.
+	 * @brief  Constructs a default %HScale object.
 	 * 
 	 */
 	HScale ();
@@ -166,7 +171,10 @@ protected:
 };
 
 inline HScale::HScale () :
-	HScale (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+	HScale	(0.0, 0.0, BWIDGETS_DEFAULT_HSCALE_WIDTH, BWIDGETS_DEFAULT_HSCALE_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 URID_UNKNOWN_URID, "")
 {
 
 }

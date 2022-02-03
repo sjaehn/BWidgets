@@ -186,11 +186,11 @@ Widget
 ```
 
 Each widget class Xxx has got at least three different constructors:
-* `Xxx ()` - The parameter free default constructor creates a zero-sized default
-  widget.
-* `Xxx (data, ...)` - Creates a default-sized widget from the passed data.
+* `Xxx ()` - The parameter free default constructor. It creates a 
+  default default-sized empty (or default content) widget. 
+* `Xxx (data, ...)` - Creates a default-sized widget with the passed data.
 * `Xxx (x, y, width, height, data, ...)` - Creates a widget at the position (x, 
-  y) relative to the parent widget with the extends (width, height) from the
+  y) relative to the parent widget with the extends (width, height) with the
   passed data.
 
 You can re-define the widget default size used for `Xxx (data, ...)` by 

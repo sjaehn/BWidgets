@@ -21,8 +21,13 @@
 #include "VScale.hpp"
 #include "Draws/drawKnob.hpp"
 
+#ifndef BWIDGETS_DEFAULT_VSLIDER_WIDTH
 #define BWIDGETS_DEFAULT_VSLIDER_WIDTH 20.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VSLIDER_HEIGHT
 #define BWIDGETS_DEFAULT_VSLIDER_HEIGHT 80.0
+#endif
 
 namespace BWidgets
 {
@@ -42,7 +47,7 @@ class VSlider :	public VScale
 public:
 
 	/**
-	 * @brief  Constructs an empty %VSlider object.
+	 * @brief  Constructs a default %VSlider object.
 	 * 
 	 */
 	VSlider ();
@@ -130,7 +135,10 @@ protected:
 };
 
 inline VSlider::VSlider () :
-	VSlider (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+	VSlider	(0.0, 0.0, BWIDGETS_DEFAULT_VSLIDER_WIDTH, BWIDGETS_DEFAULT_VSLIDER_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 URID_UNKNOWN_URID, "")
 {
 
 }

@@ -23,8 +23,13 @@
 #include <exception>
 #include <functional>
 
+#ifndef BWIDGETS_DEFAULT_VALUEVSLIDER_WIDTH
 #define BWIDGETS_DEFAULT_VALUEVSLIDER_WIDTH 40.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUEVSLIDER_HEIGHT
 #define BWIDGETS_DEFAULT_VALUEVSLIDER_HEIGHT 80.0
+#endif
 
 namespace BWidgets
 {
@@ -55,7 +60,7 @@ public:
 	LabelEdit label;
 
 	/**
-	 * @brief  Constructs an empty %ValueVSlider object.
+	 * @brief  Constructs a default %ValueVSlider object.
 	 */
 	ValueVSlider ();
 
@@ -142,7 +147,7 @@ public:
 
 inline ValueVSlider::ValueVSlider () :
 	ValueVSlider	(
-					 0.0, 0.0, 0.0, 0.0, 
+					 0.0, 0.0, BWIDGETS_DEFAULT_VALUEVSLIDER_WIDTH, BWIDGETS_DEFAULT_VALUEVSLIDER_HEIGHT, 
 					 0.0, 0.0, 1.0, 0.0, 
 					 ValueTransferable<double>::noTransfer, 
 					 ValueTransferable<double>::noTransfer, 

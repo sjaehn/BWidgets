@@ -21,8 +21,13 @@
 #include "Button.hpp"
 #include "Draws/drawKnob.hpp"
 
+#ifndef BWIDGETS_DEFAULT_KNOB_WIDTH
 #define BWIDGETS_DEFAULT_KNOB_WIDTH 20.0
-#define BWIDGETS_DEFAULT_KNOB_HEIGHT 20.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_KNOB_HEIGHT
+#define BWIDGETS_DEFAULT_KNOB_HEIGHT BWIDGETS_DEFAULT_KNOB_WIDTH
+#endif
 
 namespace BWidgets
 {
@@ -43,7 +48,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %Knob object.
+	 * @brief  Constructs a default %Knob object.
 	 * 
 	 */
 	Knob ();
@@ -134,7 +139,7 @@ protected:
 };
 
 inline Knob::Knob () :
-	Knob (0.0, 0.0, 0.0, 0.0, 0.0, false, false, URID_UNKNOWN_URID, "")
+	Knob (0.0, 0.0, BWIDGETS_DEFAULT_KNOB_WIDTH, BWIDGETS_DEFAULT_KNOB_HEIGHT, 1.0, false, false, URID_UNKNOWN_URID, "")
 {
 
 }

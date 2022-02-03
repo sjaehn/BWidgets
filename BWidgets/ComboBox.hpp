@@ -158,7 +158,10 @@ protected:
 	static void listBoxChangedCallback (BEvents::Event* event);
 };
 
-inline ComboBox::ComboBox () : ComboBox (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, {}, 0, URID_UNKNOWN_URID, "") {}
+inline ComboBox::ComboBox () : 
+	ComboBox	(0.0, 0.0, BWIDGETS_DEFAULT_COMBOBOX_WIDTH, BWIDGETS_DEFAULT_COMBOBOX_HEIGHT, 
+				 0.0, BWIDGETS_DEFAULT_COMBOBOX_HEIGHT, BWIDGETS_DEFAULT_COMBOBOX_WIDTH, BWIDGETS_DEFAULT_COMBOBOX_LISTBOX_HEIGHT, 
+				 {}, 0, URID_UNKNOWN_URID, "") {}
 
 inline ComboBox::ComboBox	(const std::initializer_list<const std::string> items, size_t value, uint32_t urid, std::string title) :
 	ComboBox	(0.0, 0.0, BWIDGETS_DEFAULT_COMBOBOX_WIDTH, BWIDGETS_DEFAULT_COMBOBOX_HEIGHT, 

@@ -24,8 +24,13 @@
 #include <exception>
 #include <functional>
 
+#ifndef BWIDGETS_DEFAULT_VALUEHMETER_WIDTH
 #define BWIDGETS_DEFAULT_VALUEHMETER_WIDTH 120.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUEHMETER_HEIGHT
 #define BWIDGETS_DEFAULT_VALUEHMETER_HEIGHT 20.0
+#endif
 
 namespace BWidgets
 {
@@ -56,7 +61,7 @@ public:
 	Label label;
 
 	/**
-	 * @brief  Constructs an empty %ValueHMeter object.
+	 * @brief  Constructs a default %ValueHMeter object.
 	 */
 	ValueHMeter ();
 
@@ -143,7 +148,7 @@ public:
 
 inline ValueHMeter::ValueHMeter () :
 	ValueHMeter	(
-					 0.0, 0.0, 0.0, 0.0, 
+					 0.0, 0.0, BWIDGETS_DEFAULT_VALUEHMETER_WIDTH, BWIDGETS_DEFAULT_VALUEHMETER_HEIGHT, 
 					 0.0, 0.0, 1.0, 0.0, 
 					 ValueTransferable<double>::noTransfer, 
 					 ValueTransferable<double>::noTransfer, 

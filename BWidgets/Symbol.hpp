@@ -22,7 +22,13 @@
 #include <cairo/cairo.h>
 #include <cmath>
 
-#define BWIDGETS_DEFAULT_SYMBOL_SIZE 12
+#ifndef BWIDGETS_DEFAULT_SYMBOL_WIDTH
+#define BWIDGETS_DEFAULT_SYMBOL_WIDTH 20.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_SYMBOL_HEIGHT
+#define BWIDGETS_DEFAULT_SYMBOL_HEIGHT BWIDGETS_DEFAULT_SYMBOL_WIDTH
+#endif
 
 namespace BWidgets
 {
@@ -63,7 +69,7 @@ protected:
 public:
 
 	/**
-	 * @brief Constructs an empty %Symbol object.
+	 * @brief Constructs an empty default %Symbol object.
 	 */
 	Symbol ();
 
@@ -143,13 +149,13 @@ protected:
 };
 
 inline Symbol::Symbol () : 
-	Symbol (0.0, 0.0, 0.0, 0.0, NO_SYMBOL, URID_UNKNOWN_URID, "") 
+	Symbol (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOL_WIDTH, BWIDGETS_DEFAULT_SYMBOL_HEIGHT, NO_SYMBOL, URID_UNKNOWN_URID, "") 
 {
 
 }
 
 inline Symbol::Symbol (SymbolType symbol, uint32_t urid, std::string title) :
-	Symbol (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOL_SIZE, BWIDGETS_DEFAULT_SYMBOL_SIZE, symbol, urid, title)
+	Symbol (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOL_WIDTH, BWIDGETS_DEFAULT_SYMBOL_HEIGHT, symbol, urid, title)
 {
 }
 

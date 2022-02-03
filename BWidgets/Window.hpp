@@ -27,6 +27,14 @@
 #include "../BDevices/BDevices.hpp"
 #include "Supports/Closeable.hpp"
 
+#ifndef BWIDGETS_DEFAULT_WINDOW_WIDTH
+#define BWIDGETS_DEFAULT_WINDOW_WIDTH 600
+#endif
+
+#ifndef BWIDGETS_DEFAULT_WINDOW_HEIGHT
+#define BWIDGETS_DEFAULT_WINDOW_HEIGHT 400
+#endif
+
 namespace BWidgets
 {
 

@@ -51,7 +51,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %HScrollBar object.
+	 * @brief  Constructs a default %HScrollBar object.
 	 * 
 	 */
 	HScrollBar ();
@@ -165,7 +165,10 @@ protected:
 };
 
 inline HScrollBar::HScrollBar () :
-	HScrollBar (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+	HScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_HSCROLLBAR_WIDTH, BWIDGETS_DEFAULT_HSCROLLBAR_HEIGHT, 
+				 0.0, 0.0, 1.0, 0.0, 0.0, 
+				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+				 URID_UNKNOWN_URID, "")
 {
 
 }

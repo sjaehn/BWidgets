@@ -20,7 +20,13 @@
 
 #include "Button.hpp"
 
-#define BWIDGETS_DEFAULT_CHECKBOX_SIZE 20.0
+#ifndef BWIDGETS_DEFAULT_CHECKBOX_WIDTH
+#define BWIDGETS_DEFAULT_CHECKBOX_WIDTH 20.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_CHECKBOX_HEIGHT
+#define BWIDGETS_DEFAULT_CHECKBOX_HEIGHT BWIDGETS_DEFAULT_CHECKBOX_WIDTH
+#endif
 
 namespace BWidgets
 {
@@ -38,7 +44,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %CheckBox object.
+	 * @brief  Constructs a default %CheckBox object.
 	 * 
 	 */
 	CheckBox ();
@@ -115,13 +121,13 @@ protected:
 };
 
 inline CheckBox::CheckBox () :
-	CheckBox (0.0, 0.0, 0.0, 0.0, false, false, URID_UNKNOWN_URID, "")
+	CheckBox (0.0, 0.0, BWIDGETS_DEFAULT_CHECKBOX_WIDTH, BWIDGETS_DEFAULT_CHECKBOX_HEIGHT, false, false, URID_UNKNOWN_URID, "")
 {
 
 }
 
 inline CheckBox::CheckBox (bool toggleable, bool clicked, uint32_t urid, std::string title) : 
-	CheckBox (0.0, 0.0, BWIDGETS_DEFAULT_CHECKBOX_SIZE, BWIDGETS_DEFAULT_CHECKBOX_SIZE, toggleable, clicked, urid, title) 
+	CheckBox (0.0, 0.0, BWIDGETS_DEFAULT_CHECKBOX_WIDTH, BWIDGETS_DEFAULT_CHECKBOX_HEIGHT, toggleable, clicked, urid, title) 
 {
 
 }

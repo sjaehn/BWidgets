@@ -21,6 +21,14 @@
 #include "Widget.hpp"
 #include "Supports/Draggable.hpp"
 
+#ifndef BWIDGETS_DEFAULT_FRAME_WIDTH
+#define BWIDGETS_DEFAULT_FRAME_WIDTH BWIDGETS_DEFAULT_WIDGET_WIDTH
+#endif
+
+#ifndef BWIDGETS_DEFAULT_FRAME_HEIGHT
+#define BWIDGETS_DEFAULT_FRAME_HEIGHT BWIDGETS_DEFAULT_WIDGET_HEIGHT
+#endif
+
 namespace BWidgets
 {
 
@@ -82,7 +90,7 @@ public:
 };
 
 inline Frame::Frame () :
-    Frame (0.0, 0.0, BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT)
+    Frame (0.0, 0.0, BWIDGETS_DEFAULT_FRAME_WIDTH, BWIDGETS_DEFAULT_FRAME_HEIGHT)
 {
 
 }

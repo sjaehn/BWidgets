@@ -34,9 +34,17 @@
 #include "../BEvents/Event.hpp"
 
 // Default basic widget settings
-#define BWIDGETS_DEFAULT_WIDTH 200
-#define BWIDGETS_DEFAULT_HEIGHT 100
+#ifndef BWIDGETS_DEFAULT_WIDGET_WIDTH
+#define BWIDGETS_DEFAULT_WIDGET_WIDTH 200
+#endif
+
+#ifndef BWIDGETS_DEFAULT_WIDGET_HEIGHT
+#define BWIDGETS_DEFAULT_WIDGET_HEIGHT 100
+#endif
+
+#ifndef BWIDGETS_DEFAULT_STATUS
 #define BWIDGETS_DEFAULT_STATUS BStyles::STATUS_NORMAL
+#endif
 
 namespace BWidgets
 {

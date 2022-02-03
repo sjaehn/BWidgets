@@ -21,8 +21,13 @@
 #include "Box.hpp"
 #include "Text.hpp"
 
+#ifndef BWIDGETS_DEFAULT_TEXTBOX_WIDTH
 #define BWIDGETS_DEFAULT_TEXTBOX_WIDTH BWIDGETS_DEFAULT_BOX_WIDTH
+#endif
+
+#ifndef BWIDGETS_DEFAULT_TEXTBOX_HEIGHT
 #define BWIDGETS_DEFAULT_TEXTBOX_HEIGHT (BWIDGETS_DEFAULT_BOX_HEIGHT + 80.0)
+#endif
 
 namespace BWidgets
 {
@@ -40,7 +45,7 @@ public:
 	Text text;
 
 	/**
-	 *  @brief  Constructs an empty %TextBox object.
+	 *  @brief  Constructs an empty default %TextBox object.
 	 */
 	TextBox ();
 
@@ -117,7 +122,7 @@ public:
     virtual void update () override;
 };
 
-inline TextBox::TextBox () : TextBox (0.0, 0.0, 0.0, 0.0, "", {}, URID_UNKNOWN_URID, "") 
+inline TextBox::TextBox () : TextBox (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBOX_WIDTH, BWIDGETS_DEFAULT_TEXTBOX_HEIGHT, "", {}, URID_UNKNOWN_URID, "") 
 {
 
 }

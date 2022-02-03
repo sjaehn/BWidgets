@@ -25,8 +25,13 @@
 #include "Supports/ValueTransferable.hpp"
 #include <cairo/cairo.h>
 
+#ifndef BWIDGETS_DEFAULT_HMETER_WIDTH
 #define BWIDGETS_DEFAULT_HMETER_WIDTH 80.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_HMETER_HEIGHT
 #define BWIDGETS_DEFAULT_HMETER_HEIGHT 20.0
+#endif
 
 #ifndef STYLEPROPERTY_HICOLORS_URI
 #define STYLEPROPERTY_HICOLORS_URI STYLEPROPERTY_URI "#HiColors"
@@ -62,7 +67,7 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %HMeter object.
+	 * @brief  Constructs a default %HMeter object.
 	 * 
 	 */
 	HMeter ();
@@ -182,7 +187,10 @@ protected:
 };
 
 inline HMeter::HMeter () :
-	HMeter (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+	HMeter	(0.0, 0.0, BWIDGETS_DEFAULT_HMETER_WIDTH, BWIDGETS_DEFAULT_HMETER_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 URID_UNKNOWN_URID, "")
 {
 
 }

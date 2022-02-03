@@ -21,8 +21,13 @@
 #include "HScale.hpp"
 #include "Draws/drawKnob.hpp"
 
+#ifndef BWIDGETS_DEFAULT_HSLIDER_WIDTH
 #define BWIDGETS_DEFAULT_HSLIDER_WIDTH 80.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_HSLIDER_HEIGHT
 #define BWIDGETS_DEFAULT_HSLIDER_HEIGHT 20.0
+#endif
 
 namespace BWidgets
 {
@@ -42,7 +47,7 @@ class HSlider :	public HScale
 public:
 
 	/**
-	 * @brief  Constructs an empty %HSlider object.
+	 * @brief  Constructs a default %HSlider object.
 	 * 
 	 */
 	HSlider ();
@@ -130,7 +135,10 @@ protected:
 };
 
 inline HSlider::HSlider () :
-	HSlider (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, URID_UNKNOWN_URID, "")
+	HSlider	(0.0, 0.0, BWIDGETS_DEFAULT_HSLIDER_WIDTH, BWIDGETS_DEFAULT_HSLIDER_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 URID_UNKNOWN_URID, "")
 {
 
 }

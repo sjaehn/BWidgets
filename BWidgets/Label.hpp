@@ -19,10 +19,26 @@
 #define BWIDGETS_LABEL_HPP_
 
 #include <string>
-#define BWIDGETS_DEFAULT_LABEL_ALIGN BStyles::Font::TEXT_ALIGN_CENTER
-#define BWIDGETS_DEFAULT_LABEL_VALIGN BStyles::Font::TEXT_VALIGN_MIDDLE
+
+
 
 #include "Widget.hpp"
+
+#ifndef BWIDGETS_DEFAULT_LABEL_WIDTH
+#define BWIDGETS_DEFAULT_LABEL_WIDTH 80
+#endif
+
+#ifndef BWIDGETS_DEFAULT_LABEL_HEIGHT
+#define BWIDGETS_DEFAULT_LABEL_HEIGHT 20
+#endif
+
+#ifndef BWIDGETS_DEFAULT_LABEL_ALIGN
+#define BWIDGETS_DEFAULT_LABEL_ALIGN BStyles::Font::TEXT_ALIGN_CENTER
+#endif
+
+#ifndef BWIDGETS_DEFAULT_LABEL_VALIGN
+#define BWIDGETS_DEFAULT_LABEL_VALIGN BStyles::Font::TEXT_VALIGN_MIDDLE
+#endif
 
 namespace BWidgets
 {
@@ -39,7 +55,7 @@ protected:
 	std::string text_;
 public:
 	/**
-	 * @brief Constructs an empty %Label object.
+	 * @brief Constructs an empty default %Label object.
 	 */
 	Label ();
 
@@ -145,13 +161,13 @@ protected:
 };
 
 inline Label::Label () : 
-	Label (0.0, 0.0, 0.0, 0.0, "", URID_UNKNOWN_URID, "") 
+	Label (0.0, 0.0, BWIDGETS_DEFAULT_LABEL_WIDTH, BWIDGETS_DEFAULT_LABEL_HEIGHT, "", URID_UNKNOWN_URID, "") 
 {
 
 }
 
 inline Label::Label (const std::string& text, uint32_t urid, std::string title) :
-	Label (0.0, 0.0, 0.0, 0.0, text, urid, title)
+	Label (0.0, 0.0, BWIDGETS_DEFAULT_LABEL_WIDTH, BWIDGETS_DEFAULT_LABEL_HEIGHT, text, urid, title)
 {
 	Label::resize();
 }

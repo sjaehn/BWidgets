@@ -28,6 +28,14 @@
 #include <locale>
 #include <codecvt>
 
+#ifndef BWIDGETS_DEFAULT_LABELEDIT_WIDTH
+#define BWIDGETS_DEFAULT_LABELEDIT_WIDTH BWIDGETS_DEFAULT_LABEL_WIDTH
+#endif
+
+#ifndef BWIDGETS_DEFAULT_LABELEDIT_HEIGHT
+#define BWIDGETS_DEFAULT_LABELEDIT_HEIGHT BWIDGETS_DEFAULT_LABEL_HEIGHT
+#endif
+
 namespace BWidgets
 {
 
@@ -51,7 +59,7 @@ protected:
 public:
 
 	/**
-	 * @brief Constructs an empty %LabelEdit object.
+	 * @brief Constructs an empty default %LabelEdit object.
 	 */
 	LabelEdit ();
 
@@ -232,13 +240,13 @@ protected:
 };
 
 inline LabelEdit::LabelEdit () : 
-	LabelEdit (0.0, 0.0, 0.0, 0.0, "", URID_UNKNOWN_URID, "") 
+	LabelEdit (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, "", URID_UNKNOWN_URID, "") 
 {
 
 }
 
 inline LabelEdit::LabelEdit (const std::string& text, uint32_t urid, std::string title) :
-	Label (0.0, 0.0, 0.0, 0.0, text, urid, title)
+	Label (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, text, urid, title)
 {
 	Label::resize();
 }
