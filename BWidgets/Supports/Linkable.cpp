@@ -105,8 +105,8 @@ void Linkable::release (Linkable* child, std::function<void (Linkable* obj)> rel
 				std::next (it), 
 				[child, releasefunc] (Linkable* l)
 				{
-					l->main_ = child;
 					releasefunc (l);
+					l->main_ = child;
 					return true;
 				}
 			);
