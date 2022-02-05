@@ -159,6 +159,7 @@ Widget
  |    ├── HSwitch
  |    ╰── VSwitch
  ├── SpinButton
+ ├── Pad
  ├── HMeter
  |    ├── ValueHMeter
  |    ╰── HScale
@@ -409,6 +410,17 @@ BgColors parameter (static elements, false) and by the FgColors parameter
 `SymbolButton`. Its value can either be 0 (no button pressed) or -1 (up button
 pressed) or 1 (down button pressed). The visualble content of the SpinButton 
 is represented by its background and its border.
+
+
+### Pad
+
+![pad](../suppl/Pad.png)
+
+`Pad` is a `Valueable` widget imitating an LED pad. Its value is represented
+by its color from dark to bright. It supports user interaction via
+`Clickable` (switch on / off), `Draggable` (increase / decrease value), and
+`Scrollable` (increase / decrease value). The visualble content of
+the Pad is represented by FgColors.
 
 
 ### HMeter

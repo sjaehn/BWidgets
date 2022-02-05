@@ -26,6 +26,7 @@
 #include "../BWidgets/Button.hpp"
 #include "../BWidgets/TextButton.hpp"
 #include "../BWidgets/SymbolButton.hpp"
+#include "../BWidgets/Pad.hpp"
 #include "../BWidgets/ImageButton.hpp"
 #include "../BWidgets/CheckBox.hpp"
 #include "../BWidgets/RadioButton.hpp"
@@ -97,42 +98,42 @@ int main ()
     window.add (&frameLabel);
 
     // Label
-    Label label (210, 10, 80, 60, "Text");
+    Label label (10, 130, 80, 60, "Text");
     label.setFont(Font ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD, 18.0, BStyles::Font::TEXT_ALIGN_CENTER, BStyles::Font::TEXT_VALIGN_MIDDLE));
-    Label labelLabel (210, 80, 80, 20, "Label");
+    Label labelLabel (10, 200, 80, 20, "Label");
     labelLabel.setFont (labelFont);
     window.add (&label);
     window.add (&labelLabel);
 
     // LabelEdit
-    LabelEdit labelEdit (310, 10, 80, 60, "Edit me");
+    LabelEdit labelEdit (110, 130, 80, 60, "Edit me");
     labelEdit.setFont(Font ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD, 18.0, BStyles::Font::TEXT_ALIGN_CENTER, BStyles::Font::TEXT_VALIGN_MIDDLE));
-    Label labelEditLabel (310, 80, 80, 20, "LabelEdit");
+    Label labelEditLabel (110, 200, 80, 20, "LabelEdit");
     labelEditLabel.setFont (labelFont);
     window.add (&labelEdit);
     window.add (&labelEditLabel);
 
     // Text
-    Text text (410, 10, 180, 60, loremipsum);
-    Label textLabel (460, 80, 80, 20, "Text");
+    Text text (10, 250, 180, 60, loremipsum);
+    Label textLabel (60, 320, 80, 20, "Text");
     textLabel.setFont (labelFont);
     window.add (&text);
     window.add (&textLabel);
 
     // Symbols
-    Symbol addSymbol (610, 10, 12, 12, Symbol::ADD_SYMBOL);
-    Symbol minusSymbol (626, 10, 12, 12, Symbol::MINUS_SYMBOL);
-    Symbol leftSymbol (642, 10, 12, 12, Symbol::LEFT_SYMBOL);
-    Symbol rightSymbol (658, 10, 12, 12, Symbol::RIGHT_SYMBOL);
-    Symbol upSymbol (674, 10, 12, 12, Symbol::UP_SYMBOL);
-    Symbol downSymbol (610, 26, 12, 12, Symbol::DOWN_SYMBOL);
-    Symbol playSymbol (626, 26, 12, 12, Symbol::PLAY_SYMBOL);
-    Symbol questionSymbol (642, 26, 12, 12, Symbol::QUESTION_SYMBOL);
-    Symbol infoSymbol (658, 26, 12, 12, Symbol::INFO_SYMBOL);
-    Symbol warnSymbol (674, 26, 12, 12, Symbol::WARN_SYMBOL);
-    Symbol errorSymbol (610, 42, 12, 12, Symbol::ERROR_SYMBOL);
-    Symbol newFolderSymbol (626, 42, 12, 12, Symbol::NEW_FOLDER_SYMBOL);
-    Label symbolLabel (610, 80, 80, 20, "Symbol");
+    Symbol addSymbol (410, 10, 12, 12, Symbol::ADD_SYMBOL);
+    Symbol minusSymbol (426, 10, 12, 12, Symbol::MINUS_SYMBOL);
+    Symbol leftSymbol (442, 10, 12, 12, Symbol::LEFT_SYMBOL);
+    Symbol rightSymbol (458, 10, 12, 12, Symbol::RIGHT_SYMBOL);
+    Symbol upSymbol (474, 10, 12, 12, Symbol::UP_SYMBOL);
+    Symbol downSymbol (410, 26, 12, 12, Symbol::DOWN_SYMBOL);
+    Symbol playSymbol (426, 26, 12, 12, Symbol::PLAY_SYMBOL);
+    Symbol questionSymbol (442, 26, 12, 12, Symbol::QUESTION_SYMBOL);
+    Symbol infoSymbol (458, 26, 12, 12, Symbol::INFO_SYMBOL);
+    Symbol warnSymbol (474, 26, 12, 12, Symbol::WARN_SYMBOL);
+    Symbol errorSymbol (410, 42, 12, 12, Symbol::ERROR_SYMBOL);
+    Symbol newFolderSymbol (426, 42, 12, 12, Symbol::NEW_FOLDER_SYMBOL);
+    Label symbolLabel (410, 80, 80, 20, "Symbol");
     symbolLabel.setFont (labelFont);
     window.add (&addSymbol);
     window.add (&minusSymbol);
@@ -149,39 +150,47 @@ int main ()
     window.add (&symbolLabel);
 
     // Image
-    Image image (710, 10, 80, 60, "example-romedalen.png");
-    Label imageLabel (710, 80, 80, 20, "Image");
+    Image image (510, 10, 80, 60, "example-romedalen.png");
+    Label imageLabel (510, 80, 80, 20, "Image");
     imageLabel.setFont (labelFont);
     window.add (&image);
     window.add (&imageLabel);
 
+    // ImageButton
+    ImageButton imageButton (610, 30, 80, 20, {"imgbut01.png", "imgbut02.png"});
+    Label imageButtonLabel (610, 80, 80, 20, "ImageButton");
+    imageButtonLabel.setFont (labelFont);
+    window.add (&imageButton);
+    window.add (&imageButtonLabel);
+
     // Button
-    Button button (810, 30, 80, 20);
-    Label buttonLabel (810, 80, 80, 20, "Button");
+    Button button (710, 30, 80, 20);
+    Label buttonLabel (710, 80, 80, 20, "Button");
     buttonLabel.setFont (labelFont);
     window.add (&button);
     window.add (&buttonLabel);
 
     // TextButton
-    TextButton textButton (910, 30, 80, 20, "Text");
-    Label textButtonLabel (910, 80, 80, 20, "TextButton");
+    TextButton textButton (810, 30, 80, 20, "Text");
+    Label textButtonLabel (810, 80, 80, 20, "TextButton");
     textButtonLabel.setFont (labelFont);
     window.add (&textButton);
     window.add (&textButtonLabel);
 
     // SymbolButton
-    SymbolButton symbolButton (1010, 30, 80, 20, Symbol::ADD_SYMBOL);
-    Label symbolButtonLabel (1000, 80, 100, 20, "SymbolButton");
+    SymbolButton symbolButton (910, 30, 80, 20, Symbol::ADD_SYMBOL);
+    Label symbolButtonLabel (900, 80, 100, 20, "SymbolButton");
     symbolButtonLabel.setFont (labelFont);
     window.add (&symbolButton);
     window.add (&symbolButtonLabel);
 
-    // ImageButton
-    ImageButton imageButton (1110, 30, 80, 20, {"imgbut01.png", "imgbut02.png"});
-    Label imageButtonLabel (1110, 80, 80, 20, "ImageButton");
-    imageButtonLabel.setFont (labelFont);
-    window.add (&imageButton);
-    window.add (&imageButtonLabel);
+    // Pad
+    Pad pad (1010, 20, 80, 40, 0.0, 0.0, 1.0, 0.0);
+    pad.setFgColors(BStyles::blues);
+    Label padLabel (1000, 80, 100, 20, "Pad");
+    padLabel.setFont (labelFont);
+    window.add (&pad);
+    window.add (&padLabel);
 
     // SpinButton
     SpinButton spinButton (740, 150, 20, 20);
@@ -233,7 +242,7 @@ int main ()
     window.add (&vScrollBarLabel);
 
     // SpinBox
-    SpinBox spinBox (710, 390, 80, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
+    SpinBox spinBox (700, 390, 100, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
     spinBox.setValue (1);
     Label spinBoxLabel (710, 440, 80, 20, "SpinBox");
     spinBoxLabel.setFont (labelFont);
@@ -329,9 +338,9 @@ int main ()
     window.add (&valueVSliderLabel);
 
     // HPianoRoll
-    HPianoRoll hPianoRoll (310, 740, 580, 40);
+    HPianoRoll hPianoRoll (10, 740, 580, 40);
     hPianoRoll.activate (36, 95, true);
-    Label hPianoRollLabel (550, 800, 100, 20, "HPianoRoll");
+    Label hPianoRollLabel (350, 800, 100, 20, "HPianoRoll");
     hPianoRollLabel.setFont (labelFont);
     window.add (&hPianoRoll);
     window.add (&hPianoRollLabel);
@@ -391,8 +400,8 @@ int main ()
     window.add (&valueVMeterLabel);
 
     // Box
-    Box box (10, 130, 180, 60, {BUtilities::Dictionary::get("Cancel"), BUtilities::Dictionary::get("OK")});
-    Label boxLabel (10, 200, 180, 20, "Box");
+    Box box (210, 10, 180, 60, {BUtilities::Dictionary::get("Cancel"), BUtilities::Dictionary::get("OK")});
+    Label boxLabel (210, 80, 180, 20, "Box");
     boxLabel.setFont (labelFont);
     window.add (&box);
     window.add (&boxLabel);

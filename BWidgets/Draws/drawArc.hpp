@@ -23,9 +23,17 @@
 #include <cmath>
 #include "../../BStyles/Types/Color.hpp"
 
+#ifndef BWIDGETS_DEFAULT_DRAWARC_START
 #define BWIDGETS_DEFAULT_DRAWARC_START (M_PI * 0.75)
+#endif
+
+#ifndef BWIDGETS_DEFAULT_DRAWARC_END
 #define BWIDGETS_DEFAULT_DRAWARC_END (M_PI * 2.25)
+#endif
+
+#ifndef BWIDGETS_DEFAULT_DRAWARC_SIZE
 #define BWIDGETS_DEFAULT_DRAWARC_SIZE (BWIDGETS_DEFAULT_DRAWARC_END - BWIDGETS_DEFAULT_DRAWARC_START)
+#endif
 
 /**
  *  @brief  Draws a pseudo 3d arc in a Cairo context. 

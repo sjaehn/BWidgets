@@ -1,6 +1,9 @@
 # B.Widgets
 Rewrite of the widget toolkit of the B.Music project. Work in progress. And 
-still a lot of space to fill (as you can see):
+still some space to fill (as you can see).
+
+For a detailed description of the classes and methods of B.Widgets see
+[BWidgets](BWidgets/README.md) and the other namespaces below the widget gallery.
 
 ![widgetgallery](suppl/widgetgallery.png)
 
