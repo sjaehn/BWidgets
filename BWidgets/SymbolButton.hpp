@@ -163,8 +163,8 @@ inline void SymbolButton::copy (const SymbolButton* that)
 inline void SymbolButton::resize ()
 {
 	symbol.resize ();
-	symbol.moveTo (0, 0);
-	Button::resize ();
+	symbol.moveTo (getXOffset(), getYOffset());
+	Button::resize (2.0 * getXOffset() + symbol.getWidth(), 2.0 * getYOffset() + symbol.getHeight());
 }
 
 inline void SymbolButton::resize (const double width, const double height) 
