@@ -164,8 +164,8 @@ inline void TextButton::copy (const TextButton* that)
 inline void TextButton::resize ()
 {
 	label.resize ();
-	label.moveTo (0, 0);
-	Button::resize ();
+	label.moveTo (getXOffset(), getYOffset());
+	Button::resize (2.0 * getXOffset() + label.getWidth(), 2.0 * getYOffset() + label.getHeight());
 }
 
 inline void TextButton::resize (const double width, const double height) 
@@ -176,7 +176,7 @@ inline void TextButton::resize (const double width, const double height)
 inline void TextButton::resize (const BUtilities::Point extends)
 {
 	Button::resize (BUtilities::Point (extends.x, extends.y));
-	label.resize (getEffectiveWidth(), getEffectiveHeight());
+	label.resize ();
 	label.moveTo (label.center(), label.middle());
 }
 

@@ -1,5 +1,5 @@
 /* FileChooser.hpp
- * Copyright (C) 2019  Sven Jähnichen
+ * Copyright (C) 2019 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,225 +18,787 @@
 #ifndef BWIDGETS_FILECHOOSER_HPP_
 #define BWIDGETS_FILECHOOSER_HPP_
 
+#include <cairo/cairo.h>
+#include <cstddef>
+#include <initializer_list>
+#include <regex>
+#include <dirent.h>
+#include <sys/stat.h>
+#include "Box.hpp"
+#include "Frame.hpp"
+#include "Supports/ValueableTyped.hpp"
+#include "Supports/Closeable.hpp"
+#include "Symbol.hpp"
+#include "TextButton.hpp"
+#include "LabelEdit.hpp"
+#include "ComboBox.hpp"
+#include "MessageBox.hpp"
+
+#ifndef BWIDGETS_DEFAULT_FILECHOOSER_WIDTH
 #define BWIDGETS_DEFAULT_FILECHOOSER_WIDTH 400
+#endif
+
+#ifndef BWIDGETS_DEFAULT_FILECHOOSER_HEIGHT
 #define BWIDGETS_DEFAULT_FILECHOOSER_HEIGHT 320
-#define BWIDGETS_DEFAULT_FILECHOOSER_OK_INDEX 0
-#define BWIDGETS_DEFAULT_FILECHOOSER_OPEN_INDEX 1
-#define BWIDGETS_DEFAULT_FILECHOOSER_CANCEL_INDEX 2
-#define BWIDGETS_DEFAULT_FILECHOOSER_FILE_EXISTS_INDEX 3
-#define BWIDGETS_DEFAULT_FILECHOOSER_FILE_NOT_EXISTS_INDEX 4
-#define BWIDGETS_DEFAULT_FILECHOOSER_NEW_FOLDER_INDEX 5
-#define BWIDGETS_DEFAULT_FILECHOOSER_NEW_FOLDER_FAIL_INDEX 6
+#endif
 
 #ifndef PATH_SEPARATOR
 #define PATH_SEPARATOR "/"
 #endif
 
-#include "PopupListBox.hpp"
-#include "TextButton.hpp"
-#include <regex>
-
 namespace BWidgets
 {
 
-struct FileFilter
-{
-	std::string name;
-	std::regex regex;
-};
-
 /**
- * Class BWidgets::FileChooser
+ *  @brief  Menu widget for selection of a file.
  *
- * Menu widget for selection of a file.
+ *  The %FileChooser is a Valueable Widget based on Frame. It consists of:
+ *  * a Label to display the current path,
+ *  * a new folder SymbolButton,
+ *  * a ListBox with the (filtered) content of the current path,
+ *  * a LabelEdit to display or edit the selected filename,
+ *  * a ComboBox to select filename filter options,
+ *  * a "Cancel" button,
+ *  * an "OK" / "Open" button,
+ *
+ *  The ListBox fascilitates selection of files and the navigation through
+ *  the file system. A selected file is also shown in the LabelEdit.
+ *  
+ *  Clicking on the new folder SymbolButton opens a dialog and the user is
+ *  asked to enter a new folder name. The new folder is created within the
+ *  current path shown in the Label.
+ *
+ *  Clicking on "Cancel" will set the widget value to "" and a 
+ *  CloseRequestEvent is emitted.
+ *
+ *  Clicking on "OK" / "Open" will set the widget value to path + filename 
+ *  and a CloseRequestEvent is emitted.
  */
-class FileChooser : public ValueWidget
+class FileChooser : public Frame, public ValueableTyped<std::string>, public Closeable
 {
 public:
-	FileChooser ();
-	FileChooser (const double x, const double y, const double width, const double height, const std::string& name);
-	FileChooser (const double x, const double y, const double width, const double height, const std::string& name,
-		     const std::string& path);
-	FileChooser (const double x, const double y, const double width, const double height, const std::string& name,
-		     const std::string& path, const std::vector<FileFilter>& filters);
-	FileChooser (const double x, const double y, const double width, const double height, const std::string& name,
-		     const std::string& path, const std::vector<FileFilter>& filters, const std::string& buttonText);
-	FileChooser (const double x, const double y, const double width, const double height, const std::string& name,
-		     const std::string& path, const std::vector<FileFilter>& filters, const std::vector<std::string>& texts);
-
-
-	FileChooser (const FileChooser& that);
 
 	/**
-	 * Assignment. Copies the file chooser properties from a source and keeps
-	 * its position within the widget tree. Emits a
-	 * BEvents::ExposeEvent if the file chooser is visible.
-	 * @param that Source file chooser
+	 *  @brief  Filter data type consisting of a regex and a name.
 	 */
-	FileChooser& operator= (const FileChooser& that);
-
-	/**
-	 * Pattern cloning. Creates a new instance of the widget and copies all
-	 * its properties.
-	 */
-	virtual Widget* clone () const override;
-
-	/**
-	 * Sets the path of the file chooser.
-	 * @param path	Path
-	 */
-	void setPath (const std::string& path);
-
-	/**
-	 * Gets the current path
-	 * @return	Current path
-	 */
-	std::string getPath () const;
-
-	/**
-	 * Sets the file name of the file chooser.
-	 * @param filename	File name
-	 */
-	virtual void setFileName (const std::string& filename);
-
-	/**
-	 * Gets the selected file name
-	 * @return	Selected file name
-	 */
-	std::string getFileName () const;
-
-	/**
-	 * Sets the filters of the file chooser.
-	 * @param filters	File filters
-	 */
-	void setFilters (const std::vector<FileFilter>& filters);
-
-	/**
-	 * Gets the file filters
-	 * @return	File filters
-	 */
-	std::vector<FileFilter> getFilters () const;
-
-	/**
-	 * Selects and activates one filter out of the file filters.
-	 * @param name	Filter name
-	 */
-	void selectFilter (const std::string& name);
-
-	/**
-	 * Sets the text of the OK button.
-	 * @param text	Text
-	 */
-	void setButtonText (const std::string& buttonText);
-
-	/**
-	 * Gets the Text of the OK button
-	 * @return	Text
-	 */
-	std::string getButtonText ();
-
-	/**
-	 * Sets the text of the labels.
-	 * @param texts	Vectors containing the texts as strings
-	 */
-	void setLabels (const std::vector<std::string>& texts);
-
-	/**
-	 * Gets the text of the labels.
-	 * @return	Vectors containing the texts as strings
-	 */
-	std::vector<std::string> getLabels () const;
-
-	/**
-	 * Resizes the widget, redraw and emits a BEvents::ExposeEvent if the
-	 * widget is visible. If no parameters are given, the widget will be
-	 * resized to the size of the containing child widgets or to the text
-	 * extends (what is higher).
-	 * @param width		New widgets width
-	 * @param height	New widgets height
-	 * @param extends	New widget extends
-	 */
-	virtual void resize () override;
-	virtual void resize (const double width, const double height) override;
-	virtual void resize (const BUtilities::Point extends) override;
-
-	/**
-	 * Calls a redraw of the widget and calls postRedisplay () if the the
-	 * Widget is visible.
-	 * This method should be called if the widgets properties are indirectly
-	 * changed.
-	 */
-	virtual void update () override;
-
-	/**
-	 * Scans theme for widget properties and applies these properties.
-	 * @param theme	Theme to be scanned.
-	 * 		Styles used are:
-	 * 		...
-	 * @param name	Name of the BStyles::StyleSet within the theme to be
-	 * 		applied.
-	 */
-	virtual void applyTheme (BStyles::Theme& theme) override;
-	virtual void applyTheme (BStyles::Theme& theme, const std::string& name) override;
-
-	static void fileListBoxClickedCallback (BEvents::Event* event);
-	static void filterPopupListBoxClickedCallback (BEvents::Event* event);
-	static void cancelButtonClickedCallback (BEvents::Event* event);
-	static void okButtonClickedCallback (BEvents::Event* event);
-	static void confirmCancelButtonClickedCallback (BEvents::Event* event);
-	static void confirmOkButtonClickedCallback (BEvents::Event* event);
-	static void newFolderButtonClickedCallback (BEvents::Event* event);
-	static void createCancelButtonClickedCallback (BEvents::Event* event);
-	static void createOkButtonClickedCallback (BEvents::Event* event);
+	typedef std::pair<std::string, std::regex> Filter;
 
 protected:
+	std::map<std::string, std::regex> filters_;
+	std::vector<std::string> dirs_;
+	std::vector<std::string> files_;
 
-	void enterDir ();
-	void processFileSelected();
+public:
 
-	std::vector<FileFilter> filters;
-	std::vector<std::string> dirs;
-	std::vector<std::string> files;
-	std::vector<std::string> labels;
-	BColors::ColorSet bgColors;
 	Label pathNameBox;
+	SymbolButton newFolderButton;
 	ListBox fileListBox;
 	Label fileNameLabel;
-	Label fileNameBox;
-	PopupListBox filterPopupListBox;
+	LabelEdit fileNameBox;
+	ComboBox filterComboBox;
 	TextButton cancelButton;
 	TextButton okButton;
 	Label fileListBoxFileLabel;
 	Label fileListBoxDirLabel;
-	Label filterPopupListBoxFilterLabel;
+	Label filterComboBoxFilterLabel;
 
-	Widget confirmBox;
-	Label confirmLabel;
-	TextButton confirmCancelButton;
-	TextButton confirmOkButton;
+	MessageBox confirmBox;
 
-	class NewFolderButton: public Button
-	{
-	public:
-		NewFolderButton (const double x, const double y, const double width, const double height, const std::string& name, double defaultValue = 0.0);
-
-	protected:
-		virtual void draw (const BUtilities::RectArea& area) override;
-	};
-
-	NewFolderButton newFolderButton;
-
-	Widget createBox;
+	Box createBox;
 	Label createLabel;
-	Label createInput;
+	LabelEdit createInput;
 	Label createError;
-	TextButton createCancelButton;
-	TextButton createOkButton;
+
+	/**
+	 *  @brief  Constructs a default FileChooser object.
+	 * 
+	 */
+	FileChooser ();
+
+	/**
+	 *  @brief  Constructs a FileChooser object with default size
+	 *  @param path  File path.
+	 *  @param filters  Optional, initializer list with filename search
+	 *  filters.
+     *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %FileChooser title.
+	 */
+	FileChooser	(const std::string& path, std::initializer_list<Filter> filters = {},
+				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+
+	/**
+	 *  @brief  Constructs a FileChooser object with default size
+	 *  @param x  %FileChooser X origin coordinate.
+	 *  @param y  %FileChooser Y origin coordinate.
+	 *  @param width  %FileChooser width.
+	 *  @param height  %FileChooser height.
+	 *  @param path  File path.
+	 *  @param filters  Optional, initializer list with filename search
+	 *  filters.
+     *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param title  Optional, %FileChooser title.
+	 */
+	FileChooser	(const double x, const double y, const double width, const double height,
+				 std::string path = ".", std::initializer_list<Filter> filters = {},
+				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+
+
+	/**
+	 *  @brief  Creates a clone of the %FileChooser. 
+	 *  @return  Pointer to the new %FileChooser.
+	 *
+	 *  Creates a clone of this widget by copying all properties. But NOT its
+	 *  linkage.
+	 *
+	 *  Allocated heap memory needs to be freed using @c delete if the clone
+	 *  in not needed anymore!
+	 */
+	virtual Widget* clone () const override; 
+
+	/**
+	 *  @brief  Copies from another %FileChooser. 
+	 *  @param that  Other %FileChooser.
+	 *
+	 *  Copies all properties from another %FileChooser. But NOT its linkage.
+	 */
+	void copy (const FileChooser* that);
+
+	/**
+	 *  @brief  Sets the current file path.
+	 *  @param path  File path.
+	 */
+	virtual void setPath (const std::string& path);
+
+	/**
+	 *  @brief  Gets the current file path.
+	 *  @return  Current file path.
+	 */
+	std::string getPath () const;
+
+	/**
+	 *  @brief  Sets the file name.
+	 *  @param filename  File name.
+	 */
+	virtual void setFileName (const std::string& filename);
+
+	/**
+	 *  @brief  Gets the selected file name.
+	 *  @return  Selected file name.
+	 */
+	std::string getFileName () const;
+
+	/**
+	 *  @brief  Sets the map of filename search filters.
+	 *  @param filters  std::map with filter name and regex filter.
+	 */
+	void setFilter (const std::map<Filter::first_type, Filter::second_type>& filters);
+
+	/**
+	 *  @brief  Gets the map of filename search filters.
+	 *  @return  std::map with filter name and regex filter.
+	 */
+	std::map<Filter::first_type, Filter::second_type> getFilters () const;
+
+	/**
+	 *  @brief  Selects and activates a filter.
+	 *  @param name Filter name
+	 */
+	void selectFilter (const std::string& name);
+
+	/**
+     *  @brief  Method to be called following an object state change.
+     */
+    virtual void update () override;
+
+protected:
+
+	static void fileListBoxChangedCallback (BEvents::Event* event);
+	static void filterComboBoxChangedCallback (BEvents::Event* event);
+	static void cancelButtonClickedCallback (BEvents::Event* event);
+	static void okButtonClickedCallback (BEvents::Event* event);
+	static void confirmClickedCallback (BEvents::Event* event);
+	static void createClickedCallback (BEvents::Event* event);
+	static void newFolderButtonClickedCallback (BEvents::Event* event);
+
+	void enterDir ();
+
+	void processFileSelected();
+
 
 	virtual std::function<void (BEvents::Event*)> getFileListBoxClickedCallback();
 
 	bool isDir (const std::string& path, const std::string& name) const;
 };
+
+inline FileChooser::FileChooser () : 
+	FileChooser (0.0, 0.0, BWIDGETS_DEFAULT_FILECHOOSER_WIDTH, BWIDGETS_DEFAULT_FILECHOOSER_HEIGHT, "", {}, URID_UNKNOWN_URID, "") 
+{
+
+}
+
+inline FileChooser::FileChooser	(const std::string& path, std::initializer_list<Filter> filters, uint32_t urid, std::string title) :
+	FileChooser (0, 0, BWIDGETS_DEFAULT_FILECHOOSER_WIDTH, BWIDGETS_DEFAULT_FILECHOOSER_HEIGHT, path, filters, urid, title) 
+{
+
+}
+
+inline FileChooser::FileChooser	(const double x, const double y, const double width, const double height,
+				 				 std::string path, std::initializer_list<Filter> filters, uint32_t urid, std::string title) :
+		Frame (x, y, width, height, urid, title),
+		ValueableTyped<std::string> (path),
+		Closeable (),
+		filters_ (),
+		dirs_ (),
+		files_ (),
+
+		pathNameBox ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/textbox"), ""),
+		newFolderButton (Symbol::NEW_FOLDER_SYMBOL, false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"), ""),
+		fileListBox ({}, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/listbox"), ""),
+		fileNameLabel (BUtilities::Dictionary::get ("File") + ":", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), ""),
+		fileNameBox ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/textbox"), ""),
+		filterComboBox ({}, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/combobox"), ""),
+		cancelButton (BUtilities::Dictionary::get ("Cancel"), false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"), ""),
+		okButton (BUtilities::Dictionary::get ("OK"), false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"), ""),
+		fileListBoxFileLabel ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/listbox/item/file"), ""),
+		fileListBoxDirLabel ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/listbox/item/dir"), ""),
+		filterComboBoxFilterLabel ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "combobox/listbox/item"), ""),
+
+		confirmBox	(Symbol::WARN_SYMBOL, "", "", 
+					 {BUtilities::Dictionary::get ("Cancel"), BUtilities::Dictionary::get ("OK")}, 
+					 BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/box"), ""),
+		
+		createBox	({BUtilities::Dictionary::get ("Cancel"), BUtilities::Dictionary::get ("OK")}, 
+					 BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/box"), ""),
+		createLabel ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), ""),
+		createInput ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/textbox"), ""),
+		createError ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
+{
+	setPath (path);
+	enterDir();
+
+	pathNameBox.setBorder (BStyles::Border (BStyles::greyLine1pt, 0.0, 3.0));
+	fileNameBox.setBorder (BStyles::Border (BStyles::greyLine1pt, 0.0, 3.0));
+	createInput.setBorder (BStyles::Border (BStyles::greyLine1pt, 0.0, 3.0));
+	fileNameLabel.setBorder(BStyles::Border (BStyles::noLine, 0.0, 4.0));
+
+	createBox.setStacking (STACKING_ESCAPE);
+	confirmBox.setStacking (STACKING_ESCAPE);
+
+	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (-0.75)));
+	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
+
+	fileListBox.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, fileListBoxChangedCallback);
+	filterComboBox.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, filterComboBoxChangedCallback);
+	cancelButton.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, cancelButtonClickedCallback);
+	okButton.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, okButtonClickedCallback);
+	confirmBox.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, confirmClickedCallback);
+	newFolderButton.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, newFolderButtonClickedCallback);
+	createBox.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, createClickedCallback);
+
+	for (const Filter& f : filters) 
+	{
+		filters_[f.first] = f.second;
+		filterComboBox.addItem (f.first);
+	}
+	filterComboBox.setValue (1);
+
+	createBox.add (&createLabel);
+	createBox.add (&createInput);
+	createBox.add (&createError);
+
+	add (&pathNameBox);
+	add (&fileListBox);
+	add (&fileNameLabel);
+	add (&fileNameBox);
+	add (&cancelButton);
+	add (&okButton);
+	add (&filterComboBox);
+	add (&newFolderButton);
+}
+
+inline Widget* FileChooser::clone () const 
+{
+	Widget* f = new FileChooser ();
+	f->copy (this);
+	return f;
+}
+
+inline void FileChooser::copy (const FileChooser* that)
+{
+	filters_ = that->filters_;
+	dirs_ = that->dirs_;
+	files_ = that->files_;
+
+	pathNameBox.copy (&that->pathNameBox);
+	newFolderButton.copy (&that->newFolderButton);
+	fileListBox.copy (&that->fileListBox);
+	fileNameLabel.copy (&that->fileNameLabel);
+	fileNameBox.copy (&that->fileNameBox);
+	filterComboBox.copy (&that->filterComboBox);
+	cancelButton.copy (&that->cancelButton);
+	okButton.copy (&that->okButton);
+	fileListBoxFileLabel.copy (&that->fileListBoxFileLabel);
+	fileListBoxDirLabel.copy (&that->fileListBoxDirLabel);
+	filterComboBoxFilterLabel.copy (&that->filterComboBoxFilterLabel);
+
+	release (&confirmBox); 
+	confirmBox.copy (&that->confirmBox);
+	if (that->contains (&that->confirmBox)) add (&confirmBox);
+
+	release (&createBox); 
+	createBox.copy (&that->createBox);
+	if (that->contains (&that->createBox)) add (&createBox);
+	createLabel.copy (&that->createLabel);
+	createInput.copy (&that->createInput);
+	createError.copy (&that->createError);
+
+	Closeable::operator= (*that);
+	ValueableTyped<std::string>::operator= (*that);
+	Frame::copy (that);
+}
+
+inline void FileChooser::setPath (const std::string& path)
+{
+	if (path != pathNameBox.getText())
+	{
+		char buf[PATH_MAX];
+		char *rp = realpath(path.c_str(), buf);
+		if (rp) pathNameBox.setText (rp);
+		else pathNameBox.setText (path);
+
+		update();
+	}
+}
+
+inline std::string FileChooser::getPath () const 
+{
+	return pathNameBox.getText();
+}
+
+inline void FileChooser::setFileName (const std::string& filename)
+{
+	if (filename != fileNameBox.getText())
+	{
+		fileNameBox.setText (filename);
+		fileListBox.setValue (filename);
+	}
+}
+
+inline std::string FileChooser::getFileName () const 
+{
+	return fileNameBox.getText();
+}
+
+inline void FileChooser::setFilter (const std::map<Filter::first_type, Filter::second_type>& filters)
+{
+	this->filters_ = filters;
+
+	filterComboBox.deleteItem();
+	for (const Filter& f : filters) filterComboBox.addItem (f.first);
+	filterComboBox.setValue (1);
+
+	enterDir();
+	update ();
+}
+
+inline std::map<FileChooser::Filter::first_type, FileChooser::Filter::second_type> FileChooser::getFilters () const 
+{
+	return filters_;
+	}
+
+inline void FileChooser::selectFilter (const std::string& name)
+{
+	filterComboBox.setValue (name);
+	enterDir();
+	update();
+}
+
+inline void FileChooser::update ()
+{
+	double x0 = getXOffset();
+	double y0 = getYOffset();
+	double w = getEffectiveWidth();
+	double h = getEffectiveHeight();
+
+	if ((w >= 40) && (h >= 20))
+	{
+		double val = fileListBox.getValue();
+		if ((val == 0) || (val > dirs_.size())) okButton.label.setText (BUtilities::Dictionary::get ("OK"));
+		else okButton.label.setText (BUtilities::Dictionary::get ("Open"));
+		cancelButton.label.setText(BUtilities::Dictionary::get ("Cancel"));
+
+		// Get extends first
+		okButton.resize();
+		cancelButton.resize ();
+		double okWidth = (okButton.getWidth() > cancelButton.getWidth() ? okButton.getWidth() : cancelButton.getWidth());
+		double okHeight = (okButton.getHeight() > cancelButton.getHeight() ? okButton.getHeight() : cancelButton.getHeight());
+		pathNameBox.resize();
+		double pathNameHeight = pathNameBox.getHeight();
+		fileNameBox.resize();
+		double fileNameHeight = fileNameBox.getHeight();
+		fileNameLabel.resize();
+		double fileNameWidth = fileNameLabel.getWidth();
+
+		pathNameBox.moveTo (x0 + 10, y0 + 10);
+		pathNameBox.resize (w - pathNameHeight - 30, pathNameHeight);
+
+		newFolderButton.moveTo (x0 + w - 12 - pathNameHeight, y0 + 8);
+		newFolderButton.resize (pathNameHeight + 4, pathNameHeight + 4);
+
+		okButton.moveTo (x0 + w - okWidth - 10, y0 + h - okHeight - 10);
+		okButton.resize (okWidth, okHeight);
+
+		cancelButton.moveTo (x0 + w - 2 * okWidth - 20, y0 + h - okHeight - 10);
+		cancelButton.resize (okWidth, okHeight);
+
+		fileNameLabel.moveTo (x0 + 10, y0 + h - okHeight - fileNameHeight - 20);
+		fileNameLabel.resize (fileNameWidth, fileNameHeight);
+
+		fileNameBox.moveTo (x0 + fileNameWidth + 30, y0 + h - okHeight - fileNameHeight - 20);
+		fileNameBox.resize (w - fileNameWidth - 40, fileNameHeight);
+
+		filterComboBox.moveTo (x0 + 10, y0 + h - okHeight - 10);
+		filterComboBox.resize (w - 2 * okWidth - 40, okHeight);
+		filterComboBox.setItemHeight (okHeight);
+		filterComboBox.resizeItems();
+		filterComboBox.resizeListBox (BUtilities::Point (w - 2 * okWidth - 40, filters_.size() * okHeight + 20));
+
+		okButton.show();
+		cancelButton.show();
+		fileNameLabel.show();
+		fileNameBox.show();
+		filterComboBox.show ();
+
+		if (h > pathNameHeight + okHeight + fileNameHeight + 50)
+		{
+			fileListBox.moveTo (x0 + 10, y0 + pathNameHeight + 20);
+			fileListBox.resize (w - 20, h - pathNameHeight - okHeight - fileNameHeight - 50);
+			fileListBox.setItemHeight (20);
+			fileListBox.resizeItems();
+			fileListBox.show();
+		}
+		else fileListBox.hide();
+
+		confirmBox.resize();
+		confirmBox.moveTo (0.5 * getWidth() - 0.5 * confirmBox.getWidth(), 0.5 * getHeight() - 0.5 * confirmBox.getHeight());
+		confirmBox.show();
+
+		createLabel.resize();
+		createInput.resize();
+		createError.resize();
+		const double createLabelsWidth = (createLabel.getWidth() > createError.getWidth() ? createLabel.getWidth() : createError.getWidth());
+		const double createBoxWidth = (createLabelsWidth + 40 > 2 * okWidth + 60 ? createLabelsWidth + 40 : 2 * okWidth + 60);
+		const double createBoxHeight = createLabel.getHeight() + createInput.getHeight() + createError.getHeight() + okHeight + 80;
+		createBox.resize (createBoxWidth, createBoxHeight);
+		createBox.moveTo (0.5 * getWidth() - 0.5 * createBoxWidth, 0.5 * getHeight() - 0.5 * createBoxHeight);
+		createLabel.moveTo (20, 20);
+		createInput.resize (createBoxWidth - 40, createInput.getHeight());
+		createInput.moveTo (20, 30 + createLabel.getHeight());
+		createError.moveTo (20, 40 + createLabel.getHeight() + createInput.getHeight());
+		createBox.show();
+	}
+
+	else
+	{
+		okButton.hide();
+		cancelButton.hide();
+		fileListBox.hide();
+		fileNameLabel.hide();
+		fileNameBox.hide();
+		filterComboBox.hide ();
+		confirmBox.hide();
+		createBox.hide();
+	}
+
+	Widget::update();
+}
+
+inline void FileChooser::fileListBoxChangedCallback (BEvents::Event* event)
+{
+	if (!event) return;
+	ListBox* w = dynamic_cast<ListBox*>(event->getWidget());
+	if (!w) return;
+	FileChooser* fc = dynamic_cast<FileChooser*>(w->getParent());
+	if (!fc) return;
+
+	size_t val = w->getValue();
+
+	if ((val != 0) && (!fc->fileNameBox.getEditMode()))
+	{
+		// Directory selected -> one click chdir
+		if (val <= fc->dirs_.size())
+		{
+			fc->fileNameBox.setText ("");
+			BEvents::ValueChangeTypedEvent<bool> dummyEvent = BEvents::ValueChangeTypedEvent<bool> (&fc->okButton, true);
+			fc->okButtonClickedCallback (&dummyEvent);
+		}
+
+		// File selected
+		else
+		{
+			Label* l = dynamic_cast<Label*>(w->getItem (val));
+			if (l) fc->setFileName (l->getText());
+		}
+
+		fc->update();
+	}
+}
+
+inline void FileChooser::filterComboBoxChangedCallback (BEvents::Event* event)
+{
+	if (!event) return;
+	ComboBox* w = dynamic_cast<ComboBox*>(event->getWidget());
+	if (!w) return;
+	FileChooser* fc = (FileChooser*)w->getParent();
+	if (!fc) return;
+
+	fc->enterDir();
+	fc->update();
+}
+
+inline void FileChooser::cancelButtonClickedCallback (BEvents::Event* event)
+{
+	if (!event) return;
+	TextButton* w = dynamic_cast<TextButton*>(event->getWidget());
+	if (!w) return;
+	FileChooser* fc = dynamic_cast<FileChooser*>(w->getParent());
+	if (!fc) return;
+
+	fc->setValue ("");
+	fc->postCloseRequest();
+}
+
+inline void FileChooser::okButtonClickedCallback (BEvents::Event* event)
+{
+	if (!event) return;
+	TextButton* w = dynamic_cast<TextButton*>(event->getWidget());
+	if (!w) return;
+	FileChooser* fc = dynamic_cast<FileChooser*>(w->getParent());
+	if (!fc) return;
+	
+	size_t lb = fc->fileListBox.getValue();
+
+	if (lb != 0)
+	{
+		// Dircectory selected: Open directory
+		if (lb <= fc->dirs_.size())
+		{
+			Label* l = dynamic_cast<Label*>(fc->fileListBox.getItem (lb));
+			if (l)
+			{
+				std::string newPath = fc->getPath() + PATH_SEPARATOR + l->getText();
+				char buf[PATH_MAX];
+					char *rp = realpath(newPath.c_str(), buf);
+					if (rp) fc->setPath (rp);
+
+				fc->enterDir();
+				fc->update();
+			}
+		}
+
+		// File selected: OK on file
+		else fc->processFileSelected();
+	}
+
+	// File name set: OK on file
+	else if (fc->fileNameBox.getText() != "") fc->processFileSelected();
+}
+
+inline void FileChooser::confirmClickedCallback (BEvents::Event* event)
+{
+	if (!event) return;
+	MessageBox* w = dynamic_cast<MessageBox*>(event->getWidget());
+	if (!w) return;
+	FileChooser* fc = dynamic_cast<FileChooser*>(w->getParentWidget());
+	if (!fc) return;
+
+	size_t button = fc->confirmBox.getValue();
+
+	// Cancel
+	if (button == 1.0)
+	{
+		w->setValue (0.0);
+		fc->release (&fc->confirmBox);
+	}
+
+	// OK
+	else if (button == 2.0)
+	{
+		w->setValue (0.0);
+		fc->setValue (fc->getPath() + PATH_SEPARATOR + fc->getFileName());
+		fc->postCloseRequest();
+	}
+}
+
+inline void FileChooser::createClickedCallback (BEvents::Event* event)
+{
+	if (!event) return;
+	Box* w = dynamic_cast<Box*>(event->getWidget());
+	if (!w) return;
+	FileChooser* fc = dynamic_cast<FileChooser*>(w->getParentWidget());
+	if (!fc) return;
+
+	size_t button = fc->createBox.getValue();
+
+	// Cancel
+	if (button == 1.0)
+	{
+		w->setValue (0.0);
+		fc->release (&fc->createBox);
+	}
+
+	// OK
+	else if (button == 2.0)
+	{
+		w->setValue (0.0);
+		std::string newPath = fc->getPath() + PATH_SEPARATOR + fc->createInput.getText();
+		if (!mkdir (newPath.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))
+		{
+			fc->createError.hide();
+			fc->enterDir();
+			fc->release (&fc->createBox);
+		}
+
+		else
+		{
+			fc->createError.setText (BUtilities::Dictionary::get ("Error") + ": " + BUtilities::Dictionary::get ("Can't create new folder") + ".");
+			fc->createError.show();
+		}
+
+		fc->update ();
+	}
+}
+
+inline void FileChooser::newFolderButtonClickedCallback (BEvents::Event* event)
+{
+	if (!event) return;
+	TextButton* w = (TextButton*)event->getWidget();
+	if (!w) return;
+	FileChooser* fc = (FileChooser*)w->getParent();
+	if (!fc) return;
+
+	if (!fc->contains (&fc->createBox))
+	{
+		fc->createLabel.setText (BUtilities::Dictionary::get ("Create new folder") + ":");
+		fc->createInput.setText ("");
+		fc->createError.setText (BUtilities::Dictionary::get ("Error") + ": " + BUtilities::Dictionary::get ("Can't create new folder") + ".");
+		fc->createError.hide();
+		fc->add (&fc->createBox);
+		fc->update();
+	}
+}
+
+inline bool FileChooser::isDir (const std::string& path, const std::string& name) const
+{
+	std::string full = (path == PATH_SEPARATOR ? path : path + PATH_SEPARATOR) + name;
+	struct stat sb;
+        if (stat (full.c_str(), &sb)) return false;
+	if (S_ISDIR(sb.st_mode)) return true;
+	return false;
+}
+
+inline void FileChooser::enterDir ()
+{
+	std::vector<std::string> newFiles;
+	std::vector<std::string> newDirs;
+	DIR *dir = opendir (getPath().c_str());
+
+	// Scan directory
+	// TODO Use C++17 for future versions
+	if (dir)
+	{
+		for (struct dirent* entry = readdir(dir); entry ; entry = readdir(dir))
+		{
+			if (isDir (getPath(), entry->d_name))
+			{
+				std::string s = entry->d_name;
+				if ((std::regex_match (s, std::regex ("(\\.{1,2})|([^\\.].*)"))))	// Exclude hidden
+				{
+					newDirs.push_back (entry->d_name);
+				}
+			}
+
+			else
+			{
+				std::string s = entry->d_name;
+				if (!std::regex_match (s, std::regex ("\\..*")))	// Exclude hidden
+				{
+					if (filters_.empty()) newFiles.push_back (s);
+					else
+					{
+						Label* l = dynamic_cast<Label*>(filterComboBox.getItem (filterComboBox.getValue()));
+						if (l && (std::regex_match (s, filters_[l->getText()]))) newFiles.push_back (s);
+					}
+				}
+			}
+		}
+		closedir (dir);
+	}
+
+	std::sort (newFiles.begin(), newFiles.end());
+	std::sort (newDirs.begin(), newDirs.end());
+
+	if ((files_ != newFiles) || (dirs_ != newDirs))
+	{
+		files_ = newFiles;
+		dirs_ = newDirs;
+
+		fileListBox.deleteItem();
+
+		// Directories
+		for (std::string const& d : dirs_) 
+		{
+			fileListBox.addItem (d);
+			Label* l = dynamic_cast<Label*>(fileListBox.getItem (d));
+			if (l) 
+			{
+				BStyles::Font f = l->getFont();
+				f.weight = CAIRO_FONT_WEIGHT_BOLD;
+				l->setFont (f);
+			}
+		}
+
+		// Files
+		for (std::string const& f : files_) fileListBox.addItem (f);
+
+		fileListBox.setTop (1);
+	}
+}
+
+inline void FileChooser::processFileSelected()
+{
+	struct stat buffer;
+	const std::string fileName = getPath() + PATH_SEPARATOR + getFileName();
+	const bool fileExists = (stat (fileName.c_str(), &buffer) == 0);
+
+	// Open file exists dialog
+	if (fileExists)
+	{
+		confirmBox.text.setText (BUtilities::Dictionary::get ("File already exists") + ". " + BUtilities::Dictionary::get ("Overwrite") + "?");
+		update();
+		if (!contains (&confirmBox)) add (&confirmBox);
+	}
+
+	// Open file not exists dialog
+	else if (!fileExists)
+	{
+		confirmBox.text.setText (BUtilities::Dictionary::get ("File not found") + ".");
+		update();
+		if (!contains (&confirmBox)) add (&confirmBox);
+	}
+
+	// Otherwise finish directly
+	else
+	{
+		setValue (getPath() + PATH_SEPARATOR + getFileName());
+		postCloseRequest();
+	}
+}
+
+inline std::function<void (BEvents::Event*)> FileChooser::getFileListBoxClickedCallback()
+{
+	return fileListBoxChangedCallback;
+}
 
 }
 

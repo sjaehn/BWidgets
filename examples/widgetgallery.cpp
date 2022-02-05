@@ -15,6 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+
 #include "../BWidgets/Window.hpp"
 #include "../BWidgets/Label.hpp"
 #include "../BWidgets/Frame.hpp"
@@ -55,6 +56,7 @@
 #include "../BWidgets/ComboBox.hpp"
 #include "../BWidgets/HScrollBar.hpp"
 #include "../BWidgets/VScrollBar.hpp"
+#include "../BWidgets/FileChooser.hpp"
 #include <cairo/cairo.h>
 #include <iostream>
 #include <vector>
@@ -68,6 +70,8 @@ const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipisic
 
 int main ()
 {
+    BUtilities::Dictionary::setLanguage ("en");
+
     Window window (1200, 820, 0, URID_UNKNOWN_URID, "Window");
 
     // Widget
@@ -127,7 +131,8 @@ int main ()
     Symbol infoSymbol (658, 26, 12, 12, Symbol::INFO_SYMBOL);
     Symbol warnSymbol (674, 26, 12, 12, Symbol::WARN_SYMBOL);
     Symbol errorSymbol (610, 42, 12, 12, Symbol::ERROR_SYMBOL);
-    Label symbolLabel (610, 80, 180, 20, "Symbol");
+    Symbol newFolderSymbol (626, 42, 12, 12, Symbol::NEW_FOLDER_SYMBOL);
+    Label symbolLabel (610, 80, 80, 20, "Symbol");
     symbolLabel.setFont (labelFont);
     window.add (&addSymbol);
     window.add (&minusSymbol);
@@ -140,6 +145,7 @@ int main ()
     window.add (&infoSymbol);
     window.add (&warnSymbol);
     window.add (&errorSymbol);
+    window.add (&newFolderSymbol);
     window.add (&symbolLabel);
 
     // Image
@@ -385,7 +391,7 @@ int main ()
     window.add (&valueVMeterLabel);
 
     // Box
-    Box box (10, 130, 180, 60, {"Cancel", "OK"});
+    Box box (10, 130, 180, 60, {BUtilities::Dictionary::get("Cancel"), BUtilities::Dictionary::get("OK")});
     Label boxLabel (10, 200, 180, 20, "Box");
     boxLabel.setFont (labelFont);
     window.add (&box);
@@ -399,11 +405,20 @@ int main ()
     window.add (&textBoxLabel);
 
     // MessageBox
-    MessageBox messageBox (410, 130, 280, 180, Symbol::INFO_SYMBOL, "Hello world is sooo easy:", "Window window;\nLabel label (\"Hello World\");\nwindow.add (&label);\nwindow.run ();", {"Close"});
+    MessageBox messageBox   (410, 130, 280, 180, Symbol::INFO_SYMBOL, 
+                             "Hello world is sooo easy:", "Window window;\nLabel label (\"Hello World\");\nwindow.add (&label);\nwindow.run ();", 
+                             {BUtilities::Dictionary::get("Close")});
     Label messageBoxLabel (410, 320, 280, 20, "MessageBox");
     messageBoxLabel.setFont (labelFont);
     window.add (&messageBox);
     window.add (&messageBoxLabel);
+
+    // FileChooser
+    FileChooser fileChooser (10, 370, 280, 290);
+    Label fileChooserLabel (100, 680, 100, 20, "FileChooser");
+    fileChooserLabel.setFont (labelFont);
+    window.add (&fileChooser);
+    window.add (&fileChooserLabel);
 
     window.run();
 }

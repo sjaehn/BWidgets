@@ -60,7 +60,8 @@ public:
 		QUESTION_SYMBOL,
 		INFO_SYMBOL,
 		WARN_SYMBOL,
-		ERROR_SYMBOL
+		ERROR_SYMBOL,
+		NEW_FOLDER_SYMBOL
 	};
 
 protected:
@@ -294,9 +295,9 @@ inline void Symbol::draw (const BUtilities::RectArea& area)
                                         cairo_fill (cr);
 										break;
 
-				case WARN_SYMBOL:		cairo_arc (cr, xc, yc - 0.3 * ext, 0.05 * ext, 1.1667 * M_PI, 1.8333 * M_PI);
-										cairo_arc (cr, xc + 0.3464 * ext, yc + 0.3 * ext, 0.05 * ext, 1.8333 * M_PI, 2.5 * M_PI);
-										cairo_arc (cr, xc - 0.3464 * ext, yc + 0.3 * ext, 0.05 * ext, 0.5 * M_PI, 1.1667 * M_PI);
+				case WARN_SYMBOL:		cairo_arc (cr, xc, yc - 0.345 * ext, 0.05 * ext, 1.1667 * M_PI, 1.8333 * M_PI);
+										cairo_arc (cr, xc + 0.3984 * ext, yc + 0.345 * ext, 0.05 * ext, 1.8333 * M_PI, 2.5 * M_PI);
+										cairo_arc (cr, xc - 0.3984 * ext, yc + 0.345 * ext, 0.05 * ext, 0.5 * M_PI, 1.1667 * M_PI);
 										cairo_close_path (cr);
 										cairo_set_line_width (cr, 0.1 * ext);
 										cairo_stroke (cr);
@@ -340,6 +341,29 @@ inline void Symbol::draw (const BUtilities::RectArea& area)
 										cairo_line_to (cr, xc - 0.2 * ext, yc + 0.2 * ext);
 										cairo_set_line_width (cr, 0.1 * ext);
 										cairo_stroke (cr);
+										break;
+
+				case NEW_FOLDER_SYMBOL:	{
+											const double size = ext * 0.9;
+											cairo_set_line_width (cr, 0.05 * ext);
+											cairo_move_to (cr, x0 + 0.5 * w - 0.45 * size, y0 + 0.5 * h + 0.4 * size);
+											cairo_line_to (cr, x0 + 0.5 * w - 0.5 * size, y0 + 0.5 * h + 0.35 * size);
+											cairo_line_to (cr, x0 + 0.5 * w - 0.5 * size, y0 + 0.5 * h - 0.35 * size);
+											cairo_line_to (cr, x0 + 0.5 * w - 0.45 * size, y0 + 0.5 * h - 0.4 * size);
+											cairo_line_to (cr, x0 + 0.5 * w - 0.15 * size, y0 + 0.5 * h - 0.4 * size);
+											cairo_line_to (cr, x0 + 0.5 * w - 0.05 * size, y0 + 0.5 * h - 0.3 * size);
+											cairo_line_to (cr, x0 + 0.5 * w + 0.45 * size, y0 + 0.5 * h - 0.3 * size);
+											cairo_line_to (cr, x0 + 0.5 * w + 0.5 * size, y0 + 0.5 * h - 0.25 * size);
+											cairo_line_to (cr, x0 + 0.5 * w + 0.5 * size, y0 + 0.5 * h + 0.35 * size);
+											cairo_line_to (cr, x0 + 0.5 * w + 0.45 * size, y0 + 0.5 * h + 0.4 * size);
+											cairo_close_path (cr);
+											cairo_move_to (cr, x0 + 0.5 * w + 0.1 * size, y0 + 0.5 * h + 0.05 * size);
+											cairo_line_to (cr, x0 + 0.5 * w + 0.4 * size, y0 + 0.5 * h + 0.05 * size);
+											cairo_move_to (cr, x0 + 0.5 * w + 0.25 * size, y0 + 0.5 * h - 0.1 * size);
+											cairo_line_to (cr, x0 + 0.5 * w + 0.25 * size, y0 + 0.5 * h + 0.2 * size);
+											cairo_stroke (cr);
+										}
+										break;
 
                 default:                break;
 		}

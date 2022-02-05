@@ -176,20 +176,17 @@ Widget
  |    ╰── Dial
  |         ╰── ValueDial
  ├── HPianoRoll
+ ├── SpinBox
+ |    ├── ListBox
+ |    ╰── ComboBox
  ├── Frame
  |    ├── Box
  |    |    ╰── TextBox
  |    |         ╰── MessageBox
+ |    ├── FileChooser
  .    .
  .    .
- .
- .
- ├── SpinBox
- |    ├── ListBox
- |    ╰── ComboBox
- .
- .
- .
+ .    .
 ```
 
 Each widget class Xxx has got at least three different constructors:
@@ -652,6 +649,33 @@ scrollable list content and allows to select an item. In contrast to `SpinBox`:
 `ComboBox` is `Valueable` widget derived from SpinBox. It shows a `SpinBox`
 with a single button. It opens a `ListBox` with the same content upon
 clicking on the button.
+
+
+### FileChooser
+
+![filechooser](../suppl/FileChooser.png)
+
+The `FileChooser` is a `Valueable` widget based on `Frame`. It consists of:
+* a `Label` to display the current path,
+* a "new folder" `SymbolButton`,
+* a `ListBox` with the (filtered) content of the current path,
+* a `LabelEdit` to display or edit the selected filename,
+* a `ComboBox` to select filename filter options,
+* a "Cancel" button, and
+* an "OK" / "Open" button,
+
+The ListBox fascilitates selection of files and the navigation through
+the file system. A selected file is also shown in the LabelEdit.
+
+Clicking on the new folder SymbolButton opens a dialog and the user is
+asked to enter a new folder name. The new folder is created within the
+current path shown in the Label.
+
+Clicking on "Cancel" will set the widget value to "" and a 
+CloseRequestEvent is emitted.
+
+Clicking on "OK" / "Open" will set the widget value to path + filename 
+and a CloseRequestEvent is emitted.
 
 
 ## Attributes and decorations
