@@ -9,7 +9,10 @@ B.Widgets allows recursive embedding of widgets including changing the order
 of embedding. 
 
 B.Widgets supports events from the keyboard, the mouse, the host windowing 
-system and also internal events like value change and messaging events. 
+system and also internal events like value change and messaging events.
+
+B.Widgets supports the system locale / messages translations and its own
+extensible dictionary for internationalization.
 
 Widgets can be decorated using styles.
 
@@ -141,7 +144,6 @@ additionally inherit from [Support](#Supports) classes to extend its features.
 ```
 Widget
  ├── Window
- ├── Frame
  ├── Label
  |    ├── LabelEdit
  |    ╰── Text
@@ -174,9 +176,14 @@ Widget
  |    ╰── Dial
  |         ╰── ValueDial
  ├── HPianoRoll
- ├── Box
- |    ╰── TextBox
- |         ╰── MessageBox
+ ├── Frame
+ |    ├── Box
+ |    |    ╰── TextBox
+ |    |         ╰── MessageBox
+ .    .
+ .    .
+ .
+ .
  ├── SpinBox
  |    ├── ListBox
  |    ╰── ComboBox
@@ -193,8 +200,8 @@ Each widget class Xxx has got at least three different constructors:
   y) relative to the parent widget with the extends (width, height) with the
   passed data.
 
-You can re-define the widget default size used for `Xxx (data, ...)` by 
-defining the macros `BWIDGETS_DEFAULT_XXX_WIDTH` and 
+You can re-define the widget default size used for `Xxx ()` and 
+`Xxx (data, ...)` by defining the macros `BWIDGETS_DEFAULT_XXX_WIDTH` and 
 `BWIDGETS_DEFAULT_XXX_HEIGHT`.
 
 **Note: Widgets in B.Widgets don't have got any copy constructors or 
@@ -778,6 +785,18 @@ MacOS, and Windows, and optionally supports Vulkan, OpenGL, and Cairo graphics
 contexts. Pugl is written by David Robillard *et al.*
 
 BWidgets uses the Cairo graphics context support of Pugl.
+
+
+## Internationalization
+
+B.Widgets supports the system locale / messages translation and additionally
+uses its own dictionary. You can globally change the language of you project
+either by definition of `BUTILITIES_DICTIONARY_LANGUAGE` with the POSIX
+locale (language[_territory][.codeset][@modifier], e. g. "en_US.utf8") *prior* 
+including B.Widgets or using `Dictionary::setLanguage()`:
+```
+BUtilities::Dictionary::setLanguage ("de_DE.utf8");
+```
 
 
 ## TODO
