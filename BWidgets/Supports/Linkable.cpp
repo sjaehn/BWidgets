@@ -132,7 +132,7 @@ bool Linkable::hasChildren () const
 	return !children_.empty();
 }
 
-bool Linkable::contains (Linkable* child)
+bool Linkable::contains (const Linkable* child) const
 {
 	return std::find (children_.begin(), children_.end(), child) != children_.end();
 }

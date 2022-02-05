@@ -70,7 +70,7 @@ public:
      *  @brief  Gets the value.
      *  @return  Value. 
      */
-    T getValue ();
+    T getValue () const;
 
     /**
 	 *  @brief  Lets a %Widget emit a ValueChangeTypedEvent.
@@ -113,7 +113,7 @@ void ValueableTyped<T>::setValue (const T& value)
 }
 
 template<class T>
-T ValueableTyped<T>::getValue ()
+T ValueableTyped<T>::getValue () const
 {
     return value_;
 }

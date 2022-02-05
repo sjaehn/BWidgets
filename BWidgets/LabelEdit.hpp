@@ -129,7 +129,7 @@ public:
 	 *  If the LabelEdit is currently edited, then %getText() returns the last
 	 *  stored text.
 	 */
-	virtual std::string getText ();
+	virtual std::string getText () const override;
 
 	/**
 	 *  @brief  Changes the edit mode.
@@ -303,7 +303,7 @@ inline void LabelEdit::setText (const std::string& text)
 	setValue (text);
 }
 
-inline std::string LabelEdit::getText () 
+inline std::string LabelEdit::getText () const
 {
 	return getValue();
 }

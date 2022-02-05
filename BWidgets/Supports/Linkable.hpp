@@ -121,7 +121,7 @@ public:
 	 *  @param child  Pointer to a child object.
 	 *  @return  True if @a child is one of the children, otherwise false.
 	 */
-	bool contains (Linkable* child);
+	bool contains (const Linkable* child) const;
 
 	/**
 	 *  @brief  Read-only access to the list of children pointers. 
