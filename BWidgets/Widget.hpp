@@ -21,6 +21,7 @@
 #include <cstdint>
 #include <functional>
 
+#include "../BUtilities/Dictionary.hpp"
 #include "Supports/Linkable.hpp"
 #include "Supports/Visualizable.hpp"
 #include "Supports/EventMergeable.hpp"

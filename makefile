@@ -20,6 +20,7 @@ BUNDLE = widgetgallery helloworld buttontest
 
 CXX_INCL = \
 BUtilities/Urid.cpp \
+BUtilities/Dictionary.cpp \
 BWidgets/Supports/Closeable.cpp \
 BWidgets/Supports/Linkable.cpp \
 BWidgets/Supports/Messagable.cpp \
