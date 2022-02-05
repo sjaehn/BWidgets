@@ -20,12 +20,12 @@
 
 #include "Widget.hpp"
 #include "Supports/Clickable.hpp"
-#include "Supports/Draggable.hpp"
 #include "Supports/Scrollable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/ValidatableRange.hpp"
 #include "Supports/ValueTransferable.hpp"
 #include "../BEvents/WheelEvent.hpp"
+#include "../BEvents/PointerEvent.hpp"
 #include "Draws/drawPad.hpp"
 
 #ifndef BWIDGETS_DEFAULT_PAD_WIDTH
@@ -43,16 +43,14 @@ namespace BWidgets
  *
  *  %Pad is a Valueable widget imitating an LED pad. Its value is represented
  *  by its color from dark to bright. It supports user interaction via
- *  Clickable (switch on / off), Draggable (increase / decrease value), and
- *  Scrollable (increase / decrease value). The visualble content of
- *  the %Pad is represented by FgColors.
+ *  Clickable (switch on / off) and Scrollable (increase / decrease value). 
+ *  The visualble content of the %Pad is represented by FgColors.
  */
 class Pad : public Widget, 
 			public ValueableTyped<double>, 
 			public ValidatableRange<double>, 
 			public ValueTransferable<double>, 
 			public Clickable, 
-			public Draggable, 
 			public Scrollable
 {
 
@@ -127,16 +125,6 @@ public:
      *  function.
      */
     virtual void onButtonClicked (BEvents::Event* event) override;
-
-	/**
-     *  @brief  Method called upon pointer drag.
-     *  @param event  Passed Event.
-     *
-     *  Overridable method called from the main window event scheduler upon
-     *  a pointer drag. Changes the value and calls the widget static callback
-	 *  function.
-     */
-    virtual void onPointerDragged (BEvents::Event* event) override;
 	
 	/**
      *  @brief  Method called upon (mouse) wheel scroll.
@@ -181,7 +169,7 @@ inline Pad::Pad () :
 
 inline Pad::Pad	(double value, const double min, const double max, double step, uint32_t urid, std::string title) :
 	Pad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT, 
-		 0.0, 0.0, 1.0, 0.0, 
+		 min, max, step, urid, 
 		 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 		 urid, title) 
 {
@@ -198,7 +186,6 @@ inline Pad::Pad	(const double x, const double y, const double width, const doubl
 	ValidatableRange<double> (min, max, step),
 	ValueTransferable<double> (transferFunc, reTransferFunc),
 	Clickable(),
-	Draggable(),
 	Scrollable(),
 	storedValue_ (value == min ? max : min)
 {
@@ -216,7 +203,6 @@ inline void Pad::copy (const Pad* that)
 {
 	storedValue_ = that->storedValue_;
 	Scrollable::operator= (*that);
-	Draggable::operator= (*that);
 	Clickable::operator= (*that);
 	ValueTransferable<double>::operator= (*that);
 	ValidatableRange<double>::operator= (*that);
@@ -238,18 +224,6 @@ inline void Pad::onButtonClicked (BEvents::Event* event)
 		};
 	}
 	Clickable::onButtonClicked (event);
-}
-
-inline void Pad::onPointerDragged (BEvents::Event* event)
-{
-	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
-	if (!pev) return;
-	if (getHeight()) 
-	{
-		if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - pev->getDelta().y / getHeight(), reTransfer_));
-	}
-	Draggable::onPointerDragged (event);
 }
 
 inline void Pad::onWheelScrolled (BEvents::Event* event)
