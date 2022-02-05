@@ -141,6 +141,50 @@ public:
      */
     virtual void setValue (const size_t& value) override;
 
+	/**
+     *  @brief  Changes the value if the item text is part of the items.
+     *  @param item  Item text.
+     */
+    virtual void setValue (const std::string& value) override;
+
+	/**
+	 *  @brief  Changes the position of the ListBox.
+	 *  @param position  New position.
+	 */
+	void moveListBox (const BUtilities::Point position);
+
+	/**
+	 *  @brief  Changes the position of the ListBox.
+	 *  @param x  New x coordinate.
+	 *  @param y  New y coordinate.
+	 */
+	void moveListBox (const double x, const double y);
+
+	/**
+	 *  @brief  Gets the ListBox position.
+	 *  @return  ListBox position. 
+	 */
+	BUtilities::Point getListBoxPosition () const;
+
+	/**
+	 *  @brief  Changes the extends of the ListBox.
+	 *  @param extends  New extends.
+	 */
+	void resizeListBox (const BUtilities::Point extends);
+
+	/**
+	 *  @brief  Changes the extends of the ListBox.
+	 *  @param width  New ListBox width.
+	 *  @param height  New ListBox height.
+	 */
+	void resizeListBox (const double width, const double height);
+
+	/**
+	 *  @brief  Gets the ListBox extends.
+	 *  @return  ListBox extends. 
+	 */
+	BUtilities::Point getListBoxExtends () const;
+
 protected:
 
 	/**
@@ -206,6 +250,7 @@ inline void ComboBox::copy (const ComboBox* that)
 {
 	if (listBox_) delete listBox_;
 	listBox_ = that->listBox_->clone();
+	if (listBox_) add (listBox_);
 
 	listBoxArea_ = that->listBoxArea_;
 
@@ -223,6 +268,44 @@ inline void ComboBox::setValue (const size_t& value)
 	}
 
 	SpinBox::setValue (value);
+}
+
+inline void ComboBox::setValue (const std::string& item)
+{
+	SpinBox::setValue (item);
+}
+
+inline void ComboBox::moveListBox (const BUtilities::Point position)
+{
+	listBoxArea_.moveTo (position);
+	if (listBox_) listBox_->moveTo (position);
+}
+
+inline void ComboBox::moveListBox (const double x, const double y)
+{
+	moveListBox (BUtilities::Point (x, y));
+}
+
+inline BUtilities::Point ComboBox::getListBoxPosition () const
+{
+	return listBoxArea_.getPosition();
+}
+
+
+inline void ComboBox::resizeListBox (const BUtilities::Point extends)
+{
+	listBoxArea_.resize (extends);
+	if (listBox_) listBox_->resize (extends);
+}
+
+inline void ComboBox::resizeListBox (const double width, const double height)
+{
+	resizeListBox (BUtilities::Point (width, height));
+}
+
+inline BUtilities::Point ComboBox::getListBoxExtends () const
+{
+	return listBoxArea_.getExtends();
 }
 
 inline void ComboBox::buttonChangedCallback (BEvents::Event* event)

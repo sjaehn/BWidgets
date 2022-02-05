@@ -128,6 +128,18 @@ public:
 	void copy (const SpinBox* that);
 
 	/**
+     *  @brief  Changes the value.
+     *  @param value  Value.
+     */
+    virtual void setValue (const size_t& value) override;
+
+	/**
+     *  @brief  Changes the value if the item text is part of the items.
+     *  @param item  Item text.
+     */
+    virtual void setValue (const std::string& value);
+
+	/**
 	 *  @brief  Adds an item to the %SpinBox. 
 	 *  @param item  Item text string.
 	 *  @param pos  Optional, index of the position fo the item to be inserted
@@ -171,6 +183,48 @@ public:
 	 *  @return  Pointer to the widget.
 	 */
 	Widget* getItem (const size_t pos) const;
+
+	/**
+	 *  @brief   Access to an item of the %SpinBox
+	 *  @param item  Item text string.
+	 *  @return  Pointer to the widget.
+	 */
+	Widget* getItem (const std::string& item) const;
+
+	/**
+	 *  @brief  Sets the width of the button.
+	 *  @param width  Button width.
+	 */
+	void setButtonWidth (const double width);
+
+	/**
+	 *  @brief  Gets the width of the button.
+	 *  @return  Button width.
+	 */
+	double getButtonWidth () const;
+
+	/**
+	 *  @brief  Sets the height of each item to be added.
+	 *  @param height  Item height.
+	 *
+	 *  The change of the item height only takes effect for items added after
+	 *  the call of @c setItemHeight() of after call @c resizeItems() . 
+	 */
+	void setItemHeight (const double height);
+
+	/**
+	 *  @brief  Gets the height of each item to be added.
+	 *  @param height  Item height.
+	 */
+	double getItemHeight () const;
+
+	/**
+	 *  @brief  Resizes all items to the same size.
+	 * 
+	 *  The size is defined by the widgets effective width, the button width,
+	 *  and the item height.
+	 */
+	void resizeItems();
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -272,6 +326,24 @@ inline void SpinBox::copy (const SpinBox* that)
     Widget::copy (that);
 }
 
+inline void SpinBox::setValue (const size_t& value)
+{
+	ValueableTyped<size_t>::setValue (value < items_.size() ? value : (items_.empty() ? 0 : items_.size() - 1));
+}
+
+inline void SpinBox::setValue (const std::string& item)
+{
+	size_t pos = 0;
+	for (Widget* w : items_)
+	{
+		Label* l = dynamic_cast<Label*>(w);
+		if (l && l->getText() == item) break;
+		++pos;
+	}
+
+	if (pos < items_.size()) setValue (pos);
+}
+
 inline void SpinBox::addItem (const std::string item, size_t pos)
 {
 	Label* l = new Label (0, 0, getEffectiveWidth() - buttonWidth_, itemHeight_, item);
@@ -305,10 +377,10 @@ inline void SpinBox::deleteItem (const size_t pos)
 		delete w;
 	}
 
-	if (getValue() == pos) setValue (0);
-	else if (getValue() > pos) setValue (getValue() - 1);
 	if (top_ == pos) top_ = 0;
 	else if (top_ > pos) --top_;
+	if (getValue() == pos) setValue (0);
+	else if (getValue() > pos) setValue (getValue() - 1);
 }
 
 inline void SpinBox::deleteItem ()
@@ -322,14 +394,60 @@ inline void SpinBox::deleteItem ()
 		delete w;
 	}
 
-	setValue (0);
 	top_ = 0;
+	setValue (0);
 }
 
 inline Widget* SpinBox::getItem (const size_t pos) const
 {
 	if (pos >= items_.size()) return nullptr;
 	return *std::next(items_.begin(), pos);
+}
+
+inline Widget* SpinBox::getItem (const std::string& item) const
+{
+	for (std::list<Widget*>::const_iterator it = items_.begin(); it != items_.end(); ++it)
+	{
+		Label* l = dynamic_cast<Label*>(*it);
+		if (l && (l->getText() == item)) return *it;
+	}
+	
+	return nullptr;
+}
+
+inline void SpinBox::setButtonWidth (const double width)
+{
+	if (buttonWidth_ != width)
+	{
+		buttonWidth_ = width;
+		update();
+	}
+}
+
+inline double SpinBox::getButtonWidth () const
+{
+
+	return buttonWidth_;
+}
+
+inline void SpinBox::setItemHeight (const double height)
+{
+	if (itemHeight_ != height)
+	{
+		itemHeight_ = height;
+		update();
+	}
+}
+
+inline double SpinBox::getItemHeight () const
+{
+	return itemHeight_;
+}
+
+inline void SpinBox::resizeItems ()
+{
+	for (Widget* w : items_) w->resize (getEffectiveWidth() - buttonWidth_, itemHeight_);
+	update();
 }
 
 inline void SpinBox::update ()
