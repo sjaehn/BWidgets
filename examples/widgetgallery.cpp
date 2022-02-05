@@ -27,6 +27,7 @@
 #include "../BWidgets/TextButton.hpp"
 #include "../BWidgets/SymbolButton.hpp"
 #include "../BWidgets/Pad.hpp"
+#include "../BWidgets/SymbolPad.hpp"
 #include "../BWidgets/ImageButton.hpp"
 #include "../BWidgets/CheckBox.hpp"
 #include "../BWidgets/RadioButton.hpp"
@@ -185,12 +186,20 @@ int main ()
     window.add (&symbolButtonLabel);
 
     // Pad
-    Pad pad (1010, 20, 80, 40, 0.0, 0.0, 1.0, 0.0);
-    pad.setFgColors(BStyles::blues);
+    Pad pad (1010, 20, 80, 40, 0.7, 0.0, 1.0, 0.0);
+    pad.setFgColors(BStyles::reds);
     Label padLabel (1000, 80, 100, 20, "Pad");
     padLabel.setFont (labelFont);
     window.add (&pad);
     window.add (&padLabel);
+
+    // SymbolPad
+    SymbolPad symbolPad (1110, 20, 80, 40, Symbol::PLAY_SYMBOL, 0.7, 0.0, 1.0, 0.0);
+    symbolPad.setFgColors(BStyles::blues);
+    Label symbolPadLabel (1100, 80, 100, 20, "SymbolPad");
+    symbolPadLabel.setFont (labelFont);
+    window.add (&symbolPad);
+    window.add (&symbolPadLabel);
 
     // SpinButton
     SpinButton spinButton (740, 150, 20, 20);

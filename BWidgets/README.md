@@ -160,6 +160,7 @@ Widget
  |    ╰── VSwitch
  ├── SpinButton
  ├── Pad
+ |    ╰── SymbolPad
  ├── HMeter
  |    ├── ValueHMeter
  |    ╰── HScale
@@ -418,9 +419,18 @@ is represented by its background and its border.
 
 `Pad` is a `Valueable` widget imitating an LED pad. Its value is represented
 by its color from dark to bright. It supports user interaction via
-`Clickable` (switch on / off), `Draggable` (increase / decrease value), and
-`Scrollable` (increase / decrease value). The visualble content of
-the Pad is represented by FgColors.
+`Clickable` (switch on / off) and `Scrollable` (increase / decrease value). 
+The visualble content of the Pad is represented by FgColors.
+
+### SymbolPad
+
+![symbolpad](../suppl/SymbolPad.png)
+
+`SymbolPad` is a `Pad` containing a `Symbol`. Its value is represented
+by its color from dark to bright. It supports user interaction via
+`Clickable` (switch on / off) and `Scrollable` (increase / decrease 
+value). The visualble content of the %SymbolPad is represented by 
+FgColors.
 
 
 ### HMeter
