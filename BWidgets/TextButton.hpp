@@ -128,7 +128,7 @@ public:
      *  Creates a new RGBA surface with the new extends, copies the 
      *  surface data from the previous surface, and calls @c update() .
 	 */
-	virtual void resize (const BUtilities::Point extends) override;
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -180,12 +180,12 @@ inline void TextButton::resize ()
 
 inline void TextButton::resize (const double width, const double height) 
 {
-	TextButton::resize (BUtilities::Point (width, height));
+	TextButton::resize (BUtilities::Point<> (width, height));
 }
 
-inline void TextButton::resize (const BUtilities::Point extends)
+inline void TextButton::resize (const BUtilities::Point<> extends)
 {
-	Button::resize (BUtilities::Point (extends.x, extends.y));
+	Button::resize (BUtilities::Point<> (extends.x, extends.y));
 	label.resize ();
 	label.moveTo (label.center(), label.middle());
 }

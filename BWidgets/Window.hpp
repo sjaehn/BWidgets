@@ -73,7 +73,7 @@ protected:
 	PuglNativeView nativeWindow_;
 	bool quit_;
 	bool focused_;
-	BUtilities::Point pointer_;
+	BUtilities::Point<> pointer_;
 	std::list<BEvents::Event*> eventQueue_;
 
 public:

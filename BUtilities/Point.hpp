@@ -1,4 +1,4 @@
-/* Point.hpp
+/* Point<T>.hpp
  * Beat / envelope shaper LV2 plugin
  *
  * Copyright (C) 2019 by Sven Jähnichen
@@ -24,12 +24,13 @@
 namespace BUtilities
 {
 
+template <class T = double>
 struct Point
 {
-	double x, y;
+	T x, y;
 
-	Point () : Point (0, 0) {}
-	Point (double x, double y) : x (x), y (y) {}
+	Point () : Point<T> (0, 0) {}
+	Point (const T x, const T y) : x (x), y (y) {}
 
 	Point& operator+= (const Point& rhs)
 	{
@@ -38,7 +39,7 @@ struct Point
 		return *this;
 	}
 
-	Point& operator-= (const Point& rhs)
+	Point<T>& operator-= (const Point& rhs)
 	{
 		this->x -= rhs.x;
 		this->y -= rhs.y;
@@ -47,8 +48,8 @@ struct Point
 
 	friend bool operator== (const Point& lhs, const Point& rhs) {return ((lhs.x == rhs.x) && (lhs.y == rhs.y));}
 	friend bool operator!= (const Point& lhs, const Point& rhs) {return !(lhs == rhs);}
-	friend Point operator+ (Point lhs, const Point& rhs) {return (lhs += rhs);}
-	friend Point operator- (Point lhs, const Point& rhs) {return (lhs -= rhs);}
+	friend Point<T> operator+ (Point lhs, const Point& rhs) {return (lhs += rhs);}
+	friend Point<T> operator- (Point lhs, const Point& rhs) {return (lhs -= rhs);}
 
 };
 

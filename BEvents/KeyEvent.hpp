@@ -33,7 +33,7 @@ namespace BEvents
  class KeyEvent : public Event
  {
  protected:
-	BUtilities::Point point_;
+	BUtilities::Point<> point_;
 	uint32_t key_;
 
  public:
@@ -56,7 +56,7 @@ namespace BEvents
      *  @param unicode  Key as four byte unicode.
      */
 	KeyEvent (BWidgets::Widget* widget, const EventType type, const double x, const double y, const uint32_t unicode) :
-		KeyEvent (widget, type, BUtilities::Point (x, y), unicode) 
+		KeyEvent (widget, type, BUtilities::Point<> (x, y), unicode) 
     {
 
     }
@@ -68,7 +68,7 @@ namespace BEvents
      *  @param position  Pointer coordinates relative to the widget origin.
      *  @param unicode  Key as four byte unicode.
      */
-	KeyEvent (BWidgets::Widget* widget, const EventType type, const BUtilities::Point& position, const uint32_t unicode) :
+	KeyEvent (BWidgets::Widget* widget, const EventType type, const BUtilities::Point<>& position, const uint32_t unicode) :
 		Event (widget, type),
 		point_ (position),
 		key_ (unicode) 
@@ -80,7 +80,7 @@ namespace BEvents
     *  @brief  Redefines the pointer coordinates of the %KeyEvent.
     *  @param coords  Pointer coordinates relative to the widgets origin.
     */
-    void setPosition (const BUtilities::Point& coords)
+    void setPosition (const BUtilities::Point<>& coords)
     {
         point_ = coords;
     }
@@ -89,7 +89,7 @@ namespace BEvents
     *  @brief  Gets the pointer coordinates of the %KeyEvent.
     *  @return  Pointer coordinates relative to the widgets origin.
     */
-    BUtilities::Point getPosition () const
+    BUtilities::Point<> getPosition () const
     {
         return point_;
     }

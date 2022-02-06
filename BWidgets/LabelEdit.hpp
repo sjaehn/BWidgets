@@ -223,7 +223,7 @@ protected:
 	 *  @param position  Mouse pointer position.
 	 *  @return  Cursor position.
 	 */
-	size_t getCursorFromCoords (const BUtilities::Point& position);
+	size_t getCursorFromCoords (const BUtilities::Point<>& position);
 
 	/**
      *  @brief  Unclipped draw to the surface (if is visualizable).
@@ -243,7 +243,7 @@ protected:
      *  @brief  Clipped Draw to the surface (if is visualizable).
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea& area) override;
+    virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 inline LabelEdit::LabelEdit () : 
@@ -504,7 +504,7 @@ inline void LabelEdit::onKeyPressed (BEvents::Event* event)
 	KeyPressable::onKeyPressed(event);
 }
 
-inline size_t LabelEdit::getCursorFromCoords (const BUtilities::Point& position)
+inline size_t LabelEdit::getCursorFromCoords (const BUtilities::Point<>& position)
 {
 	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
 	const std::u32string u32labelText = convert.from_bytes (text_);
@@ -568,10 +568,10 @@ inline void LabelEdit::draw ()
 
 inline void LabelEdit::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea (x0, y0, width, height));
+	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
-inline void LabelEdit::draw (const BUtilities::RectArea& area)
+inline void LabelEdit::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

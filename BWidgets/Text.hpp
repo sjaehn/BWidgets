@@ -120,7 +120,7 @@ public:
      *  Creates a new RGBA surface with the new extends, copies the 
      *  surface data from the previous surface, and calls @c update() .
 	 */
-	virtual void resize (const BUtilities::Point extends) override;
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
 	 * Gets a block (a vector) of text lines that fit into the widget output.
@@ -159,7 +159,7 @@ protected:
      *  @brief  Clipped Draw to the surface (if is visualizable).
      *  @param area  Clipped area. 
      */
-	virtual void draw (const BUtilities::RectArea& area) override;
+	virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 inline Text::Text () : Text (0.0, 0.0, BWIDGETS_DEFAULT_TEXT_WIDTH, BWIDGETS_DEFAULT_TEXT_HEIGHT, "", URID_UNKNOWN_URID, "") 
@@ -204,10 +204,10 @@ inline void Text::resize ()
 
 inline void Text::resize (const double width, const double height) 
 {
-	resize (BUtilities::Point (width, height));
+	resize (BUtilities::Point<> (width, height));
 }
 
-inline void Text::resize (const BUtilities::Point extends)
+inline void Text::resize (const BUtilities::Point<> extends)
 {
 	Widget::resize (extends);
 }
@@ -270,10 +270,10 @@ inline void Text::draw ()
 
 inline void Text::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea (x0, y0, width, height));
+	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
-inline void Text::draw (const BUtilities::RectArea& area)
+inline void Text::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

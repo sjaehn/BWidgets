@@ -121,7 +121,7 @@ public:
 	 *  @brief  Resizes the object.
 	 *  @param extends  New object extends.
 	 */
-	virtual void resize (const BUtilities::Point extends) override;
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -179,10 +179,10 @@ inline void TextBox::resize ()
 
 inline void TextBox::resize (const double width, const double height)
 {
-	resize (BUtilities::Point (width, height));
+	resize (BUtilities::Point<> (width, height));
 }
 
-inline void TextBox::resize (const BUtilities::Point extends)
+inline void TextBox::resize (const BUtilities::Point<> extends)
 {
 	Box::resize (extends);
 }

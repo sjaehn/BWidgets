@@ -266,15 +266,15 @@ public:
 	};
 
 	ButtonCode button;
-	BUtilities::Point position;
+	BUtilities::Point<> position;
 
 protected:
 	std::chrono::steady_clock::time_point time_;
 
 public:
-	MouseDevice () : MouseDevice (NO_BUTTON, BUtilities::Point ()) {}
-	MouseDevice (const ButtonCode but) : MouseDevice (but, BUtilities::Point ()) {}
-	MouseDevice (const ButtonCode but, const BUtilities::Point& pos) :
+	MouseDevice () : MouseDevice (NO_BUTTON, BUtilities::Point<> ()) {}
+	MouseDevice (const ButtonCode but) : MouseDevice (but, BUtilities::Point<> ()) {}
+	MouseDevice (const ButtonCode but, const BUtilities::Point<>& pos) :
 			button (but), position (pos),
 			time_ (std::chrono::steady_clock::now()) {}
 

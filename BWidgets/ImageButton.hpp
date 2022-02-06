@@ -197,7 +197,7 @@ public:
      *  Creates a new RGBA surface with the new extends, copies the 
      *  surface data from the previous surface, and calls @c update() .
 	 */
-	virtual void resize (const BUtilities::Point extends) override;
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -307,13 +307,13 @@ inline void ImageButton::resize ()
 
 inline void ImageButton::resize (const double width, const double height) 
 {
-	ImageButton::resize (BUtilities::Point (width, height));
+	ImageButton::resize (BUtilities::Point<> (width, height));
 }
 
-inline void ImageButton::resize (const BUtilities::Point extends)
+inline void ImageButton::resize (const BUtilities::Point<> extends)
 {
-	Button::resize (BUtilities::Point (extends.x, extends.y));
-	image.resize (BUtilities::Point (getEffectiveWidth(), getEffectiveHeight()));
+	Button::resize (BUtilities::Point<> (extends.x, extends.y));
+	image.resize (BUtilities::Point<> (getEffectiveWidth(), getEffectiveHeight()));
 	image.moveTo (image.center(), image.middle());
 }
 

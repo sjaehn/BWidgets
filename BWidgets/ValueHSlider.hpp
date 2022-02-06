@@ -222,7 +222,7 @@ inline void ValueHSlider::copy (const ValueHSlider* that)
 
 inline void ValueHSlider::update ()
 {
-	scale_ = BUtilities::RectArea 
+	scale_ = BUtilities::RectArea<> 
 	(
 		getXOffset() + 0.25 * getEffectiveHeight(), 
 		getYOffset() + 0.625 * getEffectiveHeight(), 

@@ -35,7 +35,7 @@ namespace BEvents
 class ExposeEvent : public WidgetEvent
 {
 protected:
-	BUtilities::RectArea exposeArea_;
+	BUtilities::RectArea<> exposeArea_;
 
 public:
 
@@ -62,7 +62,7 @@ public:
      */
 	ExposeEvent (BWidgets::Widget* eventWidget, BWidgets::Widget* requestWidget, const EventType type,
 		         const double x, const double y, const double width, const double height) :
-		ExposeEvent (eventWidget, requestWidget, type, BUtilities::RectArea (x, y, width, height)) 
+		ExposeEvent (eventWidget, requestWidget, type, BUtilities::RectArea<> (x, y, width, height)) 
     {
 
     }
@@ -75,7 +75,7 @@ public:
      *  @param area  Expose area relative to the widget origin.
      */
 	ExposeEvent (BWidgets::Widget* eventWidget, BWidgets::Widget* requestWidget, const EventType type,
-		         const BUtilities::RectArea& area) :
+		         const BUtilities::RectArea<>& area) :
 		WidgetEvent (eventWidget, requestWidget, type),
 		exposeArea_ (area) 
     {
@@ -86,7 +86,7 @@ public:
 	 *  @brief  Redefines the area coordinates of the output region.
 	 *  @param area  Area coordinates relative to the widgets origin.
 	 */
-	void setArea (const BUtilities::RectArea& area)
+	void setArea (const BUtilities::RectArea<>& area)
 	{
         exposeArea_ = area;
     }
@@ -95,7 +95,7 @@ public:
 	 *  @brief  Gets the area coordinates of the output region.
 	 *  @return  Area coordinates relative to the widgets origin.
 	 */
-	BUtilities::RectArea getArea () const
+	BUtilities::RectArea<> getArea () const
 	{
         return exposeArea_;
     }

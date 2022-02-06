@@ -29,12 +29,12 @@ Visualizable::Visualizable () :
 }
 
 Visualizable::Visualizable (const double width, const double height) :
-    Visualizable (BUtilities::Point (width, height))
+    Visualizable (BUtilities::Point<> (width, height))
 {
 
 }
 
-Visualizable::Visualizable (const BUtilities::Point extends) :
+Visualizable::Visualizable (const BUtilities::Point<> extends) :
     Callback(),
     Support(),
     scheduleDraw_ (true),
@@ -127,14 +127,14 @@ void Visualizable::resize ()
 
 void Visualizable::resize (const double width, const double height)
 {
-    resize (BUtilities::Point (width, height));
+    resize (BUtilities::Point<> (width, height));
 }
 
-void Visualizable::resize (const BUtilities::Point extends)
+void Visualizable::resize (const BUtilities::Point<> extends)
 {
     if ((extends.x != extends_.x) || (extends.y != extends_.y))
     {
-        extends_ = BUtilities::Point (std::max (extends.x, 0.0), std::max (extends.y, 0.0));
+        extends_ = BUtilities::Point<> (std::max (extends.x, 0.0), std::max (extends.y, 0.0));
 
         // Create new surface
         cairo_surface_t* new_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends_.x, extends_.y);
@@ -161,7 +161,7 @@ void Visualizable::resize (const BUtilities::Point extends)
     }
 }
 
-BUtilities::Point Visualizable::getExtends () const 
+BUtilities::Point<> Visualizable::getExtends () const 
 {
     return extends_;
 }
@@ -197,7 +197,7 @@ void Visualizable::draw (const double x0, const double y0, const double width, c
 
 }
 
-void Visualizable::draw (const BUtilities::RectArea& area)
+void Visualizable::draw (const BUtilities::RectArea<>& area)
 {
     scheduleDraw_ = false;
 }

@@ -226,7 +226,7 @@ inline void ValueVMeter::update ()
 	label.resize();
 	label.moveTo (label.center(), getYOffset());
 
-	scale_ = BUtilities::RectArea 
+	scale_ = BUtilities::RectArea<> 
 	(
 		getXOffset() + 0.25 * getEffectiveWidth(), 
 		getYOffset() + label.getHeight(), 

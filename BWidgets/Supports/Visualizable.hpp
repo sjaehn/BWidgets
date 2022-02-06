@@ -48,7 +48,7 @@ class Visualizable : virtual public Callback, public Support
 {
 protected:
     bool scheduleDraw_;
-    BUtilities::Point extends_;
+    BUtilities::Point<> extends_;
     cairo_surface_t* surface_;
 
 public:
@@ -69,7 +69,7 @@ public:
      *  @brief  Creates an empty %Visualizable object.
      *  @param area  Drawing surface area.
      */
-    Visualizable (const BUtilities::Point extends);
+    Visualizable (const BUtilities::Point<> extends);
 
     /**
      *  @brief  Create a copy of a %Visualizable object.
@@ -176,13 +176,13 @@ public:
      *  Creates a new RGBA surface with the new extends, copies the 
      *  surface data from the previous surface, and calls @c update() .
 	 */
-	virtual void resize (const BUtilities::Point extends);
+	virtual void resize (const BUtilities::Point<> extends);
 
     /**
 	 *  @brief  Gets the surface extends of an object.
-	 *  @return  Point data containing width and height.
+	 *  @return  Point<> data containing width and height.
 	 */
-	virtual BUtilities::Point getExtends () const;
+	virtual BUtilities::Point<> getExtends () const;
 
     /**
      *  @brief  Method to be called following an object state change.
@@ -201,7 +201,7 @@ public:
 	 *  @brief  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT.
      *  @param area  Area to be re-displayed.
 	 */
-    virtual void emitExposeEvent (const BUtilities::RectArea& area) = 0;
+    virtual void emitExposeEvent (const BUtilities::RectArea<>& area) = 0;
     
     /**
      *  @brief  Access to the Cairo surface.
@@ -255,7 +255,7 @@ protected:
      *
      *  Default empty method to be overridden.
      */
-    virtual void draw (const BUtilities::RectArea& area);
+    virtual void draw (const BUtilities::RectArea<>& area);
 
 };
 }

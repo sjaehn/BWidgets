@@ -36,7 +36,7 @@ namespace BEvents
 class PointerEvent : public Event
 {
 protected:
-	BUtilities::Point point_, origin_, delta_;
+	BUtilities::Point<> point_, origin_, delta_;
 	BDevices::MouseDevice::ButtonCode button_;
 
 public:
@@ -69,7 +69,7 @@ public:
                      const double xOrigin, const double yOrigin,
 			         const double deltaX, const double deltaY, 
                      const BDevices::MouseDevice::ButtonCode button) :
-		PointerEvent (widget, type, BUtilities::Point (x, y), BUtilities::Point (xOrigin, yOrigin), BUtilities::Point (deltaX, deltaY), button) 
+		PointerEvent (widget, type, BUtilities::Point<> (x, y), BUtilities::Point<> (xOrigin, yOrigin), BUtilities::Point<> (deltaX, deltaY), button) 
     {
 
     }
@@ -86,9 +86,9 @@ public:
      *  @param button  ButtonCode.
      */
 	PointerEvent    (BWidgets::Widget* widget, const EventType type, 
-                     const BUtilities::Point& point,
-			         const BUtilities::Point& origin, 
-                     const BUtilities::Point& delta,
+                     const BUtilities::Point<>& point,
+			         const BUtilities::Point<>& origin, 
+                     const BUtilities::Point<>& delta,
 			         const BDevices::MouseDevice::ButtonCode button) :
 		Event (widget, type), 
         point_ (point), 
@@ -100,7 +100,7 @@ public:
 	 *  @brief  Redefines the pointer coordinates of the %PointerEvent.
 	 *  @param point  Pointer coordinate relative to the widgets origin.
 	 */
-	void setPosition (const BUtilities::Point& coords)
+	void setPosition (const BUtilities::Point<>& coords)
  	{
         point_ = coords;
     }
@@ -109,7 +109,7 @@ public:
 	 *  @brief  Gets the pointer coordinates of the %PointerEvent.
 	 *  @return  Pointer coordinate relative to the widgets origin.
 	 */
-	BUtilities::Point getPosition () const
+	BUtilities::Point<> getPosition () const
 	{
         return point_;
     }
@@ -119,7 +119,7 @@ public:
 	 *  @param origin  Original pointer coordinates relative to the widgets 
      *  origin.
 	 */
-	void setOrigin (const BUtilities::Point& coords)
+	void setOrigin (const BUtilities::Point<>& coords)
 	{
         origin_ = coords;
     }
@@ -132,7 +132,7 @@ public:
      *  The returned value is the same as for getPoint() for 
      *  BUTTON_PRESS_EVENTs, 0.0 for POINTER_MOTION_EVENTs.
 	 */
-	BUtilities::Point getOrigin () const
+	BUtilities::Point<> getOrigin () const
 	{
         return origin_;
     }
@@ -141,7 +141,7 @@ public:
 	 *  @brief  Redefines the pointer movement.
 	 *  @param delta  Movement coordinates of the pointer.
 	 */
-	void setDelta (const BUtilities::Point& coords)
+	void setDelta (const BUtilities::Point<>& coords)
 	{
         delta_ = coords;
     }
@@ -150,7 +150,7 @@ public:
 	 *  @brief  Gets the movement (relative to the last %PointerEvent).
 	 *  @return Change in coordinates.
 	 */
-	BUtilities::Point getDelta () const
+	BUtilities::Point<> getDelta () const
 	{
         return delta_;
     }

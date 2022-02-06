@@ -137,7 +137,7 @@ protected:
      *  @brief  Clipped draw a %HSlider to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea& area) override;
+    virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 inline HSlider::HSlider () :
@@ -174,7 +174,7 @@ inline HSlider::HSlider	(const double  x, const double y, const double width, co
 						 uint32_t urid, std::string title) :
 		HScale (x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title)
 {
-	scale_ = BUtilities::RectArea (0.5 * height, 0.25 * height, width - height, 0.5 * height);
+	scale_ = BUtilities::RectArea<> (0.5 * height, 0.25 * height, width - height, 0.5 * height);
 }
 
 inline Widget* HSlider::clone () const 
@@ -191,7 +191,7 @@ inline void HSlider::copy (const HSlider* that)
 
 inline void HSlider::update ()
 {
-	scale_ = BUtilities::RectArea 
+	scale_ = BUtilities::RectArea<> 
 	(
 		getXOffset() + 0.5 * getEffectiveHeight(), 
 		getYOffset() + 0.25 * getEffectiveHeight(), 
@@ -208,10 +208,10 @@ inline void HSlider::draw ()
 
 inline void HSlider::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea (x0, y0, width, height));
+	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
-inline void HSlider::draw (const BUtilities::RectArea& area)
+inline void HSlider::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

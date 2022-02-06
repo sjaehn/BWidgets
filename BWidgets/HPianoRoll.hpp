@@ -279,7 +279,7 @@ protected:
 	 *  @param position  Position within the widget.
 	 *  @return  MIDI key number (or 255 for invalid).
 	 */
-	virtual uint8_t getKey (const BUtilities::Point& position);
+	virtual uint8_t getKey (const BUtilities::Point<>& position);
 
 	/**
      *  @brief  Unclipped draw a %HPianoRoll to the surface.
@@ -299,7 +299,7 @@ protected:
      *  @brief  Clipped draw a %HPianoRoll to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea& area) override;
+    virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 struct PianoKeyCoords
@@ -615,7 +615,7 @@ inline void HPianoRoll::onPointerDragged (BEvents::Event* event)
 	Draggable::onPointerDragged (event);
 }
 
-inline uint8_t HPianoRoll::getKey (const BUtilities::Point& position)
+inline uint8_t HPianoRoll::getKey (const BUtilities::Point<>& position)
 {
 	double x0 = getXOffset();
 	double y0 = getYOffset();
@@ -681,10 +681,10 @@ inline void HPianoRoll::draw ()
 
 inline void HPianoRoll::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea (x0, y0, width, height));
+	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
-inline void HPianoRoll::draw (const BUtilities::RectArea& area)
+inline void HPianoRoll::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

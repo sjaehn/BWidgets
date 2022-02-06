@@ -229,7 +229,7 @@ inline void ValueDial::update ()
 		getEffectiveHeight() * BWIDGETS_DEFAULT_VALUEDIAL_WIDTH / BWIDGETS_DEFAULT_VALUEDIAL_HEIGHT
 	);
 
-	scale_ = BUtilities::RectArea 
+	scale_ = BUtilities::RectArea<> 
 	(
 		getXOffset() + 0.5 * getEffectiveWidth() - rad , 
 		getYOffset() + 0.5 * getEffectiveHeight() - rad * BWIDGETS_DEFAULT_VALUEDIAL_HEIGHT / BWIDGETS_DEFAULT_VALUEDIAL_WIDTH, 

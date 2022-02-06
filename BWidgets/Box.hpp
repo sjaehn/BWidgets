@@ -135,7 +135,7 @@ public:
 	 *  @brief  Resizes the object.
 	 *  @param extends  New object extends.
 	 */
-	virtual void resize (const BUtilities::Point extends) override;
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
 	 *  @brief  Creates and adds a TextButton to the message box.
@@ -321,7 +321,7 @@ inline void Box::resize ()
 	}
 
 	// Other content
-	BUtilities::Point contExt = BUtilities::Point (getXOffset(), getYOffset());
+	BUtilities::Point<> contExt = BUtilities::Point<> (getXOffset(), getYOffset());
 	for (Linkable* l : children_)
 	{
 		Widget* w = dynamic_cast<Widget*>(l);
@@ -341,10 +341,10 @@ inline void Box::resize ()
 
 inline void Box::resize (const double width, const double height)
 {
-	resize (BUtilities::Point (width, height));
+	resize (BUtilities::Point<> (width, height));
 }
 
-inline void Box::resize (const BUtilities::Point extends)
+inline void Box::resize (const BUtilities::Point<> extends)
 {
 	Frame::resize (extends);
 }

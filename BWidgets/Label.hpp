@@ -123,7 +123,7 @@ public:
 	 *  @param text   Text string.
 	 *  @param return  Text extends.
 	 */
-	BUtilities::Point getTextExtends (std::string& text) const;
+	BUtilities::Point<> getTextExtends (std::string& text) const;
 
 	/**
      *  @brief  Optimizes the %Label widget extends.
@@ -143,7 +143,7 @@ public:
 	 *  @brief  Resizes the object.
 	 *  @param extends  New object extends.
 	 */
-	virtual void resize (const BUtilities::Point extends) override;
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 protected:
 	/**
@@ -164,7 +164,7 @@ protected:
      *  @brief  Clipped Draw to the surface (if is visualizable).
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea& area) override;
+    virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 inline Label::Label () : 
@@ -219,12 +219,12 @@ inline std::string Label::getText () const
 	return text_;
 }
 
-inline BUtilities::Point Label::getTextExtends (std::string& text) const
+inline BUtilities::Point<> Label::getTextExtends (std::string& text) const
 {
 	cairo_t* cr = cairo_create (surface_);
 	cairo_text_extents_t ext = getFont().getCairoTextExtents(cr, text.c_str ());
 	cairo_destroy (cr);
-	return BUtilities::Point (ext.width, ext.height);
+	return BUtilities::Point<> (ext.width, ext.height);
 }
 
 inline void Label::resize ()
@@ -235,7 +235,7 @@ inline void Label::resize ()
 	cairo_text_extents_t ext = font.getCairoTextExtents(cr, text_.c_str ());
 	double w = ext.width;
 	double h = (ext.height > font.size ? ext.height : font.size);
-	BUtilities::Point contExt = BUtilities::Point (w + 2 * getXOffset () + 2, h + 2 * getYOffset () + 2);
+	BUtilities::Point<> contExt = BUtilities::Point<> (w + 2 * getXOffset () + 2, h + 2 * getYOffset () + 2);
 	cairo_destroy (cr);
 
 	// Or use embedded widgets size, if bigger
@@ -252,10 +252,10 @@ inline void Label::resize ()
 
 inline void Label::resize (const double width, const double height) 
 {
-	resize (BUtilities::Point (width, height));
+	resize (BUtilities::Point<> (width, height));
 }
 
-inline void Label::resize (const BUtilities::Point extends) 
+inline void Label::resize (const BUtilities::Point<> extends) 
 {
 	Widget::resize (extends);
 }
@@ -267,10 +267,10 @@ inline void Label::draw ()
 
 inline void Label::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea (x0, y0, width, height));
+	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
-inline void Label::draw (const BUtilities::RectArea& area)
+inline void Label::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

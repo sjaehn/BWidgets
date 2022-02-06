@@ -138,7 +138,7 @@ protected:
      *  @brief  Clipped draw a %VSlider to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea& area) override;
+    virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 inline VSlider::VSlider () :
@@ -175,7 +175,7 @@ inline VSlider::VSlider	(const double  x, const double y, const double width, co
 						 uint32_t urid, std::string title) :
 		VScale (x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title)
 {
-	scale_ = BUtilities::RectArea (0.25 * width, 0.5 * width, 0.5 * width, height - width);
+	scale_ = BUtilities::RectArea<> (0.25 * width, 0.5 * width, 0.5 * width, height - width);
 }
 
 inline Widget* VSlider::clone () const 
@@ -192,7 +192,7 @@ inline void VSlider::copy (const VSlider* that)
 
 inline void VSlider::update ()
 {
-	scale_ = BUtilities::RectArea 
+	scale_ = BUtilities::RectArea<> 
 	(
 		getXOffset() + 0.25 * getEffectiveWidth(), 
 		getYOffset() + 0.5 * getEffectiveWidth(), 
@@ -209,10 +209,10 @@ inline void VSlider::draw ()
 
 inline void VSlider::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea (x0, y0, width, height));
+	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
-inline void VSlider::draw (const BUtilities::RectArea& area)
+inline void VSlider::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

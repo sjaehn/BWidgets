@@ -128,7 +128,7 @@ public:
      *  Creates a new RGBA surface with the new extends, copies the 
      *  surface data from the previous surface, and calls @c update() .
 	 */
-	virtual void resize (const BUtilities::Point extends) override;
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -153,7 +153,7 @@ inline SymbolButton::SymbolButton	(const double x, const double y, const double 
 	symbol.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
 	symbol.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
 	add (&symbol);
-	symbol.resize (BUtilities::Point (0.75 * extends_.x, 0.75 * extends_.y));
+	symbol.resize (BUtilities::Point<> (0.75 * extends_.x, 0.75 * extends_.y));
 	symbol.moveTo (symbol.center(), symbol.middle());
 }
 
@@ -179,13 +179,13 @@ inline void SymbolButton::resize ()
 
 inline void SymbolButton::resize (const double width, const double height) 
 {
-	SymbolButton::resize (BUtilities::Point (width, height));
+	SymbolButton::resize (BUtilities::Point<> (width, height));
 }
 
-inline void SymbolButton::resize (const BUtilities::Point extends)
+inline void SymbolButton::resize (const BUtilities::Point<> extends)
 {
-	Button::resize (BUtilities::Point (extends.x, extends.y));
-	symbol.resize (BUtilities::Point (0.66 * extends.x, 0.66 * extends.y));
+	Button::resize (BUtilities::Point<> (extends.x, extends.y));
+	symbol.resize (BUtilities::Point<> (0.66 * extends.x, 0.66 * extends.y));
 	symbol.moveTo (symbol.center(), symbol.middle());
 }
 

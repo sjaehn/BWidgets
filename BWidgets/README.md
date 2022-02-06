@@ -162,6 +162,7 @@ Widget
  ├── Pad
  |    ╰── SymbolPad
  ├── Pattern
+ ├── HPianoRoll
  ├── HMeter
  |    ├── ValueHMeter
  |    ╰── HScale
@@ -178,7 +179,6 @@ Widget
  |    ├── ValueRadialMeter
  |    ╰── Dial
  |         ╰── ValueDial
- ├── HPianoRoll
  ├── SpinBox
  |    ├── ListBox
  |    ╰── ComboBox
@@ -192,17 +192,23 @@ Widget
  .    .
 ```
 
-Each widget class Xxx has got at least three different constructors:
+Each widget class Xxx has got at least four* different constructors:
 * `Xxx ()` - The parameter free default constructor. It creates a 
   default default-sized empty (or default content) widget. 
-* `Xxx (data, ...)` - Creates a default-sized widget with the passed data.
-* `Xxx (x, y, width, height, data, ...)` - Creates a widget at the position (x, 
-  y) relative to the parent widget with the extends (width, height) with the
-  passed data.
+* `Xxx (urid, title)` - Creates a default default-sized empty (or default 
+  content) widget and defines its urid and title.
+* `Xxx (data, urid, title)` - Creates a default-sized widget with the passed 
+  data, urid and title.
+* `Xxx (x, y, width, height, data, urid, title)` - Creates a widget at the
+  position (x, y) relative to the parent widget with the extends (width, 
+  height) with the passed data, urid and title.
 
-You can re-define the widget default size used for `Xxx ()` and 
-`Xxx (data, ...)` by defining the macros `BWIDGETS_DEFAULT_XXX_WIDTH` and 
-`BWIDGETS_DEFAULT_XXX_HEIGHT`.
+\*Widgets without any additional data to pass (Widget, Frame) have only got 
+three constructors.
+
+You can re-define the widget default size used for `Xxx ()`, 
+`Xxx (urid, title)` and `Xxx (data, urid, title)` by defining the macros 
+`BWIDGETS_DEFAULT_XXX_WIDTH` and `BWIDGETS_DEFAULT_XXX_HEIGHT`.
 
 **Note: Widgets in B.Widgets don't have got any copy constructors or 
 assignment operators!**
@@ -447,6 +453,16 @@ vector of `std::pair` with the pad extensions (default:
 second type.
 
 
+### HPianoRoll
+
+![hpianoroll](../suppl/HPianoRoll.png)
+
+`HPianoRoll` is a `Valueable` Widget displaying a horizontal piano roll.
+It supports user interaction via `Clickable`, `Draggable`, and 
+`Toggleable`. Its appearance is defined by the BgColors parameter 
+(inactive keys) and by the FgColors parameter (active keys).
+
+
 ### HMeter
 
 ![hmeter](../suppl/HMeter.png)
@@ -612,16 +628,6 @@ the BgColors parameter (static elements) and by the FgColors parameter (value).
 
 `ValueDial` is a `Dial` Widget with an additional editable label for
 displaying its value.
-
-
-### HPianoRoll
-
-![hpianoroll](../suppl/HPianoRoll.png)
-
-`HPianoRoll` is a `Valueable` Widget displaying a horizontal piano roll.
-It supports user interaction via `Clickable`, `Draggable`, and 
-`Toggleable`. Its appearance is defined by the BgColors parameter 
-(inactive keys) and by the FgColors parameter (active keys).
 
 
 ### Box

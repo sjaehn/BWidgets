@@ -136,7 +136,7 @@ public:
      *  Creates a new RGBA surface with the new extends, copies the 
      *  surface data from the previous surface, and calls @c update() .
 	 */
-	virtual void resize (const BUtilities::Point extends) override;
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -187,7 +187,7 @@ inline SymbolPad::SymbolPad	(const double x, const double y, const double width,
 	symbol.setTxColors (symbol.getBgColors());
 	symbol.setStatus (BStyles::STATUS_INACTIVE);
 	add (&symbol);
-	symbol.resize (BUtilities::Point (0.4 * extends_.x, 0.4 * extends_.y));
+	symbol.resize (BUtilities::Point<> (0.4 * extends_.x, 0.4 * extends_.y));
 	symbol.moveTo (symbol.center(), symbol.middle());
 }
 
@@ -213,13 +213,13 @@ inline void SymbolPad::resize ()
 
 inline void SymbolPad::resize (const double width, const double height) 
 {
-	SymbolPad::resize (BUtilities::Point (width, height));
+	SymbolPad::resize (BUtilities::Point<> (width, height));
 }
 
-inline void SymbolPad::resize (const BUtilities::Point extends)
+inline void SymbolPad::resize (const BUtilities::Point<> extends)
 {
-	Pad::resize (BUtilities::Point (extends.x, extends.y));
-	symbol.resize (BUtilities::Point (0.4 * extends.x, 0.4 * extends.y));
+	Pad::resize (BUtilities::Point<> (extends.x, extends.y));
+	symbol.resize (BUtilities::Point<> (0.4 * extends.x, 0.4 * extends.y));
 	symbol.moveTo (symbol.center(), symbol.middle());
 }
 

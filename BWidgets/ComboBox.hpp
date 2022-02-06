@@ -55,7 +55,7 @@ class ComboBox : public SpinBox
 
 protected:
 	Widget* listBox_;
-	BUtilities::RectArea listBoxArea_;
+	BUtilities::RectArea<> listBoxArea_;
 
 public:
 
@@ -158,7 +158,7 @@ public:
 	 *  @brief  Changes the position of the ListBox.
 	 *  @param position  New position.
 	 */
-	void moveListBox (const BUtilities::Point position);
+	void moveListBox (const BUtilities::Point<> position);
 
 	/**
 	 *  @brief  Changes the position of the ListBox.
@@ -171,13 +171,13 @@ public:
 	 *  @brief  Gets the ListBox position.
 	 *  @return  ListBox position. 
 	 */
-	BUtilities::Point getListBoxPosition () const;
+	BUtilities::Point<> getListBoxPosition () const;
 
 	/**
 	 *  @brief  Changes the extends of the ListBox.
 	 *  @param extends  New extends.
 	 */
-	void resizeListBox (const BUtilities::Point extends);
+	void resizeListBox (const BUtilities::Point<> extends);
 
 	/**
 	 *  @brief  Changes the extends of the ListBox.
@@ -190,7 +190,7 @@ public:
 	 *  @brief  Gets the ListBox extends.
 	 *  @return  ListBox extends. 
 	 */
-	BUtilities::Point getListBoxExtends () const;
+	BUtilities::Point<> getListBoxExtends () const;
 
 protected:
 
@@ -282,7 +282,7 @@ inline void ComboBox::setValue (const std::string& item)
 	SpinBox::setValue (item);
 }
 
-inline void ComboBox::moveListBox (const BUtilities::Point position)
+inline void ComboBox::moveListBox (const BUtilities::Point<> position)
 {
 	listBoxArea_.moveTo (position);
 	if (listBox_) listBox_->moveTo (position);
@@ -290,16 +290,16 @@ inline void ComboBox::moveListBox (const BUtilities::Point position)
 
 inline void ComboBox::moveListBox (const double x, const double y)
 {
-	moveListBox (BUtilities::Point (x, y));
+	moveListBox (BUtilities::Point<> (x, y));
 }
 
-inline BUtilities::Point ComboBox::getListBoxPosition () const
+inline BUtilities::Point<> ComboBox::getListBoxPosition () const
 {
 	return listBoxArea_.getPosition();
 }
 
 
-inline void ComboBox::resizeListBox (const BUtilities::Point extends)
+inline void ComboBox::resizeListBox (const BUtilities::Point<> extends)
 {
 	listBoxArea_.resize (extends);
 	if (listBox_) listBox_->resize (extends);
@@ -307,10 +307,10 @@ inline void ComboBox::resizeListBox (const BUtilities::Point extends)
 
 inline void ComboBox::resizeListBox (const double width, const double height)
 {
-	resizeListBox (BUtilities::Point (width, height));
+	resizeListBox (BUtilities::Point<> (width, height));
 }
 
-inline BUtilities::Point ComboBox::getListBoxExtends () const
+inline BUtilities::Point<> ComboBox::getListBoxExtends () const
 {
 	return listBoxArea_.getExtends();
 }

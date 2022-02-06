@@ -238,7 +238,7 @@ public:
 	 *  @brief  Resizes the object extends.
 	 *  @param extends  New object extends.
 	 */
-	virtual void resize (const BUtilities::Point extends) override;
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
 	 *  @brief  Clears the visual content for a status.
@@ -257,7 +257,7 @@ public:
 	cairo_surface_t* getImageSurface (BStyles::Status status);
 
 protected:
-	virtual void draw (const BUtilities::RectArea& area) override;
+	virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 inline Image::Image () : 
@@ -373,7 +373,7 @@ inline void Image::clear()
 inline void Image::resize ()
 {
 	// Get surface extends for the present Status
-	BUtilities::Point contExt = {0.0, 0.0};
+	BUtilities::Point<> contExt = {0.0, 0.0};
 	if (!imageSurfaces_.empty())
 	{
 		std::map<BStyles::Status, cairo_surface_t*>::iterator it = imageSurfaces_.find (getStatus());
@@ -385,8 +385,8 @@ inline void Image::resize ()
 
 			if (stateSurface && (cairo_surface_status (stateSurface) == CAIRO_STATUS_SUCCESS))
 			{
-				contExt =	BUtilities::Point (cairo_image_surface_get_width (stateSurface), cairo_image_surface_get_height (stateSurface)) +
-							BUtilities::Point (2.0 * getXOffset(), 2.0 * getYOffset());
+				contExt =	BUtilities::Point<> (cairo_image_surface_get_width (stateSurface), cairo_image_surface_get_height (stateSurface)) +
+							BUtilities::Point<> (2.0 * getXOffset(), 2.0 * getYOffset());
 			}
 		}
 	}
@@ -405,10 +405,10 @@ inline void Image::resize ()
 
 inline void Image::resize (const double width, const double height) 
 {
-	resize (BUtilities::Point (width, height));
+	resize (BUtilities::Point<> (width, height));
 }
 
-inline void Image::resize (const BUtilities::Point extends) 
+inline void Image::resize (const BUtilities::Point<> extends) 
 {
 	Widget::resize (extends);
 }
@@ -443,7 +443,7 @@ inline cairo_surface_t* Image::getImageSurface (BStyles::Status status)
 	return imageSurfaces_[status];
 }
 
-inline void Image::draw (const BUtilities::RectArea& area)
+inline void Image::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

@@ -26,43 +26,44 @@
 namespace BUtilities
 {
 
+template <class T = double>
 class RectArea
 {
 protected:
-	Point p1, p2;
+	Point<T> p1, p2;
 
 public:
-	RectArea () : RectArea (Point (), Point ()) {}
-	RectArea (const double x1, const double y1, const double width, const double height) :
-		RectArea (Point (x1, y1), Point (x1 + width, y1 + height)) {}
-	RectArea (const Point& p1, const Point& p2) :
-		p1 (Point ((p1.x < p2.x ? p1.x : p2.x), (p1.y < p2.y ? p1.y : p2.y))),
-		p2 (Point ((p1.x > p2.x ? p1.x : p2.x), (p1.y > p2.y ? p1.y : p2.y)))
+	RectArea () : RectArea (Point<T> (), Point<T> ()) {}
+	RectArea (const T x1, const T y1, const T width, const T height) :
+		RectArea (Point<T> (x1, y1), Point<T> (x1 + width, y1 + height)) {}
+	RectArea (const Point<T>& p1, const Point<T>& p2) :
+		p1 (Point<T> ((p1.x < p2.x ? p1.x : p2.x), (p1.y < p2.y ? p1.y : p2.y))),
+		p2 (Point<T> ((p1.x > p2.x ? p1.x : p2.x), (p1.y > p2.y ? p1.y : p2.y)))
 	{}
 
-	Point getPosition () const {return p1;}
-	double getX () const {return p1.x;}
-	double getY () const {return p1.y;}
+	Point<T> getPosition () const {return p1;}
+	T getX () const {return p1.x;}
+	T getY () const {return p1.y;}
 
-	Point getExtends () const {return Point (p2.x - p1.x, p2.y - p1.y);}
-	double getWidth () const {return (p2.x - p1.x);}
-	double getHeight () const {return (p2.y - p1.y);}
+	Point<T> getExtends () const {return Point<T> (p2.x - p1.x, p2.y - p1.y);}
+	T getWidth () const {return (p2.x - p1.x);}
+	T getHeight () const {return (p2.y - p1.y);}
 
-	void setX (const double x) {moveTo (x, getY());}
-	void setY (const double y) {moveTo (getX(), y);}
-	void moveTo (const double x, const double y) {moveTo (Point (x, y));}
-	void moveTo (const Point& position)
+	void setX (const T x) {moveTo (x, getY());}
+	void setY (const T y) {moveTo (getX(), y);}
+	void moveTo (const T x, const T y) {moveTo (Point<T> (x, y));}
+	void moveTo (const Point<T>& position)
 	{
 		p2 = p2 - p1 + position;
 		p1 = position;
 	}
 
-	void setWidth (const double width) {resize (width, getHeight());}
-	void setHeight (const double height) {resize (getWidth(), height);}
-	void resize (const double width, const double height) {resize (Point (width, height));}
-	void resize (const Point& extends) {p2 = p1 + extends;}
+	void setWidth (const T width) {resize (width, getHeight());}
+	void setHeight (const T height) {resize (getWidth(), height);}
+	void resize (const T width, const T height) {resize (Point<T> (width, height));}
+	void resize (const Point<T>& extends) {p2 = p1 + extends;}
 
-	bool contains (const Point& p) const
+	bool contains (const Point<T>& p) const
 	{
 		return ((p.x > p1.x) && (p.x < p2.x) && (p.y > p1.y) && (p.y < p2.y));
 	}
@@ -82,8 +83,8 @@ public:
 		if (*this == RectArea ()) *this = ra;
 		else if (ra != RectArea ())
 		{
-			p1 = Point ((p1.x < ra.p1.x ? p1.x : ra.p1.x), (p1.y < ra.p1.y ? p1.y : ra.p1.y));
-			p2 = Point ((p2.x > ra.p2.x ? p2.x : ra.p2.x), (p2.y > ra.p2.y ? p2.y : ra.p2.y));
+			p1 = Point<T> ((p1.x < ra.p1.x ? p1.x : ra.p1.x), (p1.y < ra.p1.y ? p1.y : ra.p1.y));
+			p2 = Point<T> ((p2.x > ra.p2.x ? p2.x : ra.p2.x), (p2.y > ra.p2.y ? p2.y : ra.p2.y));
 		}
 	}
 
@@ -93,12 +94,12 @@ public:
 
 		else
 		{
-			double x1 = (ra.p1.x < p1.x ? p1.x : ra.p1.x);
-			double y1 = (ra.p1.y < p1.y ? p1.y : ra.p1.y);
-			double x2 = (ra.p2.x > p2.x ? p2.x : ra.p2.x);
-			double y2 = (ra.p2.y > p2.y ? p2.y : ra.p2.y);
-			p1 = Point (x1, y1);
-			p2 = Point (x2, y2);
+			T x1 = (ra.p1.x < p1.x ? p1.x : ra.p1.x);
+			T y1 = (ra.p1.y < p1.y ? p1.y : ra.p1.y);
+			T x2 = (ra.p2.x > p2.x ? p2.x : ra.p2.x);
+			T y2 = (ra.p2.y > p2.y ? p2.y : ra.p2.y);
+			p1 = Point<T> (x1, y1);
+			p2 = Point<T> (x2, y2);
 		}
 	}
 

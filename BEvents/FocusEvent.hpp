@@ -31,7 +31,7 @@ namespace BEvents
 class FocusEvent : public Event
 {
 protected:
-	BUtilities::Point point_;
+	BUtilities::Point<> point_;
 
 public:
 
@@ -52,7 +52,7 @@ public:
      *  @param y  Pointer y coordinate relative to the widget origin.
      */
 	FocusEvent (BWidgets::Widget* widget, const EventType type, const double x, const double y) :
-		FocusEvent (widget, type, BUtilities::Point (x, y))
+		FocusEvent (widget, type, BUtilities::Point<> (x, y))
     {
 
     }
@@ -63,7 +63,7 @@ public:
      *  @param type  EventType.
      *  @param point  Coordinates relative to the widget origin.
      */
-	FocusEvent (BWidgets::Widget* widget, const EventType type, const BUtilities::Point& point) :
+	FocusEvent (BWidgets::Widget* widget, const EventType type, const BUtilities::Point<>& point) :
 		Event (widget, type), point_ (point) 
     {
 
@@ -73,7 +73,7 @@ public:
 	 *  @brief  Redefines the pointers coordinate.
 	 *  @param coords Pointer coordinate relative to the widgets origin.
 	 */
-	void setPosition (const BUtilities::Point& coords)
+	void setPosition (const BUtilities::Point<>& coords)
   	{
         point_ = coords;
     }
@@ -82,7 +82,7 @@ public:
 	 *  @brief  Gets the pointer coordinate.
 	 *  @return Pointer coordinate relative to the widgets origin.
 	 */
-	BUtilities::Point getPosition () const
+	BUtilities::Point<> getPosition () const
  	{
         return point_;
     }

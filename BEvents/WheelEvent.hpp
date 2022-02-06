@@ -38,8 +38,8 @@ namespace BEvents
 class WheelEvent : public Event
 {
 protected:
-	BUtilities::Point point_;
-	BUtilities::Point delta_;
+	BUtilities::Point<> point_;
+	BUtilities::Point<> delta_;
 
 public:
 
@@ -63,7 +63,7 @@ public:
      */
 	WheelEvent  (BWidgets::Widget* widget, const EventType type, 
                  const double x, const double y, const double deltaX, const double deltaY) :
-		WheelEvent (widget, type, BUtilities::Point (x, y), BUtilities::Point (deltaX, deltaY))
+		WheelEvent (widget, type, BUtilities::Point<> (x, y), BUtilities::Point<> (deltaX, deltaY))
     {
 
     }
@@ -76,7 +76,7 @@ public:
      *  @param delta  Wheel scroll coordinates.
      */
 	WheelEvent  (BWidgets::Widget* widget, const EventType type, 
-                 const BUtilities::Point& point, const BUtilities::Point delta) :
+                 const BUtilities::Point<>& point, const BUtilities::Point<> delta) :
 		Event (widget, type), 
         point_ (point), delta_ (delta) 
     {
@@ -87,7 +87,7 @@ public:
 	 *  @brief  Redefines the pointers coordinate.
 	 *  @param coords  Pointer coordinate relative to the widgets origin.
 	 */
-	void setPosition (const BUtilities::Point& coords)
+	void setPosition (const BUtilities::Point<>& coords)
   	{
         point_ = coords;
     }
@@ -96,7 +96,7 @@ public:
 	 *  @brief  Gets the pointers coordinate of the wheel event.
 	 *  @return Pointer coordinate relative to the widgets origin.
 	 */
-	BUtilities::Point getPosition () const
+	BUtilities::Point<> getPosition () const
  	{
         return point_;
     }
@@ -105,7 +105,7 @@ public:
 	 *  @brief  Redefines the wheels movement
 	 *  @param delta  Movement of the wheel.
 	 */
-	void setDelta (const BUtilities::Point& coords)
+	void setDelta (const BUtilities::Point<>& coords)
  	{
         delta_ = coords;
     }
@@ -114,7 +114,7 @@ public:
 	 *  @brief  Gets the movement of the wheel.
 	 *  @return  Movement of the wheel.
 	 */
-	BUtilities::Point getDelta () const
+	BUtilities::Point<> getDelta () const
  	{
         return delta_;
     }

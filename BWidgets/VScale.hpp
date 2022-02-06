@@ -53,7 +53,7 @@ class VScale :	public VMeter,
 				public Scrollable
 {
 protected:
-	BUtilities::RectArea scale_;
+	BUtilities::RectArea<> scale_;
 
 public:
 
@@ -174,7 +174,7 @@ protected:
      *  @brief  Clipped draw a %VScale to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea& area) override;
+    virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 inline VScale::VScale () :
@@ -277,10 +277,10 @@ inline void VScale::draw ()
 
 inline void VScale::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea (x0, y0, width, height));
+	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
-inline void VScale::draw (const BUtilities::RectArea& area)
+inline void VScale::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

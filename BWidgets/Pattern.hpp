@@ -156,7 +156,7 @@ public:
      *  a (mouse) wheel scroll. Increases or decreases the value and calls the
 	 *  widget static callback function.
      */
-    //virtual void onPointerDragged (BEvents::Event* event) override;
+    virtual void onPointerDragged (BEvents::Event* event) override;
 
 protected:
 
@@ -184,7 +184,7 @@ protected:
      *  @brief  Clipped Draw to the surface (if is visualizable).
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea& area) override;
+    virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 template <class T>
@@ -343,12 +343,12 @@ inline void Pattern<T>::update ()
 	}
 }
 
-/*template <class T>
+template <class T>
 inline void Pattern<T>::onPointerDragged (BEvents::Event* event)
 {
 	
 	Draggable::onPointerDragged (event);
-}*/
+}
 
 template <class T>
 inline void Pattern<T>::padChangedCallback (BEvents::Event* event)
@@ -388,11 +388,11 @@ inline void Pattern<T>::draw ()
 template <class T>
 inline void Pattern<T>::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea (x0, y0, width, height));
+	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
 template <class T>
-inline void Pattern<T>::draw (const BUtilities::RectArea& area)
+inline void Pattern<T>::draw (const BUtilities::RectArea<>& area)
 	{
 		if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

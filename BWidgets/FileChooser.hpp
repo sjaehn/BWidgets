@@ -474,7 +474,7 @@ inline void FileChooser::update ()
 		filterComboBox.resize (w - 2 * okWidth - 40, okHeight);
 		filterComboBox.setItemHeight (okHeight);
 		filterComboBox.resizeItems();
-		filterComboBox.resizeListBox (BUtilities::Point (w - 2 * okWidth - 40, filters_.size() * okHeight + 20));
+		filterComboBox.resizeListBox (BUtilities::Point<> (w - 2 * okWidth - 40, filters_.size() * okHeight + 20));
 
 		okButton.show();
 		cancelButton.show();

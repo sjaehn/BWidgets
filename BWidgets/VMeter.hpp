@@ -61,7 +61,7 @@ class VMeter :	public Widget,
 				public ValueTransferable<double>
 {
 protected:
-	BUtilities::RectArea scale_;
+	BUtilities::RectArea<> scale_;
 	std::function<double (const double& x)> gradient_ = noTransfer;
 
 public:
@@ -190,7 +190,7 @@ protected:
      *  @brief  Clipped draw a %VMeter to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea& area) override;
+    virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 inline VMeter::VMeter () :
@@ -253,7 +253,7 @@ inline void VMeter::copy (const VMeter* that)
 
 inline void VMeter::update ()
 {
-	scale_ = BUtilities::RectArea (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
+	scale_ = BUtilities::RectArea<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
 	Widget::update();
 }
 
@@ -276,10 +276,10 @@ inline void VMeter::draw ()
 
 inline void VMeter::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea (x0, y0, width, height));
+	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
-inline void VMeter::draw (const BUtilities::RectArea& area)
+inline void VMeter::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 
