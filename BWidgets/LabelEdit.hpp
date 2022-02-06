@@ -253,13 +253,13 @@ inline LabelEdit::LabelEdit () :
 }
 
 inline LabelEdit::LabelEdit (const uint32_t urid, const std::string& title) :
-	Label (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, "", urid, title)
+	LabelEdit (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, "", urid, title)
 {
 	
 }
 
 inline LabelEdit::LabelEdit (const std::string& text, uint32_t urid, std::string title) :
-	Label (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, text, urid, title)
+	LabelEdit (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, text, urid, title)
 {
 	Label::resize();
 }
