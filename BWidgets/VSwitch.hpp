@@ -57,6 +57,13 @@ public:
 	VSwitch ();
 
 	/**
+	 *  @brief  Constructs a default %VSwitch object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	VSwitch (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Creates a %VSwitch with default size.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
@@ -161,6 +168,12 @@ protected:
 
 inline VSwitch::VSwitch () :
 	VSwitch (0.0, 0.0, BWIDGETS_DEFAULT_VSWITCH_WIDTH, BWIDGETS_DEFAULT_VSWITCH_HEIGHT, true, false, URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline VSwitch::VSwitch (const uint32_t urid, const std::string& title) : 
+	VSwitch (0.0, 0.0, BWIDGETS_DEFAULT_VSWITCH_WIDTH, BWIDGETS_DEFAULT_VSWITCH_HEIGHT, true, false, urid, title) 
 {
 
 }

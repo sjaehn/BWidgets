@@ -84,6 +84,13 @@ public:
 	Window ();
 
 	/**
+	 *  @brief  Construct a %Window object with default parameters.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	Window (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Construct a %Window object.
 	 *  @param width  Window width.
 	 *  @param height  Window height.

@@ -55,9 +55,16 @@ protected:
 	std::string text_;
 public:
 	/**
-	 * @brief Constructs an empty default %Label object.
+	 *  @brief  Constructs an empty default %Label object.
 	 */
 	Label ();
+
+	/**
+	 *  @brief  Constructs an empty default %Label object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	Label (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Constructs a %Label object at the origin with optimized extends.
@@ -164,6 +171,12 @@ inline Label::Label () :
 	Label (0.0, 0.0, BWIDGETS_DEFAULT_LABEL_WIDTH, BWIDGETS_DEFAULT_LABEL_HEIGHT, "", URID_UNKNOWN_URID, "") 
 {
 
+}
+
+inline Label::Label (const uint32_t urid, const std::string& title) :
+	Label (0.0, 0.0, BWIDGETS_DEFAULT_LABEL_WIDTH, BWIDGETS_DEFAULT_LABEL_HEIGHT, "", urid, title)
+{
+	
 }
 
 inline Label::Label (const std::string& text, uint32_t urid, std::string title) :

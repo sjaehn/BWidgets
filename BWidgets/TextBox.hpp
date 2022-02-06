@@ -50,6 +50,13 @@ public:
 	TextBox ();
 
 	/**
+	 *  @brief  Constructs an empty default %TextBox object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	TextBox (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Construct a %TextBox object with default size.
 	 *  @param text  Text string.
 	 *  @param buttonlabels  Optional, initializer list with butten label 
@@ -123,6 +130,12 @@ public:
 };
 
 inline TextBox::TextBox () : TextBox (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBOX_WIDTH, BWIDGETS_DEFAULT_TEXTBOX_HEIGHT, "", {}, URID_UNKNOWN_URID, "") 
+{
+
+}
+
+inline TextBox::TextBox (const uint32_t urid, const std::string& title) :
+	TextBox (0, 0, BWIDGETS_DEFAULT_TEXTBOX_WIDTH, BWIDGETS_DEFAULT_TEXTBOX_HEIGHT, "", {}, urid, title) 
 {
 
 }

@@ -47,10 +47,16 @@ class HSlider :	public HScale
 public:
 
 	/**
-	 * @brief  Constructs a default %HSlider object.
-	 * 
+	 *  @brief  Constructs a default %HSlider object.
 	 */
 	HSlider ();
+
+	/**
+	 *  @brief  Constructs a default %HSlider object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	HSlider (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %HSlider with default size.
@@ -141,6 +147,15 @@ inline HSlider::HSlider () :
 			 URID_UNKNOWN_URID, "")
 {
 
+}
+
+inline HSlider::HSlider (const uint32_t urid, const std::string& title) : 
+	HSlider	(0.0, 0.0, BWIDGETS_DEFAULT_HSLIDER_WIDTH, BWIDGETS_DEFAULT_HSLIDER_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 urid, title) 
+{
+	
 }
 
 inline HSlider::HSlider (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 

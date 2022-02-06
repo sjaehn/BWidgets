@@ -45,9 +45,16 @@ public:
 	Symbol symbol;
 
 	/**
-	 * @brief  Constructs a new %SymbolButton object with default parameters.
+	 *  @brief  Constructs a new %SymbolButton object with default parameters.
 	 */
 	SymbolButton ();
+
+	/**
+	 *  @brief  Constructs a new %SymbolButton object with default parameters.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	SymbolButton (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %SymbolButton with default size.
@@ -131,6 +138,9 @@ public:
 
 inline SymbolButton::SymbolButton () : 
 	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH, BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT, Symbol::NO_SYMBOL, false, false, URID_UNKNOWN_URID, "") {}
+
+inline SymbolButton::SymbolButton	(const uint32_t urid, const std::string& title) :
+	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH, BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT, Symbol::NO_SYMBOL, false, false, urid, title) {}
 
 inline SymbolButton::SymbolButton	(const Symbol::SymbolType symbolIdx, bool toggleable, bool clicked, uint32_t urid, std::string title) :
 	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH, BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT, symbolIdx, toggleable, clicked, urid, title) {}

@@ -68,10 +68,16 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs a default %RadialMeter object.
-	 * 
+	 *  @brief  Constructs a default %RadialMeter object.
 	 */
 	RadialMeter ();
+
+	/**
+	 *  @brief  Constructs a default %RadialMeter object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	RadialMeter (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %RadialMeter with default size.
@@ -192,6 +198,15 @@ inline RadialMeter::RadialMeter () :
 				 0.0, 0.0, 1.0, 0.0, 
 				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 				 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline RadialMeter::RadialMeter (const uint32_t urid, const std::string& title) : 
+	RadialMeter	(0.0, 0.0, BWIDGETS_DEFAULT_RADIALMETER_WIDTH, BWIDGETS_DEFAULT_RADIALMETER_HEIGHT, 
+				 0.0, 0.0, 1.0, 0.0, 
+				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+				 urid, title) 
 {
 
 }

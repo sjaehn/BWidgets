@@ -60,9 +60,16 @@ public:
 	LabelEdit label;
 
 	/**
-	 * @brief  Constructs a default %ValueDial object.
+	 *  @brief  Constructs a default %ValueDial object.
 	 */
 	ValueDial ();
+
+	/**
+	 *  @brief  Constructs a default %ValueDial object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	ValueDial (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %ValueDial with default size.
@@ -154,6 +161,18 @@ inline ValueDial::ValueDial () :
 				 valueToString,
 				 stringToValue,
 				 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline ValueDial::ValueDial (const uint32_t urid, const std::string& title) : 
+	ValueDial	(0.0, 0.0, BWIDGETS_DEFAULT_VALUEDIAL_WIDTH, BWIDGETS_DEFAULT_VALUEDIAL_HEIGHT, 
+				 0.0, 0.0, 1.0, 0.0,  
+				 ValueTransferable<double>::noTransfer, 
+				 ValueTransferable<double>::noTransfer,
+				 valueToString,
+				 stringToValue, 
+				 urid, title) 
 {
 
 }

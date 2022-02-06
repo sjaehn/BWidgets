@@ -46,10 +46,16 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs a default %RadioButton object.
-	 * 
+	 *  @brief  Constructs a default %RadioButton object.
 	 */
 	RadioButton ();
+
+	/**
+	 *  @brief  Constructs a default %RadioButton object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	RadioButton (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %RadioButton with default size.
@@ -124,6 +130,12 @@ protected:
 
 inline RadioButton::RadioButton () :
 	RadioButton (0.0, 0.0, BWIDGETS_DEFAULT_RADIOBUTTON_WIDTH, BWIDGETS_DEFAULT_RADIOBUTTON_HEIGHT, false, false, URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline RadioButton::RadioButton (const uint32_t urid, const std::string& title) : 
+	RadioButton (0.0, 0.0, BWIDGETS_DEFAULT_RADIOBUTTON_WIDTH, BWIDGETS_DEFAULT_RADIOBUTTON_HEIGHT, false, false, urid, title) 
 {
 
 }

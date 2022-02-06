@@ -119,6 +119,13 @@ public:
 	Widget ();
 
 	/**
+	 *  @brief  Creates a default %Widget.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	Widget (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Creates a widget.
 	 *  @param x  %Widget X origin coordinate.
 	 *  @param y  %Widget Y origin coordinate.

@@ -52,6 +52,13 @@ public:
 	MessageBox ();
 
 	/**
+	 *  @brief  Constructs an empty default %MessageBox object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	MessageBox (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Construct a %MessageBox object with default size.
 	 *  @param symbol  Symbol index.
 	 *  @param headline  Headline sting.
@@ -132,6 +139,12 @@ public:
 
 inline MessageBox::MessageBox () : 
 	MessageBox (0.0, 0.0, BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH, BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT, Symbol::NO_SYMBOL, "", "", {}, URID_UNKNOWN_URID, "") 
+{
+
+}
+
+inline MessageBox::MessageBox	(const uint32_t urid, const std::string& title) :
+	MessageBox (0, 0, BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH, BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT, Symbol::NO_SYMBOL, "", "", {}, urid, title) 
 {
 
 }

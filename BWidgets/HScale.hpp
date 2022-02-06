@@ -58,10 +58,16 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs a default %HScale object.
-	 * 
+	 *  @brief  Constructs a default %HScale object.
 	 */
 	HScale ();
+
+	/**
+	 *  @brief  Constructs a default %HScale object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	HScale (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %HScale with default size.
@@ -175,6 +181,15 @@ inline HScale::HScale () :
 			 0.0, 0.0, 1.0, 0.0, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 			 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline HScale::HScale (const uint32_t urid, const std::string& title) : 
+	HScale	(0.0, 0.0, BWIDGETS_DEFAULT_HSCALE_WIDTH, BWIDGETS_DEFAULT_HSCALE_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0,
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 urid, title) 
 {
 
 }

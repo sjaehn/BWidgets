@@ -49,9 +49,16 @@ public:
 	SymbolButton downButton_;
 
 	/**
-	 * @brief Constructs a new SpinButton object with default parameters.
+	 *  @brief  Constructs a new SpinButton object with default parameters.
 	 */
 	SpinButton ();
+
+	/**
+	 *  @brief  Constructs a new SpinButton object with default parameters.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	SpinButton (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %SpinButton with default size.
@@ -111,6 +118,9 @@ protected:
 };
 
 inline SpinButton::SpinButton () : SpinButton (0.0, 0.0, BWIDGETS_DEFAULT_SPINBUTTON_WIDTH, BWIDGETS_DEFAULT_SPINBUTTON_HEIGHT, 0, URID_UNKNOWN_URID, "") {}
+
+inline SpinButton::SpinButton	(const uint32_t urid, const std::string& title) :
+	SpinButton (0.0, 0.0, BWIDGETS_DEFAULT_SPINBUTTON_WIDTH, BWIDGETS_DEFAULT_SPINBUTTON_HEIGHT, 0, urid, title) {}
 
 inline SpinButton::SpinButton	(const int value, uint32_t urid, std::string title) :
 	SpinButton (0.0, 0.0, BWIDGETS_DEFAULT_SPINBUTTON_WIDTH, BWIDGETS_DEFAULT_SPINBUTTON_HEIGHT, value, urid, title) {}

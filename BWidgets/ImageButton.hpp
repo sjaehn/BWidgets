@@ -45,9 +45,16 @@ public:
 	Image image;
 
 	/**
-	 * @brief  Constructs a new %ImageButton object with default parameters.
+	 *  @brief  Constructs a new %ImageButton object with default parameters.
 	 */
 	ImageButton ();
+
+	/**
+	 *  @brief  Constructs a new %ImageButton object with default parameters.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	ImageButton (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %ImageButton.
@@ -203,6 +210,13 @@ inline ImageButton::ImageButton () :
 	std::map<BStyles::Status, cairo_surface_t*>(), false, false, URID_UNKNOWN_URID, "") 
 {
 
+}
+
+inline ImageButton::ImageButton	(const uint32_t urid, const std::string& title) :
+	ImageButton (0.0, 0.0, BWIDGETS_DEFAULT_IMAGEBUTTON_WIDTH, BWIDGETS_DEFAULT_IMAGEBUTTON_HEIGHT, 
+	std::map<BStyles::Status, cairo_surface_t*>(), false, false, urid, title)
+{
+	
 }
 
 inline ImageButton::ImageButton	(const double x, const double y, const double width, const double height, 

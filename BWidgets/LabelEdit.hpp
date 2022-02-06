@@ -59,9 +59,16 @@ protected:
 public:
 
 	/**
-	 * @brief Constructs an empty default %LabelEdit object.
+	 *  @brief  Constructs an empty default %LabelEdit object.
 	 */
 	LabelEdit ();
+
+	/**
+	 *  @brief  Constructs an empty default %LabelEdit object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	LabelEdit (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Constructs a %LabelEdit object at the origin with optimized 
@@ -243,6 +250,12 @@ inline LabelEdit::LabelEdit () :
 	LabelEdit (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, "", URID_UNKNOWN_URID, "") 
 {
 
+}
+
+inline LabelEdit::LabelEdit (const uint32_t urid, const std::string& title) :
+	Label (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, "", urid, title)
+{
+	
 }
 
 inline LabelEdit::LabelEdit (const std::string& text, uint32_t urid, std::string title) :

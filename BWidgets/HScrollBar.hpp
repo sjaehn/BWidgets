@@ -51,10 +51,16 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs a default %HScrollBar object.
-	 * 
+	 *  @brief  Constructs a default %HScrollBar object.
 	 */
 	HScrollBar ();
+
+	/**
+	 *  @brief  Constructs a default %HScrollBar object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	HScrollBar (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %HScrollBar with default size.
@@ -169,6 +175,15 @@ inline HScrollBar::HScrollBar () :
 				 0.0, 0.0, 1.0, 0.0, 0.0, 
 				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 				 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline HScrollBar::HScrollBar (const uint32_t urid, const std::string& title) : 
+	HScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_HSCROLLBAR_WIDTH, BWIDGETS_DEFAULT_HSCROLLBAR_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 urid, title) 
 {
 
 }

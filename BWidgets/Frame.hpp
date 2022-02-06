@@ -41,11 +41,18 @@ class Frame : public Widget, public Draggable
 public:
     /**
 	 *  @brief  Creates a %Frame.
-
+	 *
 	 *  Creates a Frame with default dimensions 
 	 *  (BWIDGETS_DEFAULT_WIDTH, BWIDGETS_DEFAULT_HEIGHT).
 	 */
 	Frame ();
+
+	/**
+	 *  @brief  Creates a %Frame.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	Frame (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %Frame.
@@ -91,6 +98,13 @@ public:
 
 inline Frame::Frame () :
     Frame (0.0, 0.0, BWIDGETS_DEFAULT_FRAME_WIDTH, BWIDGETS_DEFAULT_FRAME_HEIGHT)
+{
+
+}
+
+inline Frame::Frame (const uint32_t urid, const std::string& title) :
+    Widget (0.0, 0.0, BWIDGETS_DEFAULT_FRAME_WIDTH, BWIDGETS_DEFAULT_FRAME_HEIGHT, urid, title),
+    Draggable ()
 {
 
 }

@@ -61,9 +61,16 @@ public:
 	Label label;
 
 	/**
-	 * @brief  Constructs a default %ValueVMeter object.
+	 *  @brief  Constructs a default %ValueVMeter object.
 	 */
 	ValueVMeter ();
+
+	/**
+	 *  @brief  Constructs a default %ValueVMeter object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	ValueVMeter (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %ValueVMeter with default size.
@@ -155,6 +162,18 @@ inline ValueVMeter::ValueVMeter () :
 					 valueToString,
 					 stringToValue,
 					 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline ValueVMeter::ValueVMeter (const uint32_t urid, const std::string& title) : 
+	ValueVMeter	(0.0, 0.0, BWIDGETS_DEFAULT_VALUEVMETER_WIDTH, BWIDGETS_DEFAULT_VALUEVMETER_HEIGHT, 
+					 0.0, 0.0, 1.0, 0.0, 
+					 ValueTransferable<double>::noTransfer, 
+					 ValueTransferable<double>::noTransfer,
+					 valueToString,
+					 stringToValue, 
+				 	 urid, title) 
 {
 
 }

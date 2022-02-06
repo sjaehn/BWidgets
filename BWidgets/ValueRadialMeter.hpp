@@ -61,9 +61,16 @@ public:
 	Label label;
 
 	/**
-	 * @brief  Constructs a default %ValueRadialMeter object.
+	 *  @brief  Constructs a default %ValueRadialMeter object.
 	 */
 	ValueRadialMeter ();
+
+	/**
+	 *  @brief  Constructs a default %ValueRadialMeter object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	ValueRadialMeter (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %ValueRadialMeter with default size.
@@ -155,6 +162,18 @@ inline ValueRadialMeter::ValueRadialMeter () :
 					 valueToString,
 					 stringToValue,
 					 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline ValueRadialMeter::ValueRadialMeter (const uint32_t urid, const std::string& title) : 
+	ValueRadialMeter	(0.0, 0.0, BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH, BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT, 
+					 0.0, 0.0, 1.0, 0.0, 
+					 ValueTransferable<double>::noTransfer, 
+					 ValueTransferable<double>::noTransfer,
+					 valueToString,
+					 stringToValue, 
+				 	 urid, title) 
 {
 
 }

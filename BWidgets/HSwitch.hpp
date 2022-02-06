@@ -51,10 +51,16 @@ class HSwitch : public Button, public Draggable, public Scrollable
 public:
 
 	/**
-	 * @brief  Constructs a default %HSwitch object.
-	 * 
+	 *  @brief  Constructs a default %HSwitch object.
 	 */
 	HSwitch ();
+
+	/**
+	 *  @brief  Constructs a default %HSwitch object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	HSwitch (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %HSwitch with default size.
@@ -161,6 +167,12 @@ protected:
 
 inline HSwitch::HSwitch () :
 	HSwitch (0.0, 0.0, BWIDGETS_DEFAULT_HSWITCH_WIDTH, BWIDGETS_DEFAULT_HSWITCH_HEIGHT, true, false, URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline HSwitch::HSwitch (const uint32_t urid, const std::string& title) : 
+	HSwitch (0.0, 0.0, BWIDGETS_DEFAULT_HSWITCH_WIDTH, BWIDGETS_DEFAULT_HSWITCH_HEIGHT, true, false, urid, title) 
 {
 
 }

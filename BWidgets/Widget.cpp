@@ -28,6 +28,9 @@ namespace BWidgets
 
 Widget::Widget () : Widget (0.0, 0.0, BWIDGETS_DEFAULT_WIDGET_WIDTH, BWIDGETS_DEFAULT_WIDGET_HEIGHT) {}
 
+Widget::Widget (const uint32_t urid, const std::string& title) :
+	Widget (0.0, 0.0, BWIDGETS_DEFAULT_WIDGET_WIDTH, BWIDGETS_DEFAULT_WIDGET_HEIGHT, urid, title) {}
+
 Widget::Widget (const double x, const double y, const double width, const double height, uint32_t urid, std::string title) :
 	Linkable(),
 	Visualizable (width, height),

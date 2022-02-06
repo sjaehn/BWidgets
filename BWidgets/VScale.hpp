@@ -64,6 +64,13 @@ public:
 	VScale ();
 
 	/**
+	 *  @brief  Constructs a default %VScale object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	VScale (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Creates a %VScale with default size.
 	 *  @param value  Initial value.
 	 *  @param min  Lower value limit.
@@ -175,6 +182,15 @@ inline VScale::VScale () :
 			 0.0, 0.0, 1.0, 0.0, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 			 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline VScale::VScale (const uint32_t urid, const std::string& title) : 
+	VScale	(0.0, 0.0, BWIDGETS_DEFAULT_VSCALE_WIDTH, BWIDGETS_DEFAULT_VSCALE_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0,
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 urid, title) 
 {
 
 }

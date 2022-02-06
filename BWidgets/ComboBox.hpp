@@ -60,9 +60,16 @@ protected:
 public:
 
 	/**
-	 * @brief Constructs a new ComboBox object with default parameters.
+	 *  @brief  Constructs a new ComboBox object with default parameters.
 	 */
 	ComboBox ();
+
+	/**
+	 *  @brief  Constructs a new ComboBox object with default parameters.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	ComboBox (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %ComboBox with default size.

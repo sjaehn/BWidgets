@@ -75,9 +75,16 @@ protected:
 public:
 
 	/**
-	 * @brief Constructs a new SpinBox object with default parameters.
+	 *  @brief  Constructs a new SpinBox object with default parameters.
 	 */
 	SpinBox ();
+
+	/**
+	 *  @brief  Constructs a new SpinBox object with default parameters.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	SpinBox (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %SpinBox with default size.
@@ -252,6 +259,9 @@ protected:
 };
 
 inline SpinBox::SpinBox () : SpinBox (0.0, 0.0, BWIDGETS_DEFAULT_SPINBOX_WIDTH, BWIDGETS_DEFAULT_SPINBOX_HEIGHT, {}, 0, URID_UNKNOWN_URID, "") {}
+
+inline SpinBox::SpinBox	(const uint32_t urid, const std::string& title) :
+	SpinBox (0.0, 0.0, BWIDGETS_DEFAULT_SPINBOX_WIDTH, BWIDGETS_DEFAULT_SPINBOX_HEIGHT, {}, 0, urid, title) {}
 
 inline SpinBox::SpinBox	(const std::initializer_list<const std::string> items, size_t value, uint32_t urid, std::string title) :
 	SpinBox (0.0, 0.0, BWIDGETS_DEFAULT_SPINBOX_WIDTH, BWIDGETS_DEFAULT_SPINBOX_HEIGHT, items, value, urid, title) {}

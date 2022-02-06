@@ -49,6 +49,13 @@ public:
 	Image ();
 
 	/**
+	 *  @brief  Construct an empty default %Image.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	Image (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Creates an empty %Image with defined coordinates and size.
 	 *  @param x  %Widget X origin coordinate.
 	 *  @param y  %Widget Y origin coordinate.
@@ -255,6 +262,13 @@ protected:
 
 inline Image::Image () : 
 	Image (0.0, 0.0, BWIDGETS_DEFAULT_IMAGE_WIDTH, BWIDGETS_DEFAULT_IMAGE_HEIGHT) 
+{
+
+}
+
+inline Image::Image (const uint32_t urid, const std::string& title) :
+		Widget (0.0, 0.0, BWIDGETS_DEFAULT_IMAGE_WIDTH, BWIDGETS_DEFAULT_IMAGE_HEIGHT, urid, title),
+		imageSurfaces_()
 {
 
 }

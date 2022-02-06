@@ -67,10 +67,16 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs a default %HMeter object.
-	 * 
+	 *  @brief  Constructs a default %HMeter object.
 	 */
 	HMeter ();
+
+	/**
+	 *  @brief  Constructs a default %HMeter object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	HMeter (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %HMeter with default size.
@@ -191,6 +197,15 @@ inline HMeter::HMeter () :
 			 0.0, 0.0, 1.0, 0.0, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 			 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline HMeter::HMeter (const uint32_t urid, const std::string& title) : 
+	HMeter	(0.0, 0.0, BWIDGETS_DEFAULT_HMETER_WIDTH, BWIDGETS_DEFAULT_HMETER_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 urid, title) 
 {
 
 }

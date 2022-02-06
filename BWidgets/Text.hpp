@@ -44,9 +44,16 @@ class Text : public Label
 public:
 
 	/**
-	 * @brief Construct an empty default %Text object.
+	 *  @brief Construct an empty default %Text object.
 	 */
 	Text ();
+
+	/**
+	 *  @brief Construct an empty default %Text object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	Text (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Constructs a %Text object at the origin with optimized extends.
@@ -158,6 +165,12 @@ protected:
 inline Text::Text () : Text (0.0, 0.0, BWIDGETS_DEFAULT_TEXT_WIDTH, BWIDGETS_DEFAULT_TEXT_HEIGHT, "", URID_UNKNOWN_URID, "") 
 {
 
+}
+
+inline Text::Text (const uint32_t urid, const std::string& title) :
+	Text (0.0, 0.0, BWIDGETS_DEFAULT_TEXT_WIDTH, BWIDGETS_DEFAULT_TEXT_HEIGHT, "", urid, title) 
+{
+	
 }
 
 inline Text::Text (const std::string& text, uint32_t urid, std::string title) :

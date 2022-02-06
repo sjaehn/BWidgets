@@ -116,6 +116,13 @@ public:
 	FileChooser ();
 
 	/**
+	 *  @brief  Constructs a default FileChooser object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	FileChooser (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Constructs a FileChooser object with default size
 	 *  @param path  File path.
 	 *  @param filters  Optional, initializer list with filename search
@@ -232,6 +239,12 @@ protected:
 
 inline FileChooser::FileChooser () : 
 	FileChooser (0.0, 0.0, BWIDGETS_DEFAULT_FILECHOOSER_WIDTH, BWIDGETS_DEFAULT_FILECHOOSER_HEIGHT, "", {}, URID_UNKNOWN_URID, "") 
+{
+
+}
+
+inline FileChooser::FileChooser	(const uint32_t urid, const std::string& title) :
+	FileChooser (0, 0, BWIDGETS_DEFAULT_FILECHOOSER_WIDTH, BWIDGETS_DEFAULT_FILECHOOSER_HEIGHT, "", {}, urid, title) 
 {
 
 }

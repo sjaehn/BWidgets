@@ -73,6 +73,13 @@ public:
 	VMeter ();
 
 	/**
+	 *  @brief  Constructs an empty %VMeter object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	VMeter (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Creates a %VMeter with default size.
 	 *  @param value  Initial value.
 	 *  @param min  Lower value limit.
@@ -191,6 +198,15 @@ inline VMeter::VMeter () :
 			0.0, 0.0, 1.0, 0.0, 
 			ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 			URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline VMeter::VMeter (const uint32_t urid, const std::string& title) : 
+	VMeter	(0.0, 0.0, BWIDGETS_DEFAULT_VMETER_WIDTH, BWIDGETS_DEFAULT_VMETER_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 urid, title) 
 {
 
 }

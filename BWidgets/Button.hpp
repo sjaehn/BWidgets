@@ -54,6 +54,13 @@ public:
 	Button ();
 
 	/**
+	 *  @brief  Constructs a new Button object with default parameters.
+	 *  @param urid  URID.
+	 *  @param title  %Widget title.
+	 */
+	Button	(const uint32_t, const std::string& title);
+
+	/**
 	 *  @brief  Creates a %Button with default size.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
@@ -136,6 +143,9 @@ public:
 };
 
 inline Button::Button () : Button (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, false, false, URID_UNKNOWN_URID, "") {}
+
+inline Button::Button	(const uint32_t urid, const std::string& title) : 
+	Button (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, false, false, urid, title) {}
 
 inline Button::Button	(bool toggleable, bool clicked, uint32_t urid, std::string title) :
 	Button (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, toggleable, clicked, urid, title) {}

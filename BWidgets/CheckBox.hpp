@@ -44,10 +44,17 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs a default %CheckBox object.
+	 *  @brief  Constructs a default %CheckBox object.
 	 * 
 	 */
 	CheckBox ();
+
+	/**
+	 *  @brief  Constructs a default %CheckBox object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	CheckBox (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %CheckBox with default size.
@@ -122,6 +129,12 @@ protected:
 
 inline CheckBox::CheckBox () :
 	CheckBox (0.0, 0.0, BWIDGETS_DEFAULT_CHECKBOX_WIDTH, BWIDGETS_DEFAULT_CHECKBOX_HEIGHT, false, false, URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline CheckBox::CheckBox (const uint32_t urid, const std::string& title) : 
+	CheckBox (0.0, 0.0, BWIDGETS_DEFAULT_CHECKBOX_WIDTH, BWIDGETS_DEFAULT_CHECKBOX_HEIGHT, false, false, urid, title) 
 {
 
 }

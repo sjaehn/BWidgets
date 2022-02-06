@@ -61,10 +61,16 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs a default %HPianoRoll object.
-	 * 
+	 *  @brief  Constructs a default %HPianoRoll object. 
 	 */
 	HPianoRoll ();
+
+	/**
+	 *  @brief  Constructs a default %HPianoRoll object. 
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	HPianoRoll (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %HPianoRoll with default size and initialized key 
@@ -328,6 +334,13 @@ inline HPianoRoll::HPianoRoll () :
 
 }
 
+inline HPianoRoll::HPianoRoll (const uint32_t urid, const std::string& title) :
+	HPianoRoll	(0, 0, BWIDGETS_DEFAULT_HPIANOROLL_WIDTH, BWIDGETS_DEFAULT_HPIANOROLL_HEIGHT, 
+				 0, 127, std::map<uint8_t, uint8_t>(),
+				 urid, title)
+{
+
+}
 
 inline HPianoRoll::HPianoRoll	(const uint8_t startMidiKey, uint8_t endMidiKey, std::map<uint8_t, uint8_t> keys, 
 				 				 uint32_t urid, std::string title) :

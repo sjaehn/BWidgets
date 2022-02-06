@@ -60,9 +60,16 @@ public:
 	LabelEdit label;
 
 	/**
-	 * @brief  Constructs a default %ValueHSlider object.
+	 *  @brief  Constructs a default %ValueHSlider object.
 	 */
 	ValueHSlider ();
+
+	/**
+	 *  @brief  Constructs a default %ValueHSlider object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	ValueHSlider (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %ValueHSlider with default size.
@@ -154,6 +161,18 @@ inline ValueHSlider::ValueHSlider () :
 					 valueToString,
 					 stringToValue,
 					 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline ValueHSlider::ValueHSlider (const uint32_t urid, const std::string& title) : 
+	ValueHSlider	(0.0, 0.0, BWIDGETS_DEFAULT_VALUEHSLIDER_WIDTH, BWIDGETS_DEFAULT_VALUEHSLIDER_HEIGHT, 
+					 0.0, 0.0, 1.0, 0.0, 
+					 ValueTransferable<double>::noTransfer, 
+					 ValueTransferable<double>::noTransfer,
+					 valueToString,
+					 stringToValue, 
+				 	 urid, title) 
 {
 
 }

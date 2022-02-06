@@ -53,6 +53,13 @@ public:
 	VSlider ();
 
 	/**
+	 *  @brief  Constructs a default %VSlider object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	VSlider (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Creates a %VSlider with default size.
 	 *  @param value  Initial value.
 	 *  @param min  Lower value limit.
@@ -139,6 +146,15 @@ inline VSlider::VSlider () :
 			 0.0, 0.0, 1.0, 0.0, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 			 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline VSlider::VSlider (const uint32_t urid, const std::string& title) : 
+	VSlider	(0.0, 0.0, BWIDGETS_DEFAULT_VSLIDER_WIDTH, BWIDGETS_DEFAULT_VSLIDER_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 urid, title) 
 {
 
 }

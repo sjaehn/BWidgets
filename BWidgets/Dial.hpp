@@ -60,10 +60,16 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs a default %Dial object.
-	 * 
+	 *  @brief  Constructs a default %Dial object.
 	 */
 	Dial ();
+
+	/**
+	 *  @brief  Constructs a default %Dial object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	Dial (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %Dial with default size.
@@ -182,6 +188,15 @@ inline Dial::Dial () :
 			 0.0, 0.0, 1.0, 0.0, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 			 URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline Dial::Dial (const uint32_t urid, const std::string& title) : 
+	Dial	(0.0, 0.0, BWIDGETS_DEFAULT_DIAL_WIDTH, BWIDGETS_DEFAULT_DIAL_HEIGHT, 
+			 0.0, 0.0, 1.0, 0.0, 
+			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+			 urid, title) 
 {
 
 }

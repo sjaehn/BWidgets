@@ -64,6 +64,15 @@ public:
 	Box ();
 
 	/**
+	 *  @brief  Construct a default %Box object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 *
+	 *  The box only hosts an OK button if no button labels are provided.
+	 */
+	Box (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Construct a %Box object with default size.
 	 *  @param buttonlabels  Initializer list with butten label strings.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
@@ -195,6 +204,12 @@ protected:
 };
 
 inline Box::Box () : Box (0.0, 0.0, BWIDGETS_DEFAULT_BOX_WIDTH, BWIDGETS_DEFAULT_BOX_HEIGHT, {}, URID_UNKNOWN_URID, "") 
+{
+
+}
+
+inline Box::Box (const uint32_t urid, const std::string& title) : 
+	Box (0.0, 0.0, BWIDGETS_DEFAULT_BOX_WIDTH, BWIDGETS_DEFAULT_BOX_HEIGHT, {}, urid, title) 
 {
 
 }

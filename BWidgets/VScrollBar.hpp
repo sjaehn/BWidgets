@@ -57,6 +57,13 @@ public:
 	VScrollBar ();
 
 	/**
+	 *  @brief  Constructs a default %VScrollBar object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	VScrollBar (const uint32_t urid, const std::string& title);
+
+	/**
 	 *  @brief  Creates a %VScrollBar with default size.
 	 *  @param value  Initial value.
 	 *  @param min  Lower value limit.
@@ -173,22 +180,31 @@ inline VScrollBar::VScrollBar () :
 
 }
 
+inline VScrollBar::VScrollBar (const uint32_t urid, const std::string& title) : 
+	VScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VSCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VSCROLLBAR_HEIGHT, 
+				 0.0, 0.0, 1.0, 0.0, 0.0, 
+				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+				 urid, title) 
+{
+
+}
+
 inline VScrollBar::VScrollBar (double value, const double min, const double max, double step, double vsize, uint32_t urid, std::string title) : 
 	VScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VSCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VSCROLLBAR_HEIGHT, 
-			 value, min, max, step, vsize,
-			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
-			 urid, title) 
+				 value, min, max, step, vsize,
+				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+				 urid, title) 
 {
 
 }
 
 inline VScrollBar::VScrollBar	(const double  x, const double y, const double width, const double height, 
-						 double value, const double min, const double max, double step, double vsize,
-						 std::function<double (const double& x)> transferFunc,
-			 			 std::function<double (const double& x)> reTransferFunc,
-						 uint32_t urid, std::string title) :
-		VScale	(x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
-		vsize_ (vsize)
+								 double value, const double min, const double max, double step, double vsize,
+								 std::function<double (const double& x)> transferFunc,
+					 			 std::function<double (const double& x)> reTransferFunc,
+								 uint32_t urid, std::string title) :
+	VScale	(x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
+	vsize_ (vsize)
 {
 
 }

@@ -48,10 +48,17 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs a default %Knob object.
+	 *  @brief  Constructs a default %Knob object.
 	 * 
 	 */
 	Knob ();
+
+	/**
+	 *  @brief  Constructs a default %Knob object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	Knob (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %Knob with default size.
@@ -140,6 +147,12 @@ protected:
 
 inline Knob::Knob () :
 	Knob (0.0, 0.0, BWIDGETS_DEFAULT_KNOB_WIDTH, BWIDGETS_DEFAULT_KNOB_HEIGHT, 1.0, false, false, URID_UNKNOWN_URID, "")
+{
+
+}
+
+inline Knob::Knob (const uint32_t urid, const std::string& title) : 
+	Knob (0.0, 0.0, BWIDGETS_DEFAULT_KNOB_WIDTH, BWIDGETS_DEFAULT_KNOB_HEIGHT, 1.0, false, false, urid, title) 
 {
 
 }

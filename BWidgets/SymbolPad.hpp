@@ -47,9 +47,16 @@ public:
 	Symbol symbol;
 
 	/**
-	 * @brief  Constructs a new %SymbolPad object with default parameters.
+	 *  @brief  Constructs a new %SymbolPad object with default parameters.
 	 */
 	SymbolPad ();
+
+	/**
+	 *  @brief  Constructs a new %SymbolPad object with default parameters.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	SymbolPad (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %SymbolPad with default size.
@@ -142,6 +149,15 @@ inline SymbolPad::SymbolPad () :
 				 Symbol::NO_SYMBOL, 0.0, 0.0, 1.0, 0.0, 
 				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer,  
 				 URID_UNKNOWN_URID, "") 
+{
+
+}
+
+inline SymbolPad::SymbolPad	(const uint32_t urid, const std::string& title) :
+	SymbolPad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT,
+				 Symbol::NO_SYMBOL, 0.0, 0.0, 1.0, 0.0, 
+				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer,  
+				 urid, title) 
 {
 
 }

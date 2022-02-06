@@ -45,9 +45,16 @@ public:
 	Label label;
 
 	/**
-	 * @brief  Constructs a new %TextButton object with default parameters.
+	 *  @brief  Constructs a new %TextButton object with default parameters.
 	 */
 	TextButton ();
+
+	/**
+	 *  @brief  Constructs a new %TextButton object with default parameters.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	TextButton (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %TextButton with default size.
@@ -130,6 +137,9 @@ public:
 };
 
 inline TextButton::TextButton () : TextButton (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBUTTON_WIDTH, BWIDGETS_DEFAULT_TEXTBUTTON_HEIGHT, "", false, false, URID_UNKNOWN_URID, "") {}
+
+inline TextButton::TextButton	(const uint32_t urid, const std::string& title) :
+	TextButton (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBUTTON_WIDTH, BWIDGETS_DEFAULT_TEXTBUTTON_HEIGHT, "", false, false, urid, title) {}
 
 inline TextButton::TextButton	(const std::string& text, bool toggleable, bool clicked, uint32_t urid, std::string title) :
 	TextButton (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBUTTON_WIDTH, BWIDGETS_DEFAULT_TEXTBUTTON_HEIGHT, text, toggleable, clicked, urid, title) {}

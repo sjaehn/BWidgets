@@ -70,9 +70,16 @@ protected:
 public:
 
 	/**
-	 * @brief Constructs an empty default %Symbol object.
+	 *  @brief  Constructs an empty default %Symbol object.
 	 */
 	Symbol ();
+
+	/**
+	 *  @brief  Constructs an empty default %Symbol object.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	Symbol (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Constructs a %Symbol object at the origin with optimized extends.
@@ -153,6 +160,11 @@ inline Symbol::Symbol () :
 	Symbol (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOL_WIDTH, BWIDGETS_DEFAULT_SYMBOL_HEIGHT, NO_SYMBOL, URID_UNKNOWN_URID, "") 
 {
 
+}
+
+inline Symbol::Symbol (const uint32_t urid, const std::string& title) :
+	Symbol (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOL_WIDTH, BWIDGETS_DEFAULT_SYMBOL_HEIGHT, NO_SYMBOL, urid, title)
+{
 }
 
 inline Symbol::Symbol (SymbolType symbol, uint32_t urid, std::string title) :

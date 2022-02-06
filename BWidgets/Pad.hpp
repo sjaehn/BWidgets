@@ -60,9 +60,16 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs a new %Pad object with default parameters.
+	 *  @brief  Constructs a new %Pad object with default parameters.
 	 */
 	Pad ();
+
+	/**
+	 *  @brief  Constructs a new %Pad object with default parameters.
+	 *  @param URID  URID.
+	 *  @param title  %Widget title.
+	 */
+	Pad (const uint32_t urid, const std::string& title);
 
 	/**
 	 *  @brief  Creates a %Pad with default size.
@@ -85,6 +92,10 @@ public:
 	 *  @param value  Initial value.
 	 *  @param min  Lower value limit.
 	 *  @param max  Upper value limit.
+	 *  @param transferFunc  Optinonal, function to transfer a value from an
+	 *  external context to the internal context.
+	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
+	 *  internal context to an external context.
 	 *  @param step  Optional, value increment steps.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
@@ -167,7 +178,16 @@ inline Pad::Pad () :
 
 }
 
-inline Pad::Pad	(double value, const double min, const double max, double step, uint32_t urid, std::string title) :
+inline Pad::Pad	(const uint32_t urid, const std::string& title) :
+	Pad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT, 
+		 0.0, 0.0, 1.0, 0.0, 
+		 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+		 urid, title) 
+{
+
+}
+
+inline Pad::Pad	(const double value, const double min, const double max, double step, uint32_t urid, std::string title) :
 	Pad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT, 
 		 min, max, step, urid, 
 		 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
