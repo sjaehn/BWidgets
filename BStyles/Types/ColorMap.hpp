@@ -61,6 +61,7 @@ public:
 };
 
 const ColorMap reds = ColorMap ({red, lightred, darkred, black});
+const ColorMap yellows = ColorMap ({yellow, lightyellow, darkyellow, black});
 const ColorMap greens = ColorMap ({green, lightgreen, darkgreen, black});
 const ColorMap blues = ColorMap ({blue, lightblue, darkblue, black});
 const ColorMap greys = ColorMap ({grey, lightgrey, darkgrey, black});

@@ -39,6 +39,8 @@ protected:
 
 public:
 
+    typedef T value_type;
+    
     /**
      *  @brief  Constructs a default %ValueableTyped object.
      */

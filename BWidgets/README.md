@@ -161,6 +161,7 @@ Widget
  ├── SpinButton
  ├── Pad
  |    ╰── SymbolPad
+ ├── Pattern
  ├── HMeter
  |    ├── ValueHMeter
  |    ╰── HScale
@@ -422,6 +423,7 @@ by its color from dark to bright. It supports user interaction via
 `Clickable` (switch on / off) and `Scrollable` (increase / decrease value). 
 The visualble content of the Pad is represented by FgColors.
 
+
 ### SymbolPad
 
 ![symbolpad](../suppl/SymbolPad.png)
@@ -431,6 +433,18 @@ by its color from dark to bright. It supports user interaction via
 `Clickable` (switch on / off) and `Scrollable` (increase / decrease 
 value). The visualble content of the %SymbolPad is represented by 
 FgColors.
+
+### Pattern\<T\>
+
+![pattern](../suppl/Pattern.png)
+
+`Pattern` is a `Valueable` widget displaying a pattern of pad widgets 
+(default: `Pad`s). It is intended to use a Pad-derived widget to display a
+step or pad sequencer-like pattern, but it is also possible to use any 
+other Valueable widget (including Pattern itself). Its value is a 2D 
+vector of `std::pair` with the pad extensions (default: 
+`std::pair<size_t, size_t>(1, 1))` as the first and the pad value as the
+second type.
 
 
 ### HMeter

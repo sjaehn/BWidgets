@@ -59,7 +59,9 @@
 #include "../BWidgets/HScrollBar.hpp"
 #include "../BWidgets/VScrollBar.hpp"
 #include "../BWidgets/FileChooser.hpp"
+#include "../BWidgets/Pattern.hpp"
 #include <cairo/cairo.h>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 
@@ -349,7 +351,7 @@ int main ()
     // HPianoRoll
     HPianoRoll hPianoRoll (10, 740, 580, 40);
     hPianoRoll.activate (36, 95, true);
-    Label hPianoRollLabel (350, 800, 100, 20, "HPianoRoll");
+    Label hPianoRollLabel (250, 800, 100, 20, "HPianoRoll");
     hPianoRollLabel.setFont (labelFont);
     window.add (&hPianoRoll);
     window.add (&hPianoRollLabel);
@@ -437,6 +439,26 @@ int main ()
     fileChooserLabel.setFont (labelFont);
     window.add (&fileChooser);
     window.add (&fileChooserLabel);
+
+    // Pattern
+    Pattern<> pattern (710, 610, 180, 180, 4, 4);
+    std::array<BStyles::ColorMap, 4> patternColors = {{BStyles::reds, BStyles::yellows, BStyles::greens, BStyles::blues}};
+    for (int i = 0; i < 4; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        {
+            Pad* w = dynamic_cast<Pad*>(pattern.getPad (2 * (i % 2) + (j % 2), 2 * int (i / 2) + int (j / 2)));
+            if (w) 
+            {
+                w->setFgColors(patternColors[i]);
+                w->setValue (double (std::rand())/ RAND_MAX);
+            }
+        }
+    }
+    Label patternLabel (760, 800, 80, 20, "Pattern");
+    patternLabel.setFont (labelFont);
+    window.add (&pattern);
+    window.add (&patternLabel);
 
     window.run();
 }
