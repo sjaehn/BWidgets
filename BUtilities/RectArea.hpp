@@ -65,7 +65,7 @@ public:
 
 	bool contains (const Point<T>& p) const
 	{
-		return ((p.x > p1.x) && (p.x < p2.x) && (p.y > p1.y) && (p.y < p2.y));
+		return ((p.x >= p1.x) && (p.x <= p2.x) && (p.y >= p1.y) && (p.y <= p2.y));
 	}
 
 	bool includes (const RectArea& ra) const
