@@ -61,6 +61,12 @@ public:
 		INFO_SYMBOL,
 		WARN_SYMBOL,
 		ERROR_SYMBOL,
+		CUT_SYMBOL,
+		COPY_SYMBOL,
+		PASTE_SYMBOL,
+		DELETE_SYMBOL,
+		XFLIP_SYMBOL,
+		YFLIP_SYMBOL,
 		NEW_FOLDER_SYMBOL
 	};
 
@@ -353,6 +359,109 @@ inline void Symbol::draw (const BUtilities::RectArea<>& area)
 										cairo_line_to (cr, xc - 0.2 * ext, yc + 0.2 * ext);
 										cairo_set_line_width (cr, 0.1 * ext);
 										cairo_stroke (cr);
+										break;
+
+				case CUT_SYMBOL:		{
+											const double size = ext * 0.9;
+											cairo_set_line_width (cr, 0.05 * ext);
+											cairo_rectangle (cr, xc - 0.375 * size, yc - 0.25 * size, 0.5 * size, 0.75 * size);
+											const double dash[] = {2.0};
+											cairo_set_dash (cr, dash, 1, 0);
+											cairo_stroke (cr);
+											cairo_rectangle (cr, xc - 0.125 * size, yc - 0.5 * size, 0.5 * size, 0.75 * size);
+											cairo_fill_preserve (cr);
+											cairo_set_source_rgba (cr, 0, 0, 0, 1);
+											cairo_set_dash (cr, dash, 0, 0);
+											cairo_stroke (cr);
+										}
+										break;
+
+				case COPY_SYMBOL:		{
+											const double size = ext * 0.9;
+											cairo_set_line_width (cr, 0.05 * ext);
+											cairo_rectangle (cr, xc - 0.375 * size, yc - 0.25 * size, 0.5 * size, 0.75 * size);
+											cairo_fill_preserve (cr);
+											const double dash[] = {2.0};
+											cairo_set_dash (cr, dash, 1, 0);
+											cairo_stroke (cr);
+											cairo_rectangle (cr, xc - 0.125 * size, yc - 0.5 * size, 0.5 * size, 0.75 * size);
+											cairo_fill_preserve (cr);
+											cairo_set_source_rgba (cr, 0, 0, 0, 1);
+											cairo_set_dash (cr, dash, 0, 0);
+											cairo_stroke (cr);
+										}
+										break;
+
+				case PASTE_SYMBOL:		{
+											const double size = ext * 0.9;
+											cairo_set_line_width (cr, 0.05 * ext);
+											cairo_rectangle (cr, xc - 0.375 * size, yc - 0.5 * size, 0.5 * size, 0.75 * size);
+											cairo_fill_preserve (cr);;
+											cairo_stroke (cr);
+											cairo_rectangle (cr, xc - 0.125 * size, yc - 0.25 * size, 0.5 * size, 0.75 * size);
+											cairo_fill_preserve (cr);
+											cairo_set_source_rgba (cr, 0, 0, 0, 1);
+											cairo_stroke (cr);
+										}
+										break;
+
+				case DELETE_SYMBOL:		{
+											const double size = ext * 0.9;
+											cairo_set_line_width (cr, 0.05 * ext);
+											cairo_move_to (cr, xc - 0.25 * size, yc + 0.05 * size);
+											cairo_line_to (cr, xc, yc + 0.3 * size);
+											cairo_move_to (cr, xc, yc + 0.05 * size);
+											cairo_line_to (cr, xc - 0.25 * size, yc + 0.3 * size);
+											cairo_stroke (cr);
+											cairo_rectangle (cr, xc - 0.375 * size, yc - 0.5 * size, 0.75 * size, size);
+											const double dash[] = {2.0};
+											cairo_set_dash (cr, dash, 1, 0);
+											cairo_stroke (cr);
+										}
+										break;
+
+				case XFLIP_SYMBOL:		{
+											const double size = ext * 0.9;
+											cairo_set_line_width (cr, 0.05 * ext);
+											cairo_rectangle (cr, xc - 0.375 * size, yc - 0.5 * size, 0.75 * size, size);
+											cairo_fill_preserve (cr);
+											const double dash[] = {2.0};
+											cairo_set_dash (cr, dash, 1, 0);
+											cairo_stroke (cr);
+											cairo_set_dash (cr, dash, 0, 0);
+											cairo_set_source_rgba (cr, 0, 0, 0, 1);
+											cairo_move_to (cr, xc - 0.3 * size, yc);
+											cairo_line_to (cr, xc - 0.15 * size, yc + 0.1 * size);
+											cairo_line_to (cr, xc - 0.15 * size, yc - 0.1 * size);
+											cairo_line_to (cr, xc - 0.3 * size, yc);
+											cairo_line_to (cr, xc + 0.3 * size, yc);
+											cairo_line_to (cr, xc + 0.15 * size, yc + 0.1 * size);
+											cairo_line_to (cr, xc + 0.15 * size, yc - 0.1 * size);
+											cairo_line_to (cr, xc + 0.3 * size, yc);
+											cairo_stroke (cr);
+										}
+										break;
+
+				case YFLIP_SYMBOL:		{
+											const double size = ext * 0.9;
+											cairo_set_line_width (cr, 0.05 * ext);
+											cairo_rectangle (cr, xc - 0.375 * size, yc - 0.5 * size, 0.75 * size, size);
+											cairo_fill_preserve (cr);
+											const double dash[] = {2.0};
+											cairo_set_dash (cr, dash, 1, 0);
+											cairo_stroke (cr);
+											cairo_set_dash (cr, dash, 0, 0);
+											cairo_set_source_rgba (cr, 0, 0, 0, 1);
+											cairo_move_to (cr, xc, yc - 0.4 * size);
+											cairo_line_to (cr, xc - 0.1 * size, yc - 0.25 * size);
+											cairo_line_to (cr, xc + 0.1 * size, yc - 0.25 * size);
+											cairo_line_to (cr, xc, yc - 0.4 * size);
+											cairo_line_to (cr, xc, yc + 0.4 * size);
+											cairo_line_to (cr, xc - 0.1 * size, yc + 0.25 * size);
+											cairo_line_to (cr, xc + 0.1 * size, yc + 0.25 * size);
+											cairo_line_to (cr, xc, yc + 0.4 * size);
+											cairo_stroke (cr);
+										}
 										break;
 
 				case NEW_FOLDER_SYMBOL:	{
