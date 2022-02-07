@@ -412,7 +412,7 @@ public:
 	 *  content. It is the sum of border margin, line width, and padding if a
 	 *  border is defined.
 	 */
-	double getXOffset ();
+	double getXOffset () const;
 
 	/**
 	 *  @brief  Y offset of the %Widget content relative to the %Widget Y 
@@ -423,7 +423,7 @@ public:
 	 *  content. It is the sum of border margin, line width, and padding if a
 	 *  border is defined.
 	 */
-	double getYOffset ();
+	double getYOffset () const;
 
 	/**
 	 *  @brief  Effective width to draw a %Widget.
@@ -434,7 +434,7 @@ public:
 	 *  width minus two times the sum of border margin, line width, and 
 	 *  padding.
 	 */
-	double getEffectiveWidth ();
+	double getEffectiveWidth () const;
 
 	/**
 	 *  @brief  Effective height to draw a %Widget.
@@ -445,7 +445,7 @@ public:
 	 *  height minus two times the sum of border margin, line width, and 
 	 *  padding.
 	 */
-	double getEffectiveHeight ();
+	double getEffectiveHeight () const;
 
 	/**
 	 *  @brief  Effecitve area to draw a %Widget.
@@ -456,7 +456,7 @@ public:
 	 *  area without the borders (defined as the sum of border margin, line 
 	 *  width, and padding) on each side.
 	 */
-	BUtilities::RectArea<> getEffectiveArea ();
+	BUtilities::RectArea<> getEffectiveArea () const;
 
 	/**
 	 *  @brief  Sets the %Widget status.

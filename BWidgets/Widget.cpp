@@ -359,7 +359,7 @@ BUtilities::RectArea<> Widget::getAbsoluteArea () const
 	return a;
 }
 
-double Widget::getXOffset () 
+double Widget::getXOffset () const
 {
 	if (style_.contains (BUtilities::Urid::urid (STYLEPROPERTY_BORDER_URI)))
 	{
@@ -369,24 +369,24 @@ double Widget::getXOffset ()
 	return 0.0;
 }
 
-double Widget::getYOffset () 
+double Widget::getYOffset () const
 {
 	return getXOffset();
 }
 
-double Widget::getEffectiveWidth ()
+double Widget::getEffectiveWidth () const
 {
 	double totalBorderWidth = getXOffset ();
 	return (getWidth () > 2 * totalBorderWidth ? getWidth () - 2 * totalBorderWidth : 0);
 }
 
-double Widget::getEffectiveHeight ()
+double Widget::getEffectiveHeight () const
 {
 	double totalBorderHeight = getYOffset ();
 	return (getHeight () > 2 * totalBorderHeight ? getHeight () - 2 * totalBorderHeight : 0);
 }
 
-BUtilities::RectArea<> Widget::getEffectiveArea ()
+BUtilities::RectArea<> Widget::getEffectiveArea () const
 {
 	return BUtilities::RectArea<> (getPosition().x + getXOffset(), getPosition().y + getYOffset(), getEffectiveWidth(), getEffectiveHeight());
 }
