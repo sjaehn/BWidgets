@@ -33,14 +33,22 @@ namespace BWidgets
 {
 /**
  *  @brief Composite Pad Widget containing a Symbol.
+ *  @tparam T  Value type.
  *
  *  %SymbolPad is a Pad containing a Symbol. Its value is represented
  *  by its color from dark to bright. It supports user interaction via
  *  Clickable (switch on / off) and Scrollable (increase / decrease 
  *  value). The visualble content of the %SymbolPad is represented by 
  *  FgColors.
+ *
+ *  The value type @a T can be used to specialize %Pad (e. g., by writing
+ *  specialized @c draw() methods). @a T MUST support the standard comparison
+ *  operators and MUST also support the standard arithmetic operators. It
+ *  also MUST be compatible with ValueableTyped, ValidatableRange, and
+ *  ValueTransferable.
  */
-class SymbolPad : public Pad
+template <class T = double>
+class SymbolPad : public Pad<T>
 {
 public:
 
@@ -68,7 +76,7 @@ public:
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	SymbolPad	(const Symbol::SymbolType symbolIdx, const double value, const double min, const double max, double step = 0.0, 
+	SymbolPad	(const Symbol::SymbolType symbolIdx, const T value, const T min, const T max, T step = 0.0, 
 				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
@@ -86,9 +94,9 @@ public:
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	SymbolPad	(const double x, const double y, const double width, const double height, 
-				 const Symbol::SymbolType symbolIdx, const double value, const double min, const double max, double step = 0.0,
-				 std::function<double (const double& x)> transferFunc = ValueTransferable<double>::noTransfer,
-				 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
+				 const Symbol::SymbolType symbolIdx, const T value, const T min, const T max, T step = 0.0,
+				 std::function<T (const T& x)> transferFunc = ValueTransferable<T>::noTransfer,
+				 std::function<T (const T& x)> reTransferFunc = ValueTransferable<T>::noTransfer,
 				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
@@ -144,40 +152,44 @@ public:
     virtual void update () override;
 };
 
-inline SymbolPad::SymbolPad () : 
+template <class T>
+inline SymbolPad<T>::SymbolPad () : 
 	SymbolPad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT,
-				 Symbol::NO_SYMBOL, 0.0, 0.0, 1.0, 0.0, 
-				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer,  
+				 Symbol::NO_SYMBOL, T(), T(), T() + 1.0, T(), 
+				 ValueTransferable<T>::noTransfer, ValueTransferable<T>::noTransfer,  
 				 URID_UNKNOWN_URID, "") 
 {
 
 }
 
-inline SymbolPad::SymbolPad	(const uint32_t urid, const std::string& title) :
+template <class T>
+inline SymbolPad<T>::SymbolPad	(const uint32_t urid, const std::string& title) :
 	SymbolPad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT,
-				 Symbol::NO_SYMBOL, 0.0, 0.0, 1.0, 0.0, 
-				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer,  
+				 Symbol::NO_SYMBOL, T(), T(), T() + 1.0, T(), 
+				 ValueTransferable<T>::noTransfer, ValueTransferable<T>::noTransfer,  
 				 urid, title) 
 {
 
 }
 
-inline SymbolPad::SymbolPad	(const Symbol::SymbolType symbolIdx, double value, const double min, const double max, double step, 
-							 uint32_t urid, std::string title) :
+template <class T>
+inline SymbolPad<T>::SymbolPad	(const Symbol::SymbolType symbolIdx, const T value, const T min, const T max, T step, 
+								 uint32_t urid, std::string title) :
 	SymbolPad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT,
 				 symbolIdx, value, min, max, step, 
-				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer,  
+				 ValueTransferable<T>::noTransfer, ValueTransferable<T>::noTransfer,  
 				 urid, title) 
 {
 
 }
 
-inline SymbolPad::SymbolPad	(const double x, const double y, const double width, const double height, 
-						 	 const Symbol::SymbolType symbolIdx, double value, const double min, const double max, double step, 
-							 std::function<double (const double& x)> transferFunc,
-			 				 std::function<double (const double& x)> reTransferFunc,
+template <class T>
+inline SymbolPad<T>::SymbolPad	(const double x, const double y, const double width, const double height, 
+						 	 const Symbol::SymbolType symbolIdx, const T value, const T min, const T max, T step, 
+							 std::function<T (const T& x)> transferFunc,
+			 				 std::function<T (const T& x)> reTransferFunc,
 							 uint32_t urid, std::string title) :
-	Pad (x, y, width, height,value, min, max, step, transferFunc, reTransferFunc, urid, title),
+	Pad<T> (x, y, width, height,value, min, max, step, transferFunc, reTransferFunc, urid, title),
 	symbol (0, 0, width, height, symbolIdx, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/symbol"))
 {
 	symbol.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
@@ -186,48 +198,54 @@ inline SymbolPad::SymbolPad	(const double x, const double y, const double width,
 	symbol.setEventPassable(BEvents::Event::WHEEL_SCROLL_EVENT, true);
 	symbol.setTxColors (symbol.getBgColors());
 	symbol.setStatus (BStyles::STATUS_INACTIVE);
-	add (&symbol);
-	symbol.resize (BUtilities::Point<> (0.4 * extends_.x, 0.4 * extends_.y));
+	this->add (&symbol);
+	symbol.resize (BUtilities::Point<> (0.4 * this->extends_.x, 0.4 * this->extends_.y));
 	symbol.moveTo (symbol.center(), symbol.middle());
 }
 
-inline Widget* SymbolPad::clone () const 
+template <class T>
+inline Widget* SymbolPad<T>::clone () const 
 {
-	Widget* f = new SymbolPad (urid_, title_);
+	Widget* f = new SymbolPad (this->urid_, this->title_);
 	f->copy (this);
 	return f;
 }
 
-inline void SymbolPad::copy (const SymbolPad* that)
+template <class T>
+inline void SymbolPad<T>::copy (const SymbolPad* that)
 {
 	symbol.copy (&that->symbol);
-    Pad::copy (that);
+    Pad<T>::copy (that);
 }
 
-inline void SymbolPad::resize ()
+template <class T>
+inline void SymbolPad<T>::resize ()
 {
 	symbol.resize ();
-	Pad::resize (2.5 * symbol.getWidth(), 2.5 * symbol.getHeight());
+	Pad<T>::resize (2.5 * symbol.getWidth(), 2.5 * symbol.getHeight());
 	symbol.moveTo (symbol.center(), symbol.middle());
 }
 
-inline void SymbolPad::resize (const double width, const double height) 
+template <class T>
+inline void SymbolPad<T>::resize (const double width, const double height) 
 {
-	SymbolPad::resize (BUtilities::Point<> (width, height));
+	SymbolPad<T>::resize (BUtilities::Point<> (width, height));
 }
 
-inline void SymbolPad::resize (const BUtilities::Point<> extends)
+template <class T>
+inline void SymbolPad<T>::resize (const BUtilities::Point<> extends)
 {
-	Pad::resize (BUtilities::Point<> (extends.x, extends.y));
+	Pad<T>::resize (BUtilities::Point<> (extends.x, extends.y));
 	symbol.resize (BUtilities::Point<> (0.4 * extends.x, 0.4 * extends.y));
 	symbol.moveTo (symbol.center(), symbol.middle());
 }
 
-inline void SymbolPad::update ()
+template <class T>
+inline void SymbolPad<T>::update ()
 {
-	symbol.resize (0.4 * getEffectiveWidth(), 0.4 * getEffectiveHeight());
+	symbol.resize (0.4 * this->getEffectiveWidth(), 0.4 * this->getEffectiveHeight());
 	symbol.moveTo (symbol.center(), symbol.middle());
-	Pad::update ();
+	Pad<T>::update ();
 }
 
 }

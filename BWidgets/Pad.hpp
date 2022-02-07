@@ -40,22 +40,30 @@ namespace BWidgets
 {
 /**
  *  @brief  Widget imitating an LED pad.
+ *  @tparam T  Value type.
  *
  *  %Pad is a Valueable widget imitating an LED pad. Its value is represented
  *  by its color from dark to bright. It supports user interaction via
  *  Clickable (switch on / off) and Scrollable (increase / decrease value). 
  *  The visualble content of the %Pad is represented by FgColors.
+ *
+ *  The value type @a T can be used to specialize %Pad (e. g., by writing
+ *  specialized @c draw() methods). @a T MUST support the standard comparison
+ *  operators and MUST also support the standard arithmetic operators. It
+ *  also MUST be compatible with ValueableTyped, ValidatableRange, and
+ *  ValueTransferable.
  */
+template <class T = double>
 class Pad : public Widget, 
-			public ValueableTyped<double>, 
-			public ValidatableRange<double>, 
-			public ValueTransferable<double>, 
+			public ValueableTyped<T>, 
+			public ValidatableRange<T>, 
+			public ValueTransferable<T>, 
 			public Clickable, 
 			public Scrollable
 {
 
 protected:
-	double storedValue_;
+	T storedValue_;
 
 public:
 
@@ -80,7 +88,7 @@ public:
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	Pad	(const double value, const double min, const double max, double step = 0.0, 
+	Pad	(const T value, const T min, const T max, T step = 0.0, 
 		 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
@@ -101,9 +109,9 @@ public:
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	Pad	(const double x, const double y, const double width, const double height, 
-		 const double value, const double min, const double max, double step = 0.0,
-		 std::function<double (const double& x)> transferFunc = ValueTransferable<double>::noTransfer,
-		 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
+		 const T value, const T min, const T max, T step = 0.0,
+		 std::function<T (const T& x)> transferFunc = ValueTransferable<T>::noTransfer,
+		 std::function<T (const T& x)> reTransferFunc = ValueTransferable<T>::noTransfer,
 		 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
@@ -127,15 +135,14 @@ public:
 	void copy (const Pad* that);
 
 	/**
-     *  @brief  Method called when pointer button clicked (pressed and 
-     *  released).
+     *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
      *  Overridable method called from the main window event scheduler when
-     *  pointer button cklicked. By default, it calls its static callback 
+     *  pointer button pressed. By default, it calls its static callback 
      *  function.
      */
-    virtual void onButtonClicked (BEvents::Event* event) override;
+    virtual void onButtonPressed (BEvents::Event* event) override;
 	
 	/**
      *  @brief  Method called upon (mouse) wheel scroll.
@@ -169,42 +176,46 @@ protected:
     virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
-inline Pad::Pad () : 
+template <class T>
+inline Pad<T>::Pad () : 
 	Pad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT,
-		 0.0, 0.0, 1.0, 0.0, 
-		 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer,  
+		 T(), T(), T() + 1.0, T(), 
+		 ValueTransferable<T>::noTransfer, ValueTransferable<T>::noTransfer,  
 		 URID_UNKNOWN_URID, "") 
 {
 
 }
 
-inline Pad::Pad	(const uint32_t urid, const std::string& title) :
+template <class T>
+inline Pad<T>::Pad	(const uint32_t urid, const std::string& title) :
 	Pad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT, 
-		 0.0, 0.0, 1.0, 0.0, 
-		 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+		 T(), T(), T() + 1.0, T(),
+		 ValueTransferable<T>::noTransfer, ValueTransferable<T>::noTransfer, 
 		 urid, title) 
 {
 
 }
 
-inline Pad::Pad	(const double value, const double min, const double max, double step, uint32_t urid, std::string title) :
+template <class T>
+inline Pad<T>::Pad	(const T value, const T min, const T max, T step, uint32_t urid, std::string title) :
 	Pad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT, 
 		 min, max, step, urid, 
-		 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+		 ValueTransferable<T>::noTransfer, ValueTransferable<T>::noTransfer, 
 		 urid, title) 
 {
 
 }
 
-inline Pad::Pad	(const double x, const double y, const double width, const double height, 
-			 	 double value, const double min, const double max, double step, 
-				 std::function<double (const double& x)> transferFunc,
-			 	 std::function<double (const double& x)> reTransferFunc,
-				 uint32_t urid, std::string title) :
+template <class T>
+inline Pad<T>::Pad	(const double x, const double y, const double width, const double height, 
+				 	 const T value, const T min, const T max, T step, 
+					 std::function<T (const T& x)> transferFunc,
+				 	 std::function<T (const T& x)> reTransferFunc,
+					 uint32_t urid, std::string title) :
 	Widget (x, y, width, height, urid, title),
-	ValueableTyped<double> (value),
-	ValidatableRange<double> (min, max, step),
-	ValueTransferable<double> (transferFunc, reTransferFunc),
+	ValueableTyped<T> (value),
+	ValidatableRange<T> (min, max, step),
+	ValueTransferable<T> (transferFunc, reTransferFunc),
 	Clickable(),
 	Scrollable(),
 	storedValue_ (value == min ? max : min)
@@ -212,63 +223,68 @@ inline Pad::Pad	(const double x, const double y, const double width, const doubl
 	
 }
 
-inline Widget* Pad::clone () const 
+template <class T>
+inline Widget* Pad<T>::clone () const 
 {
 	Widget* f = new Pad (urid_, title_);
 	f->copy (this);
 	return f;
 }
 
-inline void Pad::copy (const Pad* that)
+template <class T>
+inline void Pad<T>::copy (const Pad* that)
 {
 	storedValue_ = that->storedValue_;
 	Scrollable::operator= (*that);
 	Clickable::operator= (*that);
-	ValueTransferable<double>::operator= (*that);
-	ValidatableRange<double>::operator= (*that);
-	ValueableTyped<double>::operator= (*that);
+	ValueTransferable<T>::operator= (*that);
+	ValidatableRange<T>::operator= (*that);
+	ValueableTyped<T>::operator= (*that);
 	Widget::copy (that);
 }
 
-inline void Pad::onButtonClicked (BEvents::Event* event)
+template <class T>
+inline void Pad<T>::onButtonPressed (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
-	if (pev->getPosition() == pev->getOrigin())
+	
+	if (this->getValue() == this->getMin()) this->setValue (storedValue_);
+	else
 	{
-		if (getValue() == getMin()) setValue (storedValue_);
-		else
-		{
-			 storedValue_ = getValue();
-			 setValue (getMin());
-		};
-	}
-	Clickable::onButtonClicked (event);
+			storedValue_ = this->getValue();
+			this->setValue (this->getMin());
+	};
+	Clickable::onButtonPressed (event);
 }
 
-inline void Pad::onWheelScrolled (BEvents::Event* event)
+template <class T>
+inline void Pad<T>::onWheelScrolled (BEvents::Event* event)
 {
 	BEvents::WheelEvent* wev = dynamic_cast<BEvents::WheelEvent*> (event);
 	if (!wev) return;
 	if (getHeight()) 
 	{
-		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - wev->getDelta().y / getHeight(), reTransfer_));
+		if (this->getStep() != T()) this->setValue (this->getValue() - wev->getDelta().y * this->getStep ());
+		else this->setValue (this->getValueFromRatio (this->getRatioFromValue( this->getValue(), this->transfer_) - wev->getDelta().y / getHeight(), this->reTransfer_));
 	}
 	Scrollable::onWheelScrolled (event);
 }
 
-inline void Pad::draw ()
+template <class T>
+inline void Pad<T>::draw ()
 {
 	draw (0, 0, getWidth(), getHeight());
 }
 
-inline void Pad::draw (const double x0, const double y0, const double width, const double height)
+template <class T>
+inline void Pad<T>::draw (const double x0, const double y0, const double width, const double height)
 {
 	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
-inline void Pad::draw (const BUtilities::RectArea<>& area)
+template <class T>
+inline void Pad<T>::draw (const BUtilities::RectArea<>& area)
 	{
 		if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 
@@ -288,7 +304,7 @@ inline void Pad::draw (const BUtilities::RectArea<>& area)
 				const double y0 = getYOffset ();
 				const double w = getEffectiveWidth ();
 				const double h = getEffectiveHeight ();
-				const double rval = getRatioFromValue (getValue(), transfer_);
+				const double rval = this->getRatioFromValue (this->getValue(), this->transfer_);
 				const BStyles::Color butColor = getFgColors()[getStatus()].illuminate (-0.9 + 0.9 * rval);
 				drawButton (cr, x0, y0, w, h, butColor);
 				cairo_destroy (cr);

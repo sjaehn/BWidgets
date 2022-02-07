@@ -40,40 +40,78 @@ namespace BWidgets
 /**
  *  @brief  Composite widget displaying a pattern of pad widgets (default: 
  *  Pads).
- *  @tparam T  Widget type for the pad supporting ValueableTyped.
+ *  @tparam T  Widget type for the pad.
  *
  *  %Pattern is a Valueable widget displaying a pattern of pad widgets 
  *  (default: Pads). It is intended to use a Pad-derived widget to display a
  *  step or pad sequencer-like pattern, but it is also possible to use any 
- *  other Valueable widget (including %Pattern itself). Its value is a 2D 
- *  vector of @c std::pair with the pad extensions (default: 
- *  std::pair<size_t, size_t>(1, 1)) as the first and the pad value as the
- *  second type.
+ *  other Valueable widget. The pad widgets value type
+ *  * MUST support the standard comparison operators, 
+ *  * MUST support the standard arithmetic operators. 
+ *  * MUST be compatible with ValueableTyped, ValidatableRange, and
+ *    ValueTransferable.
+ *
+ *  %Pattern allows to draw a pattern by clicking on the pads or dragging
+ *  over the pads via support of Draggable and setting the pad values to 
+ *  their @c getMin() or @c getMax() , respectively.
+ *
+ *  If the select mode is on (by setting the EditMode, e. g., cut, copy, 
+ *  delete, swap), pressing the mouse button
+ *  or dragging will mark the respective pad instead and the action of the 
+ *  selected EditMode will be applied after the button release.
+ *
+ *  The value of the %Pattern is a 2D vector of @c std::pair with the repective 
+ *  pad extensions (default: BUtilities::Point<size_t>(1, 1)) as the first and 
+ *  the respective pad value as the second type.
  *
  *  @todo  Support change pattern size.
- *  @todo  Support draw pads by dragging.
  *  @todo  Support merge pads by dragging.
  *  @todo  Support select pads.
  *  @todo  Support Journal.
  */
-template <class T = Pad>
+template <class T = Pad<>>
 class Pattern : public Widget, 
-				public ValueableTyped<std::vector<std::vector<std::pair<std::pair<size_t, size_t>, typename T::value_type>>>>,
+				public ValueableTyped<std::vector<std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>>>>,
 				public Clickable, 
 				public Draggable
 {
+
+public:
+
+	typedef std::vector<std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>>> value_type;
+
+	enum EditMode
+	{
+		MODE_EDIT = 0,
+		MODE_SELECT,
+		MODE_CUT,
+		MODE_COPY,
+		MODE_PASTE,
+		MODE_DELETE,
+		MODE_XSWAP,
+		MODE_YSWAP
+	};
+
+	enum MergeMode
+	{
+		MERGE_OFF = 0,
+		MERGE_X,
+		MERGE_Y,
+		MERGE_XY
+	};
 
 protected:
 	size_t columns_;
 	size_t rows_;
 	std::vector<std::vector<Widget*>> pads_;
-	std::pair<size_t, size_t> selectionPos_;
-	std::pair<int, int> selectionExt_;
+	BUtilities::Point<size_t> selectionPos_;
+	BUtilities::Point<int> selectionExt_;
+	EditMode editMode_;
+	MergeMode mergeMode_;
+	bool padOn_;
+
 
 public:
-
-	typedef std::vector<std::vector<std::pair<std::pair<size_t, size_t>, typename T::value_type>>> value_type;
-
 	/**
 	 *  @brief  Constructs a new %Pattern object with default parameters.
 	 */
@@ -101,7 +139,6 @@ public:
 	 *  @param y  %Widget Y origin coordinate.
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
-	 *  @param value  Initial value.
 	 *  @param columns  Number of columns.
 	 *  @param rows  Number of rows.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
@@ -147,6 +184,16 @@ public:
      *  @brief  Method to be called following an object state change.
      */
     virtual void update () override;
+
+	/**
+     *  @brief  Method called when pointer button pressed.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  pointer button pressed. By default, it calls its static callback 
+     *  function.
+     */
+    virtual void onButtonPressed (BEvents::Event* event) override;
 	
 	/**
      *  @brief  Method called upon (mouse) wheel scroll.
@@ -165,6 +212,21 @@ protected:
 	 *  @param event  Passed event.
 	 */
 	static void padChangedCallback (BEvents::Event* event);
+
+	/**
+	 *  @brief  Tests if the %Pattern is in an EditMode that supports
+	 *  selection of pads by clicking or dragging.
+	 *  @return  True if selection of pads is supported, otherwise false.
+	 */
+	bool isSelectMode() const;
+
+	/**
+	 *  @brief  Gets the pad index (column, row) from a position.
+	 *  @param x  X position relative to the %Pattern origin.
+	 *  @param y  Y position relative to the %Pattern origin.
+	 *  @return  Pad index asBUtilities::Point<size_t>.
+	 */
+	BUtilities::Point<size_t> getPadIndex (const double x, const double y) const;
 
 	/**
      *  @brief  Unclipped draw to the surface (if is visualizable).
@@ -212,35 +274,43 @@ template <class T>
 inline Pattern<T>::Pattern	(const double x, const double y, const double width, const double height, 
 						 	 const size_t columns, const size_t rows, uint32_t urid, std::string title) :
 	Widget (x, y, width, height, urid, title),
-	ValueableTyped<std::vector<std::vector<std::pair<std::pair<size_t, size_t>, typename T::value_type>>>> (),
+	ValueableTyped<std::vector<std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>>>> (),
 	Clickable (),
 	Draggable (),
 	columns_(columns),
 	rows_(rows),
 	pads_ (),
 	selectionPos_(),
-	selectionExt_()
+	selectionExt_(),
+	editMode_ (MODE_EDIT),
+	mergeMode_ (MERGE_OFF),
+	padOn_ (true)
 {
 	for (size_t r = 0; r < rows_; ++r)
 	{
-		std::vector<std::pair<std::pair<size_t, size_t>, typename T::value_type>> vs;
+		std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>> vs;
 		std::vector<Widget*> ws;
 
 		for (size_t c = 0; c < columns_; ++c)
 		{
-			Widget* w = new T(BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/pad"), "");
+			T* w = new T(BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/pad"), "");
 			w->setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, padChangedCallback);
+			w->setClickable (false);
+			w->setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT);
+			w->setEventPassable(BEvents::Event::BUTTON_RELEASE_EVENT);
+			w->setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT);
+			w->setEventPassable(BEvents::Event::POINTER_DRAG_EVENT);
 			add (w);
 			ws.push_back (w);
 
-			std::pair<size_t, size_t> ext (1, 1);
+			BUtilities::Point<size_t> ext (1, 1);
 			typename T::value_type value = typename T::value_type ();
-			std::pair<std::pair<size_t, size_t>, typename T::value_type> v (ext, value);
+			std::pair<BUtilities::Point<size_t>, typename T::value_type> v (ext, value);
 			vs.push_back (v);
 		}
 
 		pads_.push_back (ws);
-		ValueableTyped<value_type>::value_.push_back (vs);
+		this->value_.push_back (vs);
 	}
 }
 
@@ -261,7 +331,7 @@ inline Pattern<T>::~Pattern ()
 template <class T>
 inline Widget* Pattern<T>::clone () const 
 {
-	Widget* f = new Pattern ();
+	Widget* f = new Pattern (urid_, title_);
 	f->copy (this);
 	return f;
 }
@@ -298,6 +368,9 @@ inline void Pattern<T>::copy (const Pattern<T>* that)
 
 	selectionPos_ = that->selectionPos_;
 	selectionExt_ = that->selectionExt_;
+	editMode_ = that->editMode_;
+	mergeMode_ = that->mergeMode_;
+	padOn_ = that->padOn;
 
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);
@@ -308,10 +381,10 @@ inline void Pattern<T>::copy (const Pattern<T>* that)
 template <class T>
 void Pattern<T>::select (const size_t column, const size_t row, int width, int height)
 {
-	selectionPos_.first = (column < columns_ ? column : (columns_ == 0 ? 0 : columns_ - 1));
-	selectionPos_.second = (row < rows_ ? row : (rows_ == 0 ? 0 : rows_ - 1));
-	selectionExt_.first = std::max (std::min (width, static_cast<int>(columns_) - static_cast<int>(selectionPos_.first)), -static_cast<int>(selectionPos_.first));
-	selectionExt_.second = std::max (std::min (height, static_cast<int>(rows_) - static_cast<int>(selectionPos_.second)), -static_cast<int>(selectionPos_.second));
+	selectionPos_.x = (column < columns_ ? column : (columns_ == 0 ? 0 : columns_ - 1));
+	selectionPos_.y = (row < rows_ ? row : (rows_ == 0 ? 0 : rows_ - 1));
+	selectionExt_.x = std::max (std::min (width, static_cast<int>(columns_) - static_cast<int>(selectionPos_.x)), -static_cast<int>(selectionPos_.x));
+	selectionExt_.y = std::max (std::min (height, static_cast<int>(rows_) - static_cast<int>(selectionPos_.y)), -static_cast<int>(selectionPos_.y));
 	update();
 }
 
@@ -330,23 +403,72 @@ inline void Pattern<T>::update ()
 		{
 			pads_[r][c]->moveTo 
 			(
-				getXOffset() + getEffectiveWidth() * static_cast<double>(c) / static_cast<double>(columns_) + 0.025 * getEffectiveWidth() / static_cast<double>(columns_),
-				getYOffset() + getEffectiveHeight() * static_cast<double>(r) / static_cast<double>(rows_) + 0.025 * getEffectiveHeight() / static_cast<double>(rows_)
+				getXOffset() + getEffectiveWidth() * static_cast<double>(c) / static_cast<double>(columns_) + 0.01 * getEffectiveWidth() / static_cast<double>(columns_),
+				getYOffset() + getEffectiveHeight() * static_cast<double>(r) / static_cast<double>(rows_) + 0.01 * getEffectiveHeight() / static_cast<double>(rows_)
 			);
 
 			pads_[r][c]->resize 
 			(
-				0.95 * getEffectiveWidth() / static_cast<double>(columns_),
-				0.95 * getEffectiveHeight() / static_cast<double>(rows_)
+				0.98 * getEffectiveWidth() / static_cast<double>(columns_),
+				0.98 * getEffectiveHeight() / static_cast<double>(rows_)
 			);
 		}
 	}
+	Widget::update();
+}
+
+template <class T>
+inline void Pattern<T>::onButtonPressed (BEvents::Event* event)
+{
+	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*>(event);
+	if (!pev) return;
+
+	// Calculate position
+	const BUtilities::Point<size_t> p = getPadIndex (pev->getPosition().x, pev->getPosition().y);
+
+	// Selection mode:
+	if (isSelectMode()) select (p.x, p.y, 1, 1);
+
+	// Default: Invert pad value
+	else
+	{
+		T* w = dynamic_cast<T*>(pads_[p.y][p.x]);
+		padOn_ = (w->getValue() == w->getMin());
+		w->setValue (padOn_ ? w->getMax() : w->getMin());
+	}
+
+	Clickable::onButtonPressed (event);
 }
 
 template <class T>
 inline void Pattern<T>::onPointerDragged (BEvents::Event* event)
 {
-	
+	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*>(event);
+	if (!pev) return;
+
+	// Calculate position
+	const BUtilities::Point<size_t> p = getPadIndex (pev->getPosition().x, pev->getPosition().y);
+		
+	// Selection mode: Drag selection
+	if (isSelectMode())
+	{
+		select	(selectionPos_.x, 
+				 selectionPos_.y, 
+				 p.x + (p.x >= selectionPos_.x) - selectionPos_.x, 
+				 p.y + (p.y >= selectionPos_.y) - selectionPos_.y);
+	}
+
+	// Default:
+	else 
+	{
+		// Calculate previous position
+		const BUtilities::Point<size_t> p2 = getPadIndex (pev->getPosition().x - pev->getDelta().x, pev->getPosition().y - pev->getDelta().y);
+		T* w = dynamic_cast<T*>(pads_[p.y][p.x]);
+
+		// Pad changed: Set or unset pad
+		if (p != p2) w->setValue (padOn_ ? w->getMax() : w->getMin());
+		
+	}
 	Draggable::onPointerDragged (event);
 }
 
@@ -377,6 +499,22 @@ inline void Pattern<T>::padChangedCallback (BEvents::Event* event)
 			}
 		}
 	}
+}
+
+template <class T>
+inline bool Pattern<T>::isSelectMode () const
+{
+	return (editMode_ != MODE_EDIT) && (editMode_ != MODE_PASTE);
+}
+
+template <class T>
+inline BUtilities::Point<size_t> Pattern<T>::getPadIndex (const double x, const double y) const
+{
+	return BUtilities::Point<size_t>
+	(
+		std::min (std::max (static_cast<int>(static_cast<double>(columns_) * (x - getXOffset()) / getEffectiveWidth()), 0), static_cast<int> (columns_ == 0 ? 0 : columns_ - 1)),
+		std::min (std::max (static_cast<int>(static_cast<double>(rows_) * (y - getYOffset()) / getEffectiveHeight()), 0), static_cast<int>(rows_ == 0 ? 0 : rows_ - 1))
+	);
 }
 
 template <class T>
@@ -413,16 +551,12 @@ inline void Pattern<T>::draw (const BUtilities::RectArea<>& area)
 				const double w = getEffectiveWidth ();
 				const double h = getEffectiveHeight ();
 
-				if (selectionExt_ != std::pair<int, int> (0,0))
+				if (isSelectMode() && (selectionExt_ != BUtilities::Point<int>()))
 				{
-					const double xs =	x0 + w * static_cast<double>(selectionPos_.first) / static_cast<double>(columns_) - 
-										0.025 * getEffectiveWidth() / static_cast<double>(columns_);
-					const double ys = 	y0 + h * static_cast<double>(selectionPos_.second) / static_cast<double>(rows_) - 
-										0.025 * getEffectiveHeight() / static_cast<double>(rows_);
-					const double ws = 	w * static_cast<double>(selectionExt_.first) / static_cast<double>(columns_) + 
-										0.05 * getEffectiveWidth() / static_cast<double>(columns_);
-					const double hs = 	h * static_cast<double>(selectionExt_.second) / static_cast<double>(rows_) + 
-										0.05 * getEffectiveHeight() / static_cast<double>(rows_);
+					const double xs =	x0 + w * static_cast<double>(selectionPos_.x + (selectionExt_.x < 0)) / static_cast<double>(columns_);
+					const double ys = 	y0 + h * static_cast<double>(selectionPos_.y + (selectionExt_.y < 0)) / static_cast<double>(rows_);
+					const double ws = 	w * static_cast<double>(selectionExt_.x - (selectionExt_.x < 0)) / static_cast<double>(columns_);
+					const double hs = 	h * static_cast<double>(selectionExt_.y - (selectionExt_.y < 0)) / static_cast<double>(rows_);
 					const BStyles::Color color = getBgColors()[getStatus()].illuminate (BStyles::Color::highLighted);
 					cairo_rectangle (cr, xs, ys, ws, hs);
 					cairo_set_line_width (cr, 0.0);

@@ -159,9 +159,9 @@ Widget
  |    ├── HSwitch
  |    ╰── VSwitch
  ├── SpinButton
- ├── Pad
- |    ╰── SymbolPad
- ├── Pattern
+ ├── Pad<T>
+ |    ╰── SymbolPad<T>
+ ├── Pattern<T>
  ├── HPianoRoll
  ├── HMeter
  |    ├── ValueHMeter
@@ -217,10 +217,10 @@ Each widget class Xxx has got at least four* different constructors
   ComboBox (0, 0, 120, 20, {"Berlin", "London", "Madrid", "Paris"});
   ```
 
-\*Widgets without any additional data to pass (Widget, Frame) have only got 
-three constructors.
+  \*Widgets without any additional data to pass (Widget, Frame) have only got
+  three constructors.
 
-\*\*Window also has got additional optional parameters after title.
+  \*\*Window also has got additional optional parameters after title.
 
 You can re-define the widget default size used for `Xxx ()`, 
 `Xxx (urid, title)` and `Xxx (data, urid, title)` by defining the macros 
@@ -230,11 +230,11 @@ You can re-define the widget default size used for `Xxx ()`,
 assignment operators!**
 
 But all widgets have got the following two methods which you can use instead:
-* `copy (&other)` - Copies the content (but not the linkage) from another 
-  object.
+* `copy (&other)` - Copies the content (but not the linkage and not the URID) 
+  from the other object.
 * `clone ()` - Clones this object by creating a new object on the heap (don't
-  forget to delete at the end) and copies the content (but not its linkage)
-  to the new object.
+  forget to delete at the end) and copies the content including the URID (but 
+  not its linkage) to the new object.
 
 
 ### Main Window
@@ -436,7 +436,7 @@ pressed) or 1 (down button pressed). The visualble content of the SpinButton
 is represented by its background and its border.
 
 
-### Pad
+### Pad\<T\>
 
 ![pad](../suppl/Pad.png)
 
@@ -446,7 +446,7 @@ by its color from dark to bright. It supports user interaction via
 The visualble content of the Pad is represented by FgColors.
 
 
-### SymbolPad
+### SymbolPad\<T\>
 
 ![symbolpad](../suppl/SymbolPad.png)
 

@@ -188,7 +188,7 @@ int main ()
     window.add (&symbolButtonLabel);
 
     // Pad
-    Pad pad (1010, 20, 80, 40, 0.7, 0.0, 1.0, 0.0);
+    Pad<> pad (1010, 20, 80, 40, 0.7, 0.0, 1.0, 0.0);
     pad.setFgColors(BStyles::reds);
     Label padLabel (1000, 80, 100, 20, "Pad");
     padLabel.setFont (labelFont);
@@ -196,7 +196,7 @@ int main ()
     window.add (&padLabel);
 
     // SymbolPad
-    SymbolPad symbolPad (1110, 20, 80, 40, Symbol::PLAY_SYMBOL, 0.7, 0.0, 1.0, 0.0);
+    SymbolPad<> symbolPad (1110, 20, 80, 40, Symbol::PLAY_SYMBOL, 0.7, 0.0, 1.0, 0.0);
     symbolPad.setFgColors(BStyles::blues);
     Label symbolPadLabel (1100, 80, 100, 20, "SymbolPad");
     symbolPadLabel.setFont (labelFont);
@@ -447,7 +447,7 @@ int main ()
     {
         for (int j = 0; j < 4; ++j)
         {
-            Pad* w = dynamic_cast<Pad*>(pattern.getPad (2 * (i % 2) + (j % 2), 2 * int (i / 2) + int (j / 2)));
+            Pad<>* w = dynamic_cast<Pad<>*>(pattern.getPad (2 * (i % 2) + (j % 2), 2 * int (i / 2) + int (j / 2)));
             if (w) 
             {
                 w->setFgColors(patternColors[i]);
