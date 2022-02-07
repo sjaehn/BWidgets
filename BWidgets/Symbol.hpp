@@ -181,7 +181,7 @@ inline Symbol::Symbol (const double x, const double y, const double width, const
 
 inline Widget* Symbol::clone () const 
 {
-	Widget* f = new Symbol ();
+	Widget* f = new Symbol (urid_, title_);
 	f->copy (this);
 	return f;
 }

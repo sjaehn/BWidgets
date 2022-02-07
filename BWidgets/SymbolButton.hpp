@@ -159,7 +159,7 @@ inline SymbolButton::SymbolButton	(const double x, const double y, const double 
 
 inline Widget* SymbolButton::clone () const 
 {
-	Widget* f = new SymbolButton ();
+	Widget* f = new SymbolButton (urid_, title_);
 	f->copy (this);
 	return f;
 }

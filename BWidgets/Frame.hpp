@@ -118,7 +118,7 @@ inline Frame::Frame (const double x, const double y, const double width, const d
 
 inline Widget* Frame::clone () const 
 {
-	Widget* f = new Frame ();
+	Widget* f = new Frame (urid_, title_);
 	f->copy (this);
 	return f;
 }

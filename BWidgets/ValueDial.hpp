@@ -207,7 +207,7 @@ inline ValueDial::ValueDial	(const double  x, const double y, const double width
 
 inline Widget* ValueDial::clone () const 
 {
-	Widget* f = new ValueDial ();
+	Widget* f = new ValueDial (urid_, title_);
 	f->copy (this);
 	return f;
 }

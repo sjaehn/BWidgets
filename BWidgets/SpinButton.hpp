@@ -141,7 +141,7 @@ inline SpinButton::SpinButton	(const double x, const double y, const double widt
 
 inline Widget* SpinButton::clone () const 
 {
-	Widget* f = new SpinButton ();
+	Widget* f = new SpinButton (urid_, title_);
 	f->copy (this);
 	return f;
 }

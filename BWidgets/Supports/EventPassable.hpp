@@ -52,7 +52,7 @@ public:
      *  Makes an object transparent or intransparent for the respective 
      *  @a eventType.
      */
-    void setEventPassable (const BEvents::Event::EventType eventType, const bool status) 
+    void setEventPassable (const BEvents::Event::EventType eventType, bool status = true) 
     {
         eventPassable_[eventType] = status;
     }

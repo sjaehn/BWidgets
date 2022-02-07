@@ -158,7 +158,7 @@ inline TextBox::TextBox	(const double x, const double y, const double width, con
 
 inline Widget* TextBox::clone () const 
 {
-	Widget* f = new TextBox ();
+	Widget* f = new TextBox (urid_, title_);
 	f->copy (this);
 	return f;
 }

@@ -207,7 +207,7 @@ inline ValueRadialMeter::ValueRadialMeter	(const double  x, const double y, cons
 
 inline Widget* ValueRadialMeter::clone () const 
 {
-	Widget* f = new ValueRadialMeter ();
+	Widget* f = new ValueRadialMeter (urid_, title_);
 	f->copy (this);
 	return f;
 }

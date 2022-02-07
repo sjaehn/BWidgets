@@ -207,7 +207,7 @@ inline ValueHSlider::ValueHSlider	(const double  x, const double y, const double
 
 inline Widget* ValueHSlider::clone () const 
 {
-	Widget* f = new ValueHSlider ();
+	Widget* f = new ValueHSlider (urid_, title_);
 	f->copy (this);
 	return f;
 }

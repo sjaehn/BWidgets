@@ -155,7 +155,7 @@ inline RadioButton::RadioButton (const double  x, const double y, const double w
 
 inline Widget* RadioButton::clone () const 
 {
-	Widget* f = new RadioButton ();
+	Widget* f = new RadioButton (urid_, title_);
 	f->copy (this);
 	return f;
 }

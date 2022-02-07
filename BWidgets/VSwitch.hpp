@@ -195,7 +195,7 @@ inline VSwitch::VSwitch (const double  x, const double y, const double width, co
 
 inline Widget* VSwitch::clone () const 
 {
-	Widget* f = new VSwitch ();
+	Widget* f = new VSwitch (urid_, title_);
 	f->copy (this);
 	return f;
 }

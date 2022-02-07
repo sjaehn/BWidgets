@@ -220,7 +220,7 @@ inline VScale::VScale	(const double  x, const double y, const double width, cons
 
 inline Widget* VScale::clone () const 
 {
-	Widget* f = new VScale ();
+	Widget* f = new VScale (urid_, title_);
 	f->copy (this);
 	return f;
 }

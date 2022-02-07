@@ -194,7 +194,7 @@ inline HSwitch::HSwitch (const double  x, const double y, const double width, co
 
 inline Widget* HSwitch::clone () const 
 {
-	Widget* f = new HSwitch ();
+	Widget* f = new HSwitch (urid_, title_);
 	f->copy (this);
 	return f;
 }

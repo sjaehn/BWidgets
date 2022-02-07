@@ -287,7 +287,7 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 
 inline Widget* ImageButton::clone () const 
 {
-	Widget* f = new ImageButton ();
+	Widget* f = new ImageButton (urid_, title_);
 	f->copy (this);
 	return f;
 }

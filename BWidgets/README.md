@@ -192,19 +192,35 @@ Widget
  .    .
 ```
 
-Each widget class Xxx has got at least four* different constructors:
+Each widget class Xxx has got at least four* different constructors
+(demonstrated on the example of `ComboBox`):
 * `Xxx ()` - The parameter free default constructor. It creates a 
   default default-sized empty (or default content) widget. 
+  ```
+  ComboBox ();
+  ```
 * `Xxx (urid, title)` - Creates a default default-sized empty (or default 
   content) widget and defines its urid and title.
+  ```
+  ComboBox (0, "ComboBox");
+  ```
 * `Xxx (data, urid, title)` - Creates a default-sized widget with the passed 
-  data, urid and title.
+  data, urid (optional) and title (optional).
+  ```
+  ComboBox ({"Berlin", "London", "Madrid", "Paris"});
+  ```
 * `Xxx (x, y, width, height, data, urid, title)` - Creates a widget at the
   position (x, y) relative to the parent widget with the extends (width, 
-  height) with the passed data, urid and title.
+  height) with the passed data (optional), urid (optinal) and title 
+  (optional)**.
+  ```
+  ComboBox (0, 0, 120, 20, {"Berlin", "London", "Madrid", "Paris"});
+  ```
 
 \*Widgets without any additional data to pass (Widget, Frame) have only got 
 three constructors.
+
+\*\*Window also has got additional optional parameters after title.
 
 You can re-define the widget default size used for `Xxx ()`, 
 `Xxx (urid, title)` and `Xxx (data, urid, title)` by defining the macros 

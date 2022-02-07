@@ -180,7 +180,7 @@ inline VSlider::VSlider	(const double  x, const double y, const double width, co
 
 inline Widget* VSlider::clone () const 
 {
-	Widget* f = new VSlider ();
+	Widget* f = new VSlider (urid_, title_);
 	f->copy (this);
 	return f;
 }

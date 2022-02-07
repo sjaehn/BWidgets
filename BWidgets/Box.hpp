@@ -256,7 +256,7 @@ inline Box::~Box ()
 
 inline Widget* Box::clone () const 
 {
-	Widget* f = new Box ();
+	Widget* f = new Box (urid_, title_);
 	f->copy (this);
 	return f;
 }

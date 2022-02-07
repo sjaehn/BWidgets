@@ -187,7 +187,7 @@ inline Text::Text (const double x, const double y, const double width, const dou
 
 inline Widget* Text::clone () const 
 {
-	Widget* f = new Text ();
+	Widget* f = new Text (urid_, title_);
 	f->copy (this);
 	return f;
 }

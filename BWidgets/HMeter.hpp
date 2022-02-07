@@ -235,7 +235,7 @@ inline HMeter::HMeter	(const double  x, const double y, const double width, cons
 
 inline Widget* HMeter::clone () const 
 {
-	Widget* f = new HMeter ();
+	Widget* f = new HMeter (urid_, title_);
 	f->copy (this);
 	return f;
 }

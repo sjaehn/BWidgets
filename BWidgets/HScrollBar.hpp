@@ -210,7 +210,7 @@ inline HScrollBar::HScrollBar	(const double  x, const double y, const double wid
 
 inline Widget* HScrollBar::clone () const 
 {
-	Widget* f = new HScrollBar ();
+	Widget* f = new HScrollBar (urid_, title_);
 	f->copy (this);
 	return f;
 }

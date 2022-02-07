@@ -176,7 +176,7 @@ inline MessageBox::MessageBox	(const double x, const double y, const double widt
 
 inline Widget* MessageBox::clone () const 
 {
-	Widget* f = new MessageBox ();
+	Widget* f = new MessageBox (urid_, title_);
 	f->copy (this);
 	return f;
 }

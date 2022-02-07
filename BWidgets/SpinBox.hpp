@@ -308,7 +308,7 @@ inline SpinBox::~SpinBox()
 
 inline Widget* SpinBox::clone () const 
 {
-	Widget* f = new SpinBox ();
+	Widget* f = new SpinBox (urid_, title_);
 	f->copy (this);
 	return f;
 }

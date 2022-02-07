@@ -166,7 +166,7 @@ inline Button::Button	(const double x, const double y, const double width, const
 
 inline Widget* Button::clone () const 
 {
-	Widget* f = new Button ();
+	Widget* f = new Button (urid_, title_);
 	f->copy (this);
 	return f;
 }

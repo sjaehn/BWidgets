@@ -346,7 +346,7 @@ inline Image::~Image ()
 
 inline Widget* Image::clone () const 
 {
-	Widget* f = new Image ();
+	Widget* f = new Image (urid_, title_);
 	f->copy (this);
 	return f;
 }

@@ -211,7 +211,7 @@ inline VScrollBar::VScrollBar	(const double  x, const double y, const double wid
 
 inline Widget* VScrollBar::clone () const 
 {
-	Widget* f = new VScrollBar ();
+	Widget* f = new VScrollBar (urid_, title_);
 	f->copy (this);
 	return f;
 }

@@ -179,7 +179,7 @@ inline HSlider::HSlider	(const double  x, const double y, const double width, co
 
 inline Widget* HSlider::clone () const 
 {
-	Widget* f = new HSlider ();
+	Widget* f = new HSlider (urid_, title_);
 	f->copy (this);
 	return f;
 }

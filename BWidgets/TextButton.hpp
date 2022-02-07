@@ -160,7 +160,7 @@ inline TextButton::TextButton	(const double x, const double y, const double widt
 
 inline Widget* TextButton::clone () const 
 {
-	Widget* f = new TextButton ();
+	Widget* f = new TextButton (urid_, title_);
 	f->copy (this);
 	return f;
 }

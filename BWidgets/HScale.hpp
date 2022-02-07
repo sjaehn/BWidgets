@@ -219,7 +219,7 @@ inline HScale::HScale	(const double  x, const double y, const double width, cons
 
 inline Widget* HScale::clone () const 
 {
-	Widget* f = new HScale ();
+	Widget* f = new HScale (urid_, title_);
 	f->copy (this);
 	return f;
 }

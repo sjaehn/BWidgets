@@ -236,7 +236,7 @@ inline VMeter::VMeter	(const double  x, const double y, const double width, cons
 
 inline Widget* VMeter::clone () const 
 {
-	Widget* f = new VMeter ();
+	Widget* f = new VMeter (urid_, title_);
 	f->copy (this);
 	return f;
 }

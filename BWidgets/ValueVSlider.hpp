@@ -207,7 +207,7 @@ inline ValueVSlider::ValueVSlider	(const double  x, const double y, const double
 
 inline Widget* ValueVSlider::clone () const 
 {
-	Widget* f = new ValueVSlider ();
+	Widget* f = new ValueVSlider (urid_, title_);
 	f->copy (this);
 	return f;
 }

@@ -193,7 +193,7 @@ inline SymbolPad::SymbolPad	(const double x, const double y, const double width,
 
 inline Widget* SymbolPad::clone () const 
 {
-	Widget* f = new SymbolPad ();
+	Widget* f = new SymbolPad (urid_, title_);
 	f->copy (this);
 	return f;
 }

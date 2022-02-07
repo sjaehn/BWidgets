@@ -194,7 +194,7 @@ inline Label::Label (const double x, const double y, const double width, const d
 
 inline Widget* Label::clone () const 
 {
-	Widget* f = new Label ();
+	Widget* f = new Label (urid_, title_);
 	f->copy (this);
 	return f;
 }

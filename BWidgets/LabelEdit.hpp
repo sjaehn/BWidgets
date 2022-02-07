@@ -279,7 +279,7 @@ inline LabelEdit::LabelEdit (const double x, const double y, const double width,
 
 inline Widget* LabelEdit::clone () const 
 {
-	Widget* f = new LabelEdit ();
+	Widget* f = new LabelEdit (urid_, title_);
 	f->copy (this);
 	return f;
 }

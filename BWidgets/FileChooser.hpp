@@ -331,7 +331,7 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 
 inline Widget* FileChooser::clone () const 
 {
-	Widget* f = new FileChooser ();
+	Widget* f = new FileChooser (urid_, title_);
 	f->copy (this);
 	return f;
 }

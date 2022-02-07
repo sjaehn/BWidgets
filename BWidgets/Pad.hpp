@@ -214,7 +214,7 @@ inline Pad::Pad	(const double x, const double y, const double width, const doubl
 
 inline Widget* Pad::clone () const 
 {
-	Widget* f = new Pad ();
+	Widget* f = new Pad (urid_, title_);
 	f->copy (this);
 	return f;
 }

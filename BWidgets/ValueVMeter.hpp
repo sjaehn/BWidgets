@@ -207,7 +207,7 @@ inline ValueVMeter::ValueVMeter	(const double  x, const double y, const double w
 
 inline Widget* ValueVMeter::clone () const 
 {
-	Widget* f = new ValueVMeter ();
+	Widget* f = new ValueVMeter (urid_, title_);
 	f->copy (this);
 	return f;
 }

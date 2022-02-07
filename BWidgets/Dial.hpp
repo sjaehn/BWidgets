@@ -226,7 +226,7 @@ inline Dial::Dial	(const double  x, const double y, const double width, const do
 
 inline Widget* Dial::clone () const 
 {
-	Widget* f = new Dial ();
+	Widget* f = new Dial (urid_, title_);
 	f->copy (this);
 	return f;
 }

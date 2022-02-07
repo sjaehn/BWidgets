@@ -154,7 +154,7 @@ inline CheckBox::CheckBox (const double  x, const double y, const double width, 
 
 inline Widget* CheckBox::clone () const 
 {
-	Widget* f = new CheckBox ();
+	Widget* f = new CheckBox (urid_, title_);
 	f->copy (this);
 	return f;
 }

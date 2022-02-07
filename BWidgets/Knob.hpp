@@ -173,7 +173,7 @@ inline Knob::Knob (const double  x, const double y, const double width, const do
 
 inline Widget* Knob::clone () const 
 {
-	Widget* f = new Knob ();
+	Widget* f = new Knob (urid_, title_);
 	f->copy (this);
 	return f;
 }

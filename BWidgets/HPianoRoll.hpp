@@ -384,7 +384,7 @@ inline HPianoRoll::HPianoRoll	(const double x, const double y, const double widt
 
 inline Widget* HPianoRoll::clone () const
 {
-	Widget* f = new HPianoRoll ();
+	Widget* f = new HPianoRoll (urid_, title_);
 	f->copy (this);
 	return f;
 }

@@ -236,7 +236,7 @@ inline RadialMeter::RadialMeter	(const double  x, const double y, const double w
 
 inline Widget* RadialMeter::clone () const 
 {
-	Widget* f = new RadialMeter ();
+	Widget* f = new RadialMeter (urid_, title_);
 	f->copy (this);
 	return f;
 }

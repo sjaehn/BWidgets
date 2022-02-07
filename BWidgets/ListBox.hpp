@@ -178,7 +178,7 @@ inline ListBox::ListBox	(const double x, const double y, const double width, con
 
 inline Widget* ListBox::clone () const 
 {
-	Widget* f = new ListBox ();
+	Widget* f = new ListBox (urid_, title_);
 	f->copy (this);
 	return f;
 }
