@@ -815,7 +815,18 @@ widget.moveTo (widget.center(), widget.middle());
 
 ### Size
 
-The size of a widget can be changed using `resize()` and is returned by 
+Widgets are created either with the size passed in their respective 
+constructors or (if not passed) with their default size. The default size of
+each is define by `BWIDGETS_DEFAULT_XXX_WIDTH` and 
+`BWIDGETS_DEFAULT_XXX_HEIGHT` (with XXX = capitalized widget class name). You 
+can define your own default extends of a widget class *prior* the include, 
+e. g.:
+```
+#define BWIDGETS_DEFAULT_BUTTON_WIDTH 40
+#define BWIDGETS_DEFAULT_BUTTON_HEIGHT 40
+```
+
+The size of a created widget can be changed using `resize()` and is returned by
 `getExtends()`, `getWidth()`, or `getHeight()`. The parameter-free `resize()`
 methods tries to fit the widget size to its content. Parameter-free `resize()`
 will resize the widget to (0, 0) if it has got no children and no content with
@@ -847,6 +858,10 @@ l.setTxColors (reds);    // Changes text colors for l to reds
 
 Styles can also include other styles in a recursive way to describe 
 specific widget elements or to forward them to included child widgets.
+
+Some widget classes (e. g., switches, sliders, scales, dials, pads) use Draws
+functions (locaded in Draws/) to draw widget elements like pseudo 3D bars, 
+pads, and arcs. Feel free to create your own drawing functions.
 
 
 ### Status
