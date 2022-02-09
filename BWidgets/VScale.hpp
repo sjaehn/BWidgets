@@ -238,7 +238,7 @@ inline void VScale::onButtonPressed (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
-	if (scale_.getHeight()) setValue (getValueFromRatio ((getHeight() - pev->getPosition().y - scale_.getY()) / scale_.getHeight(), reTransfer_));
+	if (scale_.getHeight()) setValue (getValueFromRatio ((getHeight() - pev->getPosition().y - scale_.getY()) / scale_.getHeight(), transfer_, reTransfer_));
 	Clickable::onButtonPressed (event);
 }
 
@@ -252,7 +252,7 @@ inline void VScale::onPointerDragged (BEvents::Event* event)
 		if (scale_.getHeight()) 
 		{
 			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-			else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - pev->getDelta().y / scale_.getHeight(), reTransfer_));
+			else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - pev->getDelta().y / scale_.getHeight(), transfer_, reTransfer_));
 		}
 	}
 	Draggable::onPointerDragged (event);
@@ -265,7 +265,7 @@ inline void VScale::onWheelScrolled (BEvents::Event* event)
 	if (scale_.getHeight()) 
 	{
 		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - wev->getDelta().y / scale_.getHeight(), reTransfer_));
+		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - wev->getDelta().y / scale_.getHeight(), transfer_, reTransfer_));
 	}
 	Scrollable::onWheelScrolled (event);
 }

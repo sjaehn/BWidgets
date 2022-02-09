@@ -267,7 +267,7 @@ inline void Dial::onButtonPressed (BEvents::Event* event)
 			if (ang <= BWIDGETS_DEFAULT_DRAWARC_END)
 			{
 				const double rval = (ang - BWIDGETS_DEFAULT_DRAWARC_START) / BWIDGETS_DEFAULT_DRAWARC_SIZE;
-				setValue (getValueFromRatio (rval, reTransfer_));
+				setValue (getValueFromRatio (rval, transfer_, reTransfer_));
 			}
 		}
 	}
@@ -284,7 +284,9 @@ inline void Dial::onPointerDragged (BEvents::Event* event)
 		if (scale_.getWidth() > 0) 
 		{
 			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-			else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - pev->getDelta().y / (0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE), reTransfer_));
+			else setValue (getValueFromRatio	(getRatioFromValue (getValue(), transfer_) - pev->getDelta().y / (0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE), 
+												 transfer_, 
+												 reTransfer_));
 		}
 	}
 	Draggable::onPointerDragged (event);
@@ -297,7 +299,11 @@ inline void Dial::onWheelScrolled (BEvents::Event* event)
 	if (scale_.getWidth() > 0) 
 	{
 		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - wev->getDelta().y / (0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE), reTransfer_));
+
+		else setValue (getValueFromRatio	(getRatioFromValue (getValue(), transfer_) - wev->getDelta().y / (0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE), 
+											 transfer_, 
+											 reTransfer_));
+		
 	}
 	Scrollable::onWheelScrolled (event);
 }

@@ -266,7 +266,7 @@ inline void Pad<T>::onWheelScrolled (BEvents::Event* event)
 	if (getHeight()) 
 	{
 		if (this->getStep() != T()) this->setValue (this->getValue() - wev->getDelta().y * this->getStep ());
-		else this->setValue (this->getValueFromRatio (this->getRatioFromValue( this->getValue(), this->transfer_) - wev->getDelta().y / getHeight(), this->reTransfer_));
+		else this->setValue (this->getValueFromRatio (this->getRatioFromValue( this->getValue(), this->transfer_) - wev->getDelta().y / getHeight(), this->transfer_, this->reTransfer_));
 	}
 	Scrollable::onWheelScrolled (event);
 }

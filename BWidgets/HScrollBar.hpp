@@ -243,7 +243,7 @@ inline void HScrollBar::onPointerDragged (BEvents::Event* event)
 	if (scale_.getWidth()) 
 	{
 		if (getStep() != 0.0) setValue (getValue() + pev->getDelta().x * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) + pev->getDelta().x / scale_.getWidth(), reTransfer_));
+		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) + pev->getDelta().x / scale_.getWidth(), transfer_, reTransfer_));
 	}
 	Draggable::onPointerDragged (event);
 }

@@ -19,7 +19,9 @@
 #define BWIDGETS_VALIDATABLERANGE_HPP_
 
 #include <functional>
+#include "ValueableTyped.hpp"
 #include "Validatable.hpp"
+#include "Visualizable.hpp"
 
 #ifndef LIMIT
 #define LIMIT(val, min, max) (val < min ? min : (val > max ? max : val))
@@ -50,7 +52,7 @@ public:
     /**
      *  @brief  Constructs a default ValidatableRange object.
      */
-    ValidatableRange () = default;
+    ValidatableRange ();
 
     /**
      *  @brief  Constructs a ValidatableRange object.
@@ -139,18 +141,30 @@ public:
     /**
      *  @brief  Gets the value from a range position.
      *  @param ratio  Ratio.
+     *  @param func  Optional, transfer function.
      *  @param revfunc  Optional, re-transfer function.
      *  @return  Value.
      */
-    virtual T getValueFromRatio (const double ratio, std::function<T (const T& x)> revfunc = [] (const T& x) {return x;});
+    virtual T getValueFromRatio (const double ratio, 
+                                 std::function<T (const T& x)> func = [] (const T& x) {return x;},
+                                 std::function<T (const T& x)> revfunc = [] (const T& x) {return x;});
 
 };
+
+template <class T>
+ValidatableRange<T>::ValidatableRange () :
+    min_ (T()),
+    max_ (T() + 1.0),
+    step_ (T())
+{
+
+}
 
 template <class T>
 ValidatableRange<T>::ValidatableRange (const T& min, const T& max) :
     min_ (min),
     max_ (max),
-    step_ ()
+    step_ (T())
 {
 
 }
@@ -167,7 +181,19 @@ ValidatableRange<T>::ValidatableRange (const T& min, const T& max, const T& step
 template <class T>
 void ValidatableRange<T>::setMin (const T& min)
 {
-    min_ = min;
+    if (min_ != min)
+    {
+        // Change limits
+        min_ = min;
+        
+        // Re-calculate value
+        ValueableTyped<T>* v = dynamic_cast<ValueableTyped<T>*>(this);
+        if (v) v->setValue (v->getValue()); 
+
+        // Update
+        Visualizable* w = dynamic_cast<Visualizable*>(this);
+        if (w) w->update();
+    }
 }
 
 template <class T>
@@ -179,7 +205,19 @@ T ValidatableRange<T>::getMin () const
 template <class T>
 void ValidatableRange<T>::setMax (const T& max)
 {
-    max_ = max;
+    if (max_ != max)
+    {
+        // Change limits
+        max_ = max;
+
+        // Re-calculate value
+        ValueableTyped<T>* v = dynamic_cast<ValueableTyped<T>*>(this);
+        if (v) v->setValue (v->getValue()); 
+
+        // Update
+        Visualizable* w = dynamic_cast<Visualizable*>(this);
+        if (w) w->update();
+    }
 }
 
 template <class T>
@@ -191,7 +229,19 @@ T ValidatableRange<T>::getMax () const
 template <class T>
 void ValidatableRange<T>::setStep (const T& step)
 {
-    step_ = step;
+    if (step_ != step)
+    {
+        // Change limits
+        step_ = step;
+
+        // Re-calculate value
+        ValueableTyped<T>* v = dynamic_cast<ValueableTyped<T>*>(this);
+        if (v) v->setValue (v->getValue()); 
+
+        // Update
+        Visualizable* w = dynamic_cast<Visualizable*>(this);
+        if (w) w->update();
+    }
 }
 
 template <class T>
@@ -209,9 +259,21 @@ void ValidatableRange<T>::setRange (const T& min, const T& max)
 template <class T>
 void ValidatableRange<T>::setRange (const T& min, const T& max, const T& step)
 {
-    min_ = min;
-    max_ = max;
-    step_ = step;
+    if ((min_ != min) || (max_ != max) || (step_ != step))
+    {
+        // Change limits
+        min_ = min;
+        max_ = max;
+        step_ = step;
+
+        // Re-calculate value
+        ValueableTyped<T>* v = dynamic_cast<ValueableTyped<T>*>(this);
+        if (v) v->setValue (v->getValue()); 
+
+        // Update
+        Visualizable* w = dynamic_cast<Visualizable*>(this);
+        if (w) w->update();
+    }
 }
 
 template <class T>
@@ -237,10 +299,10 @@ double ValidatableRange<T>::getRatioFromValue (const T& value, std::function<T (
 }
 
 template <class T>
-T ValidatableRange<T>::getValueFromRatio (const double ratio, std::function<T (const T& x)> revfunc)
+T ValidatableRange<T>::getValueFromRatio (const double ratio, std::function<T (const T& x)> func, std::function<T (const T& x)> revfunc)
 {
-    const T min = revfunc (std::max (getMin(), 0.0));
-	const T max = revfunc (std::min (getMax(), 1.0));
+    const T min = func (getMin());
+	const T max = func (getMax());
 	return revfunc (ratio * (max - min) + min);
 }
 

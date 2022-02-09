@@ -244,7 +244,7 @@ inline void VScrollBar::onPointerDragged (BEvents::Event* event)
 	if (scale_.getHeight()) 
 	{
 		if (getStep() != 0.0) setValue (getValue() + pev->getDelta().y * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) + pev->getDelta().y / scale_.getHeight(), reTransfer_));
+		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) + pev->getDelta().y / scale_.getHeight(), transfer_, reTransfer_));
 	}
 	Draggable::onPointerDragged (event);
 }

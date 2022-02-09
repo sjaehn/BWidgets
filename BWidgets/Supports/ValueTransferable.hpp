@@ -88,7 +88,13 @@ public:
      *
      *  The transfer function (and its re-transfer function) MUST be biunique.
      */
-    void setTransferFunction (std::function<T (const T& x)> func);
+    virtual void setTransferFunction (std::function<T (const T& x)> func);
+
+    /**
+     *  @brief  Gets the transfer function.
+     *  @param func  Transfer function.
+     */
+    virtual std::function<T (const T& x)> getTransferFunction () const;
 
     /**
      *  @brief  Sets the re-transfer function.
@@ -105,7 +111,13 @@ public:
      *
      *  The transfer function (and its re-transfer function) MUST be biunique.
      */
-    void setReTransferFunction (std::function<T (const T& x)> func);
+    virtual void setReTransferFunction (std::function<T (const T& x)> func);
+
+    /**
+     *  @brief  Gets the re-transfer function.
+     *  @param func  Re-transfer function.
+     */
+    virtual std::function<T (const T& x)> getReTransferFunction () const;
 
     /**
      *  @brief  Transfers a value.
@@ -174,9 +186,21 @@ inline void ValueTransferable<T>::setTransferFunction (std::function<T (const T&
 }
 
 template <class T>
+inline std::function<T (const T& x)> ValueTransferable<T>::getTransferFunction () const
+{
+    return transfer_;
+}
+
+template <class T>
 inline void ValueTransferable<T>::setReTransferFunction (std::function<T (const T& x)> func)
 {
     reTransfer_ = func;
+}
+
+template <class T>
+inline std::function<T (const T& x)> ValueTransferable<T>::getReTransferFunction () const
+{
+    return reTransfer_;
 }
 
 template <class T>
