@@ -63,6 +63,7 @@
 #include <cairo/cairo.h>
 #include <cstdlib>
 #include <iostream>
+#include <memory>
 #include <vector>
 
 using namespace BWidgets;
@@ -124,32 +125,14 @@ int main ()
     window.add (&textLabel);
 
     // Symbols
-    Symbol addSymbol (410, 10, 12, 12, Symbol::ADD_SYMBOL);
-    Symbol minusSymbol (426, 10, 12, 12, Symbol::MINUS_SYMBOL);
-    Symbol leftSymbol (442, 10, 12, 12, Symbol::LEFT_SYMBOL);
-    Symbol rightSymbol (458, 10, 12, 12, Symbol::RIGHT_SYMBOL);
-    Symbol upSymbol (474, 10, 12, 12, Symbol::UP_SYMBOL);
-    Symbol downSymbol (410, 26, 12, 12, Symbol::DOWN_SYMBOL);
-    Symbol playSymbol (426, 26, 12, 12, Symbol::PLAY_SYMBOL);
-    Symbol questionSymbol (442, 26, 12, 12, Symbol::QUESTION_SYMBOL);
-    Symbol infoSymbol (458, 26, 12, 12, Symbol::INFO_SYMBOL);
-    Symbol warnSymbol (474, 26, 12, 12, Symbol::WARN_SYMBOL);
-    Symbol errorSymbol (410, 42, 12, 12, Symbol::ERROR_SYMBOL);
-    Symbol newFolderSymbol (426, 42, 12, 12, Symbol::NEW_FOLDER_SYMBOL);
+    std::array<std::unique_ptr<Symbol>, Symbol::NEW_FOLDER_SYMBOL + 1> symbols;
+    for (int i = 0; i <= Symbol::NEW_FOLDER_SYMBOL; ++i)
+    {
+        symbols[i] = std::unique_ptr<Symbol> (new Symbol (410 + 16 * (i % 5), 10 + 16 * int (i / 5), 12, 12, Symbol::SymbolType(i)));
+        window.add (symbols[i].get());
+    }
     Label symbolLabel (410, 80, 80, 20, "Symbol");
     symbolLabel.setFont (labelFont);
-    window.add (&addSymbol);
-    window.add (&minusSymbol);
-    window.add (&leftSymbol);
-    window.add (&rightSymbol);
-    window.add (&upSymbol);
-    window.add (&downSymbol);
-    window.add (&playSymbol);
-    window.add (&questionSymbol);
-    window.add (&infoSymbol);
-    window.add (&warnSymbol);
-    window.add (&errorSymbol);
-    window.add (&newFolderSymbol);
     window.add (&symbolLabel);
 
     // Image
