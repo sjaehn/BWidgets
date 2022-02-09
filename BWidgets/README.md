@@ -463,10 +463,29 @@ FgColors.
 `Pattern` is a `Valueable` widget displaying a pattern of pad widgets 
 (default: `Pad`s). It is intended to use a Pad-derived widget to display a
 step or pad sequencer-like pattern, but it is also possible to use any 
-other Valueable widget (including Pattern itself). Its value is a 2D 
-vector of `std::pair` with the pad extensions (default: 
-`std::pair<size_t, size_t>(1, 1))` as the first and the pad value as the
-second type.
+other Valueable widget. The pad widgets value type
+* MUST support the standard comparison operators, 
+* MUST support the standard arithmetic operators. 
+* MUST be compatible with `ValueableTyped`, `ValidatableRange`, and
+  `ValueTransferable`.
+
+Pattern allows to draw a pattern by left-clicking on the pads or dragging
+over the pads via support of `Draggable` and setting the pad values to 
+their `getMin()` or defined default drawing value (defined with
+`pads.setValue()`), respectively.
+ 
+Right-clicking picks the respective pad value and re-defines the default 
+drawing value. This action is equivalent to left-clicking in the
+`PICK_MODE`.
+
+If the select mode is on (by setting the EditMode, e. g., cut, copy, 
+delete, swap), pressing the left mouse button or dragging will mark the 
+respective pad instead and the action of the 
+selected EditMode will be applied after the button release.
+
+The value of the Pattern is a 2D vector of `std::pair` with the repective 
+pad extends (default: `BUtilities::Point<size_t>(0, 0)`) as the first and 
+the respective pad value as the second type.
 
 
 ### HPianoRoll

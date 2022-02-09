@@ -21,6 +21,8 @@
 #include "Pad.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
+#include "Supports/ValidatableRange.hpp"
+#include "Supports/ValueTransferable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "../BEvents/PointerEvent.hpp"
 #include <cairo/cairo.h>
@@ -40,7 +42,7 @@ namespace BWidgets
 /**
  *  @brief  Composite widget displaying a pattern of pad widgets (default: 
  *  Pads).
- *  @tparam T  Widget type for the pad.
+ *  @tparam T  Pad widget type.
  *
  *  %Pattern is a Valueable widget displaying a pattern of pad widgets 
  *  (default: Pads). It is intended to use a Pad-derived widget to display a
@@ -51,22 +53,26 @@ namespace BWidgets
  *  * MUST be compatible with ValueableTyped, ValidatableRange, and
  *    ValueTransferable.
  *
- *  %Pattern allows to draw a pattern by clicking on the pads or dragging
+ *  %Pattern allows to draw a pattern by left-clicking on the pads or dragging
  *  over the pads via support of Draggable and setting the pad values to 
- *  their @c getMin() or @c getMax() , respectively.
+ *  their @c getMin() or defined default drawing value (defined with
+ *  @c pads.setValue() ), respectively.
+ *
+ *  Right-clicking picks the respective pad value and re-defines the default 
+ *  drawing value. This action is equivalent to left-clicking in the
+ *  PICK_MODE.
  *
  *  If the select mode is on (by setting the EditMode, e. g., cut, copy, 
- *  delete, swap), pressing the mouse button
- *  or dragging will mark the respective pad instead and the action of the 
+ *  delete, swap), pressing the left mouse button or dragging will mark the 
+ *  respective pad instead and the action of the 
  *  selected EditMode will be applied after the button release.
  *
  *  The value of the %Pattern is a 2D vector of @c std::pair with the repective 
- *  pad extensions (default: BUtilities::Point<size_t>(1, 1)) as the first and 
+ *  pad extends (default: BUtilities::Point<size_t>(0, 0)) as the first and 
  *  the respective pad value as the second type.
  *
  *  @todo  Support change pattern size.
  *  @todo  Support merge pads by dragging.
- *  @todo  Support select pads.
  *  @todo  Support Journal.
  */
 template <class T = Pad<>>
@@ -80,38 +86,126 @@ public:
 
 	typedef std::vector<std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>>> value_type;
 
+protected:
+
+	/**
+	 *  @brief  Pad value and value modifiers template class. 
+	 */
+	class PadsTemplType :	public ValueableTyped<typename T::value_type>, 
+							public ValidatableRange<typename T::value_type>, 
+							public ValueTransferable<typename T::value_type>
+	{
+	private:
+		Pattern<T>* parent__;
+
+	public:
+		PadsTemplType () = delete;
+		PadsTemplType (Pattern<T>* parent);
+		PadsTemplType (const PadsTemplType& that) = delete;
+		~PadsTemplType () = default;
+		PadsTemplType& operator= (const PadsTemplType& that);
+
+		/**
+		 *  @brief  Sets the range lower limit.
+		 *  @param min  Lower limit.
+		 */
+		virtual void setMin (const typename T::value_type& min) override;
+
+	    /**
+	     *  @brief  Sets the range upper limit.
+	     *  @param min  Upper limit.
+ 	    */
+ 	   virtual void setMax (const typename T::value_type& max) override;
+
+		/**
+		 *  @brief  Sets the range step size.
+		 *  @param min  Step size.
+		 */
+		virtual void setStep (const typename T::value_type& step) override;
+
+		/**
+		 *  @brief  Sets the value range.
+		 *  @param min  Lower limit.
+		 *  @param max  Upper limit.
+		 *  @param step  Step.
+		 */
+		virtual void setRange (const typename T::value_type& min, const typename T::value_type& max, const typename T::value_type& step) override;
+
+ 		/**
+		 *  @brief  Sets the transfer function.
+		 *  @param func  Transfer function.
+		 *
+		 *  The transfer function is used
+		 *  to transfer a value from an external context (e. g., frequencies with a
+		 *  logarithmic distribution) to an internal context (e. g., a slider with 
+		 *  linear distribution). In this case a possible transfer function would be:
+		 *  @code
+		 *  [] (const double& x) {return log10 (x);}
+		 *  @endcode
+		 *
+		 *  The transfer function (and its re-transfer function) MUST be biunique.
+		 */
+		virtual void setTransferFunction (std::function<typename T::value_type (const typename T::value_type& x)> func) override;
+
+		/**
+		 *  @brief  Sets the re-transfer function.
+		 *  @param func  Re-transfer function.
+		 *
+		 *  The re-transfer function is used to transfer a value from an internal 
+		 *  context (e. g., a
+		 *  position within a slider with linear distribution) to an external
+		 *  context (e. g., frequencies with a logarithmic distribution). In this
+		 *  case a possible re-transfer function would be:
+		 *  @code
+		 *  [] (const double& x) {return pow (10, x);}
+		 *  @endcode
+		 *
+		 *  The transfer function (and its re-transfer function) MUST be biunique.
+     	 */
+    	virtual void setReTransferFunction (std::function<typename T::value_type (const typename T::value_type& x)> func) override;
+	};
+
+public:
+
+	/**
+	 *  @brief  Allows to set value modifiers (ValidatableRange,
+	 *  ValueTransferable) to all pads and to set the default
+	 *  value for clicked pads.
+	 */
+	PadsTemplType pads;
+
 	enum EditMode
 	{
 		MODE_EDIT = 0,
+		MODE_PICK,
 		MODE_SELECT,
 		MODE_CUT,
 		MODE_COPY,
 		MODE_PASTE,
 		MODE_DELETE,
-		MODE_XSWAP,
-		MODE_YSWAP
-	};
-
-	enum MergeMode
-	{
-		MERGE_OFF = 0,
-		MERGE_X,
-		MERGE_Y,
-		MERGE_XY
+		MODE_XFLIP,
+		MODE_YFLIP
 	};
 
 protected:
+
 	size_t columns_;
 	size_t rows_;
 	std::vector<std::vector<Widget*>> pads_;
-	BUtilities::Point<size_t> selectionPos_;
-	BUtilities::Point<int> selectionExt_;
+	BUtilities::RectArea<size_t> selection_;
+	bool selected_;
 	EditMode editMode_;
-	MergeMode mergeMode_;
-	bool padOn_;
+	bool allowYMerge_;
+	value_type clipBoard_;
+
+
+private:
+	bool padOn_;	// Status of the pad where button pressed, used for 
+					// onPointerDragged()
 
 
 public:
+
 	/**
 	 *  @brief  Constructs a new %Pattern object with default parameters.
 	 */
@@ -170,7 +264,70 @@ public:
 	 */
 	void copy (const Pattern* that);
 
-	void select (const size_t column, const size_t row, int width = 1, int height = 1);
+	/**
+	 *  @brief  Changes the edit mode.
+	 *  @param editMode  EditMode.
+	 */
+	void setEditMode (const EditMode editMode);
+
+	/**
+	 *  @brief  Gets the edit mode.
+	 *  return  EditMode.
+	 */
+	EditMode getEditMode () const;
+
+	/**
+	 *  @brief  Selects a %Pattern area.
+	 *  @param p1  First point (column, row).
+	 *  @param p2  Second point (column, row).
+	 */
+	void select (const BUtilities::Point<size_t> p1, const BUtilities::Point<size_t> p2);
+
+	/**
+	 *  @brief  Performs an action (cut, copy, paste, ...) on the pattern
+	 *  pad values.
+	 *  @param mode  EditMode for action.
+	 *  @param selection  Area to apply action on.
+	 */
+	void action (const EditMode mode, const BUtilities::RectArea<size_t> selection);
+
+	/**
+	 *  @brief  Cuts pad values to the clipboard. 
+	 *  @param selection  Selection area.
+	 *
+	 *  Pads of the cut area will be left with a getMin() value.
+	 */
+	void cutValues (const BUtilities::RectArea<size_t> selection);
+
+	/**
+	 *  @brief  Copies pad values to the clipboard. 
+	 *  @param selection  Selection area.
+	 */
+	void copyValues (const BUtilities::RectArea<size_t> selection);
+
+	/**
+	 *  @brief  Pastes pad values from the clipboard. 
+	 *  @param pos  Start position to paste at.
+	 */
+	void pasteValues (const BUtilities::Point<size_t> pos);
+
+	/**
+	 *  @brief  Deletes pad values and set getMin() instead. 
+	 *  @param selection  Selection area.
+	 */
+	void deleteValues (const BUtilities::RectArea<size_t> selection);
+
+	/**
+	 *  @brief  Flips pad values horizontally. 
+	 *  @param selection  Selection area.
+	 */
+	void xflipValues (const BUtilities::RectArea<size_t> selection);
+
+	/**
+	 *  @brief  Flips pad values vertically. 
+	 *  @param selection  Selection area.
+	 */
+	void yflipValues (const BUtilities::RectArea<size_t> selection);
 
 	/**
 	 *  @brief  Gets the Wigget for the respective pad.
@@ -194,6 +351,16 @@ public:
      *  function.
      */
     virtual void onButtonPressed (BEvents::Event* event) override;
+
+	/**
+     *  @brief  Method called when pointer button released.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  pointer button released. By default, it calls its static callback 
+     *  function.
+     */
+    virtual void onButtonReleased (BEvents::Event* event) override;
 	
 	/**
      *  @brief  Method called upon (mouse) wheel scroll.
@@ -228,6 +395,8 @@ protected:
 	 */
 	BUtilities::Point<size_t> getPadIndex (const double x, const double y) const;
 
+	void updatePads();
+
 	/**
      *  @brief  Unclipped draw to the surface (if is visualizable).
      */
@@ -248,6 +417,67 @@ protected:
      */
     virtual void draw (const BUtilities::RectArea<>& area) override;
 };
+
+template <class T>
+inline Pattern<T>::PadsTemplType::PadsTemplType (Pattern<T>* parent) :
+	ValidatableRange<typename T::value_type> (),
+	ValueTransferable<typename T::value_type> (),
+	parent__ (parent)
+{
+
+}
+
+template <class T>
+inline typename Pattern<T>::PadsTemplType& Pattern<T>::PadsTemplType::operator= (const Pattern<T>::PadsTemplType& that)
+{
+	// Keep parent__ !
+	
+	ValueTransferable<typename T::value_type>::operator= (that);
+	ValidatableRange<typename T::value_type>::operator= (that);
+	ValueableTyped<typename T::value_type>::operator= (that);
+}
+
+template <class T>
+inline void Pattern<T>::PadsTemplType::setMin (const typename T::value_type& min)
+{
+	ValidatableRange<typename T::value_type>::setMin (min);
+	parent__->updatePads();
+}
+
+template <class T>
+inline void Pattern<T>::PadsTemplType::setMax (const typename T::value_type& max)
+{
+	ValidatableRange<typename T::value_type>::setMax (max);
+	parent__->updatePads();
+}
+
+template <class T>
+inline void Pattern<T>::PadsTemplType::setStep (const typename T::value_type& step)
+{
+	ValidatableRange<typename T::value_type>::setStep (step);
+	parent__->updatePads();
+}
+
+template <class T>
+inline void Pattern<T>::PadsTemplType::setRange (const typename T::value_type& min, const typename T::value_type& max, const typename T::value_type& step)
+{
+	ValidatableRange<typename T::value_type>::setRange (min, max, step);
+	parent__->updatePads();
+}
+
+template <class T>
+inline void Pattern<T>::PadsTemplType::setTransferFunction (std::function<typename T::value_type (const typename T::value_type& x)> func)
+{
+	ValueTransferable<typename T::value_type>::setTransferFunction (func);
+	parent__->updatePads();
+}
+
+template <class T>
+inline void Pattern<T>::PadsTemplType::setReTransferFunction (std::function<typename T::value_type (const typename T::value_type& x)> func)
+{
+	ValueTransferable<typename T::value_type>::setReTransferFunction (func);
+	parent__->updatePads();
+}
 
 template <class T>
 inline Pattern<T>::Pattern () : 
@@ -277,15 +507,18 @@ inline Pattern<T>::Pattern	(const double x, const double y, const double width, 
 	ValueableTyped<std::vector<std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>>>> (),
 	Clickable (),
 	Draggable (),
+	pads (this),
 	columns_(columns),
 	rows_(rows),
 	pads_ (),
-	selectionPos_(),
-	selectionExt_(),
+	selection_(),
+	selected_ (false),
 	editMode_ (MODE_EDIT),
-	mergeMode_ (MERGE_OFF),
-	padOn_ (true)
+	allowYMerge_ (false),
+	clipBoard_(),
+	padOn_ (false)
 {
+	pads.setValue (1.0);
 	for (size_t r = 0; r < rows_; ++r)
 	{
 		std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>> vs;
@@ -303,7 +536,7 @@ inline Pattern<T>::Pattern	(const double x, const double y, const double width, 
 			add (w);
 			ws.push_back (w);
 
-			BUtilities::Point<size_t> ext (1, 1);
+			BUtilities::Point<size_t> ext (0, 0);
 			typename T::value_type value = typename T::value_type ();
 			std::pair<BUtilities::Point<size_t>, typename T::value_type> v (ext, value);
 			vs.push_back (v);
@@ -339,6 +572,8 @@ inline Widget* Pattern<T>::clone () const
 template <class T>
 inline void Pattern<T>::copy (const Pattern<T>* that)
 {
+	pads = that->pads;
+
 	for (size_t r = 0; r < rows_; ++r)
 	{
 		for (size_t c = 0; c < columns_; ++c)
@@ -366,10 +601,11 @@ inline void Pattern<T>::copy (const Pattern<T>* that)
 		pads_.push_back (ws);
 	}
 
-	selectionPos_ = that->selectionPos_;
-	selectionExt_ = that->selectionExt_;
+	selection_ = that->selectionPos_;
+	selected_ = that->selected_;
 	editMode_ = that->editMode_;
-	mergeMode_ = that->mergeMode_;
+	allowYMerge_ = that->allowYMerge_;
+	clipBoard_ = that->clipBoard_;
 	padOn_ = that->padOn;
 
 	Draggable::operator= (*that);
@@ -379,13 +615,144 @@ inline void Pattern<T>::copy (const Pattern<T>* that)
 }
 
 template <class T>
-void Pattern<T>::select (const size_t column, const size_t row, int width, int height)
+void Pattern<T>::setEditMode (const EditMode editMode)
 {
-	selectionPos_.x = (column < columns_ ? column : (columns_ == 0 ? 0 : columns_ - 1));
-	selectionPos_.y = (row < rows_ ? row : (rows_ == 0 ? 0 : rows_ - 1));
-	selectionExt_.x = std::max (std::min (width, static_cast<int>(columns_) - static_cast<int>(selectionPos_.x)), -static_cast<int>(selectionPos_.x));
-	selectionExt_.y = std::max (std::min (height, static_cast<int>(rows_) - static_cast<int>(selectionPos_.y)), -static_cast<int>(selectionPos_.y));
+	editMode_ = editMode;
+	selection_ = BUtilities::RectArea<size_t>();
+	selected_ = false;
 	update();
+}
+
+template <class T>
+typename Pattern<T>::EditMode Pattern<T>::getEditMode() const
+{
+	return editMode_;
+}
+
+template <class T>
+void Pattern<T>::select (const BUtilities::Point<size_t> p1, const BUtilities::Point<size_t> p2)
+{
+	selection_ = BUtilities::RectArea<size_t> (p1, p2) * BUtilities::RectArea<size_t>(0, 0, (columns_ > 0 ? columns_ - 1 : 0), (rows_ > 0 ? rows_ - 1 : 0));
+	selected_ = true;
+	update();
+}
+
+template <class T>
+void Pattern<T>::action (const EditMode mode, const BUtilities::RectArea<size_t> selection)
+{
+	switch (mode)
+	{
+		case MODE_EDIT:		break;
+
+		case MODE_PICK:		break;
+
+		case MODE_CUT:		cutValues (selection);
+							break;
+
+		case MODE_COPY:		copyValues (selection);
+							break;
+
+		case MODE_PASTE:	pasteValues (selection.getPosition());
+							break;
+
+		case MODE_DELETE:	deleteValues (selection);
+							break;
+
+		case MODE_XFLIP:	xflipValues (selection);
+							break;
+
+		case MODE_YFLIP:	yflipValues (selection);
+							break;
+
+		default:			break;
+	}
+}
+
+template <class T>
+void Pattern<T>::cutValues(const BUtilities::RectArea<size_t> selection)
+{
+	copyValues (selection);
+	deleteValues (selection);
+}
+
+template <class T>
+void Pattern<T>::copyValues(const BUtilities::RectArea<size_t> selection)
+{
+	clipBoard_.clear();
+
+	for (size_t dr = 0; dr <= selection.getHeight(); ++dr)
+	{
+		std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>> vs;
+		
+		for (size_t dc = 0; dc <= selection.getWidth(); ++dc)
+		{
+			const std::pair<BUtilities::Point<size_t>, typename T::value_type> v = this->value_[selection.getY() + dr][selection.getX() + dc];
+			vs.push_back (v);
+		}
+
+		clipBoard_.push_back (vs);
+	}
+}
+
+template <class T>
+void Pattern<T>::pasteValues(const BUtilities::Point<size_t> pos)
+{
+	for (size_t dr = 0; (dr < clipBoard_.size()) && (pos.y + dr < rows_); ++dr)
+	{
+		const std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>> vs = clipBoard_[dr];
+		for (size_t dc = 0; (dc < vs.size()) && (pos.x + dc < columns_); ++dc)
+		{
+			const std::pair<BUtilities::Point<size_t>, typename T::value_type> v = vs[dc];
+			T* w = dynamic_cast<T*>(pads_[pos.y + dr][pos.x + dc]);
+			w->setValue (v.second);
+			// TODO pad extends
+		}
+	}
+}
+
+template <class T>
+void Pattern<T>::deleteValues(const BUtilities::RectArea<size_t> selection)
+{
+	for (size_t dr = 0; dr <= selection.getHeight(); ++dr)
+	{
+		for (size_t dc = 0; dc <= selection.getWidth(); ++dc)
+		{
+			T* w = dynamic_cast<T*>(pads_[selection.getY() + dr][selection.getX() + dc]);
+			w->setValue (w->getMin());
+		}
+	}
+}
+
+template <class T>
+void Pattern<T>::xflipValues(const BUtilities::RectArea<size_t> selection)
+{
+	for (size_t dr = 0; dr <= selection.getHeight(); ++dr)
+	{
+		for (size_t dc = 0; dc < (selection.getWidth() + 1) / 2; ++dc)
+		{
+			T* w1 = dynamic_cast<T*>(pads_[selection.getY() + dr][selection.getX() + dc]);
+			T* w2 = dynamic_cast<T*>(pads_[selection.getY() + dr][selection.getX() + selection.getWidth() - dc]);
+			typename T::value_type v2 = w2->getValue();
+			w2->setValue (w1->getValue());
+			w1->setValue (v2);
+		}
+	}
+}
+
+template <class T>
+void Pattern<T>::yflipValues(const BUtilities::RectArea<size_t> selection)
+{
+	for (size_t dr = 0; dr < (selection.getHeight() + 1) / 2; ++dr)
+	{
+		for (size_t dc = 0; dc <= selection.getWidth() ; ++dc)
+		{
+			T* w1 = dynamic_cast<T*>(pads_[selection.getY() + dr][selection.getX() + dc]);
+			T* w2 = dynamic_cast<T*>(pads_[selection.getY() + selection.getHeight() - dr][selection.getX() + dc]);
+			typename T::value_type v2 = w2->getValue();
+			w2->setValue (w1->getValue());
+			w1->setValue (v2);
+		}
+	}
 }
 
 template <class T>
@@ -399,8 +766,10 @@ inline void Pattern<T>::update ()
 {
 	for (size_t r = 0; r < rows_; ++r)
 	{
-		for (size_t c = 0; c < columns_; ++c)
+		for (size_t c = 0; c < columns_; /*empty*/)
 		{
+			size_t st = (allowYMerge_ ? this->getValue()[r][c].first.x + 1 : 1);
+
 			pads_[r][c]->moveTo 
 			(
 				getXOffset() + getEffectiveWidth() * static_cast<double>(c) / static_cast<double>(columns_) + 0.01 * getEffectiveWidth() / static_cast<double>(columns_),
@@ -409,9 +778,15 @@ inline void Pattern<T>::update ()
 
 			pads_[r][c]->resize 
 			(
-				0.98 * getEffectiveWidth() / static_cast<double>(columns_),
+				(static_cast<double> (st - 1) + 0.98) * getEffectiveWidth() / static_cast<double>(columns_),
 				0.98 * getEffectiveHeight() / static_cast<double>(rows_)
 			);
+
+			pads_[r][c]->show();
+
+			// TODO Hide pads under merged pads, once merging is established
+
+			c += st;
 		}
 	}
 	Widget::update();
@@ -426,18 +801,37 @@ inline void Pattern<T>::onButtonPressed (BEvents::Event* event)
 	// Calculate position
 	const BUtilities::Point<size_t> p = getPadIndex (pev->getPosition().x, pev->getPosition().y);
 
+	// Pick mode:
+	if (editMode_ == MODE_PICK || (pev->getButton() == BDevices::MouseDevice::RIGHT_BUTTON)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
+
+	// Paste mode:
+	else if (editMode_ == MODE_PASTE) pasteValues (p);
+
 	// Selection mode:
-	if (isSelectMode()) select (p.x, p.y, 1, 1);
+	else if (isSelectMode()) select (p, p);
 
 	// Default: Invert pad value
 	else
 	{
 		T* w = dynamic_cast<T*>(pads_[p.y][p.x]);
-		padOn_ = (w->getValue() == w->getMin());
-		w->setValue (padOn_ ? w->getMax() : w->getMin());
+		typename T::value_type v = pads.getValue();
+		padOn_ = (w->getValue() != v);
+		w->setValue (padOn_ ? v : w->getMin());
 	}
 
 	Clickable::onButtonPressed (event);
+}
+
+template <class T>
+inline void Pattern<T>::onButtonReleased (BEvents::Event* event)
+{
+	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*>(event);
+	if (!pev) return;
+
+	if (selected_ && isSelectMode() && (pev->getButton() == BDevices::MouseDevice::LEFT_BUTTON)) action (getEditMode(), selection_);
+	selected_ = false;
+	update();
+	Clickable::onButtonReleased (event);
 }
 
 template <class T>
@@ -447,16 +841,11 @@ inline void Pattern<T>::onPointerDragged (BEvents::Event* event)
 	if (!pev) return;
 
 	// Calculate position
+	const BUtilities::Point<size_t> p0 = getPadIndex (pev->getOrigin().x, pev->getOrigin().y);
 	const BUtilities::Point<size_t> p = getPadIndex (pev->getPosition().x, pev->getPosition().y);
 		
 	// Selection mode: Drag selection
-	if (isSelectMode())
-	{
-		select	(selectionPos_.x, 
-				 selectionPos_.y, 
-				 p.x + (p.x >= selectionPos_.x) - selectionPos_.x, 
-				 p.y + (p.y >= selectionPos_.y) - selectionPos_.y);
-	}
+	if (isSelectMode() && (pev->getButton() == BDevices::MouseDevice::LEFT_BUTTON)) select (p0, p);
 
 	// Default:
 	else 
@@ -465,9 +854,17 @@ inline void Pattern<T>::onPointerDragged (BEvents::Event* event)
 		const BUtilities::Point<size_t> p2 = getPadIndex (pev->getPosition().x - pev->getDelta().x, pev->getPosition().y - pev->getDelta().y);
 		T* w = dynamic_cast<T*>(pads_[p.y][p.x]);
 
-		// Pad changed: Set or unset pad
-		if (p != p2) w->setValue (padOn_ ? w->getMax() : w->getMin());
-		
+		if (p != p2)
+		{
+			// Pick mode:
+			if (editMode_ == MODE_PICK || (pev->getButton() == BDevices::MouseDevice::RIGHT_BUTTON)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
+
+			// Paste mode:
+			else if (editMode_ == MODE_PASTE) pasteValues (p);
+
+			// Default: Set or unset pad
+			else w->setValue (padOn_ ? pads.getValue() : w->getMin());
+		}
 	}
 	Draggable::onPointerDragged (event);
 }
@@ -504,7 +901,11 @@ inline void Pattern<T>::padChangedCallback (BEvents::Event* event)
 template <class T>
 inline bool Pattern<T>::isSelectMode () const
 {
-	return (editMode_ != MODE_EDIT) && (editMode_ != MODE_PASTE);
+	return	(editMode_ == MODE_CUT) || 
+			(editMode_ == MODE_COPY) ||
+			(editMode_ == MODE_DELETE) ||
+			(editMode_ == MODE_XFLIP) ||
+			(editMode_ == MODE_YFLIP);
 }
 
 template <class T>
@@ -515,6 +916,21 @@ inline BUtilities::Point<size_t> Pattern<T>::getPadIndex (const double x, const 
 		std::min (std::max (static_cast<int>(static_cast<double>(columns_) * (x - getXOffset()) / getEffectiveWidth()), 0), static_cast<int> (columns_ == 0 ? 0 : columns_ - 1)),
 		std::min (std::max (static_cast<int>(static_cast<double>(rows_) * (y - getYOffset()) / getEffectiveHeight()), 0), static_cast<int>(rows_ == 0 ? 0 : rows_ - 1))
 	);
+}
+
+template <class T>
+inline void Pattern<T>::updatePads()
+{
+	for (size_t r = 0; r < rows_; ++r)
+	{
+		for (size_t c = 0; c < columns_; ++c)
+		{
+			T* w = dynamic_cast<T*>(pads_[r][c]);
+			w->setRange (pads.getMin(), pads.getMax(), pads.getStep());
+			w->setTransferFunction(pads.getTransferFunction());
+			w->setReTransferFunction(pads.getReTransferFunction());
+		}
+	}
 }
 
 template <class T>
@@ -551,17 +967,30 @@ inline void Pattern<T>::draw (const BUtilities::RectArea<>& area)
 				const double w = getEffectiveWidth ();
 				const double h = getEffectiveHeight ();
 
-				if (isSelectMode() && (selectionExt_ != BUtilities::Point<int>()))
+				if (selected_ && isSelectMode())
 				{
-					const double xs =	x0 + w * static_cast<double>(selectionPos_.x + (selectionExt_.x < 0)) / static_cast<double>(columns_);
-					const double ys = 	y0 + h * static_cast<double>(selectionPos_.y + (selectionExt_.y < 0)) / static_cast<double>(rows_);
-					const double ws = 	w * static_cast<double>(selectionExt_.x - (selectionExt_.x < 0)) / static_cast<double>(columns_);
-					const double hs = 	h * static_cast<double>(selectionExt_.y - (selectionExt_.y < 0)) / static_cast<double>(rows_);
-					const BStyles::Color color = getBgColors()[getStatus()].illuminate (BStyles::Color::highLighted);
-					cairo_rectangle (cr, xs, ys, ws, hs);
-					cairo_set_line_width (cr, 0.0);
-					cairo_set_source_rgba (cr, CAIRO_RGBA (color));
-					cairo_fill (cr);
+					for (size_t r = 0; r < rows_; ++r)
+					{
+						for (size_t c = 0; c < columns_; /* empty */)
+						{
+							size_t st = (allowYMerge_ ? this->getValue()[r][c].first.x + 1 : 1);
+							if (selection_.contains(BUtilities::Point<size_t>(c, r)))
+							{
+								const double xs =	x0 + w * static_cast<double>(c) / static_cast<double>(columns_);
+								const double ys = 	y0 + h * static_cast<double>(r) / static_cast<double>(rows_);
+								const double ws = 	w * static_cast<double>(st) / static_cast<double>(columns_);
+								const double hs = 	h / static_cast<double>(rows_);
+								const BStyles::Color color = getBgColors()[getStatus()].illuminate (BStyles::Color::highLighted);
+								cairo_rectangle (cr, xs, ys, ws, hs);
+								cairo_set_line_width (cr, 0.0);
+								cairo_set_source_rgba (cr, CAIRO_RGBA (color));
+								cairo_fill (cr);
+							}
+
+							c += st;
+						}
+					}
+					
 				}
 
 				cairo_destroy (cr);
