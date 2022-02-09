@@ -62,6 +62,7 @@
 #include "../BWidgets/Pattern.hpp"
 #include <cairo/cairo.h>
 #include <cstdlib>
+#include <initializer_list>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -143,7 +144,9 @@ int main ()
     window.add (&imageLabel);
 
     // ImageButton
-    ImageButton imageButton (610, 30, 80, 20, {"imgbut01.png", "imgbut02.png"});
+    ImageButton imageButton (620, 10, 60, 60, {"imgbut01.png", "imgbut02.png"}, true);
+    imageButton.setBackground(BStyles::noFill);
+    imageButton.setBgColors(BStyles::ColorMap ({BStyles::invisible}));
     Label imageButtonLabel (610, 80, 80, 20, "ImageButton");
     imageButtonLabel.setFont (labelFont);
     window.add (&imageButton);
@@ -236,17 +239,17 @@ int main ()
     window.add (&vScrollBarLabel);
 
     // SpinBox
-    SpinBox spinBox (700, 390, 100, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
+    SpinBox spinBox (700, 370, 100, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
     spinBox.setValue (1);
-    Label spinBoxLabel (710, 440, 80, 20, "SpinBox");
+    Label spinBoxLabel (710, 400, 80, 20, "SpinBox");
     spinBoxLabel.setFont (labelFont);
     window.add (&spinBox);
     window.add (&spinBoxLabel);
 
     // ComboBox
-    ComboBox comboBox (700, 510, 100, 20, {"Avicii", "Daft Punk", "M. Garrix", "D. Guetta", "Kygo", "Marshmello", "R. Schulz", "DJ Spooky", "Tiësto", "A. van Buren", "P. van Dyke", "S. Väth", "A. Walker"});
+    ComboBox comboBox (700, 480, 100, 20, 0, 20, 100, 90, {"Avicii", "Daft Punk", "M. Garrix", "D. Guetta", "Kygo", "Marshmello", "R. Schulz", "DJ Spooky", "Tiësto", "A. van Buren", "P. van Dyke", "S. Väth", "A. Walker"});
     comboBox.setValue (1);
-    Label comboBoxLabel (710, 560, 80, 20, "ComboBox");
+    Label comboBoxLabel (710, 450, 80, 20, "ComboBox");
     comboBoxLabel.setFont (labelFont);
     window.add (&comboBox);
     window.add (&comboBoxLabel);
@@ -417,11 +420,18 @@ int main ()
     window.add (&messageBoxLabel);
 
     // FileChooser
-    FileChooser fileChooser (10, 370, 280, 290);
+    std::initializer_list<FileChooser::Filter> filter =
+    {
+        FileChooser::Filter {"All files", std::regex (".*")},
+        FileChooser::Filter {"C/C++ files", std::regex (".*\\.((c)|(cc)|(cxx)|(cpp)|(h)|(hh)|(hpp)|(hxx))$", std::regex_constants::icase)},
+        FileChooser::Filter {"Image files", std::regex (".*\\.((png)|(bmp)|(jpg)|(jpeg)|(tif)|(tiff))$", std::regex_constants::icase)},
+        FileChooser::Filter {"Sound files", std::regex (".*\\.((wav)|(wave)|(aif)|(aiff)|(au)|(sd2)|(flac)|(caf)|(ogg)|(mp3))$", std::regex_constants::icase)}
+    };
+    FileChooser fileChooser (10, 370, 280, 290, ".", filter);
     Label fileChooserLabel (100, 680, 100, 20, "FileChooser");
     fileChooserLabel.setFont (labelFont);
-    window.add (&fileChooser);
     window.add (&fileChooserLabel);
+    window.add (&fileChooser);
 
     // Pattern
     Pattern<> pattern (710, 610, 180, 180, 4, 4);
