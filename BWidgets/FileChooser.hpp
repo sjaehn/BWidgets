@@ -146,7 +146,7 @@ public:
 	 *  @param title  Optional, %FileChooser title.
 	 */
 	FileChooser	(const double x, const double y, const double width, const double height,
-				 std::string path = ".", std::initializer_list<Filter> filters = {},
+				 std::string path = ".", std::initializer_list<Filter> filters = {Filter {BUtilities::Dictionary::get ("All files"), std::regex (".*")}},
 				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 
@@ -443,8 +443,8 @@ inline void FileChooser::update ()
 		// Get extends first
 		okButton.resize();
 		cancelButton.resize ();
-		double okWidth = (okButton.getWidth() > cancelButton.getWidth() ? okButton.getWidth() : cancelButton.getWidth());
-		double okHeight = (okButton.getHeight() > cancelButton.getHeight() ? okButton.getHeight() : cancelButton.getHeight());
+		double okWidth = (okButton.getWidth() > cancelButton.getWidth() ? okButton.getWidth() : cancelButton.getWidth()) + 4;
+		double okHeight = (okButton.getHeight() > cancelButton.getHeight() ? okButton.getHeight() : cancelButton.getHeight()) + 4;
 		pathNameBox.resize();
 		double pathNameHeight = pathNameBox.getHeight();
 		fileNameBox.resize();
