@@ -61,6 +61,8 @@ public:
 		INFO_SYMBOL,
 		WARN_SYMBOL,
 		ERROR_SYMBOL,
+		EDIT_SYMBOL,
+		PICK_SYMBOL,
 		CUT_SYMBOL,
 		COPY_SYMBOL,
 		PASTE_SYMBOL,
@@ -358,6 +360,27 @@ inline void Symbol::draw (const BUtilities::RectArea<>& area)
 										cairo_move_to (cr, xc + 0.2 * ext, yc - 0.2 * ext);
 										cairo_line_to (cr, xc - 0.2 * ext, yc + 0.2 * ext);
 										cairo_set_line_width (cr, 0.1 * ext);
+										cairo_stroke (cr);
+										break;
+
+				case PICK_SYMBOL:		cairo_move_to (cr, xc + 0.07 * ext, yc - 0.17 * ext);
+										cairo_line_to (cr, xc + 0.17 * ext, yc - 0.07 * ext);
+										cairo_line_to (cr, xc - 0.23 * ext, yc + 0.33 * ext);
+										cairo_line_to (cr, xc - 0.33 * ext, yc + 0.35 * ext);
+										cairo_line_to (cr, xc - 0.38 * ext, yc + 0.4 * ext);
+										cairo_line_to (cr, xc - 0.4 * ext, yc + 0.38 * ext);
+										cairo_line_to (cr, xc - 0.35 * ext, yc + 0.33 * ext);
+										cairo_line_to (cr, xc - 0.33 * ext, yc + 0.28 * ext);
+										cairo_line_to (cr, xc + 0.07 * ext, yc - 0.17 * ext);
+										cairo_line_to (cr, xc + 0.02 * ext, yc - 0.22 * ext);
+										cairo_line_to (cr, xc + 0.07 * ext, yc - 0.27 * ext);
+										cairo_line_to (cr, xc + 0.12 * ext, yc - 0.22 * ext);
+										cairo_line_to (cr, xc + 0.27 * ext, yc - 0.37 * ext);
+										cairo_line_to (cr, xc + 0.37 * ext, yc - 0.27 * ext);
+										cairo_line_to (cr, xc + 0.22 * ext, yc - 0.12 * ext);
+										cairo_line_to (cr, xc + 0.27 * ext, yc - 0.07 * ext);
+										cairo_line_to (cr, xc + 0.22 * ext, yc - 0.02 * ext);
+										cairo_line_to (cr, xc + 0.17 * ext, yc - 0.07 * ext);
 										cairo_stroke (cr);
 										break;
 
