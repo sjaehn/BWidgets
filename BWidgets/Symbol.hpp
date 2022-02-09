@@ -381,6 +381,7 @@ inline void Symbol::draw (const BUtilities::RectArea<>& area)
 										cairo_line_to (cr, xc + 0.27 * ext, yc - 0.07 * ext);
 										cairo_line_to (cr, xc + 0.22 * ext, yc - 0.02 * ext);
 										cairo_line_to (cr, xc + 0.17 * ext, yc - 0.07 * ext);
+										cairo_set_line_width (cr, 0.05 * ext);
 										cairo_stroke (cr);
 										break;
 
