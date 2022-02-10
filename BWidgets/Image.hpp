@@ -248,12 +248,23 @@ public:
 
 	/**
 	 *  @brief  Loads an image from a Cairo surface or an image file.
-	 *  @param surface  Cairo surface
-	 *  @param filename  Filename
+	 *  @param status  Widget status for the image to be loaded.
+	 *  @param surface  Cairo surface with the image.
 	 */
 	virtual void loadImage (BStyles::Status status, cairo_surface_t* surface);
+
+	/**
+	 *  @brief  Loads an image from a Cairo surface or an image file.
+	 *  @param status  Widget status for the image to be loaded.
+	 *  @param filename  Image file name.
+	 */
 	virtual void loadImage (BStyles::Status status, const std::string& filename);
 
+	/**
+	 *  @brief  Access to the Cairo image surface.
+	 *  @param status  Widget status.
+	 *  @return  Pointer to the Cairo surface.
+	 */
 	cairo_surface_t* getImageSurface (BStyles::Status status);
 
 protected:
