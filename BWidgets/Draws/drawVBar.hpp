@@ -79,7 +79,7 @@ inline void drawVBar    (cairo_t* cr, const double x0, const double y0, const do
         cairo_save (cr);
         cairo_rectangle_rounded (cr, x0 + 0.1 * width, y0 + 0.1 * width, 0.8 * width, std::max (height - 0.2 * width, 0.0), 0.5 * 0.8 * width, 0b1111);
         cairo_clip (cr);
-        cairo_rectangle (cr, x0, y2, width, y3 - y2);
+        cairo_rectangle_rounded (cr, x0 + 0.1 * width, y2, 0.8 * width, y3 - y2, 0.5 * 0.8 * width, 0b1111);
         cairo_set_source (cr, pat);
         cairo_fill (cr);
         cairo_restore (cr);

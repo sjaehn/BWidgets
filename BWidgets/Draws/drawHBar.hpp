@@ -79,7 +79,7 @@ inline void drawHBar    (cairo_t* cr, const double x0, const double y0, const do
         cairo_save (cr);
         cairo_rectangle_rounded (cr, x0 + 0.1 * height, y0 + 0.1 * height, std::max (width - 0.2 * height, 0.0), 0.8 * height, 0.5 * 0.8 * height, 0b1111);
         cairo_clip (cr);
-        cairo_rectangle (cr, x2, y0, x3 - x2, height);
+        cairo_rectangle_rounded (cr, x2, y0 + 0.1 * height, x3 - x2, 0.8 * height, 0.5 * 0.8 * height, 0b1111);
         cairo_set_source (cr, pat);
         cairo_fill (cr);
         cairo_restore (cr);
