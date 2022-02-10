@@ -247,9 +247,9 @@ int main ()
     window.add (&spinBoxLabel);
 
     // ComboBox
-    ComboBox comboBox (700, 480, 100, 20, 0, 20, 100, 90, {"Avicii", "Daft Punk", "M. Garrix", "D. Guetta", "Kygo", "Marshmello", "R. Schulz", "DJ Spooky", "Tiësto", "A. van Buren", "P. van Dyke", "S. Väth", "A. Walker"});
+    ComboBox comboBox (700, 440, 100, 20, 0, 20, 100, 90, {"Avicii", "Daft Punk", "M. Garrix", "D. Guetta", "Kygo", "Marshmello", "R. Schulz", "DJ Spooky", "Tiësto", "A. van Buren", "P. van Dyke", "S. Väth", "A. Walker"});
     comboBox.setValue (1);
-    Label comboBoxLabel (710, 450, 80, 20, "ComboBox");
+    Label comboBoxLabel (710, 560, 80, 20, "ComboBox");
     comboBoxLabel.setFont (labelFont);
     window.add (&comboBox);
     window.add (&comboBoxLabel);
