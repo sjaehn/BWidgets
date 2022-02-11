@@ -1,4 +1,4 @@
-/* HRangeScrollBar.hpp
+/* VRangeScrollBar.hpp
  * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,10 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BWIDGETS_HRANGESCROLLBAR_HPP_
-#define BWIDGETS_HRANGESCROLLBAR_HPP_
+#ifndef BWIDGETS_VRANGESCROLLBAR_HPP_
+#define BWIDGETS_VRANGESCROLLBAR_HPP_
 
-#include "HScrollBar.hpp"
+#include "VScrollBar.hpp"
 #include "Frame.hpp"
 #include "Symbol.hpp"
 #include "Supports/Validatable.hpp"
@@ -27,36 +27,35 @@
 #include "Supports/ValueTransferable.hpp"
 #include "Supports/Scrollable.hpp"
 #include "../BEvents/WheelEvent.hpp"
-#include "Draws/drawHBar.hpp"
 #include "Draws/drawKnob.hpp"
 #include <cairo/cairo.h>
 #include <utility>
 
-#ifndef BWIDGETS_DEFAULT_HRANGESCROLLBAR_WIDTH
-#define BWIDGETS_DEFAULT_HRANGESCROLLBAR_WIDTH BWIDGETS_DEFAULT_HSCROLLBAR_WIDTH
+#ifndef BWIDGETS_DEFAULT_VRANGESCROLLBAR_WIDTH
+#define BWIDGETS_DEFAULT_VRANGESCROLLBAR_WIDTH BWIDGETS_DEFAULT_VSCROLLBAR_WIDTH
 #endif
 
-#ifndef BWIDGETS_DEFAULT_HRANGESCROLLBAR_HEIGHT
-#define BWIDGETS_DEFAULT_HRANGESCROLLBAR_HEIGHT BWIDGETS_DEFAULT_HSCROLLBAR_HEIGHT
+#ifndef BWIDGETS_DEFAULT_VRANGESCROLLBAR_HEIGHT
+#define BWIDGETS_DEFAULT_VRANGESCROLLBAR_HEIGHT BWIDGETS_DEFAULT_VSCROLLBAR_HEIGHT
 #endif
 
 namespace BWidgets
 {
 
 /**
- *  @brief  %Horizontal scroll bar widget with the option to resize on both
+ *  @brief  %Vertical scroll bar widget with the option to resize on both
  *  ends.
  *
- *  %HRangeScrollBar is a Valueable Widget similiar to HScrollbar. It displays
+ *  %VRangeScrollBar is a Valueable Widget similiar to HScrollbar. It displays
  *  a value constisting of a std::pair with its min and its max value as a 
- *  horizontal scrollbar and supports user interaction via Scrollable to resize
+ *  vertical scrollbar and supports user interaction via Scrollable to resize
  *  the range value. In addition, it supports dragging to move the value range
  *  or to move the ends (min, max). Its appearance is defined by the BgColors 
  *  parameter.
  *
  *  @todo Inverse range, negative step.
  */
-class HRangeScrollBar :	public Widget, 
+class VRangeScrollBar :	public Widget, 
 						public ValueableTyped<std::pair<double, double>>, 
 						public ValidatableRange<std::pair<double, double>>, 
 						public ValueTransferable<std::pair<double, double>>,
@@ -65,26 +64,26 @@ class HRangeScrollBar :	public Widget,
 protected:
 
 public:
-	HScrollBar scrollbar;
+	VScrollBar scrollbar;
 	Frame button1;
 	Frame button2;
 	Symbol symbol1;
 	Symbol symbol2;
 
 	/**
-	 *  @brief  Constructs a default %HRangeScrollBar object.
+	 *  @brief  Constructs a default %VRangeScrollBar object.
 	 */
-	HRangeScrollBar ();
+	VRangeScrollBar ();
 
 	/**
-	 *  @brief  Constructs a default %HRangeScrollBar object.
+	 *  @brief  Constructs a default %VRangeScrollBar object.
 	 *  @param URID  URID.
 	 *  @param title  %Widget title.
 	 */
-	HRangeScrollBar (const uint32_t urid, const std::string& title);
+	VRangeScrollBar (const uint32_t urid, const std::string& title);
 
 	/**
-	 *  @brief  Creates a %HRangeScrollBar with default size.
+	 *  @brief  Creates a %VRangeScrollBar with default size.
 	 *  @param value1  Initial value (range min).
 	 *  @param value2  Initial value (range max).
 	 *  @param min  Lower value limit.
@@ -94,11 +93,11 @@ public:
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	HRangeScrollBar	(const double value1, const double value2, const double min, const double max, double step = 0.0,
+	VRangeScrollBar	(const double value1, const double value2, const double min, const double max, double step = 0.0,
 					 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 *  @brief  Creates a %HRangeScrollBar with default size.
+	 *  @brief  Creates a %VRangeScrollBar with default size.
 	 *  @param value  Initial value (range min, range max).
 	 *  @param min  Lower value limit.
 	 *  @param max  Upper value limit.
@@ -107,15 +106,15 @@ public:
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	HRangeScrollBar	(const value_type value, const double min, const double max, double step = 0.0,
+	VRangeScrollBar	(const value_type value, const double min, const double max, double step = 0.0,
 					 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 *  @brief  Creates a %HRangeScrollBar.
-	 *  @param x  %HRangeScrollBar X origin coordinate.
-	 *  @param y  %HRangeScrollBar Y origin coordinate.
-	 *  @param width  %HRangeScrollBar width.
-	 *  @param height  %HRangeScrollBar height.
+	 *  @brief  Creates a %VRangeScrollBar.
+	 *  @param x  %VRangeScrollBar X origin coordinate.
+	 *  @param y  %VRangeScrollBar Y origin coordinate.
+	 *  @param width  %VRangeScrollBar width.
+	 *  @param height  %VRangeScrollBar height.
 	 *  @param value1  Initial value (range min).
 	 *  @param value2  Initial value (range max).
 	 *  @param min  Lower value limit.
@@ -126,20 +125,20 @@ public:
 	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
 	 *  internal context to an external context.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
-	 *  @param title  Optional, %HRangeScrollBar title (default = "").
+	 *  @param title  Optional, %VRangeScrollBar title (default = "").
 	 */
-	HRangeScrollBar	(const double x, const double y, const double width, const double height, 
+	VRangeScrollBar	(const double x, const double y, const double width, const double height, 
 			 const double value1, const double value2, const double min, const double max, double step = 0.0,
 			 std::function<value_type (const value_type& x)> transferFunc = ValueTransferable<value_type>::noTransfer,
 			 std::function<value_type (const value_type& x)> reTransferFunc = ValueTransferable<value_type>::noTransfer,
 			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 *  @brief  Creates a %HRangeScrollBar.
-	 *  @param x  %HRangeScrollBar X origin coordinate.
-	 *  @param y  %HRangeScrollBar Y origin coordinate.
-	 *  @param width  %HRangeScrollBar width.
-	 *  @param height  %HRangeScrollBar height.
+	 *  @brief  Creates a %VRangeScrollBar.
+	 *  @param x  %VRangeScrollBar X origin coordinate.
+	 *  @param y  %VRangeScrollBar Y origin coordinate.
+	 *  @param width  %VRangeScrollBar width.
+	 *  @param height  %VRangeScrollBar height.
 	 *  @param value  Initial value (range min, range max).
 	 *  @param min  Lower value limit.
 	 *  @param max  Upper value limit.
@@ -149,19 +148,19 @@ public:
 	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
 	 *  internal context to an external context.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
-	 *  @param title  Optional, %HRangeScrollBar title (default = "").
+	 *  @param title  Optional, %VRangeScrollBar title (default = "").
 	 */
-	HRangeScrollBar	(const double x, const double y, const double width, const double height, 
+	VRangeScrollBar	(const double x, const double y, const double width, const double height, 
 			 const value_type value, const double min, const double max, double step = 0.0,
 			 std::function<value_type (const value_type& x)> transferFunc = ValueTransferable<value_type>::noTransfer,
 			 std::function<value_type (const value_type& x)> reTransferFunc = ValueTransferable<value_type>::noTransfer,
 			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 *  @brief  Creates a clone of the %HRangeScrollBar. 
-	 *  @return  Pointer to the new %HRangeScrollBar.
+	 *  @brief  Creates a clone of the %VRangeScrollBar. 
+	 *  @return  Pointer to the new %VRangeScrollBar.
 	 *
-	 *  Creates a clone of this %HRangeScrollBar by copying all properties. But NOT its
+	 *  Creates a clone of this %VRangeScrollBar by copying all properties. But NOT its
 	 *  linkage.
 	 *
 	 *  Allocated heap memory needs to be freed using @c delete if the clone
@@ -170,12 +169,12 @@ public:
 	virtual Widget* clone () const override; 
 
 	/**
-	 *  @brief  Copies from another %HRangeScrollBar. 
-	 *  @param that  Other %HRangeScrollBar.
+	 *  @brief  Copies from another %VRangeScrollBar. 
+	 *  @param that  Other %VRangeScrollBar.
 	 *
-	 *  Copies all properties from another %HRangeScrollBar. But NOT its linkage.
+	 *  Copies all properties from another %VRangeScrollBar. But NOT its linkage.
 	 */
-	void copy (const HRangeScrollBar* that);
+	void copy (const VRangeScrollBar* that);
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -200,8 +199,8 @@ protected:
 
 };
 
-inline HRangeScrollBar::HRangeScrollBar () :
-	HRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_HRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_HRANGESCROLLBAR_HEIGHT, 
+inline VRangeScrollBar::VRangeScrollBar () :
+	VRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VRANGESCROLLBAR_HEIGHT, 
 					 value_type (0.0, 0.0), 0.0, 1.0, 0.0, 
 					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
 			 		 URID_UNKNOWN_URID, "")
@@ -211,8 +210,8 @@ inline HRangeScrollBar::HRangeScrollBar () :
 
 
 
-inline HRangeScrollBar::HRangeScrollBar (const uint32_t urid, const std::string& title) : 
-	HRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_HRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_HRANGESCROLLBAR_HEIGHT, 
+inline VRangeScrollBar::VRangeScrollBar (const uint32_t urid, const std::string& title) : 
+	VRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VRANGESCROLLBAR_HEIGHT, 
 					 value_type (0.0, 0.0), 0.0, 1.0, 0.0, 
 					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
 					 urid, title) 
@@ -220,8 +219,8 @@ inline HRangeScrollBar::HRangeScrollBar (const uint32_t urid, const std::string&
 
 }
 
-inline HRangeScrollBar::HRangeScrollBar (const double value1, const double value2, const double min, const double max, double step, uint32_t urid, std::string title) : 
-	HRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_HRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_HRANGESCROLLBAR_HEIGHT, 
+inline VRangeScrollBar::VRangeScrollBar (const double value1, const double value2, const double min, const double max, double step, uint32_t urid, std::string title) : 
+	VRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VRANGESCROLLBAR_HEIGHT, 
 					 value_type (value1, value2), min, max, step,
 					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
 					 urid, title) 
@@ -229,8 +228,8 @@ inline HRangeScrollBar::HRangeScrollBar (const double value1, const double value
 
 }
 
-inline HRangeScrollBar::HRangeScrollBar (const value_type value, const double min, const double max, double step, uint32_t urid, std::string title) : 
-	HRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_HRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_HRANGESCROLLBAR_HEIGHT, 
+inline VRangeScrollBar::VRangeScrollBar (const value_type value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+	VRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VRANGESCROLLBAR_HEIGHT, 
 					 value, min, max, step,
 					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
 					 urid, title) 
@@ -238,12 +237,12 @@ inline HRangeScrollBar::HRangeScrollBar (const value_type value, const double mi
 
 }
 
-inline HRangeScrollBar::HRangeScrollBar	(const double  x, const double y, const double width, const double height, 
+inline VRangeScrollBar::VRangeScrollBar	(const double  x, const double y, const double width, const double height, 
 										 const double value1, const double value2, const double min, const double max, double step,
 										 std::function<value_type (const value_type& x)> transferFunc,
 							 			 std::function<value_type (const value_type& x)> reTransferFunc,
 										 uint32_t urid, std::string title) :
-	HRangeScrollBar	(x, y, width, height, 
+	VRangeScrollBar	(x, y, width, height, 
 					 value_type (value1, value2), min, max, step,
 					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
 					 urid, title)
@@ -251,7 +250,7 @@ inline HRangeScrollBar::HRangeScrollBar	(const double  x, const double y, const 
 
 }
 
-inline HRangeScrollBar::HRangeScrollBar	(const double  x, const double y, const double width, const double height, 
+inline VRangeScrollBar::VRangeScrollBar	(const double  x, const double y, const double width, const double height, 
 						 const value_type value, const double min, const double max, double step, 
 						 std::function<value_type (const value_type& x)> transferFunc,
 			 			 std::function<value_type (const value_type& x)> reTransferFunc,
@@ -291,14 +290,14 @@ inline HRangeScrollBar::HRangeScrollBar	(const double  x, const double y, const 
 	add (&button2);
 }
 
-inline Widget* HRangeScrollBar::clone () const 
+inline Widget* VRangeScrollBar::clone () const 
 {
-	Widget* f = new HRangeScrollBar (urid_, title_);
+	Widget* f = new VRangeScrollBar (urid_, title_);
 	f->copy (this);
 	return f;
 }
 
-inline void HRangeScrollBar::copy (const HRangeScrollBar* that)
+inline void VRangeScrollBar::copy (const VRangeScrollBar* that)
 {
 	scrollbar.copy (&that->scrollbar);
 	button1.copy (&that->button1);
@@ -312,7 +311,7 @@ inline void HRangeScrollBar::copy (const HRangeScrollBar* that)
 	Widget::copy (that);
 }
 
-inline void HRangeScrollBar::update ()
+inline void VRangeScrollBar::update ()
 {
 	if ((getEffectiveWidth () > 0) && (getEffectiveHeight () > 0))
 	{
@@ -326,33 +325,33 @@ inline void HRangeScrollBar::update ()
 		scrollbar.moveTo (x, y);
 		scrollbar.resize (w, h);
 		scrollbar.setValue (v.first);
-		scrollbar.setValueSize(v.second - v.first);
+		scrollbar.setValueSize (v.second - v.first);
 
-		symbol1.moveTo (0.25 * h, 0.25 * h);
-		symbol1.resize (0.5 * h, 0.5 * h);
+		symbol1.moveTo (0.25 * w, 0.25 * w);
+		symbol1.resize (0.5 * w, 0.5 * w);
 
-		symbol2.moveTo (0.25 * h, 0.25 * h);
-		symbol2.resize (0.5 * h, 0.5 * h);
+		symbol2.moveTo (0.25 * w, 0.25 * w);
+		symbol2.resize (0.5 * w, 0.5 * w);
 
-		button1.moveTo (x + (w - h) * rv.first, y);
-		button1.resize (h, h);
+		button1.moveTo (x, y + (h - w) * rv.first);
+		button1.resize (w, w);
 
-		button2.moveTo (x + (w - h) * rv.second, y);
-		button2.resize (h, h);
+		button2.moveTo (x, y + (h - w) * rv.second);
+		button2.resize (w, w);
 
 		const BStyles::Color bgColor =getBgColors()[getStatus()];
 		cairo_t* cr1 = cairo_create (button1.cairoSurface());
-		drawKnob (cr1, 0.5 * h, 0.5 * h, 0.25 * h, 0.0, bgColor, bgColor);
+		drawKnob (cr1, 0.5 * w, 0.5 * w, 0.25 * w, 0.0, bgColor, bgColor);
 		cairo_destroy (cr1);
 		cairo_t* cr2 = cairo_create (button2.cairoSurface());
-		drawKnob (cr2, 0.5 * h, 0.5 * h, 0.25 * h, 0.0, bgColor, bgColor);
+		drawKnob (cr2, 0.5 * w, 0.5 * w, 0.25 * w, 0.0, bgColor, bgColor);
 		cairo_destroy (cr2);
 	}
 
 	Widget::update();
 }
 
-inline void HRangeScrollBar::onWheelScrolled (BEvents::Event* event)
+inline void VRangeScrollBar::onWheelScrolled (BEvents::Event* event)
 {
 	BEvents::WheelEvent* wev = dynamic_cast<BEvents::WheelEvent*> (event);
 	if (!wev) return;
@@ -375,7 +374,7 @@ inline void HRangeScrollBar::onWheelScrolled (BEvents::Event* event)
 	Scrollable::onWheelScrolled (event);
 }
 
-inline void HRangeScrollBar::buttonDraggedCallback (BEvents::Event* event)
+inline void VRangeScrollBar::buttonDraggedCallback (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*>(event);
 	if (!pev) return;
@@ -383,15 +382,15 @@ inline void HRangeScrollBar::buttonDraggedCallback (BEvents::Event* event)
 	Frame* w = dynamic_cast<Frame*>(pev->getWidget());
 	if (!w) return;
 
-	HRangeScrollBar* p = dynamic_cast<HRangeScrollBar*>(w->getParentWidget());
+	VRangeScrollBar* p = dynamic_cast<VRangeScrollBar*>(w->getParentWidget());
 	if (!p) return;
 
-	const double x0 = p->getXOffset ();
+	const double y0 = p->getYOffset ();
 	const double width = p->getEffectiveWidth ();
 	const double height = p->getEffectiveHeight ();
-	const double px = std::max (std::min (w->getPosition().x, x0 + width - height), x0);
+	const double py = std::max (std::min (w->getPosition().y, y0 + height - width), y0);
 
-	const double rv = (px - x0) / (width - height);
+	const double rv = (py - y0) / (height - width);
 	value_type v = p->getValue();
 	const value_type rv0 = p->getRatioFromValue (v, p->getTransferFunction());
 	if ((w ==&p->button1) && (rv <= rv0.second)) v.first = p->getValueFromRatio (value_type (rv, rv0.second)).first;
@@ -401,15 +400,15 @@ inline void HRangeScrollBar::buttonDraggedCallback (BEvents::Event* event)
 
 }
 
-inline void HRangeScrollBar::scrollbarChangedCallback (BEvents::Event* event)
+inline void VRangeScrollBar::scrollbarChangedCallback (BEvents::Event* event)
 {
 	BEvents::ValueChangeTypedEvent<double>* vev = dynamic_cast<BEvents::ValueChangeTypedEvent<double>*>(event);
 	if (!vev) return;
 
-	HScrollBar* w = dynamic_cast<HScrollBar*>(vev->getWidget());
+	VScrollBar* w = dynamic_cast<VScrollBar*>(vev->getWidget());
 	if (!w) return;
 
-	HRangeScrollBar* p = dynamic_cast<HRangeScrollBar*>(w->getParentWidget());
+	VRangeScrollBar* p = dynamic_cast<VRangeScrollBar*>(w->getParentWidget());
 	if (!p) return;
 
 	p->setValue (value_type (w->getValue(), p->getValue().second + w->getValue() - p->getValue().first));
@@ -419,4 +418,4 @@ inline void HRangeScrollBar::scrollbarChangedCallback (BEvents::Event* event)
 }
 
 
-#endif /* BWIDGETS_HRANGESCROLLBAR_HPP_ */
+#endif /* BWIDGETS_VRANGESCROLLBAR_HPP_ */

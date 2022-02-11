@@ -60,6 +60,7 @@
 #include "../BWidgets/HScrollBar.hpp"
 #include "../BWidgets/VScrollBar.hpp"
 #include "../BWidgets/HRangeScrollBar.hpp"
+#include "../BWidgets/VRangeScrollBar.hpp"
 #include "../BWidgets/FileChooser.hpp"
 #include <cairo/cairo.h>
 #include <cstdlib>
@@ -256,6 +257,13 @@ int main ()
     hRangeScrollBarLabel.setFont (labelFont);
     window.add (&hRangeScrollBar);
     window.add (&hRangeScrollBarLabel);
+
+    // VRangeScrollBar
+    VRangeScrollBar vRangeScrollBar (845, 370, 10, 60, 0.2, 0.5, 0, 1, 0);
+    Label vRangeScrollBarLabel (800, 440, 100, 20, "VRangeScrollBar");
+    vRangeScrollBarLabel.setFont (labelFont);
+    window.add (&vRangeScrollBar);
+    window.add (&vRangeScrollBarLabel);
 
     // SpinBox
     SpinBox spinBox (700, 490, 100, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
