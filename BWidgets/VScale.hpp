@@ -52,9 +52,6 @@ class VScale :	public VMeter,
 				public Draggable, 
 				public Scrollable
 {
-protected:
-	BUtilities::RectArea<> scale_;
-
 public:
 
 	/**
@@ -212,8 +209,7 @@ inline VScale::VScale	(const double  x, const double y, const double width, cons
 		VMeter	(x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
 		Clickable(),
 		Draggable(),
-		Scrollable(),
-		scale_ (0, 0, width, height)
+		Scrollable()
 {
 
 }
