@@ -199,7 +199,7 @@ inline SymbolPad<T>::SymbolPad	(const double x, const double y, const double wid
 	symbol.setTxColors (symbol.getBgColors());
 	symbol.setStatus (BStyles::STATUS_INACTIVE);
 	this->add (&symbol);
-	symbol.resize (BUtilities::Point<> (0.4 * this->extends_.x, 0.4 * this->extends_.y));
+	symbol.resize (BUtilities::Point<> (0.5 * this->extends_.x, 0.5 * this->extends_.y));
 	symbol.moveTo (symbol.center(), symbol.middle());
 }
 
@@ -222,7 +222,7 @@ template <class T>
 inline void SymbolPad<T>::resize ()
 {
 	symbol.resize ();
-	Pad<T>::resize (2.5 * symbol.getWidth(), 2.5 * symbol.getHeight());
+	Pad<T>::resize (2.0 * symbol.getWidth(), 2.0 * symbol.getHeight());
 	symbol.moveTo (symbol.center(), symbol.middle());
 }
 
@@ -236,14 +236,14 @@ template <class T>
 inline void SymbolPad<T>::resize (const BUtilities::Point<> extends)
 {
 	Pad<T>::resize (BUtilities::Point<> (extends.x, extends.y));
-	symbol.resize (BUtilities::Point<> (0.4 * extends.x, 0.4 * extends.y));
+	symbol.resize (BUtilities::Point<> (0.5 * extends.x, 0.5 * extends.y));
 	symbol.moveTo (symbol.center(), symbol.middle());
 }
 
 template <class T>
 inline void SymbolPad<T>::update ()
 {
-	symbol.resize (0.4 * this->getEffectiveWidth(), 0.4 * this->getEffectiveHeight());
+	symbol.resize (0.5 * this->getEffectiveWidth(), 0.5 * this->getEffectiveHeight());
 	symbol.moveTo (symbol.center(), symbol.middle());
 	Pad<T>::update ();
 }
