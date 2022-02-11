@@ -32,7 +32,7 @@ namespace BWidgets
 {
 
 /**
- *  @brief  %Vertical scroll bar widget.
+ *  @brief  %Horizontal scroll bar widget.
  *
  *  %HScrollBar is a Valueable Widget derived from HScale. It displays a value
  *  as a horizontal scrollbar and supports user interaction via Draggable, and 

@@ -131,14 +131,14 @@ inline void Frame::copy (const Frame* that)
 
 inline void Frame::onPointerDragged (BEvents::Event* event)
 {
-    Draggable::onPointerDragged (event);
-
     BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
     if (pev) 
 	{
 		raiseToFront();
 		moveTo (getPosition () + pev->getDelta ());
 	}
+
+	Draggable::onPointerDragged (event);
 }
 
 }

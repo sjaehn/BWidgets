@@ -27,6 +27,7 @@
 #include "../BWidgets/TextButton.hpp"
 #include "../BWidgets/SymbolButton.hpp"
 #include "../BWidgets/Pad.hpp"
+#include "../BWidgets/Pattern.hpp"
 #include "../BWidgets/SymbolPad.hpp"
 #include "../BWidgets/ImageButton.hpp"
 #include "../BWidgets/CheckBox.hpp"
@@ -58,8 +59,8 @@
 #include "../BWidgets/ComboBox.hpp"
 #include "../BWidgets/HScrollBar.hpp"
 #include "../BWidgets/VScrollBar.hpp"
+#include "../BWidgets/HRangeScrollBar.hpp"
 #include "../BWidgets/FileChooser.hpp"
-#include "../BWidgets/Pattern.hpp"
 #include <cairo/cairo.h>
 #include <cstdlib>
 #include <initializer_list>
@@ -78,7 +79,7 @@ int main ()
 {
     BUtilities::Dictionary::setLanguage ("en");
 
-    Window window (1200, 820, 0, URID_UNKNOWN_URID, "Window");
+    Window window (1500, 820, 0, URID_UNKNOWN_URID, "Window");
 
     // Widget
     Widget widget (10, 10, 80, 60);
@@ -129,28 +130,19 @@ int main ()
     std::array<std::unique_ptr<Symbol>, Symbol::NEW_FOLDER_SYMBOL + 1> symbols;
     for (int i = 0; i <= Symbol::NEW_FOLDER_SYMBOL; ++i)
     {
-        symbols[i] = std::unique_ptr<Symbol> (new Symbol (410 + 16 * (i % 5), 10 + 16 * int (i / 5), 12, 12, Symbol::SymbolType(i)));
+        symbols[i] = std::unique_ptr<Symbol> (new Symbol (410 + 18 * (i % 10), 10 + 18 * int (i / 10), 12, 12, Symbol::SymbolType(i)));
         window.add (symbols[i].get());
     }
-    Label symbolLabel (410, 80, 80, 20, "Symbol");
+    Label symbolLabel (460, 80, 80, 20, "Symbol");
     symbolLabel.setFont (labelFont);
     window.add (&symbolLabel);
 
     // Image
-    Image image (510, 10, 80, 60, "example-romedalen.png");
-    Label imageLabel (510, 80, 80, 20, "Image");
+    Image image (610, 10, 80, 60, "example-romedalen.png");
+    Label imageLabel (610, 80, 80, 20, "Image");
     imageLabel.setFont (labelFont);
     window.add (&image);
     window.add (&imageLabel);
-
-    // ImageButton
-    ImageButton imageButton (620, 10, 60, 60, {"imgbut01.png", "imgbut02.png"}, true);
-    imageButton.setBackground(BStyles::noFill);
-    imageButton.setBgColors(BStyles::ColorMap ({BStyles::invisible}));
-    Label imageButtonLabel (610, 80, 80, 20, "ImageButton");
-    imageButtonLabel.setFont (labelFont);
-    window.add (&imageButton);
-    window.add (&imageButtonLabel);
 
     // Button
     Button button (710, 30, 80, 20);
@@ -188,6 +180,26 @@ int main ()
     symbolPadLabel.setFont (labelFont);
     window.add (&symbolPad);
     window.add (&symbolPadLabel);
+
+    // Pattern
+    Pattern<> pattern (1210, 10, 280, 180, 4, 4);
+    std::array<BStyles::ColorMap, 4> patternColors = {{BStyles::reds, BStyles::yellows, BStyles::greens, BStyles::blues}};
+    for (int i = 0; i < 4; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        {
+            Pad<>* w = dynamic_cast<Pad<>*>(pattern.getPad (2 * (i % 2) + (j % 2), 2 * int (i / 2) + int (j / 2)));
+            if (w) 
+            {
+                w->setFgColors(patternColors[i]);
+                w->setValue (double (std::rand())/ RAND_MAX);
+            }
+        }
+    }
+    Label patternLabel (1310, 200, 80, 20, "Pattern");
+    patternLabel.setFont (labelFont);
+    window.add (&pattern);
+    window.add (&patternLabel);
 
     // SpinButton
     SpinButton spinButton (740, 150, 20, 20);
@@ -238,27 +250,34 @@ int main ()
     window.add (&vScrollBar);
     window.add (&vScrollBarLabel);
 
+    // HRangeScrollBar
+    HRangeScrollBar hRangeScrollBar (710, 395, 80, 10, 0.2, 0.5, 0, 1, 0);
+    Label hRangeScrollBarLabel (700, 440, 100, 20, "HRangeScrollBar");
+    hRangeScrollBarLabel.setFont (labelFont);
+    window.add (&hRangeScrollBar);
+    window.add (&hRangeScrollBarLabel);
+
     // SpinBox
-    SpinBox spinBox (700, 370, 100, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
+    SpinBox spinBox (700, 490, 100, 20, {"Beethoven", "Bach", "Chopin", "Dvořák", "Händel", "Haydn", "Liszt", "Mozart", "Verdi", "Vivaldi"});
     spinBox.setValue (1);
-    Label spinBoxLabel (710, 400, 80, 20, "SpinBox");
+    Label spinBoxLabel (710, 520, 80, 20, "SpinBox");
     spinBoxLabel.setFont (labelFont);
     window.add (&spinBox);
     window.add (&spinBoxLabel);
 
     // ComboBox
-    ComboBox comboBox (700, 440, 100, 20, 0, 20, 100, 90, {"Avicii", "Daft Punk", "M. Garrix", "D. Guetta", "Kygo", "Marshmello", "R. Schulz", "DJ Spooky", "Tiësto", "A. van Buren", "P. van Dyke", "S. Väth", "A. Walker"});
+    ComboBox comboBox (700, 560, 100, 20, 0, 20, 100, 90, {"Avicii", "Daft Punk", "M. Garrix", "D. Guetta", "Kygo", "Marshmello", "R. Schulz", "DJ Spooky", "Tiësto", "A. van Buren", "P. van Dyke", "S. Väth", "A. Walker"});
     comboBox.setValue (1);
-    Label comboBoxLabel (710, 560, 80, 20, "ComboBox");
+    Label comboBoxLabel (710, 680, 80, 20, "ComboBox");
     comboBoxLabel.setFont (labelFont);
     window.add (&comboBox);
     window.add (&comboBoxLabel);
 
     // ListBox
-    ListBox listBox (810, 370, 80, 180, {"AC/DC", "Bon Jovi", "Helloween", "Iron Maiden", "KISS", "Metallica", "Manowar", "Pantera", "Scorpions", "Sepultura", "Slayer", "Van Halen"});
+    ListBox listBox (810, 490, 80, 180, {"AC/DC", "Bon Jovi", "Helloween", "Iron Maiden", "KISS", "Metallica", "Manowar", "Pantera", "Scorpions", "Sepultura", "Slayer", "Van Halen"});
     listBox.setValue (1);
     listBox.setTop (1);
-    Label listBoxLabel (810, 560, 80, 20, "ListBox");
+    Label listBoxLabel (810, 680, 80, 20, "ListBox");
     listBoxLabel.setFont (labelFont);
     window.add (&listBox);
     window.add (&listBoxLabel);
@@ -285,6 +304,15 @@ int main ()
     vScaleLabel.setFont (labelFont);
     window.add (&vScale);
     window.add (&vScaleLabel);
+
+    // ImageButton
+    ImageButton imageButton (1220, 250, 60, 60, {"imgbut01.png", "imgbut02.png"}, true);
+    imageButton.setBackground(BStyles::noFill);
+    imageButton.setBgColors(BStyles::ColorMap ({BStyles::invisible}));
+    Label imageButtonLabel (1210, 320, 80, 20, "ImageButton");
+    imageButtonLabel.setFont (labelFont);
+    window.add (&imageButton);
+    window.add (&imageButtonLabel);
 
     // Dial
     Dial dial (920, 370, 60, 60, 0.3, 0.0, 1.0, 0.0);
@@ -432,26 +460,6 @@ int main ()
     fileChooserLabel.setFont (labelFont);
     window.add (&fileChooserLabel);
     window.add (&fileChooser);
-
-    // Pattern
-    Pattern<> pattern (710, 610, 180, 180, 4, 4);
-    std::array<BStyles::ColorMap, 4> patternColors = {{BStyles::reds, BStyles::yellows, BStyles::greens, BStyles::blues}};
-    for (int i = 0; i < 4; ++i)
-    {
-        for (int j = 0; j < 4; ++j)
-        {
-            Pad<>* w = dynamic_cast<Pad<>*>(pattern.getPad (2 * (i % 2) + (j % 2), 2 * int (i / 2) + int (j / 2)));
-            if (w) 
-            {
-                w->setFgColors(patternColors[i]);
-                w->setValue (double (std::rand())/ RAND_MAX);
-            }
-        }
-    }
-    Label patternLabel (760, 800, 80, 20, "Pattern");
-    patternLabel.setFont (labelFont);
-    window.add (&pattern);
-    window.add (&patternLabel);
 
     window.run();
 }

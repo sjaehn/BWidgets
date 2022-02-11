@@ -169,6 +169,7 @@ Widget
  |         ├── HScrollBar
  |         ╰── HSlider
  |              ╰── ValueHSlider
+ ├── HRangeScrollBar
  ├── VMeter
  |    ├── ValueVMeter
  |    ╰── VScale
@@ -551,6 +552,18 @@ The value can be point value (vsize = 0) or a range value (start value
 slider and supports user interaction via `Clickable`, `Draggable`, and
 `Scrollable`. Its appearance is defined by the BgColors parameter (static
 elements, knob) and by the FgColors parameter (value).
+
+
+### HRangeScrollBar
+
+![hrangescrollbar](../suppl/HRangeScrollBar.png)
+
+`HRangeScrollBar` is a `Valueable` widget similiar to `HScrollbar`. It displays
+a value constisting of a `std::pair` with its min and its max value as a 
+horizontal scrollbar and supports user interaction via `Scrollable` to resize
+the value range. In addition, it supports dragging to move the value range
+or to move the ends (min, max). Its appearance is defined by the BgColors 
+parameter.
 
 
 ### ValueHSlider
