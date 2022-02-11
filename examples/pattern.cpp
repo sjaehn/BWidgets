@@ -27,7 +27,7 @@ using namespace BWidgets;
 
 constexpr std::array<Symbol::SymbolType, NR_EDIT_BUTTONS> buttonSymbols =
 {{
-    Symbol::NO_SYMBOL,
+    Symbol::EDIT_SYMBOL,
     Symbol::PICK_SYMBOL,
     Symbol::CUT_SYMBOL,
     Symbol::COPY_SYMBOL,
