@@ -1,4 +1,7 @@
 # B.Widgets
+
+**Stop: This branch contains the old B.Widgets (without an official API). Take a look at the new B.Widgets API at the [devel](https://github.com/sjaehn/BWidgets/tree/devel) branch.**
+
 Widget toolkit based on Cairo and PUGL.
 
 This is a simple widget toolkit for the B.Music projects.
