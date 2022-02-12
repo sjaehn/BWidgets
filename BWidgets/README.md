@@ -98,9 +98,10 @@ Build and run. You can also find this source code at "../examples/buttontest.cpp
 
 ## Namespaces
 
-The toolkit uses tools from five namespaces:
+The toolkit uses tools from six namespaces:
 * `BDevices`
 * `BEvents`
+* `BMusic`
 * `BStyles`
 * `BUtilities`
 * `BWidgets`
@@ -116,6 +117,11 @@ Interaction with the system input devices (mouse, keyboard).
 The [`BEvents`](../BEvents/README.md) namespace contains different classes of
 events. `BEvents` are emitted by a widget (or by the system via the main
 window) to the main window event queue.
+
+
+### BMusic
+
+The [`BMusic`](../BMusic/README.md) namespace contains classes and algorithms for audio processing.
 
 
 ### BStyles

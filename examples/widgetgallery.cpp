@@ -15,6 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#define MINIMP3_IMPLEMENTATION
 
 #include "../BWidgets/Window.hpp"
 #include "../BWidgets/Label.hpp"
@@ -132,19 +133,12 @@ int main ()
     std::array<std::unique_ptr<Symbol>, Symbol::NEW_FOLDER_SYMBOL + 1> symbols;
     for (int i = 0; i <= Symbol::NEW_FOLDER_SYMBOL; ++i)
     {
-        symbols[i] = std::unique_ptr<Symbol> (new Symbol (410 + 18 * (i % 10), 10 + 18 * int (i / 10), 12, 12, Symbol::SymbolType(i)));
+        symbols[i] = std::unique_ptr<Symbol> (new Symbol (410 + 18 * (i % 16), 10 + 18 * int (i / 16), 12, 12, Symbol::SymbolType(i)));
         window.add (symbols[i].get());
     }
-    Label symbolLabel (460, 80, 80, 20, "Symbol");
+    Label symbolLabel (510, 80, 80, 20, "Symbol");
     symbolLabel.setFont (labelFont);
     window.add (&symbolLabel);
-
-    // Image
-    Image image (610, 10, 80, 60, "example-romedalen.png");
-    Label imageLabel (610, 80, 80, 20, "Image");
-    imageLabel.setFont (labelFont);
-    window.add (&image);
-    window.add (&imageLabel);
 
     // Button
     Button button (710, 30, 80, 20);
@@ -182,26 +176,6 @@ int main ()
     symbolPadLabel.setFont (labelFont);
     window.add (&symbolPad);
     window.add (&symbolPadLabel);
-
-    // Pattern
-    Pattern<> pattern (1210, 10, 280, 180, 4, 4);
-    std::array<BStyles::ColorMap, 4> patternColors = {{BStyles::reds, BStyles::yellows, BStyles::greens, BStyles::blues}};
-    for (int i = 0; i < 4; ++i)
-    {
-        for (int j = 0; j < 4; ++j)
-        {
-            Pad<>* w = dynamic_cast<Pad<>*>(pattern.getPad (2 * (i % 2) + (j % 2), 2 * int (i / 2) + int (j / 2)));
-            if (w) 
-            {
-                w->setFgColors(patternColors[i]);
-                w->setValue (double (std::rand())/ RAND_MAX);
-            }
-        }
-    }
-    Label patternLabel (1310, 200, 80, 20, "Pattern");
-    patternLabel.setFont (labelFont);
-    window.add (&pattern);
-    window.add (&patternLabel);
 
     // SpinButton
     SpinButton spinButton (740, 150, 20, 20);
@@ -313,15 +287,6 @@ int main ()
     vScaleLabel.setFont (labelFont);
     window.add (&vScale);
     window.add (&vScaleLabel);
-
-    // ImageButton
-    ImageButton imageButton (1220, 250, 60, 60, {"imgbut01.png", "imgbut02.png"}, true);
-    imageButton.setBackground(BStyles::noFill);
-    imageButton.setBgColors(BStyles::ColorMap ({BStyles::invisible}));
-    Label imageButtonLabel (1210, 320, 80, 20, "ImageButton");
-    imageButtonLabel.setFont (labelFont);
-    window.add (&imageButton);
-    window.add (&imageButtonLabel);
 
     // Dial
     Dial dial (920, 370, 60, 60, 0.3, 0.0, 1.0, 0.0);
@@ -476,6 +441,42 @@ int main ()
     sampleChooserLabel.setFont (labelFont);
     window.add (&sampleChooserLabel);
     window.add (&sampleChooser);
+
+    // Pattern
+    Pattern<> pattern (1210, 10, 280, 180, 4, 4);
+    std::array<BStyles::ColorMap, 4> patternColors = {{BStyles::reds, BStyles::yellows, BStyles::greens, BStyles::blues}};
+    for (int i = 0; i < 4; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        {
+            Pad<>* w = dynamic_cast<Pad<>*>(pattern.getPad (2 * (i % 2) + (j % 2), 2 * int (i / 2) + int (j / 2)));
+            if (w) 
+            {
+                w->setFgColors(patternColors[i]);
+                w->setValue (double (std::rand())/ RAND_MAX);
+            }
+        }
+    }
+    Label patternLabel (1310, 200, 80, 20, "Pattern");
+    patternLabel.setFont (labelFont);
+    window.add (&pattern);
+    window.add (&patternLabel);
+
+    // Image
+    Image image (1210, 250, 80, 60, "examples/inc/music-guitar-acoustic-guitar-instrument-electric-guitar-musical-instrument-stringed-instrument-bass-fender-strings-bass-guitar-e-bass-jazzbass-string-instrument-plucked-string-instruments-slide-guitar-acoustic-electric-guitar-699195.png");
+    Label imageLabel (1210, 320, 80, 20, "Image");
+    imageLabel.setFont (labelFont);
+    window.add (&image);
+    window.add (&imageLabel);
+
+    // ImageButton
+    ImageButton imageButton (1320, 250, 60, 60, {"examples/inc/imgbut01.png", "examples/inc/imgbut02.png"}, true);
+    imageButton.setBackground(BStyles::noFill);
+    imageButton.setBgColors(BStyles::ColorMap ({BStyles::invisible}));
+    Label imageButtonLabel (1310, 320, 80, 20, "ImageButton");
+    imageButtonLabel.setFont (labelFont);
+    window.add (&imageButton);
+    window.add (&imageButtonLabel);
 
     window.run();
 }

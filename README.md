@@ -7,9 +7,10 @@ For a detailed description of the classes and methods of B.Widgets see
 
 ![widgetgallery](suppl/widgetgallery.png)
 
-The toolkit uses tools from five namespaces (further info there):
+The toolkit uses tools from six namespaces (further info there):
 * `BDevices`
 * [`BEvents`](BEvents/README.md)
+* [`BMusic`](BMusic/README.md)
 * [`BStyles`](BStyles/README.md)
 * `BUtilities`
 * [`BWidgets`](BWidgets/README.md)
@@ -37,12 +38,17 @@ include the widgets (or events) you need into your project, e. g.:
 To build the example binaries, simply call
 
 ```
+make
+```
+from the root directory of the clone to build all examples, or
+
+```
 make [examples]
 ```
 
-from the root directory of the clone, with optional parameter `[examples]` 
-which can be `widgetgallery`, `helloworld`, `buttontest`, `symbols`, and/or
-`pattern`. Calling `make` without parameters will build all examples.
+with optional parameter `[examples]` which can be `widgetgallery`, 
+`helloworld`, `buttontest`, `symbols`, and/or `pattern`. This will only build
+the respective example.
 
 Then call the respective example, e. g.:
 ```

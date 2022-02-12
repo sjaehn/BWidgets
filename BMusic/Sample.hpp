@@ -18,8 +18,8 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef SAMPLE_HPP_
-#define SAMPLE_HPP_
+#ifndef BMUSIC_SAMPLE_HPP_
+#define BMUSIC_SAMPLE_HPP_
 
 #include "sndfile.h"
 #include <cstdlib>
@@ -28,23 +28,29 @@
 #include <string>
 #include <stdexcept>
 
-/* #ifndef SF_FORMAT_MP3
+#ifndef SF_FORMAT_MP3
 #ifndef MINIMP3_FLOAT_OUTPUT
 #define MINIMP3_FLOAT_OUTPUT
 #endif
 #include "minimp3/minimp3_ex.h"
-#endif */ /* SF_FORMAT_MP3 */
+#endif /* SF_FORMAT_MP3 */
 
-namespace BUtilities
+namespace BMusic
 {
 
 /**
  *  @brief  Class to load, handle, and process sound (sample) data from sound
  *  files. 
  *
+ *  A %Sample consists of the sound file meta data (format, file name, extension,
+ *  path), the audio binary data, and the sample meta data (region, loop).
+
  *  %Sample uses the sndfile library to load sound files. Thus, all file types
  *  supported by sndfiles are supported by %Sample too. In addition, %Sample
  *  supports mp3 using minimp3.
+ *
+ *  Note: To support mp3, you must define MINIMP3_IMPLEMENTATION excactly ONCE
+ *  in your project, prior the include of %Sample.hpp.
  */
 struct Sample
 {
@@ -134,7 +140,7 @@ inline Sample::Sample (const char* samplepath) :
     for (char* s = ext; *s; ++s) *s = tolower ((unsigned char)*s);
 
 
-/*    // Check for known non-sndfiles
+    // Check for known non-sndfiles
 #ifndef SF_FORMAT_MP3
     if (!strcmp (ext, ".mp3"))
     {
@@ -153,7 +159,7 @@ inline Sample::Sample (const char* samplepath) :
     }
 
     else
-#endif */ /* !SF_FORMAT_MP3 */
+#endif /* !SF_FORMAT_MP3 */
 
     {
         SNDFILE* sndfile = sf_open (samplepath, SFM_READ, &info);
@@ -265,4 +271,4 @@ inline float Sample::get (const sf_count_t frame, const int channel, const int r
 
 }
 
-#endif /* SAMPLE_HPP_ */
+#endif /* BMUSIC_SAMPLE_HPP_ */

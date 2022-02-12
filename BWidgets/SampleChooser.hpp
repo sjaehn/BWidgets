@@ -26,7 +26,7 @@
 #include "CheckBox.hpp"
 #include "Frame.hpp"
 #include "Image.hpp"
-#include "../BUtilities/Sample.hpp"
+#include "../BMusic/Sample.hpp"
 #include <cairo/cairo.h>
 
 #ifndef SF_FORMAT_MP3
@@ -190,7 +190,7 @@ public:
 
 protected:
 
-	BUtilities::Sample* sample_;
+	BMusic::Sample* sample_;
 
 
 	static void sfileListBoxClickedCallback (BEvents::Event* event);
@@ -307,7 +307,7 @@ inline void SampleChooser::copy (const SampleChooser* that)
 	noFileLabel.copy (&that->noFileLabel);
 
 	if (sample_) delete sample_;
-	sample_ = new BUtilities::Sample (*(that->sample_));
+	sample_ = new BMusic::Sample (*(that->sample_));
 
 	FileChooser::copy (that);
 }
@@ -325,7 +325,7 @@ inline void SampleChooser::setFileName (const std::string& filename)
 			delete (sample_);
 			sample_ = nullptr;
 		}
-		try {sample_ = new BUtilities::Sample (rp);}
+		try {sample_ = new BMusic::Sample (rp);}
 		catch (std::exception& exc)
 		{
 			std::cerr << exc.what() << "\n";
