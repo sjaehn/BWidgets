@@ -54,9 +54,6 @@ class Dial :	public RadialMeter,
 				public Draggable, 
 				public Scrollable
 {
-protected:
-	BUtilities::RectArea<> scale_;
-
 public:
 
 	/**
@@ -218,8 +215,7 @@ inline Dial::Dial	(const double  x, const double y, const double width, const do
 		RadialMeter	(x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
 		Clickable(),
 		Draggable(),
-		Scrollable(),
-		scale_ (0, 0, width, height)
+		Scrollable()
 {
 
 }
