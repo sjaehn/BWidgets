@@ -428,17 +428,17 @@ inline void FileChooser::selectFilter (const std::string& name)
 
 inline void FileChooser::update ()
 {
-	double x0 = getXOffset();
-	double y0 = getYOffset();
-	double w = getEffectiveWidth();
-	double h = getEffectiveHeight();
+	const double x0 = getXOffset();
+	const double y0 = getYOffset();
+	const double w = getEffectiveWidth();
+	const double h = getEffectiveHeight();
 
 	if ((w >= 40) && (h >= 20))
 	{
-		double val = fileListBox.getValue();
+		const size_t val = fileListBox.getValue();
 		if ((val == 0) || (val > dirs_.size())) okButton.label.setText (BUtilities::Dictionary::get ("OK"));
 		else okButton.label.setText (BUtilities::Dictionary::get ("Open"));
-		cancelButton.label.setText(BUtilities::Dictionary::get ("Cancel"));
+		//cancelButton.label.setText(BUtilities::Dictionary::get ("Cancel"));
 
 		// Get extends first
 		okButton.resize();
@@ -534,7 +534,7 @@ inline void FileChooser::fileListBoxChangedCallback (BEvents::Event* event)
 	FileChooser* fc = dynamic_cast<FileChooser*>(w->getParent());
 	if (!fc) return;
 
-	size_t val = w->getValue();
+	const size_t val = w->getValue();
 
 	if ((val != 0) && (!fc->fileNameBox.getEditMode()))
 	{
@@ -589,7 +589,7 @@ inline void FileChooser::okButtonClickedCallback (BEvents::Event* event)
 	FileChooser* fc = dynamic_cast<FileChooser*>(w->getParent());
 	if (!fc) return;
 	
-	size_t lb = fc->fileListBox.getValue();
+	const size_t lb = fc->fileListBox.getValue();
 
 	if (lb != 0)
 	{
@@ -625,7 +625,7 @@ inline void FileChooser::confirmClickedCallback (BEvents::Event* event)
 	FileChooser* fc = dynamic_cast<FileChooser*>(w->getParentWidget());
 	if (!fc) return;
 
-	size_t button = fc->confirmBox.getValue();
+	const size_t button = fc->confirmBox.getValue();
 
 	// Cancel
 	if (button == 1.0)
@@ -651,7 +651,7 @@ inline void FileChooser::createClickedCallback (BEvents::Event* event)
 	FileChooser* fc = dynamic_cast<FileChooser*>(w->getParentWidget());
 	if (!fc) return;
 
-	size_t button = fc->createBox.getValue();
+	const size_t button = fc->createBox.getValue();
 
 	// Cancel
 	if (button == 1.0)
@@ -664,7 +664,7 @@ inline void FileChooser::createClickedCallback (BEvents::Event* event)
 	else if (button == 2.0)
 	{
 		w->setValue (0.0);
-		std::string newPath = fc->getPath() + PATH_SEPARATOR + fc->createInput.getText();
+		const std::string newPath = fc->getPath() + PATH_SEPARATOR + fc->createInput.getText();
 		if (!mkdir (newPath.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH))
 		{
 			fc->createError.hide();

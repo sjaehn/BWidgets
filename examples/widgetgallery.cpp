@@ -62,6 +62,7 @@
 #include "../BWidgets/HRangeScrollBar.hpp"
 #include "../BWidgets/VRangeScrollBar.hpp"
 #include "../BWidgets/FileChooser.hpp"
+#include "../BWidgets/SampleChooser.hpp"
 #include <cairo/cairo.h>
 #include <cstdlib>
 #include <initializer_list>
@@ -456,18 +457,25 @@ int main ()
     window.add (&messageBoxLabel);
 
     // FileChooser
-    std::initializer_list<FileChooser::Filter> filter =
+    std::initializer_list<FileChooser::Filter> fileFilter =
     {
         FileChooser::Filter {"All files", std::regex (".*")},
         FileChooser::Filter {"C/C++ files", std::regex (".*\\.((c)|(cc)|(cxx)|(cpp)|(h)|(hh)|(hpp)|(hxx))$", std::regex_constants::icase)},
         FileChooser::Filter {"Image files", std::regex (".*\\.((png)|(bmp)|(jpg)|(jpeg)|(tif)|(tiff))$", std::regex_constants::icase)},
         FileChooser::Filter {"Sound files", std::regex (".*\\.((wav)|(wave)|(aif)|(aiff)|(au)|(sd2)|(flac)|(caf)|(ogg)|(mp3))$", std::regex_constants::icase)}
     };
-    FileChooser fileChooser (10, 370, 280, 290, ".", filter);
+    FileChooser fileChooser (10, 370, 280, 290, ".", fileFilter);
     Label fileChooserLabel (100, 680, 100, 20, "FileChooser");
     fileChooserLabel.setFont (labelFont);
     window.add (&fileChooserLabel);
     window.add (&fileChooser);
+
+    // SampleChooser
+    SampleChooser sampleChooser (310, 370, 380, 290);
+    Label sampleChooserLabel (450, 680, 100, 20, "SampleChooser");
+    sampleChooserLabel.setFont (labelFont);
+    window.add (&sampleChooserLabel);
+    window.add (&sampleChooser);
 
     window.run();
 }

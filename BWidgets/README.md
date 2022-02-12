@@ -176,6 +176,7 @@ Widget
  |         ├── VScrollBar
  |         ╰── VSlider
  |              ╰── ValueHSlider
+ ├── VRangeScrollBar
  ├── RadialMeter
  |    ├── ValueRadialMeter
  |    ╰── Dial
@@ -187,10 +188,11 @@ Widget
  |    ├── Box
  |    |    ╰── TextBox
  |    |         ╰── MessageBox
- |    ├── FileChooser
- .    .
- .    .
- .    .
+ |    ╰── FileChooser
+ |         ╰── SampleChooser
+ .   
+ .    
+ .    
 ```
 
 Each widget class Xxx has got at least four* different constructors
@@ -637,6 +639,18 @@ elements, knob) and by the FgColors parameter (value).
 displaying its value.
 
 
+### VRangeScrollBar
+
+![vrangescrollbar](../suppl/VRangeScrollBar.png)
+
+`VRangeScrollBar` is a `Valueable` widget similiar to `VScrollbar`. It displays
+a value constisting of a `std::pair` with its min and its max value as a 
+vertical scrollbar and supports user interaction via `Scrollable` to resize
+the value range. In addition, it supports dragging to move the value range
+or to move the ends (min, max). Its appearance is defined by the BgColors 
+parameter.
+
+
 ### RadialMeter
 
 ![radialmeter](../suppl/RadialMeter.png)
@@ -766,6 +780,15 @@ CloseRequestEvent is emitted.
 
 Clicking on "OK" / "Open" will set the widget value to path + filename 
 and a CloseRequestEvent is emitted.
+
+
+### SampleChooser
+
+![samplechooser](../suppl/SampleChooser.png)
+
+The `SampleChooser` is a widget based on `FileChooser` for the selection of 
+audio files and samples. It additionally shows the waveform of the
+selected audio file and allows to select a range as a `Sample`.
 
 
 ## Attributes and decorations

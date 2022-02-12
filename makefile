@@ -1,7 +1,7 @@
 SHELL = /bin/sh
 
 PKG_CONFIG ?= pkg-config
-PKG_LIBS += x11 cairo
+PKG_LIBS += sndfile x11 cairo
 ifneq ($(shell $(PKG_CONFIG) --exists fontconfig || echo no), no)
   PKG_LIBS += fontconfig
   CPPFLAGS += -DPKG_HAVE_FONTCONFIG

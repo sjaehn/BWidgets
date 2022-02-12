@@ -28,12 +28,12 @@
 #include <string>
 #include <stdexcept>
 
-#ifndef SF_FORMAT_MP3
+/* #ifndef SF_FORMAT_MP3
 #ifndef MINIMP3_FLOAT_OUTPUT
 #define MINIMP3_FLOAT_OUTPUT
 #endif
 #include "minimp3/minimp3_ex.h"
-#endif /* SF_FORMAT_MP3 */
+#endif */ /* SF_FORMAT_MP3 */
 
 namespace BUtilities
 {
@@ -134,7 +134,7 @@ inline Sample::Sample (const char* samplepath) :
     for (char* s = ext; *s; ++s) *s = tolower ((unsigned char)*s);
 
 
-    // Check for known non-sndfiles
+/*    // Check for known non-sndfiles
 #ifndef SF_FORMAT_MP3
     if (!strcmp (ext, ".mp3"))
     {
@@ -153,7 +153,7 @@ inline Sample::Sample (const char* samplepath) :
     }
 
     else
-#endif /* !SF_FORMAT_MP3 */
+#endif */ /* !SF_FORMAT_MP3 */
 
     {
         SNDFILE* sndfile = sf_open (samplepath, SFM_READ, &info);
