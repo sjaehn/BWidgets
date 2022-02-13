@@ -268,7 +268,25 @@ public:
 	cairo_surface_t* getImageSurface (BStyles::Status status);
 
 protected:
-	virtual void draw (const BUtilities::RectArea<>& area) override;
+	/**
+     *  @brief  Unclipped draw an %Image to the surface.
+     */
+    virtual void draw () override;
+
+    /**
+     *  @brief  Clipped draw an %Image to the surface.
+     *  @param x0  X origin of the clipped area. 
+     *  @param y0  Y origin of the clipped area. 
+     *  @param width  Width of the clipped area.
+     *  @param height  Height of the clipped area. 
+     */
+    virtual void draw (const double x0, const double y0, const double width, const double height) override;
+
+    /**
+     *  @brief  Clipped draw an %Image to the surface.
+     *  @param area  Clipped area. 
+     */
+    virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
 inline Image::Image () : 
@@ -454,6 +472,16 @@ inline cairo_surface_t* Image::getImageSurface (BStyles::Status status)
 	return imageSurfaces_[status];
 }
 
+inline void Image::draw ()
+{
+	draw (0, 0, getWidth(), getHeight());
+}
+
+inline void Image::draw (const double x0, const double y0, const double width, const double height)
+{
+	draw (BUtilities::RectArea<> (x0, y0, width, height));
+}
+
 inline void Image::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
@@ -490,8 +518,9 @@ inline void Image::draw (const BUtilities::RectArea<>& area)
 						double sz = ((w / oriw < h / orih) ? (w / oriw) : (h / orih));
 						double x0 = getXOffset () + w / 2 - oriw * sz / 2;
 						double y0 = getYOffset () + h / 2 - orih * sz / 2;
+						cairo_translate (cr, x0, y0);
 						cairo_scale (cr, sz, sz);
-						cairo_set_source_surface(cr, stateSurface, x0 / sz, y0 / sz);
+						cairo_set_source_surface (cr, stateSurface, 0, 0);
 						cairo_paint (cr);
 					}
 
