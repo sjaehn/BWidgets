@@ -64,12 +64,14 @@
 #include "../BWidgets/VRangeScrollBar.hpp"
 #include "../BWidgets/FileChooser.hpp"
 #include "../BWidgets/SampleChooser.hpp"
+#include "../BWidgets/ImageVMeter.hpp"
 #include <cairo/cairo.h>
 #include <cstdlib>
 #include <initializer_list>
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <ctime>
 
 using namespace BWidgets;
 using namespace BStyles;
@@ -477,6 +479,32 @@ int main ()
     imageButtonLabel.setFont (labelFont);
     window.add (&imageButton);
     window.add (&imageButtonLabel);
+    
+    // ImageVMeter
+    ImageVMeter imageVMeter (1430, 360, 40, 80, 
+                             "examples/inc/ImageVSlider1-01.png", {{24.0, 113.0}, {24.0, 22.0}},
+                             "examples/inc/ImageVSlider1-02.png", {24.0, 113.0},
+                             "examples/inc/ImageVSlider03.png", {11.0, 21.0},
+                             0.5);
+    imageVMeter.setBackground(BStyles::Fill ("examples/inc/ImageVSliderBg.png"));
+    Label imageVMeterLabel (1410, 440, 80, 20, "ImageVMeter");
+    imageVMeterLabel.setFont (labelFont);
+    window.add (&imageVMeter);
+    window.add (&imageVMeterLabel);
 
-    window.run();
+    const std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
+
+    while (!window.isQuit())
+    {
+        const std::chrono::steady_clock::time_point t = std::chrono::steady_clock::now();
+        const std::chrono::duration<double> dt = t - t0;
+        radialMeter.setValue (0.5 + 0.5 * sin (1.2 * dt.count()));
+        hMeter.setValue (0.5 + 0.5 * sin (dt.count()));
+        vMeter.setValue (0.5 + 0.5 * sin (2.0 * dt.count()));
+        valueRadialMeter.setValue (0.5 + 0.5 * cos (0.5 * dt.count()));
+        valueHMeter.setValue (0.5 + 0.5 * sin (1.4 * dt.count()));
+        valueVMeter.setValue (0.5 + 0.5 * cos (0.7 * dt.count()));
+        imageVMeter.setValue (0.5 + 0.5 * sin (1.3 * dt.count()));
+        window.handleEvents();
+    }
 }
