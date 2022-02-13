@@ -800,4 +800,9 @@ void Window::purgeEventQueue (Widget* widget)
 	}
 }
 
+bool Window::isQuit() const
+{
+	return quit_;
+}
+
 }

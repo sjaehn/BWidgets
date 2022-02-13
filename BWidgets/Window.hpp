@@ -197,6 +197,12 @@ public:
 	 */
 	void purgeEventQueue (Widget* widget = nullptr);
 
+	/**
+	 *  @brief  Checks if close of the main %Window is scheduled.
+	 *  @return  True, if quit is scheduled, otherwise false.
+	 */
+	bool isQuit () const;
+
 protected:
 
 	/**
