@@ -64,6 +64,7 @@
 #include "../BWidgets/VRangeScrollBar.hpp"
 #include "../BWidgets/FileChooser.hpp"
 #include "../BWidgets/SampleChooser.hpp"
+#include "../BWidgets/ImageHMeter.hpp"
 #include "../BWidgets/ImageVMeter.hpp"
 #include <cairo/cairo.h>
 #include <cstdlib>
@@ -473,19 +474,31 @@ int main ()
 
     // ImageButton
     ImageButton imageButton (1320, 250, 60, 60, {"examples/inc/imgbut01.png", "examples/inc/imgbut02.png"}, true);
-    imageButton.setBackground(BStyles::noFill);
+    imageButton.setBackground(BStyles::Fill ("examples/inc/ImageVSliderBg.png"));
     imageButton.setBgColors(BStyles::ColorMap ({BStyles::invisible}));
     Label imageButtonLabel (1310, 320, 80, 20, "ImageButton");
     imageButtonLabel.setFont (labelFont);
     window.add (&imageButton);
     window.add (&imageButtonLabel);
+
+    // ImageHMeter
+    ImageHMeter imageHMeter (1310, 380, 80, 40, 
+                             "examples/inc/ImageHMeter_s.png", {{35.0, 55.0}, {230.0, 55.0}},
+                             "examples/inc/ImageHMeter_a.png", {35.0, 55.0},
+                             "", {0.0, 0.0},
+                             0.5, 0.0, 1.0, 1.0 / 15.0);
+    imageHMeter.setBackground(BStyles::Fill ("examples/inc/ImageVSliderBg.png"));
+    Label imageHMeterLabel (1310, 440, 80, 20, "ImageHMeter");
+    imageHMeterLabel.setFont (labelFont);
+    window.add (&imageHMeter);
+    window.add (&imageHMeterLabel);
     
     // ImageVMeter
     ImageVMeter imageVMeter (1430, 360, 40, 80, 
-                             "examples/inc/ImageVSlider1-01.png", {{24.0, 113.0}, {24.0, 22.0}},
-                             "examples/inc/ImageVSlider1-02.png", {24.0, 113.0},
-                             "examples/inc/ImageVSlider03.png", {11.0, 21.0},
-                             0.5);
+                             "examples/inc/ImageVMeter_s.png", {{55.0, 228.0}, {55.0, 32.0}},
+                             "examples/inc/ImageVMeter_a.png", {55.0, 228.0},
+                             "", {0.0, 0.0},
+                             0.5, 0.0, 1.0, 1.0 / 15.0);
     imageVMeter.setBackground(BStyles::Fill ("examples/inc/ImageVSliderBg.png"));
     Label imageVMeterLabel (1410, 440, 80, 20, "ImageVMeter");
     imageVMeterLabel.setFont (labelFont);
@@ -504,6 +517,7 @@ int main ()
         valueRadialMeter.setValue (0.5 + 0.5 * cos (0.5 * dt.count()));
         valueHMeter.setValue (0.5 + 0.5 * sin (1.4 * dt.count()));
         valueVMeter.setValue (0.5 + 0.5 * cos (0.7 * dt.count()));
+        imageHMeter.setValue (0.5 + 0.5 * cos (0.8 * dt.count()));
         imageVMeter.setValue (0.5 + 0.5 * sin (1.3 * dt.count()));
         window.handleEvents();
     }

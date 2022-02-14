@@ -176,6 +176,8 @@ Widget
  |         ╰── HSlider
  |              ╰── ValueHSlider
  ├── HRangeScrollBar
+ ├── ImageHMeter
+ |    ╰── ImageHSlider
  ├── VMeter
  |    ├── ValueVMeter
  |    ╰── VScale
@@ -183,6 +185,8 @@ Widget
  |         ╰── VSlider
  |              ╰── ValueHSlider
  ├── VRangeScrollBar
+ ├── ImageVMeter
+ |    ╰── ImageVSlider
  ├── RadialMeter
  |    ├── ValueRadialMeter
  |    ╰── Dial
@@ -562,6 +566,14 @@ slider and supports user interaction via `Clickable`, `Draggable`, and
 elements, knob) and by the FgColors parameter (value).
 
 
+### ValueHSlider
+
+![valuehslider](../suppl/ValueHSlider.png)
+
+`ValueHSlider` is a `HSlider` Widget with an additional editable label for
+displaying its value.
+
+
 ### HRangeScrollBar
 
 ![hrangescrollbar](../suppl/HRangeScrollBar.png)
@@ -574,12 +586,21 @@ or to move the ends (min, max). Its appearance is defined by the BgColors
 parameter.
 
 
-### ValueHSlider
+### ImageHMeter
 
-![valuehslider](../suppl/ValueHSlider.png)
+![imagehmeter](../suppl/ImageHMeter.png)
 
-`ValueHSlider` is a `HSlider` Widget with an additional editable label for
-displaying its value.
+`ImageHMeter` is a `Valueable` widget and displays a value as a horizontal
+meter based on images. The visual output is constructed using three
+freely selectable images along the provided anchor points:
+* static: All static elements in a passive state (background, labels, 
+  scales, ...).
+* active: All static elements in an active state (LEDs, ...).
+* dynamic: The dymacic element (sliding contoller, ...).
+
+ImageHMeter itself doesn't possess any user interaction. The value is 
+kept within a defined range and is displayed by the value-dependently
+cropped active image and by the position of the dynamic image.
 
 
 ### VMeter
@@ -655,6 +676,23 @@ vertical scrollbar and supports user interaction via `Scrollable` to resize
 the value range. In addition, it supports dragging to move the value range
 or to move the ends (min, max). Its appearance is defined by the BgColors 
 parameter.
+
+
+### ImageVMeter
+
+![imagevmeter](../suppl/ImageVMeter.png)
+
+`ImageVMeter` is a `Valueable` widget and displays a value as a vertical
+meter based on images. The visual output is constructed using three
+freely selectable images along the provided anchor points:
+* static: All static elements in a passive state (background, labels, 
+  scales, ...).
+* active: All static elements in an active state (LEDs, ...).
+* dynamic: The dymacic element (sliding contoller, ...).
+
+ImageVMeter itself doesn't possess any user interaction. The value is 
+kept within a defined range and is displayed by the value-dependently
+cropped active image and by the position of the dynamic image.
 
 
 ### RadialMeter

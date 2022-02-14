@@ -1,4 +1,4 @@
-/* ImageVMeter.hpp
+/* ImageHMeter.hpp
  * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BWIDGETS_IMAGEVMETER_HPP_
-#define BWIDGETS_IMAGEVMETER_HPP_
+#ifndef BWIDGETS_IMAGEHMETER_HPP_
+#define BWIDGETS_IMAGEHMETER_HPP_
 
 #include "Widget.hpp"
 #include "Supports/Validatable.hpp"
@@ -26,21 +26,21 @@
 #include <cairo/cairo.h>
 #include <utility>
 
-#ifndef BWIDGETS_DEFAULT_IMAGEVMETER_WIDTH
-#define BWIDGETS_DEFAULT_IMAGEVMETER_WIDTH 20.0
+#ifndef BWIDGETS_DEFAULT_IMAGEHMETER_WIDTH
+#define BWIDGETS_DEFAULT_IMAGEHMETER_WIDTH 20.0
 #endif
 
-#ifndef BWIDGETS_DEFAULT_IMAGEVMETER_HEIGHT
-#define BWIDGETS_DEFAULT_IMAGEVMETER_HEIGHT 80.0
+#ifndef BWIDGETS_DEFAULT_IMAGEHMETER_HEIGHT
+#define BWIDGETS_DEFAULT_IMAGEHMETER_HEIGHT 80.0
 #endif
 
 namespace BWidgets
 {
 
 /**
- *  @brief  %ImageVMeter widget.
+ *  @brief  %ImageHMeter widget.
  *
- *  %ImageVMeter is a Valueable Widget and displays a value as a vertical
+ *  %ImageHMeter is a Valueable Widget and displays a value as a horizontal
  *  meter based on images. The visual output is constructed using three
  *  freely selectable images along the provided anchor points:
  *  * static: All static elements in a passive state (background, labels, 
@@ -48,17 +48,17 @@ namespace BWidgets
  *  * active: All static elements in an active state (LEDs, ...).
  *  * dynamic: The dymacic element (sliding contoller, ...).
  *
- *  %ImageVMeter itself doesn't possess any user interaction. The value is 
+ *  %ImageHMeter itself doesn't possess any user interaction. The value is 
  *  kept within a defined range and is displayed by the value-dependently
  *  cropped active image and by the position of the dynamic image.
  *
- *  Advanced settings allow an %ImageVMeter to display a value in a non-linear
+ *  Advanced settings allow an %ImageHMeter to display a value in a non-linear
  *  manner (e.g. for levels and frequencies) using transfer functions and / or
  *  to use non-line color gradients for display using gradient functions. 
  *
  *  @todo Inverse range, negative step.
  */
-class ImageVMeter :	public Widget, 
+class ImageHMeter :	public Widget, 
 				public ValueableTyped<double>, 
 				public ValidatableRange<double>, 
 				public ValueTransferable<double>
@@ -74,20 +74,20 @@ protected:
 public:
 
 	/**
-	 * @brief  Constructs an empty %ImageVMeter object.
+	 * @brief  Constructs an empty %ImageHMeter object.
 	 * 
 	 */
-	ImageVMeter ();
+	ImageHMeter ();
 
 	/**
-	 *  @brief  Constructs an empty %ImageVMeter object.
+	 *  @brief  Constructs an empty %ImageHMeter object.
 	 *  @param URID  URID.
 	 *  @param title  %Widget title.
 	 */
-	ImageVMeter (const uint32_t urid, const std::string& title);
+	ImageHMeter (const uint32_t urid, const std::string& title);
 
 	/**
-	 *  @brief  Creates a %ImageVMeter with default size.
+	 *  @brief  Creates a %ImageHMeter with default size.
 	 *  @param staticImage  Filename of the static passive content image.
 	 *  @param staticAnchors  Anchor points of the static passive content 
 	 *  (std::pair of position for the min value and position of the max 
@@ -112,18 +112,18 @@ public:
 	 *  cover ALL possible positions of the static active content 
 	 *  @a activeImage and the dynamic content @a dynamicImage.
 	 */
-	ImageVMeter	(const std::string staticImage, const std::pair<BUtilities::Point<>, BUtilities::Point<>> staticAnchors,
+	ImageHMeter	(const std::string staticImage, const std::pair<BUtilities::Point<>, BUtilities::Point<>> staticAnchors,
 				 std::string activeImage = "", BUtilities::Point<> activeAnchor = {0,0},
 				 std::string dynamicImage = "", BUtilities::Point<> dynamicAnchor = {0,0},
 				 double value = 0.0, double min = 0.0, double max = 1.0, double step = 0.0, 
 				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 *  @brief  Creates a %ImageVMeter.
-	 *  @param x  %ImageVMeter X origin coordinate.
-	 *  @param y  %ImageVMeter Y origin coordinate.
-	 *  @param width  %ImageVMeter width.
-	 *  @param height  %ImageVMeter height.
+	 *  @brief  Creates a %ImageHMeter.
+	 *  @param x  %ImageHMeter X origin coordinate.
+	 *  @param y  %ImageHMeter Y origin coordinate.
+	 *  @param width  %ImageHMeter width.
+	 *  @param height  %ImageHMeter height.
 	 *  @param staticImage  Filename of the static passive content image.
 	 *  @param staticAnchors  Anchor points of the static passive content 
 	 *  (std::pair of position for the min value and position of the max 
@@ -144,7 +144,7 @@ public:
 	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
 	 *  internal context to an external context.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
-	 *  @param title  Optional, %ImageVMeter title (default = "").
+	 *  @param title  Optional, %ImageHMeter title (default = "").
 	 *
 	 *  Note: It's mandatory to provide an image for the static passive content
 	 *  @a staticImage (background, labels, ...) and its anchor points for the
@@ -152,7 +152,7 @@ public:
 	 *  cover ALL possible positions of the static active content 
 	 *  @a activeImage and the dynamic content @a dynamicImage.
 	 */
-	ImageVMeter	(const double x, const double y, const double width, const double height, 
+	ImageHMeter	(const double x, const double y, const double width, const double height, 
 				 const std::string staticImage, const std::pair<BUtilities::Point<>, BUtilities::Point<>> staticAnchors,
 				 std::string activeImage = "", BUtilities::Point<> activeAnchor = {0,0},
 				 std::string dynamicImage = "", BUtilities::Point<> dynamicAnchor = {0,0},
@@ -161,13 +161,13 @@ public:
 				 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
 				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
-	virtual ~ImageVMeter();
+	virtual ~ImageHMeter();
 
 	/**
-	 *  @brief  Creates a clone of the %ImageVMeter. 
-	 *  @return  Pointer to the new %ImageVMeter.
+	 *  @brief  Creates a clone of the %ImageHMeter. 
+	 *  @return  Pointer to the new %ImageHMeter.
 	 *
-	 *  Creates a clone of this %ImageVMeter by copying all properties. But NOT its
+	 *  Creates a clone of this %ImageHMeter by copying all properties. But NOT its
 	 *  linkage.
 	 *
 	 *  Allocated heap memory needs to be freed using @c delete if the clone
@@ -176,21 +176,21 @@ public:
 	virtual Widget* clone () const override; 
 
 	/**
-	 *  @brief  Copies from another %ImageVMeter. 
-	 *  @param that  Other %ImageVMeter.
+	 *  @brief  Copies from another %ImageHMeter. 
+	 *  @param that  Other %ImageHMeter.
 	 *
-	 *  Copies all properties from another %ImageVMeter. But NOT its linkage.
+	 *  Copies all properties from another %ImageHMeter. But NOT its linkage.
 	 */
-	void copy (const ImageVMeter* that);
+	void copy (const ImageHMeter* that);
 
 protected:
 	/**
-     *  @brief  Unclipped draw a %ImageVMeter to the surface.
+     *  @brief  Unclipped draw a %ImageHMeter to the surface.
      */
     virtual void draw () override;
 
     /**
-     *  @brief  Clipped draw a %ImageVMeter to the surface.
+     *  @brief  Clipped draw a %ImageHMeter to the surface.
      *  @param x0  X origin of the clipped area. 
      *  @param y0  Y origin of the clipped area. 
      *  @param width  Width of the clipped area.
@@ -199,14 +199,14 @@ protected:
     virtual void draw (const double x0, const double y0, const double width, const double height) override;
 
     /**
-     *  @brief  Clipped draw a %ImageVMeter to the surface.
+     *  @brief  Clipped draw a %ImageHMeter to the surface.
      *  @param area  Clipped area. 
      */
     virtual void draw (const BUtilities::RectArea<>& area) override;
 };
 
-inline ImageVMeter::ImageVMeter () :
-	ImageVMeter	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEVMETER_WIDTH, BWIDGETS_DEFAULT_IMAGEVMETER_HEIGHT,
+inline ImageHMeter::ImageHMeter () :
+	ImageHMeter	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEHMETER_WIDTH, BWIDGETS_DEFAULT_IMAGEHMETER_HEIGHT,
 				 "", std::pair<BUtilities::Point<>, BUtilities::Point<>> ({0,0}, {0,0}),
 				 "", BUtilities::Point<> (0,0),
 				 "", BUtilities::Point<> (0,0),
@@ -217,8 +217,8 @@ inline ImageVMeter::ImageVMeter () :
 
 }
 
-inline ImageVMeter::ImageVMeter (const uint32_t urid, const std::string& title) : 
-	ImageVMeter	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEVMETER_WIDTH, BWIDGETS_DEFAULT_IMAGEVMETER_HEIGHT,
+inline ImageHMeter::ImageHMeter (const uint32_t urid, const std::string& title) : 
+	ImageHMeter	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEHMETER_WIDTH, BWIDGETS_DEFAULT_IMAGEHMETER_HEIGHT,
 				 "", std::pair<BUtilities::Point<>, BUtilities::Point<>> ({0,0}, {0,0}),
 				 "", BUtilities::Point<> (0,0),
 				 "", BUtilities::Point<> (0,0),
@@ -229,12 +229,12 @@ inline ImageVMeter::ImageVMeter (const uint32_t urid, const std::string& title) 
 
 }
 
-inline ImageVMeter::ImageVMeter (const std::string staticImage, const std::pair<BUtilities::Point<>, BUtilities::Point<>> staticAnchors,
+inline ImageHMeter::ImageHMeter (const std::string staticImage, const std::pair<BUtilities::Point<>, BUtilities::Point<>> staticAnchors,
 								 std::string activeImage, BUtilities::Point<> activeAnchor,
 								 std::string dynamicImage, BUtilities::Point<> dynamicAnchor,
 								 double value, const double min, const double max, double step, 
 								 uint32_t urid, std::string title) : 
-	ImageVMeter	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEVMETER_WIDTH, BWIDGETS_DEFAULT_IMAGEVMETER_HEIGHT,
+	ImageHMeter	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEHMETER_WIDTH, BWIDGETS_DEFAULT_IMAGEHMETER_HEIGHT,
 				 staticImage, staticAnchors, activeImage, activeAnchor, dynamicImage, dynamicAnchor,
 				 value, min, max, step, 
 				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -243,7 +243,7 @@ inline ImageVMeter::ImageVMeter (const std::string staticImage, const std::pair<
 
 }
 
-inline ImageVMeter::ImageVMeter	(const double  x, const double y, const double width, const double height, 
+inline ImageHMeter::ImageHMeter	(const double  x, const double y, const double width, const double height, 
 								 const std::string staticImage, const std::pair<BUtilities::Point<>, BUtilities::Point<>> staticAnchors,
 								 std::string activeImage, BUtilities::Point<> activeAnchor,
 								 std::string dynamicImage, BUtilities::Point<> dynamicAnchor,
@@ -265,21 +265,21 @@ inline ImageVMeter::ImageVMeter	(const double  x, const double y, const double w
 
 }
 
-inline ImageVMeter::~ImageVMeter()
+inline ImageHMeter::~ImageHMeter()
 {
 	if (staticImageSurface_ && (cairo_surface_status(staticImageSurface_) == CAIRO_STATUS_SUCCESS)) cairo_surface_destroy (staticImageSurface_);
 	if (activeImageSurface_ && (cairo_surface_status(activeImageSurface_) == CAIRO_STATUS_SUCCESS)) cairo_surface_destroy (activeImageSurface_);
 	if (dynamicImageSurface_ && (cairo_surface_status(dynamicImageSurface_) == CAIRO_STATUS_SUCCESS)) cairo_surface_destroy (dynamicImageSurface_);
 }
 
-inline Widget* ImageVMeter::clone () const 
+inline Widget* ImageHMeter::clone () const 
 {
-	Widget* f = new ImageVMeter (urid_, title_);
+	Widget* f = new ImageHMeter (urid_, title_);
 	f->copy (this);
 	return f;
 }
 
-inline void ImageVMeter::copy (const ImageVMeter* that)
+inline void ImageHMeter::copy (const ImageHMeter* that)
 {
 	staticAnchors_ = that->staticAnchors_;
 	activeAnchor_ = that->activeAnchor_;
@@ -296,17 +296,17 @@ inline void ImageVMeter::copy (const ImageVMeter* that)
 	Widget::copy (that);
 }
 
-inline void ImageVMeter::draw ()
+inline void ImageHMeter::draw ()
 {
 	draw (0, 0, getWidth(), getHeight());
 }
 
-inline void ImageVMeter::draw (const double x0, const double y0, const double width, const double height)
+inline void ImageHMeter::draw (const double x0, const double y0, const double width, const double height)
 {
 	draw (BUtilities::RectArea<> (x0, y0, width, height));
 }
 
-inline void ImageVMeter::draw (const BUtilities::RectArea<>& area)
+inline void ImageHMeter::draw (const BUtilities::RectArea<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 
@@ -351,10 +351,10 @@ inline void ImageVMeter::draw (const BUtilities::RectArea<>& area)
 				{
 					const double x0a = x0s + (staticAnchors_.first.x - activeAnchor_.x) * szs;
 					const double y0a = y0s + (staticAnchors_.first.y - activeAnchor_.y) * szs;
-					const double y0a0 = y0s + staticAnchors_.first.y * szs;
-					const double y0av = y0s + anchorv.y * szs;
+					const double x0a0 = x0s + staticAnchors_.first.x * szs;
+					const double x0av = x0s + anchorv.x * szs;
 					cairo_save (cr);
-					cairo_rectangle (cr, x0, y0a0, w, y0av - y0a0);
+					cairo_rectangle (cr, x0a0, y0, x0av - x0a0, h);
 					cairo_translate(cr, x0a, y0a);
 					cairo_scale (cr, szs, szs);
 					cairo_set_source_surface(cr, activeImageSurface_, 0, 0);
@@ -383,4 +383,4 @@ inline void ImageVMeter::draw (const BUtilities::RectArea<>& area)
 
 }
 
-#endif /* BWIDGETS_IMAGEVMETER_HPP_ */
+#endif /* BWIDGETS_IMAGEHMETER_HPP_ */
