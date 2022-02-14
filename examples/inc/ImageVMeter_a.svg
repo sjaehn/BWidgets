@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="182"
+   height="524"
+   viewBox="0 0 48.154164 138.64167"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="ImageVMeter_a.svg"
+   inkscape:export-filename="/home/sven/dev/c/BWidgets/examples/inc/ImageVMeter_a.png"
+   inkscape:export-xdpi="48"
+   inkscape:export-ydpi="48"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#1500ff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="1.2810465"
+     inkscape:cx="258.7728"
+     inkscape:cy="284.53299"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2"
+     units="px">
+    <inkscape:grid
+       type="xygrid"
+       id="grid824" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter20645-4"
+       x="-0.0052048969"
+       y="-0.062677366"
+       width="1.0104098"
+       height="1.1253547">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.22111191"
+         id="feGaussianBlur20647-4" />
+    </filter>
+  </defs>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Ebene 2"
+     style="display:inline">
+    <text
+       xml:space="preserve"
+       style="font-size:8.46667px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;display:inline;mix-blend-mode:normal;fill:#ffffff;stroke-width:0.264583;filter:url(#filter20645-4)"
+       x="37.781849"
+       y="35.785549"
+       id="text18103-7"
+       transform="matrix(0,1,1,0,-2.2011998,-19.824489)"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'DSEG14 Classic Mini';-inkscape-font-specification:'DSEG14 Classic Mini Bold';fill:#ffffff;stroke-width:0.264583"
+         x="37.781849"
+         y="35.785549"
+         id="tspan20671-6">~~~~~~~~~~~~~~~</tspan></text>
+  </g>
+</svg>
