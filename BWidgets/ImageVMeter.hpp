@@ -329,11 +329,11 @@ inline void ImageVMeter::draw (const BUtilities::RectArea<>& area)
 			const double w = getEffectiveWidth();
 			const double h = getEffectiveHeight();
 			const double rval = getRatioFromValue (getValue(), transfer_);
+			const double ws = cairo_image_surface_get_width (staticImageSurface_);
+			const double hs = cairo_image_surface_get_height (staticImageSurface_);
 
-			if (staticImageSurface_ && (cairo_surface_status (staticImageSurface_) == CAIRO_STATUS_SUCCESS))
+			if (staticImageSurface_ && (cairo_surface_status (staticImageSurface_) == CAIRO_STATUS_SUCCESS) && (ws >= 1.0) && (hs >= 1.0))
 			{
-				const double ws = cairo_image_surface_get_width (staticImageSurface_);
-				const double hs = cairo_image_surface_get_height (staticImageSurface_);
 				const double szs = ((w / ws < h / hs) ? (w / ws) : (h / hs));
 				const double x0s = x0 + 0.5 * w - 0.5 * ws * szs;
 				const double y0s = y0 + 0.5 * h - 0.5 * hs * szs;
