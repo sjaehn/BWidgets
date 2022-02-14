@@ -67,6 +67,7 @@
 #include "../BWidgets/ImageHMeter.hpp"
 #include "../BWidgets/ImageVMeter.hpp"
 #include "../BWidgets/ImageHSlider.hpp"
+#include "../BWidgets/ImageVSlider.hpp"
 #include <cairo/cairo.h>
 #include <cstdlib>
 #include <initializer_list>
@@ -518,6 +519,19 @@ int main ()
     imageHSliderLabel.setFont (labelFont);
     window.add (&imageHSlider);
     window.add (&imageHSliderLabel);
+    
+    // ImageVSlider
+    ImageVSlider imageVSlider (1430, 480, 40, 80, 
+                             "examples/inc/ImageVSlider_s.png", {{24.0, 113.0}, {24.0, 22.0}},
+                             "examples/inc/ImageVSlider_a.png", {24.0, 113.0},
+                             "examples/inc/ImageVSlider_d.png", {10.0, 21.0},
+                             0.5);
+    imageVSlider.setBackground(BStyles::Fill ("examples/inc/ImageVSliderBg.png"));
+    imageVSlider.setClickable (false);
+    Label imageVSliderLabel (1410, 560, 80, 20, "ImageVSlider");
+    imageVSliderLabel.setFont (labelFont);
+    window.add (&imageVSlider);
+    window.add (&imageVSliderLabel);
 
     const std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
 

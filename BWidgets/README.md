@@ -705,6 +705,16 @@ kept within a defined range and is displayed by the value-dependently
 cropped active image and by the position of the dynamic image.
 
 
+### ImageVSlider
+
+![imagevslider](../suppl/ImageVSlider.png)
+
+`ImageVSlider` is a `Valueable` widget derived from `ImageVMeter`. It displays 
+a value as a vertical scale in the same way as ImageVMeter and 
+additionally supports user interaction via `Clickable`, `Draggable`, and 
+`Scrollable`.
+
+
 ### RadialMeter
 
 ![radialmeter](../suppl/RadialMeter.png)
