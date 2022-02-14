@@ -46,10 +46,27 @@ struct Point
 		return *this;
 	}
 
+	Point<T>& operator*= (const T rhs)
+	{
+		this->x *= rhs;
+		this->y *= rhs;
+		return *this;
+	}
+
+	Point<T>& operator/= (const T rhs)
+	{
+		this->x /= rhs;
+		this->y /= rhs;
+		return *this;
+	}
+
 	friend bool operator== (const Point& lhs, const Point& rhs) {return ((lhs.x == rhs.x) && (lhs.y == rhs.y));}
 	friend bool operator!= (const Point& lhs, const Point& rhs) {return !(lhs == rhs);}
 	friend Point<T> operator+ (Point lhs, const Point& rhs) {return (lhs += rhs);}
 	friend Point<T> operator- (Point lhs, const Point& rhs) {return (lhs -= rhs);}
+	friend Point<T> operator* (Point lhs, const T rhs) {return (lhs *= rhs);}
+	friend Point<T> operator* (const T lhs, Point rhs) {return (rhs *= lhs);}
+	friend Point<T> operator/ (Point lhs, const T rhs) {return (lhs /= rhs);}
 
 };
 

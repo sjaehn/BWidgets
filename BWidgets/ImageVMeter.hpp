@@ -105,6 +105,12 @@ public:
 	 *  @param step  Optional, value increment steps.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
+	 *
+	 *  Note: It's mandatory to provide an image for the static passive content
+	 *  @a staticImage (background, labels, ...) and its anchor points for the
+	 *  min value and the max value. The image area of @a staticImage MUST
+	 *  cover ALL possible positions of the static active content 
+	 *  @a activeImage and the dynamic content @a dynamicImage.
 	 */
 	ImageVMeter	(const std::string staticImage, const std::pair<BUtilities::Point<>, BUtilities::Point<>> staticAnchors,
 				 std::string activeImage = "", BUtilities::Point<> activeAnchor = {0,0},
@@ -139,6 +145,12 @@ public:
 	 *  internal context to an external context.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %ImageVMeter title (default = "").
+	 *
+	 *  Note: It's mandatory to provide an image for the static passive content
+	 *  @a staticImage (background, labels, ...) and its anchor points for the
+	 *  min value and the max value. The image area of @a staticImage MUST
+	 *  cover ALL possible positions of the static active content 
+	 *  @a activeImage and the dynamic content @a dynamicImage.
 	 */
 	ImageVMeter	(const double x, const double y, const double width, const double height, 
 				 const std::string staticImage, const std::pair<BUtilities::Point<>, BUtilities::Point<>> staticAnchors,
@@ -326,7 +338,7 @@ inline void ImageVMeter::draw (const BUtilities::RectArea<>& area)
 				const double x0s = x0 + 0.5 * w - 0.5 * ws * szs;
 				const double y0s = y0 + 0.5 * h - 0.5 * hs * szs;
 				const BUtilities::Point<> anchorv = BUtilities::Point<>	(staticAnchors_.first != staticAnchors_.second ?
-																		 staticAnchors_.first + (staticAnchors_.second - staticAnchors_.first) * rval :
+																		 staticAnchors_.first + rval * (staticAnchors_.second - staticAnchors_.first) :
 																		 staticAnchors_.first);
 				cairo_save (cr);
 				cairo_translate(cr, x0s, y0s);
