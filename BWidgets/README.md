@@ -603,6 +603,16 @@ kept within a defined range and is displayed by the value-dependently
 cropped active image and by the position of the dynamic image.
 
 
+### ImageHSlider
+
+![imagehslider](../suppl/ImageHSlider.png)
+
+`ImageHSlider` is a `Valueable` widget derived from `ImageHMeter`. It displays 
+a value as a horizontal scale in the same way as ImageHMeter and 
+additionally supports user interaction via `Clickable`, `Draggable`, and 
+`Scrollable`.
+
+
 ### VMeter
 
 ![vmeter](../suppl/VMeter.png)

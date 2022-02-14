@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="272"
+   height="100"
+   viewBox="0 0 71.966666 26.458337"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="ImageHSlider_a.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   inkscape:export-filename="/home/sven/dev/c/BWidgets/examples/inc/ImageHSlider_a.png"
+   inkscape:export-xdpi="48"
+   inkscape:export-ydpi="48"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#000042"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="px"
+     inkscape:zoom="3.6225625"
+     inkscape:cx="140.0942"
+     inkscape:cy="24.43022"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g1302">
+    <inkscape:grid
+       type="xygrid"
+       id="grid824" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3322">
+      <stop
+         style="stop-color:#008000;stop-opacity:1"
+         offset="0"
+         id="stop3318" />
+      <stop
+         style="stop-color:#00ff00;stop-opacity:1"
+         offset="1"
+         id="stop3320" />
+    </linearGradient>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4594"
+       x="-0.056570893"
+       y="-0.0013995121"
+       width="1.1131418"
+       height="1.002799">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.061793185"
+         id="feGaussianBlur4596" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3322"
+       id="linearGradient3359"
+       gradientUnits="userSpaceOnUse"
+       x1="11.730036"
+       y1="68.38999"
+       x2="14.648197"
+       y2="68.38999" />
+  </defs>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Ebene 2">
+    <g
+       id="g1302"
+       transform="rotate(90,36.315808,35.107128)">
+      <rect
+         style="mix-blend-mode:normal;fill:url(#linearGradient3359);fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter4594)"
+         id="rect1671"
+         width="2.6215539"
+         height="105.96811"
+         x="11.87834"
+         y="15.405935"
+         ry="1.8465"
+         rx="1.3107769"
+         transform="matrix(1,0,0,-0.5494282,-0.05066022,73.609964)" />
+    </g>
+  </g>
+</svg>
