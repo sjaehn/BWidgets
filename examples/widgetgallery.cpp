@@ -64,6 +64,7 @@
 #include "../BWidgets/VRangeScrollBar.hpp"
 #include "../BWidgets/FileChooser.hpp"
 #include "../BWidgets/SampleChooser.hpp"
+#include "../BWidgets/ImageRadialMeter.hpp"
 #include "../BWidgets/ImageHMeter.hpp"
 #include "../BWidgets/ImageVMeter.hpp"
 #include "../BWidgets/ImageHSlider.hpp"
@@ -483,6 +484,18 @@ int main ()
     window.add (&imageButton);
     window.add (&imageButtonLabel);
 
+    // ImageRadialMeter
+    ImageRadialMeter imageRadialMeter (1210, 370, 80, 60, 
+                             "examples/inc/ImageRadialMeter_s.png", {132.0, 264.0}, 1.35 * M_PI, 1.65 * M_PI,
+                             "", {0.0, 0.0},
+                             "examples/inc/ImageRadialMeter_d.png", {132.0, 264.0},
+                             0.5);
+    imageRadialMeter.setBackground(BStyles::Fill ("examples/inc/ImageVSliderBg.png"));
+    Label imageRadialMeterLabel (1190, 440, 120, 20, "ImageRadialMeter");
+    imageRadialMeterLabel.setFont (labelFont);
+    window.add (&imageRadialMeter);
+    window.add (&imageRadialMeterLabel);
+
     // ImageHMeter
     ImageHMeter imageHMeter (1310, 380, 80, 40, 
                              "examples/inc/ImageHMeter_s.png", {{35.0, 55.0}, {230.0, 55.0}},
@@ -545,6 +558,7 @@ int main ()
         valueRadialMeter.setValue (0.5 + 0.5 * cos (0.5 * dt.count()));
         valueHMeter.setValue (0.5 + 0.5 * sin (1.4 * dt.count()));
         valueVMeter.setValue (0.5 + 0.5 * cos (0.7 * dt.count()));
+        imageRadialMeter.setValue (0.5 + 0.5 * sin (0.6 * dt.count()));
         imageHMeter.setValue (0.5 + 0.5 * cos (0.8 * dt.count()));
         imageVMeter.setValue (0.5 + 0.5 * sin (1.3 * dt.count()));
         window.handleEvents();
