@@ -393,11 +393,11 @@ inline void ImageRadialMeter::draw (const BUtilities::RectArea<>& area)
 				{
 					const double ad = (staticMaxAngle_ - staticMinAngle_) * rval;
 					cairo_save (cr);
-					cairo_translate (cr, dynamicAnchor_.x * szs, dynamicAnchor_.y * szs);
-					cairo_rotate (cr, ad);
-					cairo_translate (cr, -dynamicAnchor_.x * szs, -dynamicAnchor_.y * szs);
-					cairo_translate(cr, x0s, y0s);
+
+					cairo_translate (cr, x0s + staticAnchor_.x * szs, y0s + staticAnchor_.y * szs);
 					cairo_scale (cr, szs, szs);
+					cairo_rotate (cr, ad);
+					cairo_translate (cr, -dynamicAnchor_.x, -dynamicAnchor_.y);
 					cairo_set_source_surface(cr, dynamicImageSurface_, 0, 0);
 					cairo_paint (cr);
 					cairo_restore (cr);
