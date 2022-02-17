@@ -67,6 +67,7 @@
 #include "../BWidgets/ImageRadialMeter.hpp"
 #include "../BWidgets/ImageHMeter.hpp"
 #include "../BWidgets/ImageVMeter.hpp"
+#include "../BWidgets/ImageDial.hpp"
 #include "../BWidgets/ImageHSlider.hpp"
 #include "../BWidgets/ImageVSlider.hpp"
 #include <cairo/cairo.h>
@@ -519,6 +520,19 @@ int main ()
     imageVMeterLabel.setFont (labelFont);
     window.add (&imageVMeter);
     window.add (&imageVMeterLabel);
+
+    // ImageDial
+    ImageDial imageDial (1210, 490, 80, 60, 
+                             "examples/inc/ImageDial_s.png", {150.0, 150.0}, 0.75 * M_PI, 2.25 * M_PI,
+                             "examples/inc/ImageDial_a.png", {150.0, 150.0},
+                             "examples/inc/ImageDial_d.png", {150.0, 150.0},
+                             0.5);
+    imageDial.setBackground(BStyles::Fill ("examples/inc/ImageVSliderBg.png"));
+    imageDial.setClickable (false);
+    Label imageDialLabel (1210, 560, 80, 20, "ImageDial");
+    imageDialLabel.setFont (labelFont);
+    window.add (&imageDial);
+    window.add (&imageDialLabel);
 
     // ImageHSlider
     ImageHSlider imageHSlider (1310, 500, 80, 40, 

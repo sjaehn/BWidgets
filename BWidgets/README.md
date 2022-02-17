@@ -794,6 +794,16 @@ cropped active image (pie sliced) and by the position of the dynamic image
 (rotated around the anchor).
 
 
+### ImageDial
+
+![imagedial](../suppl/ImageDial.png)
+
+`ImageDial` is a `Valueable` widget derived from `ImageRadialMeter`. It displays 
+a value in a radial representation in the same way as ImageRadialMeter and 
+additionally supports user interaction via `Clickable`, `Draggable`, and 
+`Scrollable`.
+
+
 ### Box
 
 ![box](../suppl/Box.png)
