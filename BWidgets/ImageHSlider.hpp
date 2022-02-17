@@ -192,7 +192,7 @@ public:
 };
 
 inline ImageHSlider::ImageHSlider () :
-	ImageHSlider	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEHMETER_WIDTH, BWIDGETS_DEFAULT_IMAGEHMETER_HEIGHT,
+	ImageHSlider	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEHSLIDER_WIDTH, BWIDGETS_DEFAULT_IMAGEHSLIDER_HEIGHT,
 					 "", std::pair<BUtilities::Point<>, BUtilities::Point<>> ({0,0}, {0,0}),
 					 "", BUtilities::Point<> (0,0),
 					 "", BUtilities::Point<> (0,0),
@@ -204,7 +204,7 @@ inline ImageHSlider::ImageHSlider () :
 }
 
 inline ImageHSlider::ImageHSlider (const uint32_t urid, const std::string& title) : 
-	ImageHSlider	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEHMETER_WIDTH, BWIDGETS_DEFAULT_IMAGEHMETER_HEIGHT,
+	ImageHSlider	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEHSLIDER_WIDTH, BWIDGETS_DEFAULT_IMAGEHSLIDER_HEIGHT,
 					 "", std::pair<BUtilities::Point<>, BUtilities::Point<>> ({0,0}, {0,0}),
 					 "", BUtilities::Point<> (0,0),
 					 "", BUtilities::Point<> (0,0),
@@ -220,7 +220,7 @@ inline ImageHSlider::ImageHSlider (const std::string staticImage, const std::pai
 									 std::string dynamicImage, BUtilities::Point<> dynamicAnchor,
 									 double value, const double min, const double max, double step, 
 									 uint32_t urid, std::string title) : 
-	ImageHSlider	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEHMETER_WIDTH, BWIDGETS_DEFAULT_IMAGEHMETER_HEIGHT,
+	ImageHSlider	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGEHSLIDER_WIDTH, BWIDGETS_DEFAULT_IMAGEHSLIDER_HEIGHT,
 					 staticImage, staticAnchors, activeImage, activeAnchor, dynamicImage, dynamicAnchor,
 					 value, min, max, step, 
 					 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
