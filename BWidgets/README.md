@@ -187,6 +187,7 @@ Widget
  |    ╰── Dial
  |         ╰── ValueDial
  ├── Image
+ ├── ImageConditional
  ├── ImageHMeter
  |    ╰── ImageHSlider
  ├── ImageVMeter
@@ -719,6 +720,19 @@ the BgColors parameter (static elements) and by the FgColors parameter (value).
 
 `ValueDial` is a `Dial` Widget with an additional editable label for
 displaying its value.
+
+
+### ImageConditional
+
+![imageconditional](../suppl/ImageConditional.png)
+
+`ImageConditional` is a `Valueable` widget which may take up multiple images
+each linked to a specific value. The widget shows the image(s) depending
+on its value. By default, the widget shows the image whos value is the
+closest to the widget value.
+
+ImageConditional supports user interaction via `Clickable`, `Draggable`, and 
+`Scrollable`.
 
 
 ### ImageHMeter

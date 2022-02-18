@@ -64,6 +64,7 @@
 #include "../BWidgets/VRangeScrollBar.hpp"
 #include "../BWidgets/FileChooser.hpp"
 #include "../BWidgets/SampleChooser.hpp"
+#include "../BWidgets/ImageConditional.hpp"
 #include "../BWidgets/ImageRadialMeter.hpp"
 #include "../BWidgets/ImageHMeter.hpp"
 #include "../BWidgets/ImageVMeter.hpp"
@@ -484,6 +485,19 @@ int main ()
     imageButtonLabel.setFont (labelFont);
     window.add (&imageButton);
     window.add (&imageButtonLabel);
+    
+    // ImageConditional
+    ImageConditional imageConditional   (1410, 250, 80, 60, 
+                                         {{0.0, "examples/inc/ImageConditional0.png"}, 
+                                          {1.0, "examples/inc/ImageConditional1.png"},
+                                          {2.0, "examples/inc/ImageConditional2.png"},
+                                          {3.0, "examples/inc/ImageConditional3.png"}},
+                                         0.0, 0.0, 3.0, 0.0);
+    imageConditional.setBackground(BStyles::Fill ("examples/inc/ImageVSliderBg.png"));
+    Label imageConditionalLabel (1390, 320, 120, 20, "ImageConditional");
+    imageConditionalLabel.setFont (labelFont);
+    window.add (&imageConditional);
+    window.add (&imageConditionalLabel);
 
     // ImageRadialMeter
     ImageRadialMeter imageRadialMeter (1210, 370, 80, 60, 
