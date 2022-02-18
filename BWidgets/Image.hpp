@@ -192,10 +192,10 @@ public:
 	virtual ~Image();
 
 	/**
-	 *  @brief  Creates a clone of the %Label. 
-	 *  @return  Pointer to the new %Label.
+	 *  @brief  Creates a clone of the %Image. 
+	 *  @return  Pointer to the new %Image.
 	 *
-	 *  Creates a clone of this %Label by copying all properties. But NOT its
+	 *  Creates a clone of this %Image by copying all properties. But NOT its
 	 *  linkage.
 	 *
 	 *  Allocated heap memory needs to be freed using @c delete if the clone
@@ -204,10 +204,10 @@ public:
 	virtual Widget* clone () const override; 
 
 	/**
-	 *  @brief  Copies from another %Label. 
-	 *  @param that  Other %Label.
+	 *  @brief  Copies from another %Image. 
+	 *  @param that  Other %Image.
 	 *
-	 *  Copies all properties from another %Label. But NOT its linkage.
+	 *  Copies all properties from another %Image. But NOT its linkage.
 	 */
 	void copy (const Image* that);
 
@@ -215,6 +215,12 @@ public:
 	 *  @brief  Clears all visual content. 
 	 */
 	virtual void clear ();
+
+	/**
+	 *  @brief  Clears the visual content for a status.
+	 *  @param status  Status. 
+	 */
+	virtual void clear (const BStyles::Status status);
 
 	/**
      *  @brief  Optimizes the object extends.
@@ -241,31 +247,25 @@ public:
 	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
-	 *  @brief  Clears the visual content for a status.
-	 *  @param status  Status. 
-	 */
-	virtual void clear (const BStyles::Status status);
-
-	/**
 	 *  @brief  Loads an image from a Cairo surface or an image file.
 	 *  @param status  Widget status for the image to be loaded.
 	 *  @param surface  Cairo surface with the image.
 	 */
-	virtual void loadImage (BStyles::Status status, cairo_surface_t* surface);
+	virtual void loadImage (const BStyles::Status status, cairo_surface_t* surface);
 
 	/**
 	 *  @brief  Loads an image from a Cairo surface or an image file.
 	 *  @param status  Widget status for the image to be loaded.
 	 *  @param filename  Image file name.
 	 */
-	virtual void loadImage (BStyles::Status status, const std::string& filename);
+	virtual void loadImage (const BStyles::Status status, const std::string& filename);
 
 	/**
 	 *  @brief  Access to the Cairo image surface.
 	 *  @param status  Widget status.
 	 *  @return  Pointer to the Cairo surface.
 	 */
-	cairo_surface_t* getImageSurface (BStyles::Status status);
+	cairo_surface_t* getImageSurface (const BStyles::Status status);
 
 protected:
 	/**
@@ -453,21 +453,21 @@ inline void Image::clear (const BStyles::Status status)
 	}
 }
 
-inline void Image::loadImage (BStyles::Status status, cairo_surface_t* surface)
+inline void Image::loadImage (const BStyles::Status status, cairo_surface_t* surface)
 {
 	clear (status);
 	imageSurfaces_[status] = cairo_image_surface_clone_from_image_surface (surface);
 	update ();
 }
 
-inline void Image::loadImage (BStyles::Status status, const std::string& filename)
+inline void Image::loadImage (const BStyles::Status status, const std::string& filename)
 {
 	clear (status);
 	imageSurfaces_[status] = cairo_image_surface_create_from_png (filename.c_str());
 	update ();
 }
 
-inline cairo_surface_t* Image::getImageSurface (BStyles::Status status)
+inline cairo_surface_t* Image::getImageSurface (const BStyles::Status status)
 {
 	return imageSurfaces_[status];
 }
