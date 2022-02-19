@@ -50,8 +50,6 @@ namespace BWidgets
  *
  *  %ImageConditional supports user interaction via Clickable, Draggable, and 
  *  Scrollable.
- *
- *  TODO: User-defined image selection function
  */
 class ImageConditional :	public Widget, 
 							public ValueableTyped<double>, 
@@ -63,6 +61,7 @@ class ImageConditional :	public Widget,
 {
 protected:
 	std::map<double, cairo_surface_t*> imageSurfaces_;
+	std::function<bool (ImageConditional* widget, const double& x)> showFunc_;
 
 public:
 	/**
@@ -110,6 +109,8 @@ public:
 	 *  external context to the internal context.
 	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
 	 *  internal context to an external context.
+	 *  @param showFunc  Optinonal, function to test if an image represented
+	 *  by its value will be shown or not.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
@@ -118,6 +119,7 @@ public:
 						 double value = 0.0, double min = 0.0, double max = 1.0, double step = 0.0, 
 						 std::function<double (const double& x)> transferFunc = ValueTransferable<double>::noTransfer,
 						 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
+						 std::function<bool (ImageConditional* widget, const double& x)> showFunc = isClosestToValue,
 						 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	virtual ~ImageConditional();
@@ -175,7 +177,7 @@ public:
 	 */
 	cairo_surface_t* getImageSurface (const double value);
 
-	bool isClosestToValue (const double value);
+	static bool isClosestToValue (ImageConditional* widget, const double& value);
 
 	/**
      *  @brief  Method called when pointer button pressed.
@@ -226,14 +228,15 @@ protected:
      *  @brief  Clipped draw an %ImageConditional to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea<>& area) override;
+    virtual void draw (const BUtilities::Area<>& area) override;
 };
 
 inline ImageConditional::ImageConditional () : 
 	ImageConditional	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGECONDITIONAL_WIDTH, BWIDGETS_DEFAULT_IMAGECONDITIONAL_HEIGHT,
 						 {},
 						 0.0, 0.0, 1.0, 0.0,
-						 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+						 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer,
+						 isClosestToValue,
 						 URID_UNKNOWN_URID, "") 
 {
 
@@ -244,6 +247,7 @@ inline ImageConditional::ImageConditional (const uint32_t urid, const std::strin
 						 {},
 						 0.0, 0.0, 1.0, 0.0,
 						 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+						 isClosestToValue,
 						 urid, title)
 	
 {
@@ -257,6 +261,7 @@ inline ImageConditional::ImageConditional	(const std::initializer_list<std::pair
 						 filenames, 
 						 value, min, max, step,
 						 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
+						 isClosestToValue,
 						 urid, title)
 {
 
@@ -268,7 +273,8 @@ inline ImageConditional::ImageConditional	(const double x, const double y, const
 											 const std::initializer_list<std::pair<double, std::string>>& filenames,
 											 double value, double min, double max, double step,
 											 std::function<double (const double& x)> transferFunc,
-											 std::function<double (const double& x)> reTransferFunc, 
+											 std::function<double (const double& x)> reTransferFunc,
+											 std::function<bool (ImageConditional* widget,const double& x)> showFunc,
 											 uint32_t urid, std::string title) :
 	Widget	(x, y, width, height, urid, title),
 	ValueableTyped<double> (value),
@@ -276,7 +282,9 @@ inline ImageConditional::ImageConditional	(const double x, const double y, const
 	ValueTransferable<double> (transferFunc, reTransferFunc),
 	Clickable(),
 	Draggable(),
-	Scrollable()
+	Scrollable(),
+	imageSurfaces_(),
+	showFunc_ (showFunc)
 {
 	for (std::initializer_list<std::pair<double, std::string>>::const_reference f : filenames) 
 	{
@@ -305,6 +313,7 @@ inline void ImageConditional::copy (const ImageConditional* that)
 {
 	clear();
 	for (std::map<double, cairo_surface_t*>::const_reference t : that->imageSurfaces_) loadImage (t.first, t.second);
+	showFunc_ = that->showFunc_;
 	Scrollable::operator= (*that);
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);
@@ -340,7 +349,7 @@ inline void ImageConditional::clear (const double value)
 inline void ImageConditional::loadImage (const double value, cairo_surface_t* surface)
 {
 	clear (value);
-	imageSurfaces_[value] = cairo_image_surface_clone_from_image_surface (surface);
+	imageSurfaces_[value] = cairoplus_image_surface_clone_from_image_surface (surface);
 	update ();
 }
 
@@ -357,26 +366,28 @@ inline cairo_surface_t* ImageConditional::getImageSurface (const double value)
 	return imageSurfaces_[value];
 }
 
-inline bool ImageConditional::isClosestToValue (const double value)
+inline bool ImageConditional::isClosestToValue (ImageConditional* widget, const double& value)
 {
+	if (!widget) return false;
+
 	// No images: invalid / false
-	if (imageSurfaces_.empty()) return false;
+	if (widget->imageSurfaces_.empty()) return false;
 
 	// No image for this value: false
-	map<double, cairo_surface_t*>::const_iterator it = imageSurfaces_.find (value);
-	if (it == imageSurfaces_.end()) return false;
+	map<double, cairo_surface_t*>::const_iterator it = widget->imageSurfaces_.find (value);
+	if (it == widget->imageSurfaces_.end()) return false;
 
 	// Only one image: always the closest
-	if (std::next (imageSurfaces_.begin()) == imageSurfaces_.end()) return true;
+	if (std::next (widget->imageSurfaces_.begin()) == widget->imageSurfaces_.end()) return true;
 
-	const double x = getRatioFromValue (getValue());
-	const double rval = getRatioFromValue (value);
+	const double x = widget->getRatioFromValue (widget->getValue());
+	const double rval = widget->getRatioFromValue (value);
 
 	if (x < rval)
 	{
-		if (it == imageSurfaces_.begin()) return true;
+		if (it == widget->imageSurfaces_.begin()) return true;
 
-		const double prval = getRatioFromValue (std::prev (it)->first);
+		const double prval = widget->getRatioFromValue (std::prev (it)->first);
 		if (x < prval) return false;
 
 		return (x - prval >= rval - x);
@@ -384,9 +395,9 @@ inline bool ImageConditional::isClosestToValue (const double value)
 
 	else 
 	{
-		if (std::next (it) == imageSurfaces_.end()) return true;
+		if (std::next (it) == widget->imageSurfaces_.end()) return true;
 
-		const double nrval = getRatioFromValue (std::next (it)->first);
+		const double nrval = widget->getRatioFromValue (std::next (it)->first);
 		if (x > nrval) return false;
 
 		return (nrval - x > x - rval);
@@ -443,10 +454,10 @@ inline void ImageConditional::draw ()
 
 inline void ImageConditional::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea<> (x0, y0, width, height));
+	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
-inline void ImageConditional::draw (const BUtilities::RectArea<>& area)
+inline void ImageConditional::draw (const BUtilities::Area<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 
@@ -469,7 +480,7 @@ inline void ImageConditional::draw (const BUtilities::RectArea<>& area)
 
 			for (std::map<double, cairo_surface_t*>::const_reference i : imageSurfaces_)
 			{
-				if	(isClosestToValue (i.first) &&
+				if	(showFunc_ (this,i.first) &&
 					 i.second && 
 					 (cairo_surface_status (i.second) == CAIRO_STATUS_SUCCESS))
 				{

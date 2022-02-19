@@ -159,7 +159,7 @@ protected:
      *  @brief  Clipped Draw to the surface (if is visualizable).
      *  @param area  Clipped area. 
      */
-	virtual void draw (const BUtilities::RectArea<>& area) override;
+	virtual void draw (const BUtilities::Area<>& area) override;
 };
 
 inline Text::Text () : Text (0.0, 0.0, BWIDGETS_DEFAULT_TEXT_WIDTH, BWIDGETS_DEFAULT_TEXT_HEIGHT, "", URID_UNKNOWN_URID, "") 
@@ -218,7 +218,7 @@ inline std::vector<std::string> Text::getTextBlock ()
 	const double w = getEffectiveWidth ();
 	//const double h = getEffectiveHeight ();
 	cairo_t* cr = cairo_create (surface_);
-	cairo_text_decorations decorations;
+	cairoplus_text_decorations decorations;
 	const BStyles::Font font = getFont();
 	strncpy (decorations.family, font.family.c_str (), 63);
 	decorations.size = font.size;
@@ -232,12 +232,12 @@ inline std::vector<std::string> Text::getTextBlock ()
 
 		for (double y = 0; strlen (textCString) > 0; /* empty */)
 		{
-			char* outputtext = cairo_create_text_fitted (cr, w, decorations, textCString);
+			char* outputtext = cairoplus_create_text_fitted (cr, w, decorations, textCString);
 			if (outputtext[0] == '\0') break;
 			cairo_text_extents_t ext = font.getCairoTextExtents(cr, outputtext);
 			textblock.push_back (std::string (outputtext));
 			y += (ext.height * font.lineSpacing);
-			cairo_text_destroy (outputtext);
+			cairoplus_text_destroy (outputtext);
 		}
 
 		free (textCString);
@@ -270,10 +270,10 @@ inline void Text::draw ()
 
 inline void Text::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea<> (x0, y0, width, height));
+	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
-inline void Text::draw (const BUtilities::RectArea<>& area)
+inline void Text::draw (const BUtilities::Area<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

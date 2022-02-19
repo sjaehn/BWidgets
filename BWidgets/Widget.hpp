@@ -387,7 +387,7 @@ public:
 	 *  @brief  Gets the %Widget covered area.
 	 *  @return  %Widget area relative to its parent %Widget.
 	 */
-	BUtilities::RectArea<> getArea () const;
+	BUtilities::Area<> getArea () const;
 
 	/**
 	 *  @brief  Gets the %Widget position relative to the position of its root
@@ -401,7 +401,7 @@ public:
 	 *  root widget (e. g., the main Window).
 	 *  @return  %Widget area relative to its root widet.
 	 */
-	BUtilities::RectArea<> getAbsoluteArea () const;
+	BUtilities::Area<> getAbsoluteArea () const;
 
 	/**
 	 *  @brief  X offset of the %Widget content relative to the %Widget X 
@@ -456,7 +456,7 @@ public:
 	 *  area without the borders (defined as the sum of border margin, line 
 	 *  width, and padding) on each side.
 	 */
-	BUtilities::RectArea<> getEffectiveArea () const;
+	BUtilities::Area<> getEffectiveArea () const;
 
 	/**
 	 *  @brief  Sets the %Widget status.
@@ -618,7 +618,7 @@ public:
 	 *  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT to the main
 	 *  Window event queue. 
 	 */
-	void emitExposeEvent (const BUtilities::RectArea<>& area) override;
+	void emitExposeEvent (const BUtilities::Area<>& area) override;
 
 protected:
 
@@ -626,14 +626,14 @@ protected:
 	 *  @brief  Gets the area covered by this %Widget and all its children.
 	 *  @param func  Optional, filter function.
 	 */
-	BUtilities::RectArea<> getFamilyArea (std::function<bool (const Widget* widget)> func = [] (const Widget* widget) {return true;}) const;
+	BUtilities::Area<> getFamilyArea (std::function<bool (const Widget* widget)> func = [] (const Widget* widget) {return true;}) const;
 
 	/**
 	 *  @brief  Gets the area covered by this %Widget and all its children
 	 *  relative to the root widget (e. g., the main Window).
 	 *  @param func  Optional, filter function.
 	 */
-	BUtilities::RectArea<> getAbsoluteFamilyArea (std::function<bool (const Widget* widget)> func = [] (const Widget* widget) {return true;}) const;
+	BUtilities::Area<> getAbsoluteFamilyArea (std::function<bool (const Widget* widget)> func = [] (const Widget* widget) {return true;}) const;
 
 	/**
 	 *  @brief  Gets the top %Widget at a given position.
@@ -659,7 +659,7 @@ protected:
 	 *  in their respective RGBA surfaces to the system provided RGBA surface
 	 *  of the main %Window.  
 	 */
-	void display (cairo_surface_t* surface, const BUtilities::RectArea<>& area);
+	void display (cairo_surface_t* surface, const BUtilities::Area<>& area);
 
 	/**
      *  @brief  Unclipped draw a %Widget to the surface.
@@ -679,13 +679,13 @@ protected:
      *  @brief  Clipped draw a %Widget to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea<>& area) override;
+    virtual void draw (const BUtilities::Area<>& area) override;
 
 private:
-	void display (cairo_surface_t* surface, const BUtilities::RectArea<>& outerArea, const BUtilities::RectArea<>& area);
+	void display (cairo_surface_t* surface, const BUtilities::Area<>& outerArea, const BUtilities::Area<>& area);
 	Widget* getWidgetAt	(const BUtilities::Point<>& abspos, 
-						 const BUtilities::RectArea<>& outerArea,
-			   			 const BUtilities::RectArea<>& area, 
+						 const BUtilities::Area<>& outerArea,
+			   			 const BUtilities::Area<>& area, 
 						 std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;},
 						 std::function<bool (Widget* widget)> passfunc = [] (Widget* widget) {return true;});
 };

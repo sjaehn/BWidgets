@@ -299,7 +299,7 @@ protected:
      *  @brief  Clipped draw a %HPianoRoll to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea<>& area) override;
+    virtual void draw (const BUtilities::Area<>& area) override;
 };
 
 struct PianoKeyCoords
@@ -681,10 +681,10 @@ inline void HPianoRoll::draw ()
 
 inline void HPianoRoll::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea<> (x0, y0, width, height));
+	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
-inline void HPianoRoll::draw (const BUtilities::RectArea<>& area)
+inline void HPianoRoll::draw (const BUtilities::Area<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 
@@ -759,7 +759,7 @@ inline void HPianoRoll::draw (const BUtilities::RectArea<>& area)
 					);
 
 					cairo_set_source_rgba (cr, CAIRO_RGBA (color));
-					cairo_rectangle_rounded (cr, x0 + keyX * xs, y0, keyCoords[keyNrOffset].width * xs, 0.6667 * h, 0.1 * xs, 0b1100);
+					cairoplus_rectangle_rounded (cr, x0 + keyX * xs, y0, keyCoords[keyNrOffset].width * xs, 0.6667 * h, 0.1 * xs, 0b1100);
 					cairo_fill (cr);
 				}
 

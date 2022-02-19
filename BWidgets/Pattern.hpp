@@ -192,7 +192,7 @@ protected:
 	size_t columns_;
 	size_t rows_;
 	std::vector<std::vector<Widget*>> pads_;
-	BUtilities::RectArea<size_t> selection_;
+	BUtilities::Area<size_t> selection_;
 	bool selected_;
 	EditMode editMode_;
 	bool allowYMerge_;
@@ -289,7 +289,7 @@ public:
 	 *  @param mode  EditMode for action.
 	 *  @param selection  Area to apply action on.
 	 */
-	void action (const EditMode mode, const BUtilities::RectArea<size_t> selection);
+	void action (const EditMode mode, const BUtilities::Area<size_t> selection);
 
 	/**
 	 *  @brief  Cuts pad values to the clipboard. 
@@ -297,13 +297,13 @@ public:
 	 *
 	 *  Pads of the cut area will be left with a getMin() value.
 	 */
-	void cutValues (const BUtilities::RectArea<size_t> selection);
+	void cutValues (const BUtilities::Area<size_t> selection);
 
 	/**
 	 *  @brief  Copies pad values to the clipboard. 
 	 *  @param selection  Selection area.
 	 */
-	void copyValues (const BUtilities::RectArea<size_t> selection);
+	void copyValues (const BUtilities::Area<size_t> selection);
 
 	/**
 	 *  @brief  Pastes pad values from the clipboard. 
@@ -315,19 +315,19 @@ public:
 	 *  @brief  Deletes pad values and set getMin() instead. 
 	 *  @param selection  Selection area.
 	 */
-	void deleteValues (const BUtilities::RectArea<size_t> selection);
+	void deleteValues (const BUtilities::Area<size_t> selection);
 
 	/**
 	 *  @brief  Flips pad values horizontally. 
 	 *  @param selection  Selection area.
 	 */
-	void xflipValues (const BUtilities::RectArea<size_t> selection);
+	void xflipValues (const BUtilities::Area<size_t> selection);
 
 	/**
 	 *  @brief  Flips pad values vertically. 
 	 *  @param selection  Selection area.
 	 */
-	void yflipValues (const BUtilities::RectArea<size_t> selection);
+	void yflipValues (const BUtilities::Area<size_t> selection);
 
 	/**
 	 *  @brief  Gets the Wigget for the respective pad.
@@ -415,7 +415,7 @@ protected:
      *  @brief  Clipped Draw to the surface (if is visualizable).
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea<>& area) override;
+    virtual void draw (const BUtilities::Area<>& area) override;
 };
 
 template <class T>
@@ -618,7 +618,7 @@ template <class T>
 void Pattern<T>::setEditMode (const EditMode editMode)
 {
 	editMode_ = editMode;
-	selection_ = BUtilities::RectArea<size_t>();
+	selection_ = BUtilities::Area<size_t>();
 	selected_ = false;
 	update();
 }
@@ -632,13 +632,13 @@ typename Pattern<T>::EditMode Pattern<T>::getEditMode() const
 template <class T>
 void Pattern<T>::select (const BUtilities::Point<size_t> p1, const BUtilities::Point<size_t> p2)
 {
-	selection_ = BUtilities::RectArea<size_t> (p1, p2) * BUtilities::RectArea<size_t>(0, 0, (columns_ > 0 ? columns_ - 1 : 0), (rows_ > 0 ? rows_ - 1 : 0));
+	selection_ = BUtilities::Area<size_t> (p1, p2) * BUtilities::Area<size_t>(0, 0, (columns_ > 0 ? columns_ - 1 : 0), (rows_ > 0 ? rows_ - 1 : 0));
 	selected_ = true;
 	update();
 }
 
 template <class T>
-void Pattern<T>::action (const EditMode mode, const BUtilities::RectArea<size_t> selection)
+void Pattern<T>::action (const EditMode mode, const BUtilities::Area<size_t> selection)
 {
 	switch (mode)
 	{
@@ -669,14 +669,14 @@ void Pattern<T>::action (const EditMode mode, const BUtilities::RectArea<size_t>
 }
 
 template <class T>
-void Pattern<T>::cutValues(const BUtilities::RectArea<size_t> selection)
+void Pattern<T>::cutValues(const BUtilities::Area<size_t> selection)
 {
 	copyValues (selection);
 	deleteValues (selection);
 }
 
 template <class T>
-void Pattern<T>::copyValues(const BUtilities::RectArea<size_t> selection)
+void Pattern<T>::copyValues(const BUtilities::Area<size_t> selection)
 {
 	clipBoard_.clear();
 
@@ -711,7 +711,7 @@ void Pattern<T>::pasteValues(const BUtilities::Point<size_t> pos)
 }
 
 template <class T>
-void Pattern<T>::deleteValues(const BUtilities::RectArea<size_t> selection)
+void Pattern<T>::deleteValues(const BUtilities::Area<size_t> selection)
 {
 	for (size_t dr = 0; dr <= selection.getHeight(); ++dr)
 	{
@@ -724,7 +724,7 @@ void Pattern<T>::deleteValues(const BUtilities::RectArea<size_t> selection)
 }
 
 template <class T>
-void Pattern<T>::xflipValues(const BUtilities::RectArea<size_t> selection)
+void Pattern<T>::xflipValues(const BUtilities::Area<size_t> selection)
 {
 	for (size_t dr = 0; dr <= selection.getHeight(); ++dr)
 	{
@@ -740,7 +740,7 @@ void Pattern<T>::xflipValues(const BUtilities::RectArea<size_t> selection)
 }
 
 template <class T>
-void Pattern<T>::yflipValues(const BUtilities::RectArea<size_t> selection)
+void Pattern<T>::yflipValues(const BUtilities::Area<size_t> selection)
 {
 	for (size_t dr = 0; dr < (selection.getHeight() + 1) / 2; ++dr)
 	{
@@ -942,11 +942,11 @@ inline void Pattern<T>::draw ()
 template <class T>
 inline void Pattern<T>::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea<> (x0, y0, width, height));
+	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
 template <class T>
-inline void Pattern<T>::draw (const BUtilities::RectArea<>& area)
+inline void Pattern<T>::draw (const BUtilities::Area<>& area)
 	{
 		if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

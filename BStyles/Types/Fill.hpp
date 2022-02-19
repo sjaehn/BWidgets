@@ -78,7 +78,7 @@ public:
 	Fill (cairo_surface_t* surface) :
         color_ (),
         surface_    (surface && (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS) ? 
-                     cairo_image_surface_clone_from_image_surface (surface) : 
+                     cairoplus_image_surface_clone_from_image_surface (surface) : 
                      nullptr),
         type_ (FILL_IMAGE)
     {
@@ -104,7 +104,7 @@ public:
     Fill (const Fill& that) :
         color_ (that.color_),
         surface_    (that.surface_ && (cairo_surface_status (that.surface_) == CAIRO_STATUS_SUCCESS) ? 
-                     cairo_image_surface_clone_from_image_surface (that.surface_) : 
+                     cairoplus_image_surface_clone_from_image_surface (that.surface_) : 
                      nullptr),
         type_ (that.type_)
     {
@@ -131,7 +131,7 @@ public:
         if (surface_ != that.surface_)
         {
             if (surface_ && (cairo_surface_status (surface_) == CAIRO_STATUS_SUCCESS)) cairo_surface_destroy (surface_);
-            if (that.surface_) surface_ = cairo_image_surface_clone_from_image_surface (that.surface_);
+            if (that.surface_) surface_ = cairoplus_image_surface_clone_from_image_surface (that.surface_);
             else surface_ = nullptr;
         }
 
@@ -174,7 +174,7 @@ public:
         if (surface_ != surface)
         {
             if (surface_ && (cairo_surface_status (surface_) == CAIRO_STATUS_SUCCESS)) cairo_surface_destroy (surface_);
-            if (surface) surface_ = cairo_image_surface_clone_from_image_surface (surface);
+            if (surface) surface_ = cairoplus_image_surface_clone_from_image_surface (surface);
             else surface_ = nullptr;
         }
 

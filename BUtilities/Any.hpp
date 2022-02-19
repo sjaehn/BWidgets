@@ -24,6 +24,12 @@
 namespace BUtilities
 {
 
+/**
+ *  @brief  Container to type-safely take up the content of any copy 
+ *  constructible type.
+ *
+ *  @note  Similar classes are in the std (C++>=17) and boost.
+ */
 class Any
 {
 protected:
@@ -51,12 +57,26 @@ protected:
         }
 
 public:
+        /**
+         *  @brief  Constructs an empty Any object.
+         * 
+         */
         Any () {}
+
+        /**
+         *  @brief  Constructs a new Any object from another object.
+         *  @param that  Other object.
+         */
         Any (const Any& that) : dataTypeHash_ (that.dataTypeHash_)
         {dataptr_ = that.clone ();}
 
         ~Any () {if (dataptr_) delete dataptr_;}
 
+        /**
+         *  @brief  Copy assigns to the content of another object.
+         *  @param that  Other object.
+         *  @return  Content of this object.
+         */
         Any& operator= (const Any& that)
         {
                 if (dataptr_) delete dataptr_;
@@ -65,16 +85,33 @@ public:
                 return *this;
         }
 
+        /**
+         *  @brief  Gets the hash code of the containing data.
+         *  @return  Hash code.
+         */
         size_t dataTypeHash () const {return dataTypeHash_;}
 
-        template <class T> void set (const T& t)
+        /**
+         *  @brief  Sets the content of this Any object.
+         *  @tparam T  Data type of the content.
+         *  @param t  Data.
+         */
+        template <class T> 
+        void set (const T& t)
         {
                 if (dataptr_) delete dataptr_;
                 dataptr_ = new Data<T> (t);
                 dataTypeHash_ = typeid (T).hash_code ();
         }
 
-        template <class T> T get () const
+        /**
+         *  @brief  Gets the content of this Any object.
+         *  @tparam T  Data type of the content.
+         *  @return  Containing data or default constructed data object if
+         *  data types don't match.
+         */
+        template <class T> 
+        T get () const
         {
                 if ((!dataptr_) || (typeid (T).hash_code () != dataTypeHash_)) return T ();        // Return () better throw exception
                 return ((Data<T>*)dataptr_)->data;
@@ -82,7 +119,14 @@ public:
 
 };
 
-template <class T> Any makeAny (const T& t)
+/**
+ *  @brief  Creates and defines an Any object. 
+ *  @tparam T  Data type.
+ *  @param t  Data.
+ *  @return  Content of the created object.
+ */
+template <class T> 
+Any makeAny (const T& t)
 {
         Any a;
         a.set<T> (t);

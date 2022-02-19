@@ -286,7 +286,7 @@ protected:
      *  @brief  Clipped draw an %Image to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea<>& area) override;
+    virtual void draw (const BUtilities::Area<>& area) override;
 };
 
 inline Image::Image () : 
@@ -456,7 +456,7 @@ inline void Image::clear (const BStyles::Status status)
 inline void Image::loadImage (const BStyles::Status status, cairo_surface_t* surface)
 {
 	clear (status);
-	imageSurfaces_[status] = cairo_image_surface_clone_from_image_surface (surface);
+	imageSurfaces_[status] = cairoplus_image_surface_clone_from_image_surface (surface);
 	update ();
 }
 
@@ -479,10 +479,10 @@ inline void Image::draw ()
 
 inline void Image::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea<> (x0, y0, width, height));
+	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
-inline void Image::draw (const BUtilities::RectArea<>& area)
+inline void Image::draw (const BUtilities::Area<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

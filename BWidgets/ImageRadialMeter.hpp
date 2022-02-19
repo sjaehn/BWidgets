@@ -208,7 +208,7 @@ protected:
      *  @brief  Clipped draw a %ImageRadialMeter to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea<>& area) override;
+    virtual void draw (const BUtilities::Area<>& area) override;
 };
 
 inline ImageRadialMeter::ImageRadialMeter () :
@@ -298,11 +298,11 @@ inline void ImageRadialMeter::copy (const ImageRadialMeter* that)
 	activeAnchor_ = that->activeAnchor_;
 	dynamicAnchor_ = that->dynamicAnchor_;
 	if (staticImageSurface_ && (cairo_surface_status(staticImageSurface_) == CAIRO_STATUS_SUCCESS)) cairo_surface_destroy (staticImageSurface_);
-	staticImageSurface_ = cairo_image_surface_clone_from_image_surface (that->staticImageSurface_);
+	staticImageSurface_ = cairoplus_image_surface_clone_from_image_surface (that->staticImageSurface_);
 	if (activeImageSurface_ && (cairo_surface_status(activeImageSurface_) == CAIRO_STATUS_SUCCESS)) cairo_surface_destroy (activeImageSurface_);
-	activeImageSurface_ = cairo_image_surface_clone_from_image_surface (that->activeImageSurface_);
+	activeImageSurface_ = cairoplus_image_surface_clone_from_image_surface (that->activeImageSurface_);
 	if (dynamicImageSurface_ && (cairo_surface_status(dynamicImageSurface_) == CAIRO_STATUS_SUCCESS)) cairo_surface_destroy (dynamicImageSurface_);
-	dynamicImageSurface_ = cairo_image_surface_clone_from_image_surface (that->dynamicImageSurface_);
+	dynamicImageSurface_ = cairoplus_image_surface_clone_from_image_surface (that->dynamicImageSurface_);
 	ValueTransferable<double>::operator= (*that);
 	ValidatableRange<double>::operator= (*that);
 	ValueableTyped<double>::operator= (*that);
@@ -316,10 +316,10 @@ inline void ImageRadialMeter::draw ()
 
 inline void ImageRadialMeter::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea<> (x0, y0, width, height));
+	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
-inline void ImageRadialMeter::draw (const BUtilities::RectArea<>& area)
+inline void ImageRadialMeter::draw (const BUtilities::Area<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

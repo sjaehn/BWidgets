@@ -60,12 +60,12 @@ inline void drawVBar    (cairo_t* cr, const double x0, const double y0, const do
     {
         cairo_pattern_add_color_stop_rgba (pat, 0, CAIRO_RGBA(bgLo));
         cairo_pattern_add_color_stop_rgba (pat, 1, CAIRO_RGBA(bgHi));
-        cairo_rectangle_rounded (cr, x0, y0, width, height, 0.5 * width, 0b1111);
+        cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.5 * width, 0b1111);
         cairo_set_source (cr, pat);
         cairo_fill (cr);
         cairo_pattern_destroy (pat);
     }
-    cairo_rectangle_rounded (cr, x0, y0, width, height, 0.5 * width, 0b1111);
+    cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.5 * width, 0b1111);
     cairo_set_source_rgba (cr, CAIRO_RGBA(bgSh));
     cairo_fill (cr);
 
@@ -77,9 +77,9 @@ inline void drawVBar    (cairo_t* cr, const double x0, const double y0, const do
         cairo_pattern_add_color_stop_rgba (pat, 0.25, CAIRO_RGBA(fgHi));
         cairo_pattern_add_color_stop_rgba (pat, 1.0, CAIRO_RGBA(fgLo));
         cairo_save (cr);
-        cairo_rectangle_rounded (cr, x0 + 0.1 * width, y0 + 0.1 * width, 0.8 * width, std::max (height - 0.2 * width, 0.0), 0.5 * 0.8 * width, 0b1111);
+        cairoplus_rectangle_rounded (cr, x0 + 0.1 * width, y0 + 0.1 * width, 0.8 * width, std::max (height - 0.2 * width, 0.0), 0.5 * 0.8 * width, 0b1111);
         cairo_clip (cr);
-        cairo_rectangle_rounded (cr, x0 + 0.1 * width, y2, 0.8 * width, y3 - y2, 0.5 * 0.8 * width, 0b1111);
+        cairoplus_rectangle_rounded (cr, x0 + 0.1 * width, y2, 0.8 * width, y3 - y2, 0.5 * 0.8 * width, 0b1111);
         cairo_set_source (cr, pat);
         cairo_fill (cr);
         cairo_restore (cr);
@@ -92,7 +92,7 @@ inline void drawVBar    (cairo_t* cr, const double x0, const double y0, const do
     {
         cairo_pattern_add_color_stop_rgba (pat, 0, CAIRO_RGBA(bgLo));
         cairo_pattern_add_color_stop_rgba (pat, 1, CAIRO_RGBA(bgHi));
-        cairo_rectangle_rounded (cr, x0, y0, width, height, 0.5 * width, 0b1111);
+        cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.5 * width, 0b1111);
         cairo_set_source (cr, pat);
         cairo_set_line_width (cr, 0.05 * width);
         cairo_stroke (cr);

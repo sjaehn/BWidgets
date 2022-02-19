@@ -182,7 +182,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 						BEvents::ExposeEvent* firstEvent = (BEvents::ExposeEvent*) precursor;
 						BEvents::ExposeEvent* nextEvent = (BEvents::ExposeEvent*) event;
 
-						BUtilities::RectArea<> area = nextEvent->getArea ();
+						BUtilities::Area<> area = nextEvent->getArea ();
 						firstEvent->setArea (area);
 
 						delete event;
@@ -195,7 +195,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 						BEvents::ExposeEvent* firstEvent = (BEvents::ExposeEvent*) precursor;
 						BEvents::ExposeEvent* nextEvent = (BEvents::ExposeEvent*) event;
 
-						BUtilities::RectArea<> area = firstEvent->getArea ();
+						BUtilities::Area<> area = firstEvent->getArea ();
 						area.extend (nextEvent->getArea ());
 						firstEvent->setArea (area);
 
@@ -672,7 +672,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 	// Expose events handled HERE
 	case PUGL_EXPOSE:
 		{
-			BUtilities::RectArea<> area = BUtilities::RectArea<> (puglEvent->expose.x, puglEvent->expose.y, puglEvent->expose.width, puglEvent->expose.height);
+			BUtilities::Area<> area = BUtilities::Area<> (puglEvent->expose.x, puglEvent->expose.y, puglEvent->expose.width, puglEvent->expose.height);
 
 			// Create a temporal storage surface and store all children surfaces on this
 			cairo_surface_t* storageSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w->getWidth(), w->getHeight());

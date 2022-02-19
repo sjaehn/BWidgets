@@ -250,7 +250,7 @@ void Widget::hide()
 	bool wasVisible = isVisible ();
 
 	// Get area occupied by this widget and its children
-	BUtilities::RectArea<> hideArea = getAbsoluteFamilyArea ([] (const Widget* w) {return w->isVisible();});
+	BUtilities::Area<> hideArea = getAbsoluteFamilyArea ([] (const Widget* w) {return w->isVisible();});
 	Visualizable::setSupport (false);
 
 	if (wasVisible && (this != dynamic_cast<Widget*> (getMainWindow())))
@@ -340,9 +340,9 @@ BUtilities::Point<> Widget::getPosition () const
 	return position_;
 }
 
-BUtilities::RectArea<> Widget::getArea () const 
+BUtilities::Area<> Widget::getArea () const 
 {
-	return BUtilities::RectArea<> (position_, position_ + extends_);
+	return BUtilities::Area<> (position_, position_ + extends_);
 }
 
 BUtilities::Point<> Widget::getAbsolutePosition () const
@@ -352,9 +352,9 @@ BUtilities::Point<> Widget::getAbsolutePosition () const
 	return p;
 }
 
-BUtilities::RectArea<> Widget::getAbsoluteArea () const
+BUtilities::Area<> Widget::getAbsoluteArea () const
 {
-	BUtilities::RectArea<> a = getArea();
+	BUtilities::Area<> a = getArea();
 	a.moveTo (getAbsolutePosition ());
 	return a;
 }
@@ -386,9 +386,9 @@ double Widget::getEffectiveHeight () const
 	return (getHeight () > 2 * totalBorderHeight ? getHeight () - 2 * totalBorderHeight : 0);
 }
 
-BUtilities::RectArea<> Widget::getEffectiveArea () const
+BUtilities::Area<> Widget::getEffectiveArea () const
 {
-	return BUtilities::RectArea<> (getPosition().x + getXOffset(), getPosition().y + getYOffset(), getEffectiveWidth(), getEffectiveHeight());
+	return BUtilities::Area<> (getPosition().x + getXOffset(), getPosition().y + getYOffset(), getEffectiveWidth(), getEffectiveHeight());
 }
 
 void Widget::setStatus (const BStyles::Status status)
@@ -522,12 +522,12 @@ void Widget::setTxColors (const BStyles::ColorMap& colors)
 
 void Widget::emitExposeEvent ()
 {
-	BUtilities::RectArea<> area = getFamilyArea ([] (const Widget* w) {return w->isVisible();});
+	BUtilities::Area<> area = getFamilyArea ([] (const Widget* w) {return w->isVisible();});
 	area.moveTo (getAbsolutePosition ());
 	emitExposeEvent (area);
 }
 
-void Widget::emitExposeEvent (const BUtilities::RectArea<>& area)
+void Widget::emitExposeEvent (const BUtilities::Area<>& area)
 {
 	Window* main = getMainWindow();
 	if (main)
@@ -541,25 +541,25 @@ Widget* Widget::getWidgetAt	(const BUtilities::Point<>& position,
 							 std::function<bool (Widget* widget)> func,
 							 std::function<bool (Widget* widget)> passfunc)
 {
-	BUtilities::RectArea<> absarea = getAbsoluteArea ();
+	BUtilities::Area<> absarea = getAbsoluteArea ();
 	return getWidgetAt (getAbsolutePosition () + position, absarea, absarea, func, passfunc);
 }
 
 Widget* Widget::getWidgetAt	(const BUtilities::Point<>& abspos, 
-							 const BUtilities::RectArea<>& outerArea,
-			    			 const BUtilities::RectArea<>& area, 
+							 const BUtilities::Area<>& outerArea,
+			    			 const BUtilities::Area<>& area, 
 							 std::function<bool (Widget* widget)> func,
 							 std::function<bool (Widget* widget)> passfunc)
 {
-	BUtilities::RectArea<> a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
-	BUtilities::RectArea<> thisArea = getArea();
+	BUtilities::Area<> a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
+	BUtilities::Area<> thisArea = getArea();
 	thisArea.moveTo (getAbsolutePosition());
 	thisArea.intersect (a);
 	if (getMainWindow())
 	{
 		Widget* finalw =
 		(
-			((thisArea != BUtilities::RectArea<> ()) && thisArea.contains (abspos)) ? 
+			((thisArea != BUtilities::Area<> ()) && thisArea.contains (abspos)) ? 
 			(
 				func (this) ?
 				this : 
@@ -586,16 +586,16 @@ Widget* Widget::getWidgetAt	(const BUtilities::Point<>& abspos,
 	else return nullptr;
 }
 
-BUtilities::RectArea<> Widget::getFamilyArea (std::function<bool (const Widget* widget)> func) const
+BUtilities::Area<> Widget::getFamilyArea (std::function<bool (const Widget* widget)> func) const
 {
-	BUtilities::RectArea<> a = getAbsoluteFamilyArea (func);
+	BUtilities::Area<> a = getAbsoluteFamilyArea (func);
 	a.moveTo (a.getPosition() - getAbsolutePosition());
 	return a;
 }
 
-BUtilities::RectArea<> Widget::getAbsoluteFamilyArea (std::function<bool (const Widget* widget)> func) const
+BUtilities::Area<> Widget::getAbsoluteFamilyArea (std::function<bool (const Widget* widget)> func) const
 {
-	BUtilities::RectArea<> a = getAbsoluteArea();
+	BUtilities::Area<> a = getAbsoluteArea();
 	forEachChild 
 	(
 		[&a, func] (Linkable* l)
@@ -614,29 +614,29 @@ BUtilities::RectArea<> Widget::getAbsoluteFamilyArea (std::function<bool (const 
 	return a;
 }
 
-void Widget::display (cairo_surface_t* surface, const BUtilities::RectArea<>& area)
+void Widget::display (cairo_surface_t* surface, const BUtilities::Area<>& area)
 {
 	if (isVisible())
 	{
 		// Calculate absolute area position and start private core method
-		BUtilities::RectArea<> absArea = area;
+		BUtilities::Area<> absArea = area;
 		absArea.moveTo (absArea.getPosition() + getAbsolutePosition());
 		display (surface, absArea, absArea);
 	}
 }
 
-void Widget::display (cairo_surface_t* surface, const BUtilities::RectArea<>& outerArea, const BUtilities::RectArea<>& area)
+void Widget::display (cairo_surface_t* surface, const BUtilities::Area<>& outerArea, const BUtilities::Area<>& area)
 {
-	BUtilities::RectArea<> a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
-	BUtilities::RectArea<> thisArea = getArea(); 
+	BUtilities::Area<> a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
+	BUtilities::Area<> thisArea = getArea(); 
 	thisArea.moveTo (getAbsolutePosition());
 	a.intersect (thisArea);
 	if (isVisible())
 	{
-		if (a != BUtilities::RectArea<> ())
+		if (a != BUtilities::Area<> ())
 		{
 			// Update draw
-			if (scheduleDraw_) draw (BUtilities::RectArea<> (0, 0, getWidth (), getHeight ()));
+			if (scheduleDraw_) draw (BUtilities::Area<> (0, 0, getWidth (), getHeight ()));
 
 			// Copy widgets surface onto main surface
 			cairo_t* cr = cairo_create (surface);
@@ -661,15 +661,15 @@ void Widget::draw ()
 
 void Widget::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea<> (x0, y0, width, height));
+	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
-void Widget::draw (const BUtilities::RectArea<>& area)
+void Widget::draw (const BUtilities::Area<>& area)
 {
 	Visualizable::draw (area);
 
 	if ((!cairoSurface()) || (cairo_surface_status (cairoSurface()) != CAIRO_STATUS_SUCCESS)) return;
-	cairo_surface_clear (cairoSurface());
+	cairoplus_surface_clear (cairoSurface());
 	cairo_t* cr = cairo_create (cairoSurface());
 
 	if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
@@ -700,7 +700,7 @@ void Widget::draw (const BUtilities::RectArea<>& area)
 			}
 			else
 			{
-				cairo_rectangle_rounded (cr, innerBorders, innerBorders, getEffectiveWidth (), getEffectiveHeight (), innerRadius, 0b1111);
+				cairoplus_rectangle_rounded (cr, innerBorders, innerBorders, getEffectiveWidth (), getEffectiveHeight (), innerRadius, 0b1111);
 			}
 			cairo_fill (cr);
 			
@@ -720,7 +720,7 @@ void Widget::draw (const BUtilities::RectArea<>& area)
 		)
 		{
 			double lw = border.line.width;
-			cairo_rectangle_rounded
+			cairoplus_rectangle_rounded
 			(
 				cr,
 				outerBorders + lw / 2,

@@ -19,7 +19,7 @@
 #define BWIDGETS_VISUALIZABLE_HPP_
 
 #include <cairo/cairo.h>
-#include "../../BUtilities/RectArea.hpp"
+#include "../../BUtilities/Area.hpp"
 #include "Callback.hpp"
 #include "Support.hpp"
 
@@ -201,7 +201,7 @@ public:
 	 *  @brief  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT.
      *  @param area  Area to be re-displayed.
 	 */
-    virtual void emitExposeEvent (const BUtilities::RectArea<>& area) = 0;
+    virtual void emitExposeEvent (const BUtilities::Area<>& area) = 0;
     
     /**
      *  @brief  Access to the Cairo surface.
@@ -255,7 +255,7 @@ protected:
      *
      *  Default empty method to be overridden.
      */
-    virtual void draw (const BUtilities::RectArea<>& area);
+    virtual void draw (const BUtilities::Area<>& area);
 
 };
 }

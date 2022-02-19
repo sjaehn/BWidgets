@@ -229,7 +229,7 @@ inline void ValueRadialMeter::update ()
 		getEffectiveHeight() * BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH / BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT
 	);
 
-	scale_ = BUtilities::RectArea<> 
+	scale_ = BUtilities::Area<> 
 	(
 		getXOffset() + 0.5 * getEffectiveWidth() - rad , 
 		getYOffset() + 0.5 * getEffectiveHeight() - rad * BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT / BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH, 

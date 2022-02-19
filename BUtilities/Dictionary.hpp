@@ -40,6 +40,30 @@ namespace BUtilities
  *  Dictionary provides an addition and a shortcut to the system locale /
  *  messages. It may store additional words and translations but it also allows
  *  fallback access to the system provided vocabulary and translations.
+ *  
+ *  Additional vocabulary can be stored in the 
+ *  @c BUTILITIES_DICTIONARY_DATAFILE (default "Dictionary.data") in the format:
+ *  @code {.cpp}
+ *  {
+        {
+            "Word or phrase1",       
+            {
+                {"language_code1", "Translation1"},
+                {"language_code2", "Translation2"},
+                {...}
+            }
+        },
+        {
+            ...
+        }
+    }
+ *  @endcode
+ *  with the language_code is represented as the full or partial POSIX locale 
+ * (language[_territory][.codeset][@modifier], e. g. "en_US.utf8").
+ *
+ *  To use an alternative dictionary, define the 
+ *  @c BUTILITIES_DICTIONARY_DATAFILE variable prior the include of 
+ *  %Dictionary. 
  *
  *  @todo  System locale / messages.
  */

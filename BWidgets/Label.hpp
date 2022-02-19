@@ -164,7 +164,7 @@ protected:
      *  @brief  Clipped Draw to the surface (if is visualizable).
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea<>& area) override;
+    virtual void draw (const BUtilities::Area<>& area) override;
 };
 
 inline Label::Label () : 
@@ -267,10 +267,10 @@ inline void Label::draw ()
 
 inline void Label::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea<> (x0, y0, width, height));
+	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
-inline void Label::draw (const BUtilities::RectArea<>& area)
+inline void Label::draw (const BUtilities::Area<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 

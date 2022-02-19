@@ -12,7 +12,7 @@ The toolkit uses tools from six namespaces (further info there):
 * [`BEvents`](BEvents/README.md)
 * [`BMusic`](BMusic/README.md)
 * [`BStyles`](BStyles/README.md)
-* `BUtilities`
+* [`BUtilities`](BUtilities/README.md)
 * [`BWidgets`](BWidgets/README.md)
 
 

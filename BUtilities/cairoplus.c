@@ -25,7 +25,7 @@
 #define FABS(x) (x < 0 ? -x : x)
 #endif
 
-void cairo_rectangle_rounded (cairo_t* cr, double x, double y, double width, double height, double radius, uint8_t corners)
+void cairoplus_rectangle_rounded (cairo_t* cr, double x, double y, double width, double height, double radius, uint8_t corners)
 {
 	if (radius == 0.0)
 	{
@@ -63,7 +63,7 @@ void cairo_rectangle_rounded (cairo_t* cr, double x, double y, double width, dou
 	}
 }
 
-cairo_surface_t* cairo_image_surface_clone_from_image_surface (cairo_surface_t* sourceSurface)
+cairo_surface_t* cairoplus_image_surface_clone_from_image_surface (cairo_surface_t* sourceSurface)
 {
 	cairo_surface_t* targetSurface = NULL;
 
@@ -88,7 +88,7 @@ cairo_surface_t* cairo_image_surface_clone_from_image_surface (cairo_surface_t* 
 	return targetSurface;
 }
 
-void cairo_surface_clear (cairo_surface_t* surface)
+void cairoplus_surface_clear (cairo_surface_t* surface)
 {
 	cairo_t* cr = cairo_create (surface);
 	if (cr && (cairo_status (cr) == CAIRO_STATUS_SUCCESS))
@@ -102,7 +102,7 @@ void cairo_surface_clear (cairo_surface_t* surface)
 
 char cairo_nil_text[1] = "";
 
-char* cairo_create_text_fitted (cairo_t* cr, double width, cairo_text_decorations decorations, char* text)
+char* cairoplus_create_text_fitted (cairo_t* cr, double width, cairoplus_text_decorations decorations, char* text)
 {
 	size_t text_len = strlen (text);
 	if (text_len)
@@ -169,7 +169,7 @@ char* cairo_create_text_fitted (cairo_t* cr, double width, cairo_text_decoration
 	return cairo_nil_text;
 }
 
-void cairo_text_destroy (char* text)
+void cairoplus_text_destroy (char* text)
 {
 	if (text && (text != cairo_nil_text)) free (text);
 }

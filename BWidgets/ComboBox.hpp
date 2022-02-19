@@ -55,7 +55,7 @@ class ComboBox : public SpinBox
 
 protected:
 	Widget* listBox_;
-	BUtilities::RectArea<> listBoxArea_;
+	BUtilities::Area<> listBoxArea_;
 
 public:
 

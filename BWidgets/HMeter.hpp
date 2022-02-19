@@ -61,7 +61,7 @@ class HMeter :	public Widget,
 				public ValueTransferable<double>
 {
 protected:
-	BUtilities::RectArea<> scale_;
+	BUtilities::Area<> scale_;
 	std::function<double (const double& x)> gradient_ = noTransfer;
 
 public:
@@ -189,7 +189,7 @@ protected:
      *  @brief  Clipped draw a %HMeter to the surface.
      *  @param area  Clipped area. 
      */
-    virtual void draw (const BUtilities::RectArea<>& area) override;
+    virtual void draw (const BUtilities::Area<>& area) override;
 };
 
 inline HMeter::HMeter () :
@@ -252,7 +252,7 @@ inline void HMeter::copy (const HMeter* that)
 
 inline void HMeter::update ()
 {
-	scale_ = BUtilities::RectArea<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
+	scale_ = BUtilities::Area<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
 	Widget::update();
 }
 
@@ -275,10 +275,10 @@ inline void HMeter::draw ()
 
 inline void HMeter::draw (const double x0, const double y0, const double width, const double height)
 {
-	draw (BUtilities::RectArea<> (x0, y0, width, height));
+	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
-inline void HMeter::draw (const BUtilities::RectArea<>& area)
+inline void HMeter::draw (const BUtilities::Area<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 
@@ -314,7 +314,7 @@ inline void HMeter::draw (const BUtilities::RectArea<>& area)
 			// Background fill
     		cairo_set_line_width (cr, 0.0);
 			cairo_set_source_rgba (cr, CAIRO_RGBA(bgDk));
-			cairo_rectangle_rounded (cr, x0, y0, w, h, 0.2 * h, 0b1111);
+			cairoplus_rectangle_rounded (cr, x0, y0, w, h, 0.2 * h, 0b1111);
 			cairo_fill (cr);
 
 			// Border
@@ -323,7 +323,7 @@ inline void HMeter::draw (const BUtilities::RectArea<>& area)
 			{
 				cairo_pattern_add_color_stop_rgba (pat, 0, CAIRO_RGBA(bgLo));
 				cairo_pattern_add_color_stop_rgba (pat, 1, CAIRO_RGBA(bgHi));
-				cairo_rectangle_rounded (cr, x0, y0, w, h, 0.2 * h, 0b1111);
+				cairoplus_rectangle_rounded (cr, x0, y0, w, h, 0.2 * h, 0b1111);
 				cairo_set_source (cr, pat);
 				cairo_set_line_width (cr, 1.0);
 				cairo_stroke (cr);

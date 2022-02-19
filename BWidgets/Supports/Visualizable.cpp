@@ -49,7 +49,7 @@ Visualizable::Visualizable (const Visualizable& that) :
     Support (that),
     scheduleDraw_ (that.scheduleDraw_),
     extends_ (that.extends_),
-    surface_ (cairo_image_surface_clone_from_image_surface (that.surface_))
+    surface_ (cairoplus_image_surface_clone_from_image_surface (that.surface_))
 {
 
 }
@@ -66,7 +66,7 @@ Visualizable& Visualizable::operator= (const Visualizable& that)
     scheduleDraw_ = that.scheduleDraw_;
     extends_ = that.extends_;
     if (surface_) cairo_surface_destroy (surface_);
-    surface_ = cairo_image_surface_clone_from_image_surface (that.surface_);
+    surface_ = cairoplus_image_surface_clone_from_image_surface (that.surface_);
 
     update();
     return *this;
@@ -197,7 +197,7 @@ void Visualizable::draw (const double x0, const double y0, const double width, c
 
 }
 
-void Visualizable::draw (const BUtilities::RectArea<>& area)
+void Visualizable::draw (const BUtilities::Area<>& area)
 {
     scheduleDraw_ = false;
 }

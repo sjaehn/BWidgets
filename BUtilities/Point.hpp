@@ -24,14 +24,33 @@
 namespace BUtilities
 {
 
+/**
+ *  @brief  2D %Point coordinates.
+ *  @tparam T  Data type of the coordinates.
+ */
 template <class T = double>
 struct Point
 {
 	T x, y;
 
-	Point () : Point<T> (0, 0) {}
+	/**
+	 *  @brief  Constructs a new %Point object with default (origin) 
+	 *  coordinates.
+	 */
+	Point () : Point<T> (T(), T()) {}
+
+	/**
+	 *  @brief  Constructs a new %Point object from provided coordinates.
+	 *  @param x  X coordninate.
+	 *  @param y  Y coordninate.
+	 */
 	Point (const T x, const T y) : x (x), y (y) {}
 
+	/**
+	 *  @brief  2D Vector addition of %Point coordinates.
+	 *  @param rhs  Other point.
+	 *  @return  Result of 2D vector addition. 
+	 */
 	Point& operator+= (const Point& rhs)
 	{
 		this->x += rhs.x;
@@ -39,6 +58,11 @@ struct Point
 		return *this;
 	}
 
+	/**
+	 *  @brief  2D Vector subtraction of %Point coordinates.
+	 *  @param rhs  Other point.
+	 *  @return  Result of 2D vector subtraction. 
+	 */
 	Point<T>& operator-= (const Point& rhs)
 	{
 		this->x -= rhs.x;
@@ -46,6 +70,11 @@ struct Point
 		return *this;
 	}
 
+	/**
+	 *  @brief  Scalar multiplication of %Point coordinates.
+	 *  @param rhs  Factor.
+	 *  @return  Result of scalar multiplication. 
+	 */
 	Point<T>& operator*= (const T rhs)
 	{
 		this->x *= rhs;
@@ -53,6 +82,11 @@ struct Point
 		return *this;
 	}
 
+	/**
+	 *  @brief  Scalar division of %Point coordinates.
+	 *  @param rhs  Divisor.
+	 *  @return  Result of scalar division. 
+	 */
 	Point<T>& operator/= (const T rhs)
 	{
 		this->x /= rhs;
