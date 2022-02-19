@@ -395,13 +395,6 @@ symbol status (and thus its color) in addition to the change of its border
 color upon changing the condition.
 
 
-### Image
-
-![image](../suppl/Image.png)
-
-`Image` is an image displaying widget. It supports one image for each Status.
-
-
 ### ImageButton
 
 ![imagebutton](../suppl/ImageButton.png)
