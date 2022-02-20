@@ -211,14 +211,14 @@ inline void MessageBox::resize ()
 	else 
 	{
 		headline.moveTo (symbol.getPosition().x + symbol.getWidth() + BWIDGETS_DEFAULT_MENU_PADDING, getYOffset() + BWIDGETS_DEFAULT_MENU_PADDING);
-		headline.resize	(getWidth() - symbol.getPosition().x - symbol.getWidth() - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING - getXOffset(), 
+		headline.resize	(BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH - symbol.getPosition().x - symbol.getWidth() - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING - getXOffset(), 
 						 getEffectiveHeight() - 3.0 * BWIDGETS_DEFAULT_MENU_PADDING - BWIDGETS_DEFAULT_BUTTON_HEIGHT);	// Set width
 		headline.resize ();		// Optimize Height
 	}
 
 	// Text
 	text.moveTo	(headline.getPosition().x, headline.getPosition().y + headline.getHeight() + BWIDGETS_DEFAULT_MENU_PADDING);
-	text.resize	(getWidth() - symbol.getPosition().x - symbol.getWidth() - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING - getXOffset(), 
+	text.resize	(BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH - symbol.getPosition().x - symbol.getWidth() - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING - getXOffset(), 
 				 getHeight() - headline.getPosition().y - headline.getHeight() - 4.0 * BWIDGETS_DEFAULT_MENU_PADDING - getYOffset()); // Set width
 	text.resize (); // Optimize Height
 

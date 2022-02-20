@@ -171,7 +171,7 @@ inline void TextBox::copy (const TextBox* that)
 
 inline void TextBox::resize ()
 {
-	text.resize (getEffectiveWidth() - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING, text.getHeight());	// Define the text width
+	text.resize (BWIDGETS_DEFAULT_TEXTBOX_WIDTH - 2.0 * getXOffset() - 2.0 * BWIDGETS_DEFAULT_MENU_PADDING, text.getHeight());	// Define the text width
 	text.resize();	// Optimize the text hight
 	text.moveTo (getXOffset() + BWIDGETS_DEFAULT_MENU_PADDING, getYOffset() + BWIDGETS_DEFAULT_MENU_PADDING);
 	Box::resize();
