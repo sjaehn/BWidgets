@@ -44,7 +44,10 @@
     {
         "Can't create new folder",           
         {
-            {"de_DE", "Kann kein neues Vereichnis erstellen"}
+            {"de_DE", "Kann kein neues Vereichnis erstellen"},
+            {"es_ES", "No se pudo crear carpeta"},
+            {"fr_FR", "Impossible de créer le nouveau dossier"},
+            {"pl_PL", "Nie można utworzyć nowego folderu"}
         }
     },
 
@@ -108,7 +111,10 @@
     {
         "Create new folder",           
         {
-            {"de_DE", "Neues Verzeichnis erstellen"}
+            {"de_DE", "Neues Verzeichnis erstellen"},
+            {"es_ES", "Crear carpeta"},
+            {"fr_FR", "Créer un nouveau dossier"},
+            {"pl_PL", "Utwórz nowy folder"}
         }
     },
 
@@ -276,14 +282,17 @@
     {
         "frames",       
         {
-
+            {"pl_PL", "ramek"}
         }
     },
     
     {
         "Image files",       
         {
-            {"de_DE", "Bilddateien"}
+            {"de_DE", "Bilddateien"},
+            {"es_ES", "Archivos de imagen"},
+            {"fr_FR", "Fichier d'images"},
+            {"pl_PL", "Pliki obrazów"}
         }
     },
 
@@ -304,7 +313,7 @@
     {
         "No audio file selected",       
         {
-            {"de_DE", "Keine Audiodatei augewählt"}
+            {"de_DE", "Keine Audiodatei augewählt"},
         }
     },
 
@@ -360,7 +369,10 @@
     {
         "Play selection as loop",       
         {
-            {"de_DE", "Auswahl als Schleife"}
+            {"de_DE", "Auswahl als Schleife spielen"},
+            {"es_ES", "Reproducir selección en bucle"},
+            {"fr_FR", "Jouer la sélection en boucle"},
+            {"pl_PL", "Odtwarzaj zaznaczenie w pętli"}
         }
     },
 
@@ -395,7 +407,10 @@
     {
         "Sound files",       
         {
-            {"de_DE", "Sounddateien"}
+            {"de_DE", "Sounddateien"},
+            {"es_ES", "Archivos de audio"}
+            {"fr_FR", "Fichier sons"},
+            {"pl_PL", "Pliki dźwiękowe"}
         }
     },
 
