@@ -9,7 +9,8 @@
             {"nl_NL", "Alle bestanden"},
             {"pl_PL", "Wszystkie pliki"},
             {"pt_PT", "Todos os ficheiros"},
-            {"ru_RU", "Все файлы"}
+            {"ru_RU", "Все файлы"},
+            {"pt_BR", "Todos os arquivos"}
         }
     },
 
@@ -23,7 +24,8 @@
             {"nl_NL", "Toepassen"},
             {"pl_PL", "Zastosuj"},
             {"pt_PT", "Aplicar"},
-            {"ru_RU", "Применить"}
+            {"ru_RU", "Применить"},
+            {"pt_BR", "Aplicar"}
         }
     },
 
@@ -37,14 +39,16 @@
             {"nl_NL", "Annuleren"},
             {"pl_PL", "Anuluj"},
             {"pt_PT", "Cancelar"},
-            {"ru_RU", "Отмена"}
+            {"ru_RU", "Отмена"},
+            {"pt_BR", "Cancelar"}
         }
     },
 
     {
         "Can't create new folder",           
         {
-            {"de_DE", "Kann kein neues Vereichnis erstellen"}
+            {"de_DE", "Kann kein neues Vereichnis erstellen"},
+            {"pt_BR", "Não é possível criar nova pasta"}
         }
     },
 
@@ -58,7 +62,8 @@
             {"nl_NL", "Sluiten"},
             {"pl_PL", "Zamknij"},
             {"pt_PT", "Fechar"},
-            {"ru_RU", "Закрыть"}
+            {"ru_RU", "Закрыть"},
+            {"pt_BR", "Fechar"}
         }
     },
 
@@ -72,7 +77,8 @@
             {"nl_NL", "Doorgaan"},
             {"pl_PL", "Kontynuować"},
             {"pt_PT", "Continuar"},
-            {"ru_RU", "Продолжить"}
+            {"ru_RU", "Продолжить"},
+            {"pt_BR", "Continuar"}
             
         }
     },
@@ -87,7 +93,8 @@
             {"nl_NL", "Kopiëren"},
             {"pl_PL", "Kopiuj"},
             {"pt_PT", "Copiar"},
-            {"ru_RU", "Копировать"}
+            {"ru_RU", "Копировать"},
+            {"pt_BR", "Copiar"}
         }
     },
 
@@ -101,14 +108,16 @@
             {"nl_NL", "Aanmaken"},
             {"pl_PL", "Utwórz"},
             {"pt_PT", "Criar"},
-            {"ru_RU", "Создать"}
+            {"ru_RU", "Создать"},
+            {"pt_BR", "Criar"}
         }
     },
 
     {
         "Create new folder",           
         {
-            {"de_DE", "Neues Verzeichnis erstellen"}
+            {"de_DE", "Neues Verzeichnis erstellen"},
+            {"pt_BR", "Criar nova pasta"}
         }
     },
 
@@ -122,14 +131,16 @@
             {"nl_NL", "Knippen"},
             {"pl_PL", "Wytnij"},
             {"pt_PT", "Cortar"},
-            {"ru_RU", "Вырезать"}
+            {"ru_RU", "Вырезать"},
+            {"pt_BR", "Cortar"}
         }
     },
 
     {
         "C/C++ files",       
         {
-            {"de_DE", "C/C++-Dateien"}
+            {"de_DE", "C/C++-Dateien"},
+            {"pt_BR", "Arquivos C/C++"}
         }
     },
 
@@ -143,7 +154,8 @@
             {"nl_NL", "Verwijderen"},
             {"pl_PL", "Usuń"},
             {"pt_PT", "Excluir"},
-            {"ru_RU", "Удалить"}
+            {"ru_RU", "Удалить"},
+            {"pt_BR", "Remover"}
         }
     },
 
@@ -157,7 +169,8 @@
             {"nl_NL", "Negeren"},
             {"pl_PL", "Odrzuć"},
             {"pt_PT", "Rejeitar"},
-            {"ru_RU", "Отказаться"}
+            {"ru_RU", "Отказаться"},
+            {"pt_BR", "Descartar"}
         }
     },
 
@@ -171,7 +184,8 @@
             {"nl_NL", "Wijzigingen negeren"},
             {"pl_PL", "Odrzuć zmiany i połącz ponownie"},
             {"pt_PT", "Rejeitar mudanças"},
-            {"ru_RU", "Отказаться от изменений"}
+            {"ru_RU", "Отказаться от изменений"},
+            {"pt_BR", "Descartar mudanças"}
         }
     },
 
@@ -185,7 +199,8 @@
             {"nl_NL", "Klaar"},
             {"pl_PL", "Gotowe"},
             {"pt_PT", "Concluído"},
-            {"ru_RU", "Готово"}
+            {"ru_RU", "Готово"},
+            {"pt_BR", "Concluído"}
         }
     },
 
@@ -199,7 +214,8 @@
             {"nl_NL", "Bewerken"},
             {"pl_PL", "Edytuj"},
             {"pt_PT", "Editar"},
-            {"ru_RU", "Правка"}
+            {"ru_RU", "Правка"},
+            {"pt_BR", "Editar"}
         }
     },
 
@@ -213,7 +229,8 @@
             {"nl_NL", "Fout"},
             {"pl_PL", "Błąd"},
             {"pt_PT", "Erro"},
-            {"ru_RU", "Ошибка"}
+            {"ru_RU", "Ошибка"},
+            {"pt_BR", "Erro"}
         }
     },
 
@@ -227,7 +244,8 @@
             {"nl_NL", "Afsluiten"},
             {"pl_PL", "Wyjdź"},
             {"pt_PT", "Sair"},
-            {"ru_RU", "Выйти"}
+            {"ru_RU", "Выйти"},
+            {"pt_BR", "Sair"}
         }
     },
 
@@ -241,7 +259,8 @@
             {"nl_NL", "Bestand"},
             {"pl_PL", "Plik"},
             {"pt_PT", "Ficheiro"},
-            {"ru_RU", "Файл"}
+            {"ru_RU", "Файл"},
+            {"pt_BR", "Arquivo"}
         }
     },
 
@@ -255,7 +274,8 @@
             {"nl_NL", "Bestand bestaat al"},
             {"pl_PL", "Plik już istnieje"},
             {"pt_PT", "Ficheiro já existente"},
-            {"ru_RU", "Файл уже существует"}
+            {"ru_RU", "Файл уже существует"},
+            {"pt_BR", "Arquivo já existe"}
         }
     },
 
@@ -269,7 +289,8 @@
             {"nl_NL", "Bestand niet gevonden"},
             {"pl_PL", "Plik nie został odnaleziony"},
             {"pt_PT", "Ficheiro não encontrado"},
-            {"ru_RU", "Файл не найден"}
+            {"ru_RU", "Файл не найден"},
+            {"pt_BR", "Arquivo não encontrado"}
         }
     },
 
@@ -283,7 +304,8 @@
     {
         "Image files",       
         {
-            {"de_DE", "Bilddateien"}
+            {"de_DE", "Bilddateien"},
+            {"pt_BR", "Arquivos de imagem"}
         }
     },
 
@@ -297,14 +319,16 @@
             {"nl_NL", "Nee"},
             {"pl_PL", "Nie"},
             {"pt_PT", "Não"},
-            {"ru_RU", "Нет"}
+            {"ru_RU", "Нет"},
+            {"pt_BR", "Não"}
         }
     },
 
     {
         "No audio file selected",       
         {
-            {"de_DE", "Keine Audiodatei augewählt"}
+            {"de_DE", "Keine Audiodatei augewählt"},
+            {"pt_BR", "Nenhum arquivo de áudio selecionado"}
         }
     },
 
@@ -318,7 +342,8 @@
             {"nl_NL", "Geen voorbeeldweergave"},
             {"pl_PL", "Brak podglądu"},
             {"pt_PT", "Nenhuma antevisão"},
-            {"ru_RU", "Нет предпросмотра"}
+            {"ru_RU", "Нет предпросмотра"},
+            {"pt_BR", "Sem prévia"}
         }
     },
 
@@ -339,7 +364,8 @@
             {"nl_NL", "Openen"},
             {"pl_PL", "Otwórz"},
             {"pt_PT", "Abrir"},
-            {"ru_RU", "Открыть"}
+            {"ru_RU", "Открыть"},
+            {"pt_br", "Abrir}
         }
     },
 
@@ -353,14 +379,16 @@
             {"nl_NL", "Overschrijven"},
             {"pl_PL", "Nadpisz"},
             {"pt_PT", "Sobrepor"},
-            {"ru_RU", "Заменить"}
+            {"ru_RU", "Заменить"},
+            {"pt_BR", "Sobrescrever"}
         }
     },
 
     {
         "Play selection as loop",       
         {
-            {"de_DE", "Auswahl als Schleife"}
+            {"de_DE", "Auswahl als Schleife"},
+            {"pt_BR", "Tocar seleção como loop"}
         }
     },
 
@@ -374,7 +402,8 @@
             {"nl_NL", "Selectie einde"},
             {"pl_PL", "Koniec zaznaczenia"},
             {"pt_PT", "Fim da Seleção"},
-            {"ru_RU", "Конец выделения"}
+            {"ru_RU", "Конец выделения"},
+            {"pt_BR", "Final da seleção"}
         }
     },
 
@@ -388,14 +417,16 @@
             {"nl_NL", "Selectie begin"},
             {"pl_PL", "Początek zaznaczenia"},
             {"pt_PT", "Início da Seleção"},
-            {"ru_RU", "Начало выделения"}
+            {"ru_RU", "Начало выделения"},
+            {"pt_BR", "Início da seleção"}
         }
     },
 
     {
         "Sound files",       
         {
-            {"de_DE", "Sounddateien"}
+            {"de_DE", "Sounddateien"},
+            {"pt_BR", "Arquivos de áudio"}
         }
     },
 
@@ -409,7 +440,8 @@
             {"nl_NL", "Ja"},
             {"pl_PL", "Tak"},
             {"pt_PT", "Sim"},
-            {"ru_RU", "Да"}
+            {"ru_RU", "Да"},
+            {"pt_BR","Sim"}
         }
     }
 }
