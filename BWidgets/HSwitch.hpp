@@ -258,7 +258,7 @@ inline void HSwitch::draw (const BUtilities::Area<>& area)
 	const double weff = getEffectiveWidth ();
 
 	// Draw only if minimum requirements satisfied
-	if ((getHeight () >= 1) && (getWidth () >= 1))
+	if ((heff >= 1) && (weff >= 1))
 	{
 		cairo_t* cr = cairo_create (surface_);
 

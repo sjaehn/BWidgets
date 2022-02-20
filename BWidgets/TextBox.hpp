@@ -106,7 +106,7 @@ public:
 	void copy (const TextBox* that);
 
 	/**
-     *  @brief  Optimizes the %Box widget extends.
+     *  @brief  Optimizes the %TextBox widget extends.
 	 */
 	virtual void resize () override;
 

@@ -104,29 +104,23 @@ public:
 	void copy (const TextButton* that);
 
 	/**
-     *  @brief  Optimizes the object surface extends.
+     *  @brief  Optimizes the widget extends.
      *
-     *  Creates a new RGBA surface with the new optimized extends, copies the
-     *  surface data from the previous surface, and calls @c update() .
+	 *  Firstly optimizes its labels size. Then resizes the widget to include
+	 *  all direct children (including the label) into the widget area.
 	 */
 	virtual void resize () override;
 
     /**
-     *  @brief  Resizes the object surface extends.
-	 *  @param width  New object width.
-	 *  @param height  New object height.
-     *
-     *  Creates a new RGBA surface with the new extends, copies the 
-     *  surface data from the previous surface, and calls @c update() .
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
 	 */
 	virtual void resize (const double width, const double height) override;
 
     /**
-	 *  @brief  Resizes the object surface extends.
-	 *  @param extends  New object extends.
-     *
-     *  Creates a new RGBA surface with the new extends, copies the 
-     *  surface data from the previous surface, and calls @c update() .
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
 
@@ -174,26 +168,24 @@ inline void TextButton::copy (const TextButton* that)
 inline void TextButton::resize ()
 {
 	label.resize ();
-	label.moveTo (getXOffset(), getYOffset());
-	Button::resize (2.0 * getXOffset() + label.getWidth(), 2.0 * getYOffset() + label.getHeight());
+	label.moveTo (getXOffset() + (5.0 / 14.0) * label.getHeight(), getYOffset() + (5.0 / 14.0) * label.getHeight());
+	Button::resize();
 }
 
 inline void TextButton::resize (const double width, const double height) 
 {
-	TextButton::resize (BUtilities::Point<> (width, height));
+	resize (BUtilities::Point<> (width, height));
 }
 
 inline void TextButton::resize (const BUtilities::Point<> extends)
 {
-	Button::resize (BUtilities::Point<> (extends.x, extends.y));
-	label.resize ();
-	label.moveTo (label.center(), label.middle());
+	Button::resize (extends);
 }
 
 inline void TextButton::update ()
 {
 	label.setStatus (getValue() ? BStyles::Status::STATUS_ACTIVE : BStyles::Status::STATUS_NORMAL);
-	label.resize (getEffectiveWidth(), getEffectiveHeight());
+	label.resize ();
 	label.moveTo (label.center(), label.middle());
 	Button::update ();
 }

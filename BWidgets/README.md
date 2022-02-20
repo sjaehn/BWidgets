@@ -983,9 +983,10 @@ e. g.:
 
 The size of a created widget can be changed using `resize()` and is returned by
 `getExtends()`, `getWidth()`, or `getHeight()`. The parameter-free `resize()`
-methods tries to fit the widget size to its content. Parameter-free `resize()`
-will resize the widget to (0, 0) if it has got no children and no content with
-a restricted size.
+methods tries to optimize (or minimalize, depending on the widget type) the 
+widget size and to fit the widget size to its content. The parameter-free 
+`resize()` may resize the widget to (0, 0) if it has got no children and no 
+visualizable content.
 
 
 ### Style
@@ -1095,7 +1096,7 @@ BUtilities::Dictionary::setLanguage ("de_DE.utf8");
 - [ ] Styles
   - [x] Types (Color, ColorMap, Line, Border, ...)
   - [x] Set widget styles
-  - [ ] Forward and update styles to child widgets
+  - [ ] Forward and update styles to child widgets with matching URID
 - [ ] Widget functionality
   - [x] Container functionality by supporting `Linkable`
   - [x] Visualization by supporting `Visualizable`

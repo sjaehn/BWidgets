@@ -133,6 +133,28 @@ public:
 	 *  Copies all properties from another %VMeter. But NOT its linkage.
 	 */
 	void copy (const VMeter* that);
+	
+	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Resizes the widget to include all direct children into the widget
+	 *  area. Resizes the widget to its standard size if this widget doesn't 
+	 *  have any children.
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -249,6 +271,28 @@ inline void VMeter::copy (const VMeter* that)
 	ValidatableRange<double>::operator= (*that);
 	ValueableTyped<double>::operator= (*that);
 	Widget::copy (that);
+}
+
+inline void VMeter::resize ()
+{
+	BUtilities::Area<> a = (children_.empty()? BUtilities::Area<>(0, 0, BWIDGETS_DEFAULT_VMETER_WIDTH, BWIDGETS_DEFAULT_VMETER_HEIGHT) : BUtilities::Area<>());
+	for (Linkable* c : children_)
+	{
+		Widget* w = dynamic_cast<Widget*>(c);
+		if (w) a.extend (BUtilities::Area<>(w->getPosition(), w->getPosition() + w->getExtends()));
+	}
+
+	resize (a.getExtends());
+}
+
+inline void VMeter::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void VMeter::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
 }
 
 inline void VMeter::update ()

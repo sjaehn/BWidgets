@@ -128,7 +128,8 @@ public:
 	/**
      *  @brief  Optimizes the %Label widget extends.
      *
-     *  Resizes the %Label widget to the size of the text extends.
+     *  Resizes the %Label widget to the size of the text extends and all 
+	 *  direct children.
 	 */
 	virtual void resize () override;
 

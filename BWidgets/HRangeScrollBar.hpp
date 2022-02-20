@@ -176,6 +176,28 @@ public:
 	 *  Copies all properties from another %HRangeScrollBar. But NOT its linkage.
 	 */
 	void copy (const HRangeScrollBar* that);
+	
+	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Resizes the widget to include all direct children into the widget
+	 *  area. Resizes the widget to its standard size if this widget doesn't 
+	 *  have any children (except its scrollbar and its buttons).
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -310,6 +332,32 @@ inline void HRangeScrollBar::copy (const HRangeScrollBar* that)
 	ValidatableRange<value_type>::operator= (*that);
 	ValueableTyped<value_type>::operator= (*that);
 	Widget::copy (that);
+}
+
+inline void HRangeScrollBar::resize ()
+{
+	if (children_.size() <= 3) resize (BUtilities::Point<> (BWIDGETS_DEFAULT_HRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_HRANGESCROLLBAR_HEIGHT));
+
+	else
+	{
+		button1.resize (0,0);
+		button1.moveTo (getXOffset(), getYOffset());
+		button2.resize (0,0);
+		button2.moveTo (getXOffset(), getYOffset());
+		scrollbar.resize();
+		scrollbar.moveTo (getXOffset(), getYOffset());
+		Widget::resize();
+	}
+}
+
+inline void HRangeScrollBar::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void HRangeScrollBar::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
 }
 
 inline void HRangeScrollBar::update ()

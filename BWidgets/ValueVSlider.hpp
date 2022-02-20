@@ -138,6 +138,28 @@ public:
 	 *  Copies all properties from another %ValueVSlider. But NOT its linkage.
 	 */
 	void copy (const ValueVSlider* that);
+	
+	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Resizes the widget to include all direct children into the widget
+	 *  area. Resizes the widget to its standard size if this widget doesn't 
+	 *  have any children (except its label).
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -218,6 +240,28 @@ inline void ValueVSlider::copy (const ValueVSlider* that)
 	reDisplay_ = that->reDisplay_;
 	label.copy (&that->label);
 	VSlider::copy (that);
+}
+
+inline void ValueVSlider::resize ()
+{
+	if (children_.size() <= 1) resize (BUtilities::Point<> (BWIDGETS_DEFAULT_VALUEVSLIDER_WIDTH, BWIDGETS_DEFAULT_VALUEVSLIDER_HEIGHT));
+
+	else
+	{
+		label.resize();
+		label.moveTo (getXOffset(), getYOffset());
+		VSlider::resize();
+	}
+}
+
+inline void ValueVSlider::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void ValueVSlider::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
 }
 
 inline void ValueVSlider::update ()

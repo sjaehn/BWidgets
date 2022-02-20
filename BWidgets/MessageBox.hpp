@@ -114,7 +114,7 @@ public:
 	void copy (const MessageBox* that);
 
 	/**
-     *  @brief  Optimizes the %Box widget extends.
+     *  @brief  Optimizes the %MessageBox widget extends.
 	 */
 	virtual void resize () override;
 

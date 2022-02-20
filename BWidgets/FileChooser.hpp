@@ -583,7 +583,9 @@ inline void FileChooser::cancelButtonClickedCallback (BEvents::Event* event)
 
 inline void FileChooser::okButtonClickedCallback (BEvents::Event* event)
 {
-	if (!event) return;
+	BEvents::ValueChangeTypedEvent<bool>* vev = dynamic_cast<BEvents::ValueChangeTypedEvent<bool>*>(event);
+	if (!vev) return;
+	if (!vev->getValue()) return;
 	TextButton* w = dynamic_cast<TextButton*>(event->getWidget());
 	if (!w) return;
 	FileChooser* fc = dynamic_cast<FileChooser*>(w->getParent());

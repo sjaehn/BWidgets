@@ -194,7 +194,7 @@ inline void RadioButton::draw (const BUtilities::Area<>& area)
 
 	// Draw knob
 	// only if minimum requirements satisfied
-	if ((getHeight () >= 1) && (getWidth () >= 1))
+	if ((heff >= 1) && (weff >= 1))
 	{
 		cairo_t* cr = cairo_create (surface_);
 

@@ -311,32 +311,57 @@ inline void Box::resize ()
 	}
 
 	const double nrbuttons = buttons_.size();
-	if (!nrbuttons) return;
-
-	// Calculate total width
 	double totalbuttonwidth = 0.0;
-	for (TextButton* b : buttons_)
+	BUtilities::Area<> ba = BUtilities::Area<>();
+	if (nrbuttons)
 	{
-		if (b) totalbuttonwidth += b->getWidth ();
+		// Resize all buttons and calculate max button size
+		for (TextButton* b : buttons_)
+		{
+			if (b) 
+			{
+				b->moveTo (0,0);
+				b->resize();
+				ba += b->getArea();
+			}
+		}
+
+		// Resize all buttons to the same extends and calculate total width
+		for (TextButton* b : buttons_)
+		{
+			if (b) 
+			{
+				b->resize (ba.getExtends());
+				totalbuttonwidth += b->getWidth ();
+			}
+		}
 	}
 
+	// At least default extends
+	BUtilities::Area<> a = BUtilities::Area<>	(0, 0, 
+												 BWIDGETS_DEFAULT_BOX_WIDTH - BWIDGETS_DEFAULT_MENU_PADDING - getXOffset(), 
+												 BWIDGETS_DEFAULT_BOX_HEIGHT - BWIDGETS_DEFAULT_MENU_PADDING + getYOffset());
+	
 	// Other content
-	BUtilities::Point<> contExt = BUtilities::Point<> (getXOffset(), getYOffset());
 	for (Linkable* l : children_)
 	{
 		Widget* w = dynamic_cast<Widget*>(l);
-		if (!w) continue;
-
-		if (std::find (buttons_.begin(), buttons_.end(), dynamic_cast<TextButton*> (w)) != buttons_.end()) continue;
-
-		if (w->getPosition ().x + w->getWidth () > contExt.x) contExt.x = w->getPosition ().x + w->getWidth();
-		if (w->getPosition ().y + w->getHeight () > contExt.y) contExt.y = w->getPosition ().y + w->getHeight();
+		if (w && std::find (buttons_.begin(), buttons_.end(), dynamic_cast<TextButton*> (w)) == buttons_.end())
+		{
+			a += w->getArea();
+		}
 	}
 
-	// Add spaces and offset
-	totalbuttonwidth += (nrbuttons + 1) * BWIDGETS_DEFAULT_MENU_PADDING;
-	resize	(std::max (totalbuttonwidth + 2.0 * getXOffset(), contExt.x + 2.0 * BWIDGETS_DEFAULT_MENU_PADDING + getXOffset()) , 
-			 contExt.y + 2.0 * BWIDGETS_DEFAULT_MENU_PADDING + BWIDGETS_DEFAULT_BUTTON_HEIGHT + getYOffset());
+	// Add button area to other area
+	a += BUtilities::Area<>	(a.getX(), 
+							 a.getY() + a.getHeight(), 
+							 getXOffset() + totalbuttonwidth + nrbuttons * BWIDGETS_DEFAULT_MENU_PADDING,
+							 getYOffset() + ba.getHeight() + BWIDGETS_DEFAULT_MENU_PADDING);
+
+	// Add menu padding and widget border
+	a.setWidth (a.getWidth() + BWIDGETS_DEFAULT_MENU_PADDING + getXOffset());
+	a.setHeight (a.getHeight() + BWIDGETS_DEFAULT_MENU_PADDING + getYOffset());
+	resize (a.getExtends());
 }
 
 inline void Box::resize (const double width, const double height)
@@ -420,11 +445,27 @@ inline void Box::update ()
 	const double nrbuttons = buttons_.size();
 	if (!nrbuttons) return;
 
-	// Calculate total width
+	// Resize all buttons and calculate max button size
+	BUtilities::Area<> a = BUtilities::Area<>();
+	for (TextButton* b : buttons_)
+	{
+		if (b) 
+		{
+			b->moveTo (0,0);
+			b->resize();
+			a += b->getArea();
+		}
+	}
+
+	// Resize all buttons to the same extends and calculate total width
 	double totalbuttonwidth = 0.0;
 	for (TextButton* b : buttons_)
 	{
-		if (b) totalbuttonwidth += b->getWidth ();
+		if (b) 
+		{
+			b->resize (a.getExtends());
+			totalbuttonwidth += b->getWidth ();
+		}
 	}
 
 	// Calculate spaces and offset

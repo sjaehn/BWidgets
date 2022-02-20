@@ -120,29 +120,23 @@ public:
 	void copy (const SymbolPad* that);
 
 	/**
-     *  @brief  Optimizes the object surface extends.
+     *  @brief  Optimizes the widget extends.
      *
-     *  Creates a new RGBA surface with the new optimized extends, copies the
-     *  surface data from the previous surface, and calls @c update() .
+	 *  Firstly optimizes its symbol size. Then resizes the widget to include
+	 *  all direct children (including the symbol) into the widget area.
 	 */
 	virtual void resize () override;
 
     /**
-     *  @brief  Resizes the object surface extends.
-	 *  @param width  New object width.
-	 *  @param height  New object height.
-     *
-     *  Creates a new RGBA surface with the new extends, copies the 
-     *  surface data from the previous surface, and calls @c update() .
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
 	 */
 	virtual void resize (const double width, const double height) override;
 
     /**
-	 *  @brief  Resizes the object surface extends.
-	 *  @param extends  New object extends.
-     *
-     *  Creates a new RGBA surface with the new extends, copies the 
-     *  surface data from the previous surface, and calls @c update() .
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
 
@@ -222,28 +216,26 @@ template <class T>
 inline void SymbolPad<T>::resize ()
 {
 	symbol.resize ();
-	Pad<T>::resize (2.0 * symbol.getWidth(), 2.0 * symbol.getHeight());
-	symbol.moveTo (symbol.center(), symbol.middle());
+	symbol.moveTo (this->getXOffset() + 0.5 * symbol.getHeight(), this->getYOffset() + 0.5 * symbol.getHeight());
+	Pad<T>::resize ();
 }
 
 template <class T>
 inline void SymbolPad<T>::resize (const double width, const double height) 
 {
-	SymbolPad<T>::resize (BUtilities::Point<> (width, height));
+	resize (BUtilities::Point<> (width, height));
 }
 
 template <class T>
 inline void SymbolPad<T>::resize (const BUtilities::Point<> extends)
 {
-	Pad<T>::resize (BUtilities::Point<> (extends.x, extends.y));
-	symbol.resize (BUtilities::Point<> (0.5 * extends.x, 0.5 * extends.y));
-	symbol.moveTo (symbol.center(), symbol.middle());
+	Pad<T>::resize (extends);
 }
 
 template <class T>
 inline void SymbolPad<T>::update ()
 {
-	symbol.resize (0.5 * this->getEffectiveWidth(), 0.5 * this->getEffectiveHeight());
+	symbol.resize (0.667 * this->getEffectiveWidth(), 0.667 * this->getEffectiveHeight());
 	symbol.moveTo (symbol.center(), symbol.middle());
 	Pad<T>::update ();
 }

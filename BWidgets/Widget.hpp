@@ -308,6 +308,27 @@ public:
 		return (dynamic_cast<T*>(this) && dynamic_cast<T*>(this)->getSupport());
 	}
 
+    /**
+     *  @brief  Optimizes the %Widget extends.
+     *
+	 *  Resizes the widget to include all direct children into the %Widget
+	 *  area. Resizes to (0, 0) if this %Widget doesn't have any children.
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the %Widget extends.
+	 *  @param width  New %Widget width.
+	 *  @param height  New %Widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the %Widget extends.
+	 *  @param extends  New %Widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
+
 	/**
 	 *  @brief  Moves the widget to a new position.
 	 *  @param x  New x coordinate.

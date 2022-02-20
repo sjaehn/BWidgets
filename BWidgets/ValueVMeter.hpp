@@ -139,6 +139,28 @@ public:
 	 *  Copies all properties from another %ValueVMeter. But NOT its linkage.
 	 */
 	void copy (const ValueVMeter* that);
+	
+	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Resizes the widget to include all direct children into the widget
+	 *  area. Resizes the widget to its standard size if this widget doesn't 
+	 *  have any children (except its label).
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -235,6 +257,28 @@ inline void ValueVMeter::update ()
 	);
 
 	Widget::update();
+}
+
+inline void ValueVMeter::resize ()
+{
+	if (children_.size() == 1) resize (BUtilities::Point<> (BWIDGETS_DEFAULT_VALUEVMETER_WIDTH, BWIDGETS_DEFAULT_VALUEVMETER_HEIGHT));
+
+	else
+	{
+		label.resize();
+		label.moveTo (getXOffset(), getYOffset());
+		VMeter::resize();
+	}
+}
+
+inline void ValueVMeter::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void ValueVMeter::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
 }
 
 inline std::string ValueVMeter::valueToString (const double& x)

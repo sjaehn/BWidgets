@@ -23,9 +23,10 @@
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Toggleable.hpp"
 #include "../BEvents/Event.hpp"
+#include <iostream>
 
 #ifndef BWIDGETS_DEFAULT_BUTTON_WIDTH
-#define BWIDGETS_DEFAULT_BUTTON_WIDTH 80.0
+#define BWIDGETS_DEFAULT_BUTTON_WIDTH 20.0
 #endif
 
 #ifndef BWIDGETS_DEFAULT_BUTTON_HEIGHT
@@ -105,6 +106,28 @@ public:
 	void copy (const Button* that);
 
 	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Resizes the widget to include all direct children into the widget
+	 *  area. Resizes the widget to its standard size if this widget doesn't 
+	 *  have any children.
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
+
+	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -176,6 +199,28 @@ inline void Button::copy (const Button* that)
 	Clickable::operator= (*that);
 	ValueableTyped<bool>::operator= (*that);
     Widget::copy (that);
+}
+
+inline void Button::resize ()
+{
+	BUtilities::Area<> a = (children_.empty()? BUtilities::Area<>(0, 0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT) : BUtilities::Area<>());
+	for (Linkable* c : children_)
+	{
+		Widget* w = dynamic_cast<Widget*>(c);
+		if (w) a.extend (BUtilities::Area<>(w->getPosition(), w->getPosition() + w->getExtends()));
+	}
+
+	resize (a.getExtends());
+}
+
+inline void Button::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void Button::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
 }
 
 inline void Button::onButtonPressed (BEvents::Event* event)

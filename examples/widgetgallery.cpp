@@ -415,6 +415,8 @@ int main ()
 
     // TextBox
     TextBox textBox (210, 130, 180, 170, loremipsum, {"Etiam"});
+    textBox.resize();
+    textBox.resize();
     Label textBoxLabel (210, 320, 180, 20, "TextBox");
     textBoxLabel.setFont (labelFont);
     window.add (&textBox);
@@ -424,6 +426,7 @@ int main ()
     MessageBox messageBox   (410, 130, 280, 180, Symbol::INFO_SYMBOL, 
                              "Hello world is sooo easy:", "Window window;\nLabel label (\"Hello World\");\nwindow.add (&label);\nwindow.run ();", 
                              {BUtilities::Dictionary::get("Close")});
+    messageBox.resize();
     Label messageBoxLabel (410, 320, 280, 20, "MessageBox");
     messageBoxLabel.setFont (labelFont);
     window.add (&messageBox);

@@ -139,6 +139,28 @@ public:
 	 *  Copies all properties from another %ValueRadialMeter. But NOT its linkage.
 	 */
 	void copy (const ValueRadialMeter* that);
+	
+	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Resizes the widget to include all direct children into the widget
+	 *  area. Resizes the widget to its standard size if this widget doesn't 
+	 *  have any children (except its label).
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -218,6 +240,28 @@ inline void ValueRadialMeter::copy (const ValueRadialMeter* that)
 	reDisplay_ = that->reDisplay_;
 	label.copy (&that->label);
 	RadialMeter::copy (that);
+}
+
+inline void ValueRadialMeter::resize ()
+{
+	if (children_.size() == 1) resize (BUtilities::Point<> (BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH, BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT));
+
+	else
+	{
+		label.resize();
+		label.moveTo (getXOffset(), getYOffset());
+		RadialMeter::resize();
+	}
+}
+
+inline void ValueRadialMeter::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void ValueRadialMeter::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
 }
 
 inline void ValueRadialMeter::update ()

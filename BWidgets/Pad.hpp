@@ -29,7 +29,7 @@
 #include "Draws/drawPad.hpp"
 
 #ifndef BWIDGETS_DEFAULT_PAD_WIDTH
-#define BWIDGETS_DEFAULT_PAD_WIDTH 40
+#define BWIDGETS_DEFAULT_PAD_WIDTH 20
 #endif
 
 #ifndef BWIDGETS_DEFAULT_PAD_HEIGHT
@@ -143,6 +143,28 @@ public:
      *  function.
      */
     virtual void onButtonPressed (BEvents::Event* event) override;
+
+	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Resizes the widget to include all direct children into the widget
+	 *  area. Resizes the widget to its standard size if this widget doesn't 
+	 *  have any children.
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
 	
 	/**
      *  @brief  Method called upon (mouse) wheel scroll.
@@ -244,6 +266,31 @@ inline void Pad<T>::copy (const Pad* that)
 }
 
 template <class T>
+inline void Pad<T>::resize ()
+{
+	BUtilities::Area<> a = (children_.empty()? BUtilities::Area<>(0, 0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT) : BUtilities::Area<>());
+	for (Linkable* c : children_)
+	{
+		Widget* w = dynamic_cast<Widget*>(c);
+		if (w) a.extend (BUtilities::Area<>(w->getPosition(), w->getPosition() + w->getExtends()));
+	}
+
+	resize (a.getExtends());
+}
+
+template <class T>
+inline void Pad<T>::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+template <class T>
+inline void Pad<T>::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
+}
+
+template <class T>
 inline void Pad<T>::onButtonPressed (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
@@ -288,7 +335,12 @@ inline void Pad<T>::draw (const BUtilities::Area<>& area)
 	{
 		if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 
-		if ((getWidth () >= 1) && (getHeight () >= 1))
+		const double x0 = getXOffset ();
+		const double y0 = getYOffset ();
+		const double w = getEffectiveWidth ();
+		const double h = getEffectiveHeight ();
+
+		if ((h >= 1) && (w >= 1))
 		{
 			// Draw super class widget elements first
 			Widget::draw (area);
@@ -300,10 +352,6 @@ inline void Pad<T>::draw (const BUtilities::Area<>& area)
 				cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 				cairo_clip (cr);
 
-				const double x0 = getXOffset ();
-				const double y0 = getYOffset ();
-				const double w = getEffectiveWidth ();
-				const double h = getEffectiveHeight ();
 				const double rval = this->getRatioFromValue (this->getValue(), this->transfer_);
 				const BStyles::Color butColor = getFgColors()[getStatus()].illuminate (-0.95 + 0.95 * rval);
 				drawButton (cr, x0, y0, w, h, butColor);

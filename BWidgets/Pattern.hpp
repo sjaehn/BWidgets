@@ -338,6 +338,27 @@ public:
 	Widget* getPad (const size_t column, const size_t row) const;
 
 	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Firstly optimizes the pad sizes. Then resizes the widget to include
+	 *  all direct children (including the pads) into the widget area.
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
+
+	/**
      *  @brief  Method to be called following an object state change.
      */
     virtual void update () override;
@@ -759,6 +780,36 @@ template <class T>
 inline Widget* Pattern<T>::getPad (const size_t column, const size_t row) const
 {
 	return ((column < columns_) && (row < rows_) ? pads_[row][column] : nullptr);
+}
+
+template <class T>
+inline void Pattern<T>::resize ()
+{
+	double y = getYOffset();
+	for (size_t r = 0; r < rows_; ++r)
+	{
+		double x = getXOffset();
+		for (size_t c = 0; c < columns_; ++c)
+		{
+			pads_[r][c]->resize ();
+			pads_[r][c]->moveTo (x, y);
+			x += pads_[r][c]->getWidth();
+		}
+		if (!pads_[r].empty()) y += pads_[r][0]->getHeight();
+	}
+	Widget::resize ();
+}
+
+template <class T>
+inline void Pattern<T>::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+template <class T>
+inline void Pattern<T>::resize (const BUtilities::Point<> extends)
+{
+	Widget::resize (extends);
 }
 
 template <class T>

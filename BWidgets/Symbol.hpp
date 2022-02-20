@@ -153,6 +153,27 @@ public:
 	 */
 	SymbolType getSymbol () const;
 
+	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Resizes the widget to include all direct children into the widget
+	 *  area but at least to the font size defined in its style.
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
+
 protected:
 	/**
      *  @brief  Unclipped draw to the surface (if is visualizable).
@@ -223,6 +244,28 @@ inline void Symbol::setSymbol (const SymbolType symbol)
 inline Symbol::SymbolType Symbol::getSymbol () const 
 {
 	return symbol_;
+}
+
+inline void Symbol::resize ()
+{
+	BUtilities::Area<> a = BUtilities::Area<>(0, 0, getFont().size + 2.0 * getXOffset(), getFont().size + 2.0 * getYOffset());
+	for (Linkable* c : children_)
+	{
+		Widget* w = dynamic_cast<Widget*>(c);
+		if (w) a.extend (BUtilities::Area<>(w->getPosition(), w->getPosition() + w->getExtends()));
+	}
+
+	resize (a.getExtends());
+}
+
+inline void Symbol::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void Symbol::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
 }
 
 inline void Symbol::draw ()

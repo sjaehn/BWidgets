@@ -182,6 +182,27 @@ public:
 	 *  Copies all properties from another %ImageVMeter. But NOT its linkage.
 	 */
 	void copy (const ImageVMeter* that);
+	
+	/**
+     *  @brief  Optimizes the object extends.
+     *
+     *  Resizes the widget to fit the static passive image. Resizes to (0, 0)
+	 *  if no image is stored.
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the object extends.
+	 *  @param width  New object width.
+	 *  @param height  New object height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the object extends.
+	 *  @param extends  New object extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 protected:
 	/**
@@ -294,6 +315,33 @@ inline void ImageVMeter::copy (const ImageVMeter* that)
 	ValidatableRange<double>::operator= (*that);
 	ValueableTyped<double>::operator= (*that);
 	Widget::copy (that);
+}
+
+inline void ImageVMeter::resize ()
+{
+	BUtilities::Area<> a =	(staticImageSurface_ && (cairo_surface_status(staticImageSurface_) == CAIRO_STATUS_SUCCESS) ?
+			  				 BUtilities::Area<>	(0.0, 0.0,
+								   				 cairo_image_surface_get_width (staticImageSurface_) + 2.0 * getXOffset(), 
+												 cairo_image_surface_get_height (staticImageSurface_) + 2.0 * getYOffset()) :
+			  				 BUtilities::Area<>	());
+							   
+	for (Linkable* l : children_)
+	{
+		Widget* w = dynamic_cast<Widget*>(l);
+		if (w)  a += w->getArea();
+	}
+
+	resize (a.getExtends());
+}
+
+inline void ImageVMeter::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void ImageVMeter::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
 }
 
 inline void ImageVMeter::draw ()

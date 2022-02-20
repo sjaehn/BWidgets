@@ -173,29 +173,23 @@ public:
 	void copy (const ImageButton* that);
 
 	/**
-     *  @brief  Optimizes the object surface extends.
+     *  @brief  Optimizes the widget extends.
      *
-     *  Creates a new RGBA surface with the new optimized extends, copies the
-     *  surface data from the previous surface, and calls @c update() .
+	 *  Firstly optimizes its image size. Then resizes the widget to include
+	 *  all direct children (including the image) into the widget area.
 	 */
 	virtual void resize () override;
 
     /**
-     *  @brief  Resizes the object surface extends.
-	 *  @param width  New object width.
-	 *  @param height  New object height.
-     *
-     *  Creates a new RGBA surface with the new extends, copies the 
-     *  surface data from the previous surface, and calls @c update() .
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
 	 */
 	virtual void resize (const double width, const double height) override;
 
     /**
-	 *  @brief  Resizes the object surface extends.
-	 *  @param extends  New object extends.
-     *
-     *  Creates a new RGBA surface with the new extends, copies the 
-     *  surface data from the previous surface, and calls @c update() .
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
 
@@ -301,20 +295,18 @@ inline void ImageButton::copy (const ImageButton* that)
 inline void ImageButton::resize ()
 {
 	image.resize ();
-	image.moveTo (0, 0);
-	Button::resize ();
+	image.moveTo (getXOffset(), getYOffset());
+	Button::resize();
 }
 
 inline void ImageButton::resize (const double width, const double height) 
 {
-	ImageButton::resize (BUtilities::Point<> (width, height));
+	resize (BUtilities::Point<> (width, height));
 }
 
 inline void ImageButton::resize (const BUtilities::Point<> extends)
 {
-	Button::resize (BUtilities::Point<> (extends.x, extends.y));
-	image.resize (BUtilities::Point<> (getEffectiveWidth(), getEffectiveHeight()));
-	image.moveTo (image.center(), image.middle());
+	Button::resize (extends);
 }
 
 inline void ImageButton::update ()

@@ -156,6 +156,28 @@ public:
 	virtual void clear (const double value);
 
 	/**
+     *  @brief  Optimizes the object extends.
+     *
+     *  Resizes the widget to fit all images which are currently visualized.
+	 *  Resizes to first image if no image is currently visualized.
+	 *  Resizes to (0, 0) if no image is stored.
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the object extends.
+	 *  @param width  New object width.
+	 *  @param height  New object height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the object extends.
+	 *  @param extends  New object extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
+
+	/**
 	 *  @brief  Loads an image from a Cairo surface or an image file.
 	 *  @param value  Value for the image to be loaded.
 	 *  @param surface  Cairo surface with the image.
@@ -344,6 +366,47 @@ inline void ImageConditional::clear (const double value)
 		imageSurfaces_.erase (it);
 		update();
 	}
+}
+
+inline void ImageConditional::resize ()
+{
+	// Resize to the surface covered by the visible images
+	BUtilities::Area<> a = BUtilities::Area<>();
+	for (std::map<double, cairo_surface_t*>::const_reference i : imageSurfaces_)
+	{
+		if	(showFunc_ (this,i.first) && i.second && (cairo_surface_status (i.second) == CAIRO_STATUS_SUCCESS))
+		{
+			a += BUtilities::Area<> (0, 0, cairo_image_surface_get_width (i.second), cairo_image_surface_get_height (i.second));
+		}
+	}
+
+	// Otherwise resize to the first image
+	if	((a == BUtilities::Area<>()) && 
+		 (!imageSurfaces_.empty()) && 
+		 (imageSurfaces_.begin()->second) &&
+		 (cairo_surface_status (imageSurfaces_.begin()->second) == CAIRO_STATUS_SUCCESS))
+	{
+		a = BUtilities::Area<> (0, 0, cairo_image_surface_get_width (imageSurfaces_.begin()->second), cairo_image_surface_get_height (imageSurfaces_.begin()->second));
+	}
+
+	// Or use embedded widgets size, if bigger
+	for (Linkable* l : children_)
+	{
+		Widget* w = dynamic_cast<Widget*>(l);
+		if (w)  a += w->getArea();
+	}
+
+	resize (a.getExtends());
+}
+
+inline void ImageConditional::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void ImageConditional::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
 }
 
 inline void ImageConditional::loadImage (const double value, cairo_surface_t* surface)

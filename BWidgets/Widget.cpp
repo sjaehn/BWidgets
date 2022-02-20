@@ -18,6 +18,7 @@
 
 #include "Widget.hpp"
 #include "Supports/Linkable.hpp"
+#include "Supports/Visualizable.hpp"
 #include "Window.hpp"
 #include "../BEvents/ExposeEvent.hpp"
 #include <cstdint>
@@ -285,6 +286,28 @@ bool Widget::isVisible() const
 
 	// nullptr reached ? -> not connected to main -> invisible
 	return false;						
+}
+
+void Widget::resize ()
+{
+	BUtilities::Area<> a = BUtilities::Area<>(0, 0, 2.0 * getXOffset(), 2.0 * getYOffset());
+	for (Linkable* c : children_)
+	{
+		Widget* w = dynamic_cast<Widget*>(c);
+		if (w) a.extend (BUtilities::Area<>(w->getPosition(), w->getPosition() + w->getExtends()));
+	}
+
+	resize (a.getExtends());
+}
+
+void Widget::resize (const double width, const double height)
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+void Widget::resize (const BUtilities::Point<> extends)
+{
+	Visualizable::resize (extends);
 }
 
 void Widget::moveTo (const double x, const double y) {moveTo (BUtilities::Point<> (x, y));}

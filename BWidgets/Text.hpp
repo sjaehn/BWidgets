@@ -96,45 +96,49 @@ public:
 	void copy (const Text* that);
 
 	/**
-     *  @brief  Optimizes the object surface extends.
+     *  @brief  Optimizes the widget extends.
      *
-     *  Creates a new RGBA surface with the new optimized extends, copies the
-     *  surface data from the previous surface, and calls @c update() .
+	 *  First re-calculates the widget area to inlude all child widgets. Then
+	 *  extends this area to cover the full text within:
+	 *  a) the width covered by the child widgets, or if 0.0
+	 *  b) the widget width used before, or if 0.0
+	 *  c) @c BWIDGETS_DEFAULT_TEXT_WIDTH.
+	 *  It may resize to (0, 0) if this widget doesn't have
+	 *  any text and any children.
 	 */
 	virtual void resize () override;
 
     /**
-     *  @brief  Resizes the object surface extends.
-	 *  @param width  New object width.
-	 *  @param height  New object height.
-     *
-     *  Creates a new RGBA surface with the new extends, copies the 
-     *  surface data from the previous surface, and calls @c update() .
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
 	 */
 	virtual void resize (const double width, const double height) override;
 
     /**
-	 *  @brief  Resizes the object surface extends.
-	 *  @param extends  New object extends.
-     *
-     *  Creates a new RGBA surface with the new extends, copies the 
-     *  surface data from the previous surface, and calls @c update() .
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
-	 * Gets a block (a vector) of text lines that fit into the widget output.
+	 *  @brief  Gets a block (a vector) of text lines that fit into the widget
+	 *  output.
+	 *  @param width  Optional, width of the text block. In the case of a
+	 *  width of 0.0, the widget effective width is used instead.
+	 *  @return  Vector of text lines.
+	 *
 	 * If the widget is not resizable: the text is clipped, when lines exceed
 	 * the widget height. If the widget is resizable, the whole text will be
 	 * returned as a block of lines.
-	 * @return	Vector of text lines
 	 */
-	std::vector<std::string> getTextBlock ();
+	std::vector<std::string> getTextBlock (double width = 0.0);
 
 	/**
-	 * Gets the height of a given text block as calculated using Cairo.
-	 * @param textBlock Vector of text lines
-	 * @return 			Text block height.
+	 *  @brief  Gets the height of a given text block as calculated using 
+	 *  Cairo.
+	 *  @param textBlock  Vector of text lines.
+	 *  @return  Text block height.
 	 */
 	double getTextBlockHeight (std::vector<std::string> textBlock);
 
@@ -199,7 +203,20 @@ inline void Text::copy (const Text* that)
 
 inline void Text::resize () 
 {
-	resize (getExtends().x, getTextBlockHeight (getTextBlock()) + 2.0 * getYOffset());
+	BUtilities::Area<> a = BUtilities::Area<>();
+	for (Linkable* c : children_)
+	{
+		Widget* w = dynamic_cast<Widget*>(c);
+		if (w) a.extend (BUtilities::Area<>(w->getPosition(), w->getPosition() + w->getExtends()));
+	}
+
+	if (text_.empty()) resize (a.getExtends());
+
+	else
+	{
+		const double width = (a.getWidth() == 0.0 ? (getWidth() == 0.0 ? BWIDGETS_DEFAULT_TEXT_WIDTH : getWidth()) : a.getWidth());
+		resize (width, getTextBlockHeight (getTextBlock (width - 2.0 * getXOffset())) + 2.0 * getYOffset());
+	}
 }
 
 inline void Text::resize (const double width, const double height) 
@@ -212,10 +229,10 @@ inline void Text::resize (const BUtilities::Point<> extends)
 	Widget::resize (extends);
 }
 
-inline std::vector<std::string> Text::getTextBlock ()
+inline std::vector<std::string> Text::getTextBlock (double width)
 {
 	std::vector<std::string> textblock;
-	const double w = getEffectiveWidth ();
+	const double w = (width <= 0.0 ? (getEffectiveWidth () <= 0.0 ? BWIDGETS_DEFAULT_TEXT_WIDTH - 2.0 * getXOffset() : getEffectiveWidth()) : width);
 	//const double h = getEffectiveHeight ();
 	cairo_t* cr = cairo_create (surface_);
 	cairoplus_text_decorations decorations;

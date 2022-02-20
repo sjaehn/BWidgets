@@ -104,29 +104,23 @@ public:
 	void copy (const SymbolButton* that);
 
 	/**
-     *  @brief  Optimizes the object surface extends.
+     *  @brief  Optimizes the widget extends.
      *
-     *  Creates a new RGBA surface with the new optimized extends, copies the
-     *  surface data from the previous surface, and calls @c update() .
+	 *  Firstly optimizes its symbol size. Then resizes the widget to include
+	 *  all direct children (including the symbol) into the widget area.
 	 */
 	virtual void resize () override;
 
     /**
-     *  @brief  Resizes the object surface extends.
-	 *  @param width  New object width.
-	 *  @param height  New object height.
-     *
-     *  Creates a new RGBA surface with the new extends, copies the 
-     *  surface data from the previous surface, and calls @c update() .
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
 	 */
 	virtual void resize (const double width, const double height) override;
 
     /**
-	 *  @brief  Resizes the object surface extends.
-	 *  @param extends  New object extends.
-     *
-     *  Creates a new RGBA surface with the new extends, copies the 
-     *  surface data from the previous surface, and calls @c update() .
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
 
@@ -173,8 +167,8 @@ inline void SymbolButton::copy (const SymbolButton* that)
 inline void SymbolButton::resize ()
 {
 	symbol.resize ();
-	symbol.moveTo (getXOffset(), getYOffset());
-	Button::resize (2.0 * getXOffset() + symbol.getWidth(), 2.0 * getYOffset() + symbol.getHeight());
+	symbol.moveTo (getXOffset() + 0.5 * symbol.getHeight(), getYOffset() + 0.5 * symbol.getHeight());
+	Button::resize ();
 }
 
 inline void SymbolButton::resize (const double width, const double height) 
@@ -184,15 +178,13 @@ inline void SymbolButton::resize (const double width, const double height)
 
 inline void SymbolButton::resize (const BUtilities::Point<> extends)
 {
-	Button::resize (BUtilities::Point<> (extends.x, extends.y));
-	symbol.resize (BUtilities::Point<> (0.66 * extends.x, 0.66 * extends.y));
-	symbol.moveTo (symbol.center(), symbol.middle());
+	Button::resize (extends);
 }
 
 inline void SymbolButton::update ()
 {
 	symbol.setStatus (getValue() ? BStyles::Status::STATUS_ACTIVE : BStyles::Status::STATUS_NORMAL);
-	symbol.resize (0.66 * getEffectiveWidth(), 0.66 * getEffectiveHeight());
+	symbol.resize (0.667 * getEffectiveWidth(), 0.667 * getEffectiveHeight());
 	symbol.moveTo (symbol.center(), symbol.middle());
 	Button::update ();
 }

@@ -45,8 +45,8 @@ namespace BWidgets
 class SpinButton : public Widget, public ValueableTyped<int>
 {
 public:
-	SymbolButton upButton_;
-	SymbolButton downButton_;
+	SymbolButton upButton;
+	SymbolButton downButton;
 
 	/**
 	 *  @brief  Constructs a new SpinButton object with default parameters.
@@ -101,6 +101,28 @@ public:
 	 *  Copies all properties from another %SpinButton. But NOT its linkage.
 	 */
 	void copy (const SpinButton* that);
+	
+	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Firstly optimizes the upbutton and the downbutton. Then resizes the
+	 *  widget to include all direct children (including the image) into the 
+	 *  widget area.
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -129,13 +151,13 @@ inline SpinButton::SpinButton	(const double x, const double y, const double widt
 			 	 				 const int value, uint32_t urid, std::string title) :
 	Widget (x, y, width, height, urid, title),
 	ValueableTyped<int> (value < 0 ? -1 : (value > 0 ? 1 : 0)),
-	upButton_ (x, y, width, 0.5 * height, Symbol::UP_SYMBOL, false, value < 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button")),
-	downButton_ (x, y + 0.5 * height, width, 0.5 * height, Symbol::DOWN_SYMBOL, false, value > 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"))
+	upButton (x, y, width, 0.5 * height, Symbol::UP_SYMBOL, false, value < 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button")),
+	downButton (x, y + 0.5 * height, width, 0.5 * height, Symbol::DOWN_SYMBOL, false, value > 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"))
 {
-	upButton_.setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, valueChangedCallback);
-	downButton_.setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, valueChangedCallback);
-	add (&upButton_);
-	add (&downButton_);
+	upButton.setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, valueChangedCallback);
+	downButton.setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, valueChangedCallback);
+	add (&upButton);
+	add (&downButton);
 	setBorder (BStyles::Border (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL], 1.0), 0.0, 0.0, 0.0));
 }
 
@@ -148,20 +170,39 @@ inline Widget* SpinButton::clone () const
 
 inline void SpinButton::copy (const SpinButton* that)
 {
-	upButton_.copy (&that->upButton_);
-	downButton_.copy (&that->downButton_);
+	upButton.copy (&that->upButton);
+	downButton.copy (&that->downButton);
 	ValueableTyped<int>::operator= (*that);
     Widget::copy (that);
 }
 
+inline void SpinButton::resize ()
+{
+	upButton.resize ();
+	upButton.moveTo (getXOffset(), getYOffset());
+	downButton.resize ();
+	downButton.moveTo (getXOffset(), getYOffset());
+	Widget::resize ();
+}
+
+inline void SpinButton::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void SpinButton::resize (const BUtilities::Point<> extends)
+{
+	Widget::resize (extends);
+}
+
 inline void SpinButton::update ()
 {
-	upButton_.setValue (getValue() < 0);
-	downButton_.setValue (getValue() > 0);
-	upButton_.moveTo (getXOffset(), getYOffset());
-	upButton_.resize (getEffectiveWidth(), 0.5 * getEffectiveHeight());
-	downButton_.moveTo (getXOffset(), getYOffset() + 0.5 * getEffectiveHeight());
-	downButton_.resize (getEffectiveWidth(), 0.5 * getEffectiveHeight());
+	upButton.setValue (getValue() < 0);
+	downButton.setValue (getValue() > 0);
+	upButton.moveTo (getXOffset(), getYOffset());
+	upButton.resize (getEffectiveWidth(), 0.5 * getEffectiveHeight());
+	downButton.moveTo (getXOffset(), getYOffset() + 0.5 * getEffectiveHeight());
+	downButton.resize (getEffectiveWidth(), 0.5 * getEffectiveHeight());
 	Widget::update();
 }
 
@@ -174,8 +215,8 @@ inline void SpinButton::valueChangedCallback (BEvents::Event* event)
 	SpinButton* p = dynamic_cast<SpinButton*>(w->getParentWidget());
 	if (!p) return;
 
-	if (w == &p->upButton_) p->setValue (w->getValue() * -1);
-	else if (w == &p->downButton_) p->setValue (w->getValue() * 1);
+	if (w == &p->upButton) p->setValue (w->getValue() * -1);
+	else if (w == &p->downButton) p->setValue (w->getValue() * 1);
 }
 
 }

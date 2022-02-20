@@ -138,6 +138,28 @@ public:
 	 *  Copies all properties from another %HPianoRoll. But NOT its linkage.
 	 */
 	void copy (const HPianoRoll* that);
+	
+	/**
+     *  @brief  Optimizes the widget extends.
+     *
+	 *  Resizes the widget to include all direct children into the widget
+	 *  area. Resizes the widget to its standard size if this widget doesn't 
+	 *  have any children.
+	 */
+	virtual void resize () override;
+
+    /**
+     *  @brief  Resizes the widget extends.
+	 *  @param width  New widget width.
+	 *  @param height  New widget height.
+	 */
+	virtual void resize (const double width, const double height) override;
+
+    /**
+	 *  @brief  Resizes the widget extends.
+	 *  @param extends  New widget extends.
+	 */
+	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
 	 *  @brief Sets the MIDI key range of the HPianoRoll.
@@ -399,6 +421,28 @@ inline void HPianoRoll::copy (const HPianoRoll* that)
 	Clickable::operator= (*that);
 	ValueableTyped<std::map<uint8_t, uint8_t>>::operator= (*that);
 	Widget::copy (that);
+}
+
+inline void HPianoRoll::resize ()
+{
+	BUtilities::Area<> a = (children_.empty()? BUtilities::Area<>(0, 0, BWIDGETS_DEFAULT_HPIANOROLL_WIDTH, BWIDGETS_DEFAULT_HPIANOROLL_HEIGHT) : BUtilities::Area<>());
+	for (Linkable* c : children_)
+	{
+		Widget* w = dynamic_cast<Widget*>(c);
+		if (w) a.extend (BUtilities::Area<>(w->getPosition(), w->getPosition() + w->getExtends()));
+	}
+
+	resize (a.getExtends());
+}
+
+inline void HPianoRoll::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void HPianoRoll::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
 }
 
 inline void HPianoRoll::setRange (const uint8_t startMidiKey, const uint8_t endMidiKey)
