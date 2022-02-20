@@ -3,7 +3,13 @@
         "All files",       
         {
             {"de_DE", "Alle Dateien"},
-            {"nl_NL", "Alle bestanden"}
+            {"es_ES", "Todos los archivos"},
+            {"fr_FR", "Tous les fichiers"},
+            {"it_IT", "Tutti i file"},
+            {"nl_NL", "Alle bestanden"},
+            {"pl_PL", "Wszystkie pliki"},
+            {"pt_PT", "Todos os ficheiros"},
+            {"ru_RU", "Все файлы"}
         }
     },
 
@@ -59,7 +65,15 @@
     {
         "Continue",       
         {
-            {"de_DE", "Weiter"}
+            {"de_DE", "Weiter"},
+            {"es_ES", "Continuar"},
+            {"fr_FR", "Continuer"},
+            {"it_IT", "Procedere"},
+            {"nl_NL", "Doorgaan"},
+            {"pl_PL", "Kontynuować"},
+            {"pt_PT", "Continuar"},
+            {"ru_RU", "Продолжить"}
+            
         }
     },
 
@@ -262,7 +276,7 @@
     {
         "frames",       
         {
-            {"de_DE", "Frames"}
+
         }
     },
     
@@ -276,7 +290,14 @@
     {
         "No",           
         {
-            {"de_DE", "Nein"}
+            {"de_DE", "Nein"},
+            {"es_ES", "No"},
+            {"fr_FR", "Non"},
+            {"it_IT", "No"},
+            {"nl_NL", "Nee"},
+            {"pl_PL", "Nie"},
+            {"pt_PT", "Não"},
+            {"ru_RU", "Нет"}
         }
     },
 
@@ -312,7 +333,13 @@
         "Open",           
         {
             {"de_DE", "Öffnen"},
-            {"fr_FR", "Ouvrir"}
+            {"es_ES", "Abrir"},
+            {"fr_FR", "Ouvrir"},
+            {"it_IT", "Apri"},
+            {"nl_NL", "Openen"},
+            {"pl_PL", "Otwórz"},
+            {"pt_PT", "Abrir"},
+            {"ru_RU", "Открыть"}
         }
     },
 
@@ -340,14 +367,28 @@
     {
         "Selection end",       
         {
-            {"de_DE", "Ende Auswahl"}
+            {"de_DE", "Ende Auswahl"},
+            {"es_ES", "Final de la selección"},
+            {"fr_FR", "Fin de la sélection"},
+            {"it_IT", "Fine selezione"},
+            {"nl_NL", "Selectie einde"},
+            {"pl_PL", "Koniec zaznaczenia"},
+            {"pt_PT", "Fim da Seleção"},
+            {"ru_RU", "Конец выделения"}
         }
     },
 
     {
         "Selection start",       
         {
-            {"de_DE", "Anfang Auswahl"}
+            {"de_DE", "Anfang Auswahl"},
+            {"es_ES", "Inicio de la selección"},
+            {"fr_FR", "Début de la sélection"},
+            {"it_IT", "Inizio selezione"}, 
+            {"nl_NL", "Selectie begin"},
+            {"pl_PL", "Początek zaznaczenia"},
+            {"pt_PT", "Início da Seleção"},
+            {"ru_RU", "Начало выделения"}
         }
     },
 
@@ -362,7 +403,13 @@
         "Yes",          
         {
             {"de_DE", "Ja"},
-            {"de_FR", "Oui"}
+            {"es_ES", "Sí"},
+            {"de_FR", "Oui"},
+            {"it_IT", "Sì"},
+            {"nl_NL", "Ja"},
+            {"pl_PL", "Tak"},
+            {"pt_PT", "Sim"},
+            {"ru_RU", "Да"}
         }
     }
 }
