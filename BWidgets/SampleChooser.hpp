@@ -329,7 +329,7 @@ inline void SampleChooser::setFileName (const std::string& filename)
 		catch (std::exception& exc)
 		{
 			std::cerr << exc.what() << "\n";
-			noFileLabel.setText (exc.what());
+			noFileLabel.setText (BUtilities::Dictionary::get ("No preview"));
 		}
 
 		if (sample_)

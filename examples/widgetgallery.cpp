@@ -88,7 +88,7 @@ const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipisic
 
 int main ()
 {
-    BUtilities::Dictionary::setLanguage ("en");
+    BUtilities::Dictionary::setLanguage ("de");
 
     Window window (1500, 820, 0, URID_UNKNOWN_URID, "Window");
 
@@ -415,8 +415,6 @@ int main ()
 
     // TextBox
     TextBox textBox (210, 130, 180, 170, loremipsum, {"Etiam"});
-    textBox.resize();
-    textBox.resize();
     Label textBoxLabel (210, 320, 180, 20, "TextBox");
     textBoxLabel.setFont (labelFont);
     window.add (&textBox);
@@ -426,7 +424,6 @@ int main ()
     MessageBox messageBox   (410, 130, 280, 180, Symbol::INFO_SYMBOL, 
                              "Hello world is sooo easy:", "Window window;\nLabel label (\"Hello World\");\nwindow.add (&label);\nwindow.run ();", 
                              {BUtilities::Dictionary::get("Close")});
-    messageBox.resize();
     Label messageBoxLabel (410, 320, 280, 20, "MessageBox");
     messageBoxLabel.setFont (labelFont);
     window.add (&messageBox);
@@ -435,10 +432,10 @@ int main ()
     // FileChooser
     std::initializer_list<FileChooser::Filter> fileFilter =
     {
-        FileChooser::Filter {"All files", std::regex (".*")},
-        FileChooser::Filter {"C/C++ files", std::regex (".*\\.((c)|(cc)|(cxx)|(cpp)|(h)|(hh)|(hpp)|(hxx))$", std::regex_constants::icase)},
-        FileChooser::Filter {"Image files", std::regex (".*\\.((png)|(bmp)|(jpg)|(jpeg)|(tif)|(tiff))$", std::regex_constants::icase)},
-        FileChooser::Filter {"Sound files", std::regex (".*\\.((wav)|(wave)|(aif)|(aiff)|(au)|(sd2)|(flac)|(caf)|(ogg)|(mp3))$", std::regex_constants::icase)}
+        FileChooser::Filter {BUtilities::Dictionary::get ("All files"), std::regex (".*")},
+        FileChooser::Filter {BUtilities::Dictionary::get ("C/C++ files"), std::regex (".*\\.((c)|(cc)|(cxx)|(cpp)|(h)|(hh)|(hpp)|(hxx))$", std::regex_constants::icase)},
+        FileChooser::Filter {BUtilities::Dictionary::get ("Image files"), std::regex (".*\\.((png)|(bmp)|(jpg)|(jpeg)|(tif)|(tiff))$", std::regex_constants::icase)},
+        FileChooser::Filter {BUtilities::Dictionary::get ("Sound files"), std::regex (".*\\.((wav)|(wave)|(aif)|(aiff)|(au)|(sd2)|(flac)|(caf)|(ogg)|(mp3))$", std::regex_constants::icase)}
     };
     FileChooser fileChooser (10, 370, 280, 290, ".", fileFilter);
     Label fileChooserLabel (100, 680, 100, 20, "FileChooser");

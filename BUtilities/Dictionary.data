@@ -1,5 +1,13 @@
 {
     {
+        "All files",       
+        {
+            {"de_DE", "Alle Dateien"},
+            {"nl_NL", "Alle bestanden"}
+        }
+    },
+
+    {
         "Apply",       
         {
             {"de_DE", "Anwenden"},
@@ -101,6 +109,13 @@
             {"pl_PL", "Wytnij"},
             {"pt_PT", "Cortar"},
             {"ru_RU", "Вырезать"}
+        }
+    },
+
+    {
+        "C/C++ files",       
+        {
+            {"de_DE", "C/C++-Dateien"}
         }
     },
 
@@ -245,9 +260,44 @@
     },
 
     {
+        "frames",       
+        {
+            {"de_DE", "Frames"}
+        }
+    },
+    
+    {
+        "Image files",       
+        {
+            {"de_DE", "Bilddateien"}
+        }
+    },
+
+    {
         "No",           
         {
             {"de_DE", "Nein"}
+        }
+    },
+
+    {
+        "No audio file selected",       
+        {
+            {"de_DE", "Keine Audiodatei augewählt"}
+        }
+    },
+
+    {
+        "No preview",       
+        {
+            {"de_DE", "Keine Vorschau"},
+            {"es_ES", "No hay vista previa"},
+            {"fr_FR", "Pas d'aperçu"},
+            {"it_IT", "Nessuna anteprima"},
+            {"nl_NL", "Geen voorbeeldweergave"},
+            {"pl_PL", "Brak podglądu"},
+            {"pt_PT", "Nenhuma antevisão"},
+            {"ru_RU", "Нет предпросмотра"}
         }
     },
 
@@ -277,6 +327,34 @@
             {"pl_PL", "Nadpisz"},
             {"pt_PT", "Sobrepor"},
             {"ru_RU", "Заменить"}
+        }
+    },
+
+    {
+        "Play selection as loop",       
+        {
+            {"de_DE", "Auswahl als Schleife"}
+        }
+    },
+
+    {
+        "Selection end",       
+        {
+            {"de_DE", "Ende Auswahl"}
+        }
+    },
+
+    {
+        "Selection start",       
+        {
+            {"de_DE", "Anfang Auswahl"}
+        }
+    },
+
+    {
+        "Sound files",       
+        {
+            {"de_DE", "Sounddateien"}
         }
     },
 
