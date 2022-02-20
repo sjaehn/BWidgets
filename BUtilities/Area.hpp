@@ -181,8 +181,7 @@ public:
 	 */
 	void extend (const Area& ra)
 	{
-		if (*this == Area ()) *this = ra;
-		else if (ra != Area ())
+		if (ra != Area ())
 		{
 			p1 = Point<T> ((p1.x < ra.p1.x ? p1.x : ra.p1.x), (p1.y < ra.p1.y ? p1.y : ra.p1.y));
 			p2 = Point<T> ((p2.x > ra.p2.x ? p2.x : ra.p2.x), (p2.y > ra.p2.y ? p2.y : ra.p2.y));
