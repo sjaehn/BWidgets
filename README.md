@@ -96,7 +96,7 @@ Then call the respective example, e. g.:
   - [x] Enable re-definition of widget default sizes
         (`BWIDGETS_DEFAULT_XXX_WIDTH` and `BWIDGETS_DEFAULT_XXX_HEIGHT`)
   - [x] Define substitutable widget elemet draw functions (see Draws)
-  - [ ] Optimize widget size using `resize()`
+  - [x] Optimize widget size using `resize()`
   - [ ] Show default hover text (widget title, if set) by supporting
         `Focusable`
 - [ ] Documentation

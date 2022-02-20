@@ -88,7 +88,7 @@ const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipisic
 
 int main ()
 {
-    BUtilities::Dictionary::setLanguage ("de");
+    BUtilities::Dictionary::setLanguage ("pl");
 
     Window window (1500, 820, 0, URID_UNKNOWN_URID, "Window");
 
