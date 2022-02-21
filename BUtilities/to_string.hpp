@@ -19,11 +19,30 @@
 #define BUTILITIES_TO_STRING_HPP_
 
 #include <string>
+#include <sstream>
 
-namespace BUtilities {
+namespace BUtilities 
+{
 
-std::string to_string (const double value);
-std::string to_string (const double value, const std::string& format);
+/**
+ *  @brief  Converts a floaing point number into a string output with a
+ *  defined format. 
+ *  @param value  Floating point number.
+ *  @param format  Format specifier, see printf.
+ *  @return  Converted number as a string.
+ *
+ *  Similar to std::to_string. But the format specifier @a format allows a
+ *  formatted value output.
+ */
+std::string to_string (const double value, std::string format = "%f");
+
+inline std::string to_string (const double value, std::string format)
+{
+	char c[64];
+	snprintf (c, 64, format.c_str (), value);
+	std::string str = c;
+	return c;
+}
 
 }
 

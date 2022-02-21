@@ -92,3 +92,16 @@ Map class to store and convert URIs.
 
 
 ## Functions
+
+### stof
+
+Converts a floating point number-containing string to a float value. Similar 
+to std::stof. But this method is tolerant over different types of decimal 
+signs (point / comma).
+
+
+### to_string
+
+Converts a floaing point number into a string output with a defined format. 
+Similar to std::to_string. But the format specifier @a format allows a
+formatted value output.

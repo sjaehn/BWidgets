@@ -21,9 +21,75 @@
 #include <string>
 #include <stdexcept>
 
-namespace BUtilities {
+namespace BUtilities 
+{
 
+/**
+ *  @brief  Converts a floating point number-containing string to a float
+ *  value.
+ *  @param str  Floating point number-containing string.
+ *  @param idx  Index of the first character after the converted floating
+ *  point number.
+ *  @return  Converted float value.
+ *  @throw std::invalid_argument  Throws an exception if @a str doesn't start
+ *  with a number.
+ *
+ *  Similar to std::stof. But this method is tolerant over different types
+ *  of decimal signs (point / comma).
+ */
 float stof (const std::string& str, size_t* idx = 0);
+
+inline float stof (const std::string& str, size_t* idx)
+{
+        const std::string numbers = "0123456789";
+        bool isNumber = false;
+        float sign = 1.0f;
+        float predec = 0.0f;
+        float dec = 0.0f;
+        float decfac = 0.1f;
+        size_t i = 0;
+
+        // Ignore spaces before
+        while (str[i] == ' ') ++i;
+
+        // Check sign
+        if ((str[i] == '+') || (str[i] == '-'))
+        {
+                if (str[i] == '-') sign = -1.0f;
+                ++i;
+        }
+
+        // Interpret pre-decimal digits
+        while ((str[i] != 0) && (numbers.find_first_of (str[i]) != std::string::npos))
+        {
+                predec = predec * 10.0f + str[i] - '0';
+                ++i;
+                isNumber = true;
+        }
+
+        // Check decimal sign
+        if ((str[i] == '.') || (str[i] == ','))
+        {
+                ++i;
+
+                // Interpret decimal digits
+                while ((str[i] != 0) && (numbers.find_first_of (str[i]) != std::string::npos))
+                {
+                        dec += (str[i] - '0') * decfac;
+                        decfac *= 0.1f;
+                        ++i;
+                        isNumber = true;
+                }
+        }
+
+        // Communicate next position
+        if (idx != nullptr) *idx = i;
+
+        // Not a number: invalid argument exception
+        if (!isNumber) throw std::invalid_argument (str + " is not a number");
+
+        return sign * (predec + dec);
+}
 
 }
 
