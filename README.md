@@ -76,7 +76,7 @@ Then call the respective example, e. g.:
   - [x] File selection dialog widgets (FileChooser, SampleChooser)
 - [ ] URID
 - [ ] Dictionary
-  - [ ] Add translations for words and phrases used by the widgets
+  - [x] Add translations for words and phrases used by the widgets
   - [ ] Fallback to installed third party dictionaries (e. g., GTK)
 - [ ] Styles
   - [x] Types (Color, ColorMap, Line, Border, ...)
@@ -99,6 +99,7 @@ Then call the respective example, e. g.:
   - [x] Optimize widget size using `resize()`
   - [ ] Show default hover text (widget title, if set) by supporting
         `Focusable`
+- [ ] Header files only (if possible)
 - [ ] Documentation
 
 
