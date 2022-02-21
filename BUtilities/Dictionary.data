@@ -316,6 +316,7 @@
         "frames",       
         {
             {"pl_PL", "ramek"}
+            {"pt_BR", "Quadros"}
         }
     },
     
