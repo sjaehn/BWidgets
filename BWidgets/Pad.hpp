@@ -19,6 +19,7 @@
 #define BWIDGETS_PAD_HPP_
 
 #include "Widget.hpp"
+#include "Label.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/Scrollable.hpp"
 #include "Supports/ValueableTyped.hpp"
@@ -27,6 +28,7 @@
 #include "../BEvents/WheelEvent.hpp"
 #include "../BEvents/PointerEvent.hpp"
 #include "Draws/drawPad.hpp"
+#include <string>
 
 #ifndef BWIDGETS_DEFAULT_PAD_WIDTH
 #define BWIDGETS_DEFAULT_PAD_WIDTH 20
@@ -165,6 +167,11 @@ public:
 	 *  @param extends  New widget extends.
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
+
+	/**
+     *  @brief  Method to be called following an object state change.
+     */
+    virtual void update () override;
 	
 	/**
      *  @brief  Method called upon (mouse) wheel scroll.
@@ -288,6 +295,18 @@ template <class T>
 inline void Pad<T>::resize (const BUtilities::Point<> extends) 
 {
 	Widget::resize (extends);
+}
+
+template <class T>
+inline void Pad<T>::update ()
+{
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
+		f->resize();
+	}
+	Widget::update();
 }
 
 template <class T>

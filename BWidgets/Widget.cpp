@@ -17,10 +17,15 @@
  */
 
 #include "Widget.hpp"
+#include "Supports/EventPassable.hpp"
+#include "Supports/Focusable.hpp"
 #include "Supports/Linkable.hpp"
+#include "Supports/Pointable.hpp"
 #include "Supports/Visualizable.hpp"
 #include "Window.hpp"
+#include "Label.hpp"
 #include "../BEvents/ExposeEvent.hpp"
+#include "../BEvents/FocusEvent.hpp"
 #include <cstdint>
 #include <string>
 
@@ -36,14 +41,23 @@ Widget::Widget (const double x, const double y, const double width, const double
 	Linkable(),
 	Visualizable (width, height),
 	EventMergeable(),
+	EventPassable(),
+	Focusable(),
 	urid_ (urid),
 	position_ (x, y),
 	stacking_ (STACKING_NORMAL),
 	status_(BStyles::Status::STATUS_NORMAL),
 	title_ (title),
-	style_ ()
+	style_ (),
+	focus_ (title == "" ? nullptr : new Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/focus"), ""))
 {
-
+	if (focus_) 
+	{
+		focus_->setBorder (BStyles::shadow80Border2pt);
+		focus_->setBackground (BStyles::shadow80Fill);
+		focus_->setStacking (STACKING_ESCAPE);
+		focus_->resize();
+	}
 }
 
 Widget::~Widget ()
@@ -53,6 +67,8 @@ Widget::~Widget ()
 
 	// Release children
 	while (!children_.empty ()) release (children_.back ());
+
+	if (focus_) delete focus_;
 }
 
 Widget* Widget::clone () const 
@@ -66,11 +82,17 @@ void Widget::copy (const Widget* that)
 {
 	Visualizable::operator= (*that);
 	EventMergeable::operator= (*that);
+	EventPassable::operator= (*that);
+	Focusable::operator= (*that);
 	position_ = that->position_;
+	stacking_ = that->stacking_;
 	status_ = that->status_;
 	title_ = that->title_;
 	style_ = that->style_;
-	/*...*/
+
+	if (focus_) delete focus_;
+	focus_ = (that->focus_ ? that->focus_->clone() : nullptr);
+	
 	update();
 }
 
@@ -79,9 +101,40 @@ uint32_t Widget::getUrid() const
 	return urid_;
 }
 
-void Widget::rename (std::string& title)
+void Widget::setTitle (const std::string& title)
 {
 	title_ = title;
+	if (title == "")
+	{
+		if (focus_)
+		{
+			delete focus_;
+			focus_ = nullptr;
+		}
+	}
+
+	else 
+	{
+		if (!focus_) 
+		{
+			focus_ = new Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (getUrid()) + "/focus"));
+			focus_->setBorder (BStyles::shadow80Border2pt);
+			focus_->setBackground (BStyles::shadow80Fill);
+			focus_->setStacking (STACKING_ESCAPE);
+			focus_->resize();
+		}
+
+		else
+		{
+			Label* f = dynamic_cast<Label*>(focus_);
+			if (f) 
+			{
+				f->setText (title);
+				f->resize();
+			}
+		}
+	}
+
 	update();
 }
 
@@ -149,7 +202,11 @@ void Widget::release (Linkable* child, std::function<void (Linkable* obj)> relea
 		}
 	);
 
-	if (wasVisible) emitExposeEvent (childWidget->getArea());
+	if (wasVisible) 
+	{
+		emitExposeEvent (childWidget->getArea());
+		childWidget->show();
+	}
 }
 
 void Widget::raise ()
@@ -558,6 +615,31 @@ void Widget::emitExposeEvent (const BUtilities::Area<>& area)
 		BEvents::ExposeEvent* event = new BEvents::ExposeEvent (main, this, BEvents::Event::EXPOSE_REQUEST_EVENT, area);
 		main->addEventToQueue (event);
 	}
+}
+
+void Widget::onFocusIn (BEvents::Event* event)
+{
+	BEvents::FocusEvent* fev = dynamic_cast<BEvents::FocusEvent*> (event);
+	if (!fev) return;
+
+	if (isFocusable() && focus_ && (!contains(focus_)))
+	{
+		focus_->resize();
+		focus_->moveTo (fev->getPosition() - BUtilities::Point<>(0.5 * focus_->getWidth(), focus_->getHeight() + 2.0));
+		add (focus_);
+	}
+
+	Focusable::onFocusIn (event);
+}
+
+void Widget::onFocusOut (BEvents::Event* event)
+{
+	BEvents::FocusEvent* fev = dynamic_cast<BEvents::FocusEvent*> (event);
+	if (!fev) return;
+
+	if (isFocusable() && focus_ && (contains(focus_))) release (focus_);
+
+	Focusable::onFocusOut (event);
 }
 
 Widget* Widget::getWidgetAt	(const BUtilities::Point<>& position, 

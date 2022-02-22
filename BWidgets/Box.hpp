@@ -346,7 +346,7 @@ inline void Box::resize ()
 	for (Linkable* l : children_)
 	{
 		Widget* w = dynamic_cast<Widget*>(l);
-		if (w && std::find (buttons_.begin(), buttons_.end(), dynamic_cast<TextButton*> (w)) == buttons_.end())
+		if (w && (w != focus_) && std::find (buttons_.begin(), buttons_.end(), dynamic_cast<TextButton*> (w)) == buttons_.end())
 		{
 			a += w->getArea();
 		}
@@ -436,10 +436,11 @@ inline void Box::update ()
 	Frame::update ();
 
 	// Cleanup
-	for (std::vector<TextButton*>::iterator it = buttons_.begin (); it != buttons_.end (); ++it)
+	for (std::vector<TextButton*>::iterator it = buttons_.begin (); it != buttons_.end (); /* empty */)
 	{
 		TextButton* b = static_cast<TextButton*>(*it);
-		if (!b) buttons_.erase (it);
+		if (!b) it = buttons_.erase (it);
+		else ++it;
 	}
 
 	const double nrbuttons = buttons_.size();

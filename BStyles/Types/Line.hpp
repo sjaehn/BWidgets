@@ -59,6 +59,9 @@ constexpr Line whiteLine1pt = Line (white, 1.0);
 constexpr Line greyLine1pt = Line (grey, 1.0);
 constexpr Line lightgreyLine1pt = Line (lightgrey, 1.0);
 constexpr Line noLine = Line (invisible, 0.0);
+constexpr Line shadow80Line2pt = Line (Color (0.0, 0.0, 0.0, 0.8), 2.0);
+constexpr Line shadow50Line2pt = Line (Color (0.0, 0.0, 0.0, 0.5), 2.0);
+constexpr Line shadow20Line2pt = Line (Color (0.0, 0.0, 0.0, 0.2), 2.0);
 
 }
 

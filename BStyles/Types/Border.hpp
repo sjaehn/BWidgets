@@ -63,6 +63,9 @@ constexpr Border whiteBorder1pt = Border (whiteLine1pt);
 constexpr Border greyBorder1pt = Border (greyLine1pt);
 constexpr Border lightgreyBorder1pt = Border (lightgreyLine1pt);
 constexpr Border noBorder = Border (noLine);
+constexpr Border shadow80Border2pt = Border (shadow80Line2pt);
+constexpr Border shadow50Border2pt = Border (shadow50Line2pt);
+constexpr Border shadow20Border2pt = Border (shadow20Line2pt);
 
 }
 

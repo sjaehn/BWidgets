@@ -603,9 +603,10 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 					}
 				}
 			}
-			// No button associated with a widget? Only POINTER_MOTION_EVENT
+			// No button associated with a widget? Only POINTER_MOTION_EVENT or FOCUS_EVENT
 			if (button == BDevices::MouseDevice::NO_BUTTON)
 			{
+				// POINTER_MOTION_EVENT
 				Widget* widget = w->getWidgetAt	(position, 
 												 [] (Widget* widget) {return widget->isVisible() && widget->is<Pointable>();},
 												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::POINTER_MOTION_EVENT);});
@@ -622,6 +623,26 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 							position - w->pointer_,
 							button));
 				}
+
+				// FOCUS_EVENT
+				widget = w->getWidgetAt	(position, 
+												 [] (Widget* widget) {return widget->isVisible() && widget->is<Focusable>();},
+												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::FOCUS_IN_EVENT);});
+				if (widget && (widget != w))
+				{
+					w->addEventToQueue
+					(
+						new BEvents::PointerEvent
+						(
+							widget,
+							BEvents::Event::POINTER_MOTION_EVENT,
+							position - widget->getAbsolutePosition (),
+							BUtilities::Point<> (),
+							position - w->pointer_,
+							button));
+				}
+
+
 			}
 			w->pointer_ = position;
 		}
@@ -710,7 +731,7 @@ void Window::translateTimeEvent ()
 	BDevices::MouseDevice mouse = BDevices::MouseDevice (BDevices::MouseDevice::NO_BUTTON);
 	BDevices::DeviceGrab<BDevices::MouseDevice>* grab = buttonGrabStack_.getGrab(mouse);
 	if (grab)
-	{
+	{		
 		Widget* widget = grab->getWidget();
 		if (widget)
 		{

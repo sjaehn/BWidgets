@@ -223,6 +223,9 @@ const Fill greyFill = Fill (grey);
 const Fill darkgreyFill = Fill (darkgrey);
 const Fill grey20Fill = Fill (grey20);
 const Fill noFill = Fill (invisible);
+const Fill shadow80Fill = Fill (Color (0.0, 0.0, 0.0, 0.8));
+const Fill shadow50Fill = Fill (Color (0.0, 0.0, 0.0, 0.5));
+const Fill shadow20Fill = Fill (Color (0.0, 0.0, 0.0, 0.2));
 
 }
 

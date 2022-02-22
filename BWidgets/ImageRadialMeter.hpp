@@ -19,6 +19,7 @@
 #define BWIDGETS_IMAGERADIALMETER_HPP_
 
 #include "Widget.hpp"
+#include "Label.hpp"
 #include "Supports/Validatable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/ValidatableRange.hpp"
@@ -210,6 +211,11 @@ public:
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
 
+	/**
+     *  @brief  Method to be called following an object state change.
+     */
+    virtual void update () override;
+
 protected:
 	/**
      *  @brief  Unclipped draw a %ImageRadialMeter to the surface.
@@ -355,6 +361,18 @@ inline void ImageRadialMeter::resize (const double width, const double height)
 inline void ImageRadialMeter::resize (const BUtilities::Point<> extends) 
 {
 	Widget::resize (extends);
+}
+
+inline void ImageRadialMeter::update ()
+{
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
+		f->resize();
+	}
+
+	Widget::update();
 }
 
 inline void ImageRadialMeter::draw ()

@@ -26,6 +26,7 @@
 #include "Supports/Visualizable.hpp"
 #include "Supports/EventMergeable.hpp"
 #include "Supports/EventPassable.hpp"
+#include "Supports/Focusable.hpp"
 
 #include "../BUtilities/Any.hpp"
 
@@ -50,7 +51,8 @@
 namespace BWidgets
 {
 
-class Window; // Forward declaration
+// Forward declarations
+class Window;
 
 /**
  *  @brief  Root widget class of BWidgets. All other widgets (including Window)
@@ -79,7 +81,7 @@ class Window; // Forward declaration
  *  Note: The class %Widget is devoid of any copy constructor or assignment
  *  operator. 
  */
-class Widget : public Linkable, public Visualizable, public EventMergeable, public EventPassable
+class Widget : public Linkable, public Visualizable, public EventMergeable, public EventPassable, public Focusable
 {
 
 protected:
@@ -108,8 +110,10 @@ protected:
 	BStyles::Status status_;
 	std::string title_;
 	BStyles::Style style_;
+	Widget* focus_;
 
 public:
+
 	/**
 	 *  @brief  Creates a default %Widget.
 
@@ -173,7 +177,7 @@ public:
 	 *  @brief  Changes the %Widget title.
 	 *  @param title  New title.
 	 */
-	void rename (std::string& title);
+	virtual void setTitle (const std::string& title);
 
 	/**
 	 *  @brief  Gets the %Widget title.
@@ -640,6 +644,26 @@ public:
 	 *  Window event queue. 
 	 */
 	void emitExposeEvent (const BUtilities::Area<>& area) override;
+
+	/**
+     *  @brief  Method called when focus in time is passed.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  the time for focus in is passed. By default, it calls its static 
+	 *  callback function.
+     */
+    virtual void onFocusIn (BEvents::Event* event) override;
+
+	/**
+     *  @brief  Method called when focus out time is passed.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  the time for focus out is passed. By default, it calls its static 
+	 *  callback function.
+     */
+    virtual void onFocusOut (BEvents::Event* event) override;
 
 protected:
 

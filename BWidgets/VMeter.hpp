@@ -19,6 +19,7 @@
 #define BWIDGETS_VMETER_HPP_
 
 #include "Widget.hpp"
+#include "Label.hpp"
 #include "Supports/Validatable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/ValidatableRange.hpp"
@@ -275,6 +276,13 @@ inline void VMeter::copy (const VMeter* that)
 
 inline void VMeter::resize ()
 {
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
+		f->resize();
+	}
+
 	BUtilities::Area<> a = (children_.empty()? BUtilities::Area<>(0, 0, BWIDGETS_DEFAULT_VMETER_WIDTH, BWIDGETS_DEFAULT_VMETER_HEIGHT) : BUtilities::Area<>());
 	for (Linkable* c : children_)
 	{
@@ -297,6 +305,13 @@ inline void VMeter::resize (const BUtilities::Point<> extends)
 
 inline void VMeter::update ()
 {
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
+		f->resize();
+	}
+
 	scale_ = BUtilities::Area<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
 	Widget::update();
 }

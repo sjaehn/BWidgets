@@ -288,18 +288,33 @@ inline VRangeScrollBar::VRangeScrollBar	(const double  x, const double y, const 
 	symbol1 (Symbol::MINUS_SYMBOL, urid, title),
 	symbol2 (Symbol::ADD_SYMBOL, urid, title)
 {
+	scrollbar.setFocusable(false);
+	scrollbar.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
+    scrollbar.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
 	scrollbar.setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, scrollbarChangedCallback);
 	scrollbar.setScrollable (false);
 	scrollbar.setEventPassable (BEvents::Event::WHEEL_SCROLL_EVENT);
+	button1.setFocusable(false);
+	button1.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
+    button1.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
 	button1.setCallbackFunction(BEvents::Event::POINTER_DRAG_EVENT, buttonDraggedCallback);
 	button1.setEventPassable (BEvents::Event::WHEEL_SCROLL_EVENT);
+	button2.setFocusable(false);
+	button2.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
+    button2.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
 	button2.setCallbackFunction(BEvents::Event::POINTER_DRAG_EVENT, buttonDraggedCallback);
 	button2.setEventPassable (BEvents::Event::WHEEL_SCROLL_EVENT);
+	symbol1.setFocusable(false);
+	symbol1.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
+    symbol1.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
 	symbol1.setEventPassable (BEvents::Event::WHEEL_SCROLL_EVENT);
 	symbol1.setEventPassable (BEvents::Event::BUTTON_PRESS_EVENT);
 	symbol1.setEventPassable (BEvents::Event::BUTTON_RELEASE_EVENT);
 	symbol1.setEventPassable (BEvents::Event::BUTTON_CLICK_EVENT);
 	symbol1.setEventPassable (BEvents::Event::POINTER_DRAG_EVENT);
+	symbol2.setFocusable(false);
+	symbol2.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
+    symbol2.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
 	symbol2.setEventPassable (BEvents::Event::WHEEL_SCROLL_EVENT);
 	symbol2.setEventPassable (BEvents::Event::BUTTON_PRESS_EVENT);
 	symbol2.setEventPassable (BEvents::Event::BUTTON_RELEASE_EVENT);
@@ -361,6 +376,13 @@ inline void VRangeScrollBar::resize (const BUtilities::Point<> extends)
 
 inline void VRangeScrollBar::update ()
 {
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + std::to_string (this->getValue().first) + " - " + std::to_string (this->getValue().second));
+		f->resize();
+	}
+
 	if ((getEffectiveWidth () > 0) && (getEffectiveHeight () > 0))
 	{
 		const double x = getXOffset ();

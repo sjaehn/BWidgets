@@ -19,6 +19,7 @@
 #define BWIDGETS_IMAGECONDITIONAL_HPP_
 
 #include "Widget.hpp"
+#include "Label.hpp"
 #include <algorithm>
 #include <cairo/cairo.h>
 #include "Supports/Validatable.hpp"
@@ -200,6 +201,11 @@ public:
 	cairo_surface_t* getImageSurface (const double value);
 
 	static bool isClosestToValue (ImageConditional* widget, const double& value);
+
+	/**
+     *  @brief  Method to be called following an object state change.
+     */
+    virtual void update () override;
 
 	/**
      *  @brief  Method called when pointer button pressed.
@@ -466,6 +472,18 @@ inline bool ImageConditional::isClosestToValue (ImageConditional* widget, const 
 		return (nrval - x > x - rval);
 
 	}
+}
+
+inline void ImageConditional::update ()
+{
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
+		f->resize();
+	}
+
+	Widget::update();
 }
 
 inline void ImageConditional::onButtonPressed (BEvents::Event* event)

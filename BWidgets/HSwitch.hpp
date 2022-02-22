@@ -208,7 +208,13 @@ inline void HSwitch::copy (const HSwitch* that)
 
 inline void HSwitch::update()
 {
-	Widget::update();
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
+		f->resize();
+	}
+	Widget::update();	// Bypass Button::update()
 }
 
 inline void HSwitch::onButtonClicked (BEvents::Event* event)

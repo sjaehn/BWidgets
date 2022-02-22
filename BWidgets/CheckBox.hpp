@@ -166,7 +166,13 @@ inline void CheckBox::copy (const CheckBox* that)
 
 inline void CheckBox::update()
 {
-	Widget::update();
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
+		f->resize();
+	}
+	Widget::update();	// Bypass Button::update()
 }
 
 inline void CheckBox::draw ()

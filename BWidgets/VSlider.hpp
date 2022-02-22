@@ -192,6 +192,13 @@ inline void VSlider::copy (const VSlider* that)
 
 inline void VSlider::update ()
 {
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
+		f->resize();
+	}
+
 	scale_ = BUtilities::Area<> 
 	(
 		getXOffset() + 0.25 * getEffectiveWidth(), 

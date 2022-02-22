@@ -186,7 +186,13 @@ inline void Knob::copy (const Knob* that)
 
 inline void Knob::update()
 {
-	Widget::update();
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
+		f->resize();
+	}
+	Widget::update();	// Bypass Button::update()
 }
 
 inline void Knob::setDepth (const double depth)

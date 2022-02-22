@@ -266,6 +266,13 @@ inline void ValueVSlider::resize (const BUtilities::Point<> extends)
 
 inline void ValueVSlider::update ()
 {
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
+		f->resize();
+	}
+
 	label.setText (display_ (getValue()));
 	label.resize();
 	label.moveTo (label.center(), getYOffset());

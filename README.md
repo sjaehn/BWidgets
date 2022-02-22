@@ -82,6 +82,14 @@ Then call the respective example, e. g.:
   - [x] Types (Color, ColorMap, Line, Border, ...)
   - [x] Set widget styles
   - [ ] Forward and update styles to child widgets with matching URID
+- [x] Events
+  - [x] Base events (expose, close, ...)
+  - [x] Mouse / Pointer events (press, release, click, drag, move, scroll, focus)
+  - [x] Keyboard events
+  - [x] Value change events
+  - [x] Custom message events
+  - [x] Handle events in main Window
+  - [x] Enable events in widgets using interface classes (Supports)
 - [ ] Widget functionality
   - [x] Container functionality by supporting `Linkable`
   - [x] Visualization by supporting `Visualizable`
@@ -97,8 +105,10 @@ Then call the respective example, e. g.:
         (`BWIDGETS_DEFAULT_XXX_WIDTH` and `BWIDGETS_DEFAULT_XXX_HEIGHT`)
   - [x] Define substitutable widget elemet draw functions (see Draws)
   - [x] Optimize widget size using `resize()`
-  - [ ] Show default hover text (widget title, if set) by supporting
+  - [x] Show default hover text (widget title, if set) by supporting
         `Focusable`
+  - [ ] Layers
+  - [ ] Scale (zoom) main Window and linked child widgets
 - [ ] Header files only (if possible)
 - [ ] Documentation
 
@@ -109,6 +119,8 @@ Then call the respective example, e. g.:
 - [ ] Load images from SVG.
 
 
-### Until 1.4
+### Until 1.4+
 
+- [ ] Time events
+- [ ] Enable scale (zoom) for all widgets
 - [ ] Use NanoVG.

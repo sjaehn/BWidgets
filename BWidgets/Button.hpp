@@ -19,6 +19,7 @@
 #define BWIDGETS_BUTTON_HPP_
 
 #include "Widget.hpp"
+#include "Label.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Toggleable.hpp"
@@ -246,6 +247,12 @@ inline void Button::update ()
 	BStyles::Border border = getBorder();
 	border.line.color = getBgColors()[getStatus()].illuminate (getValue() ? BStyles::Color::highLighted : BStyles::Color::darkened);
 	setBorder (border);
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
+		f->resize();
+	}
 	Widget::update();
 }
 

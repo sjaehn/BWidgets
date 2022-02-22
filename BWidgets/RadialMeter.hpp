@@ -19,6 +19,7 @@
 #define BWIDGETS_RADIALMETER_HPP_
 
 #include "Widget.hpp"
+#include "Label.hpp"
 #include "Supports/Validatable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/ValidatableRange.hpp"
@@ -297,6 +298,13 @@ inline void RadialMeter::resize (const BUtilities::Point<> extends)
 
 inline void RadialMeter::update ()
 {
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
+		f->resize();
+	}
+
 	scale_ = BUtilities::Area<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
 	Widget::update();
 }

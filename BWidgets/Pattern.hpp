@@ -27,6 +27,7 @@
 #include "../BEvents/PointerEvent.hpp"
 #include <cairo/cairo.h>
 #include <cstddef>
+#include <string>
 #include <utility>
 
 #ifndef BWIDGETS_DEFAULT_PATTERN_WIDTH
@@ -547,7 +548,7 @@ inline Pattern<T>::Pattern	(const double x, const double y, const double width, 
 
 		for (size_t c = 0; c < columns_; ++c)
 		{
-			T* w = new T(BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/pad"), "");
+			T* w = new T(BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/pad"), "(" + std::to_string(c) + ", " + std::to_string(r) + ")");
 			w->setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, padChangedCallback);
 			w->setClickable (false);
 			w->setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT);

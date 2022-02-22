@@ -311,7 +311,8 @@ In addtion, widgets have got:
  * a *style* .
 
 `Widget` objects are the most simple widgets. Their visual content is only
-defined by the `Style` properties border and background. There is no further 
+defined by the `Style` properties border and background. And the title may
+be shown on hovering over the widget (if title is set). There is no further 
 user interaction.
 
 Each `Widget` must be directly or indirectly linked to the main `Window` to
@@ -530,7 +531,7 @@ It supports user interaction via `Clickable`, `Draggable`, and
 
 `HMeter` is a `Valueable` Widget and displays a value as a horizontal
 meter without user interaction. The value is kept within a defined range
-and displayed in blocks defined by the parameter @a step . Its appearance
+and displayed in blocks defined by the parameter *step* . Its appearance
 is defined by the parameters BgColors (static elements), FgColors (value,
 low range), and HiColors (value, high range).
 
@@ -605,7 +606,7 @@ parameter.
 
 `VMeter` is a `Valueable` Widget and displays a value as a vertical
 meter without user interaction. The value is kept within a defined range
-and displayed in blocks defined by the parameter @a step . Its appearance
+and displayed in blocks defined by the parameter *step*. Its appearance
 is defined by the parameters BgColors (static elements), FgColors (value,
 low range), and HiColors (value, high range).
 
@@ -680,7 +681,7 @@ parameter.
 
 `RadialMeter` is a `Valueable` Widget and displays a value as a radial
 meter without user interaction. The value is kept within a defined range
-and displayed in blocks defined by the parameter @a step. Its appearance
+and displayed in blocks defined by the parameter *step*. Its appearance
 is defined by the parameters BgColors (static elements), FgColors (value,
 low range), and HiColors (value, high range).
 
@@ -923,8 +924,11 @@ The widget URID can be used to assign styles and to identify a widget.
 ### Title
 
 The widget title is shown in the case of a `Window` object in the title bar.
-It can also be used to identify a widget. The widget title is set with 
-`rename()` and returned by `getTitle()`.
+All (other) widgets may show the title on hovering over the widget if the 
+title is set (not \"\") and the widget is `Focusable`.
+
+The title can also be used to identify a widget. The widget title is set with 
+`setTitle()` and returned by `getTitle()`.
 
 
 ### Visibility

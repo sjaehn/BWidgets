@@ -209,7 +209,13 @@ inline void VSwitch::copy (const VSwitch* that)
 
 inline void VSwitch::update()
 {
-	Widget::update();
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f)
+	{
+		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
+		f->resize();
+	}
+	Widget::update();	// Bypass Button::update()
 }
 
 inline void VSwitch::onButtonClicked (BEvents::Event* event)

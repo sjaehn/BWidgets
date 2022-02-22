@@ -154,6 +154,12 @@ inline SpinButton::SpinButton	(const double x, const double y, const double widt
 	upButton (x, y, width, 0.5 * height, Symbol::UP_SYMBOL, false, value < 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button")),
 	downButton (x, y + 0.5 * height, width, 0.5 * height, Symbol::DOWN_SYMBOL, false, value > 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"))
 {
+	upButton.setFocusable(false);
+	upButton.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
+    upButton.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
+	downButton.setFocusable(false);
+	downButton.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
+    downButton.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
 	upButton.setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, valueChangedCallback);
 	downButton.setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, valueChangedCallback);
 	add (&upButton);

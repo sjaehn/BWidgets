@@ -240,7 +240,7 @@ inline ComboBox::ComboBox	(const double x, const double y, const double width, c
 {
 	if (button_) delete button_;
 	button_ = new SymbolButton	(x + width - buttonWidth_, y, buttonWidth_, height, Symbol::DOWN_SYMBOL, false, false,
-								 BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"), "button");
+								 BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"), "");
 	button_->setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, ComboBox::buttonChangedCallback);
 	add (button_);
 	for (Widget* w : items_) w->setHeight (itemHeight_);
@@ -340,7 +340,7 @@ inline void ComboBox::buttonChangedCallback (BEvents::Event* event)
 	else 
 	{
 		p->listBox_ = new ListBox	(p->listBoxArea_.getX(), p->listBoxArea_.getY(), p->listBoxArea_.getWidth(), p->listBoxArea_.getHeight(), 
-									 {}, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (p->getUrid()) + "/listbox"), "listbox");
+									 {}, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (p->getUrid()) + "/listbox"), "");
 
 		ListBox* l = dynamic_cast<ListBox*>(p->listBox_);
 		if (l)
