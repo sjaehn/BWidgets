@@ -298,7 +298,7 @@ The full event routing process is:
 
 All widgets support the features:
 * Linkable (may got linked to parent and child widgets)
-* Visualizable (may draw to a RGBA surface and may become visible)
+* Visualizable (may draw to RGBA surface layers and may become visible)
 * EventMergeable (may let the main `Window` merge its events)
 * EventPassable (may pass events to the subjacent widget)
 
@@ -940,14 +940,25 @@ parent widget is hidden and gain back visibility if their parent widget is
 shown again.
 
 
+### Layer
+
+Widgets can be stored in different layers to be displayed on the screen.
+The layer index represents the Z position of the surface. The higher
+the index, the more to the background. The default layer has got the
+index 0. Negative indexed layers will be displayed in front of the 
+default layer, positive indexed layers behind. The widget layer can be
+changed using `setLayer()` and is returned by `getLayer()`.
+
+
 ### Level and Stacking
 
 Widgets are displayed in the order they are added to the main window from
-back (first added) to front (last added). In the same way, child widgets are
-displayed embedded into the parent widget in order they are added to it.
+back (first added) to front (last added) for the same layer. In the same way, 
+child widgets are displayed embedded into the parent widget in order they are 
+added to it.
 
-The order (level) can be changed using `raise()`, `raiseToFront()`, `drop()`,
-and `dropToBack()`.
+The order (level) within the same layer can be changed using `raise()`, 
+`raiseToFront()`, `drop()`, and `dropToBack()`.
 
 By default, child widgets are located within their parents and oversized child 
 widgets will be clipped to fit (`STACKING_NORMAL`). `STACKING_ESCAPE` breaks

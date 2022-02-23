@@ -107,7 +107,7 @@ Then call the respective example, e. g.:
   - [x] Optimize widget size using `resize()`
   - [x] Show default hover text (widget title, if set) by supporting
         `Focusable`
-  - [ ] Layers
+  - [x] Layers
   - [ ] Scale (zoom) main Window and linked child widgets
 - [ ] Header files only (if possible)
 - [ ] Documentation

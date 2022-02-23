@@ -16,6 +16,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include <cairo/cairo.h>
 #ifdef PKG_HAVE_FONTCONFIG
 #include <fontconfig/fontconfig.h>
 #endif /*PKG_HAVE_FONTCONFIG*/
@@ -63,6 +64,7 @@ Window::Window (const double width, const double height, PuglNativeView nativeWi
 		eventQueue_ ()
 {
 	main_ = this;
+	layer_ = BWIDGETS_DEFAULT_WINDOW_LAYER;
 
 	world_ = puglNewWorld (worldType, worldFlag);
 	puglSetClassName (world_, "BWidgets");
@@ -695,23 +697,48 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 		{
 			BUtilities::Area<> area = BUtilities::Area<> (puglEvent->expose.x, puglEvent->expose.y, puglEvent->expose.width, puglEvent->expose.height);
 
-			// Create a temporal storage surface and store all children surfaces on this
-			cairo_surface_t* storageSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w->getWidth(), w->getHeight());
-			if (cairo_surface_status (storageSurface) == CAIRO_STATUS_SUCCESS)
+			// Get access to the host provided surface
+			cairo_t* crw = w->getPuglContext ();
+			if (crw && (cairo_status (crw) == CAIRO_STATUS_SUCCESS))
 			{
-				w->display (storageSurface, area);
-
-				// Copy storage surface onto pugl provided surface
-				cairo_t* cr = w->getPuglContext ();
-				if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
+				// Create a temporary window surface
+				cairo_surface_t* windowSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w->getWidth(), w->getHeight());
+				if (windowSurface && (cairo_surface_status (windowSurface) == CAIRO_STATUS_SUCCESS))
 				{
-					cairo_save (cr);
-					cairo_set_source_surface (cr, storageSurface, 0, 0);
-					cairo_paint (cr);
-					cairo_restore (cr);
+					//Get access to the temporary window surface
+					cairo_t* cr = cairo_create(windowSurface);
+					if (cr && (cairo_status (cr) == CAIRO_STATUS_SUCCESS))
+					{
+						// Get a map of layered surfaces for the selected area
+						std::map<int,cairo_surface_t*> storageSurfaces;
+						w->display (storageSurfaces, BUtilities::Point<> (w->getWidth(), w->getHeight()), area);
+
+						// Write all layered surfaces to the temporary window surface from back to front
+						for (std::map<int,cairo_surface_t*>::reverse_iterator rit = storageSurfaces.rbegin(); rit != storageSurfaces.rend(); ++rit)
+						{
+							cairo_surface_t* s = rit->second;
+							if (s && (cairo_surface_status (s) == CAIRO_STATUS_SUCCESS))
+							{
+								cairo_save (cr);
+								cairo_set_source_surface (cr, s, 0, 0);
+								cairo_paint (cr);
+								cairo_restore (cr);
+								cairo_surface_destroy(s);
+							}
+						}
+
+						cairo_destroy (cr);	
+					}
+
+					
+					// Write temporary window surface to the host provided surface
+					cairo_save (crw);
+					cairo_set_source_surface (crw, windowSurface, 0, 0);
+					cairo_paint (crw);
+					cairo_restore (crw);
+					cairo_surface_destroy (windowSurface);
 				}
 			}
-			cairo_surface_destroy (storageSurface);
 		}
 		break;
 

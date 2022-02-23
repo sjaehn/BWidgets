@@ -48,6 +48,14 @@
 #define BWIDGETS_DEFAULT_STATUS BStyles::STATUS_NORMAL
 #endif
 
+#ifndef BWIDGETS_DEFAULT_FOCUS_LAYER
+#define BWIDGETS_DEFAULT_FOCUS_LAYER -100
+#endif
+
+#ifndef BWIDGETS_DEFAULT_WINDOW_LAYER
+#define BWIDGETS_DEFAULT_WINDOW_LAYER (std::numeric_limits<int>::max())
+#endif
+
 namespace BWidgets
 {
 
@@ -694,8 +702,10 @@ protected:
 
 	/**
 	 *  @brief  Draws %Widget surface and children surfaces to the provided
-	 *  target surface.
-	 *  @param surface  Target surface.
+	 *  map of layered target surfaces.
+	 *  @param surfaces  Map of target surfaces.
+	 *  @param surfaceExtends  Extends of the surfaces to be created for each
+	 *  layer.
 	 *  @param area  Clipping area.
 	 *
 	 *  This method is called by the main Window system event handler upon an
@@ -704,7 +714,7 @@ protected:
 	 *  in their respective RGBA surfaces to the system provided RGBA surface
 	 *  of the main %Window.  
 	 */
-	void display (cairo_surface_t* surface, const BUtilities::Area<>& area);
+	void display (std::map<int, cairo_surface_t*>& surfaces, const BUtilities::Point<> surfaceExtends, const BUtilities::Area<>& area);
 
 	/**
      *  @brief  Unclipped draw a %Widget to the surface.
@@ -727,7 +737,8 @@ protected:
     virtual void draw (const BUtilities::Area<>& area) override;
 
 private:
-	void display (cairo_surface_t* surface, const BUtilities::Area<>& outerArea, const BUtilities::Area<>& area);
+	void display (std::map<int, cairo_surface_t*>& surfaces, const BUtilities::Point<> surfaceExtends, const BUtilities::Area<>& outerArea, const BUtilities::Area<>& area);
+
 	Widget* getWidgetAt	(const BUtilities::Point<>& abspos, 
 						 const BUtilities::Area<>& outerArea,
 			   			 const BUtilities::Area<>& area, 

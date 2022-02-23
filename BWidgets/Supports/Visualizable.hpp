@@ -50,6 +50,7 @@ protected:
     bool scheduleDraw_;
     BUtilities::Point<> extends_;
     cairo_surface_t* surface_;
+    int layer_;
 
 public:
 
@@ -183,6 +184,28 @@ public:
 	 *  @return  Point<> data containing width and height.
 	 */
 	virtual BUtilities::Point<> getExtends () const;
+
+    /**
+     *  @brief  Re-indexes the object surface.
+     *  @param layer  Layer index.
+     *
+     *  The layer index represents the Z position of the surface. The higher
+     *  the index, the more to the background. The default layer has got the
+     *  index 0. Negative indexed layers will be displayed in front of the 
+     *  default layer, positive indexed layers behind.
+     */
+    virtual void setLayer (const int layer);
+
+    /**
+     *  @brief  Gets the object surface.
+     *  @param layer  Layer index.
+     *
+     *  The layer index represents the Z position of the surface. The higher
+     *  the index, the more to the background. The default layer has got the
+     *  index 0. Negative indexed layers will be displayed in front of the 
+     *  default layer, positive indexed layers behind.
+     */
+    virtual int getLayer () const;
 
     /**
      *  @brief  Method to be called following an object state change.

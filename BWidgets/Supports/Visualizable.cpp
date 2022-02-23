@@ -39,7 +39,8 @@ Visualizable::Visualizable (const BUtilities::Point<> extends) :
     Support(),
     scheduleDraw_ (true),
     extends_ (extends),
-    surface_ (cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends.x, extends.y))
+    surface_ (cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends.x, extends.y)),
+    layer_ (0)
 {
 
 }
@@ -49,7 +50,8 @@ Visualizable::Visualizable (const Visualizable& that) :
     Support (that),
     scheduleDraw_ (that.scheduleDraw_),
     extends_ (that.extends_),
-    surface_ (cairoplus_image_surface_clone_from_image_surface (that.surface_))
+    surface_ (cairoplus_image_surface_clone_from_image_surface (that.surface_)),
+    layer_ (that.layer_)
 {
 
 }
@@ -67,6 +69,7 @@ Visualizable& Visualizable::operator= (const Visualizable& that)
     extends_ = that.extends_;
     if (surface_) cairo_surface_destroy (surface_);
     surface_ = cairoplus_image_surface_clone_from_image_surface (that.surface_);
+    layer_ = that.layer_;
 
     update();
     return *this;
@@ -128,6 +131,20 @@ void Visualizable::resize ()
 void Visualizable::resize (const double width, const double height)
 {
     resize (BUtilities::Point<> (width, height));
+}
+
+void Visualizable::setLayer (const int layer)
+{
+    if (layer != layer_)
+    {
+        layer_ = layer;
+        update();
+    }
+}
+
+int Visualizable::getLayer() const
+{
+    return layer_;
 }
 
 void Visualizable::resize (const BUtilities::Point<> extends)

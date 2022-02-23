@@ -49,10 +49,11 @@ Widget::Widget (const double x, const double y, const double width, const double
 	status_(BStyles::Status::STATUS_NORMAL),
 	title_ (title),
 	style_ (),
-	focus_ (title == "" ? nullptr : new Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/focus"), ""))
+	focus_ (title == "" ? nullptr : new (std::nothrow) Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/focus"), ""))
 {
 	if (focus_) 
 	{
+		focus_->setLayer (BWIDGETS_DEFAULT_FOCUS_LAYER);
 		focus_->setBorder (BStyles::shadow80Border2pt);
 		focus_->setBackground (BStyles::shadow80Fill);
 		focus_->setStacking (STACKING_ESCAPE);
@@ -117,11 +118,15 @@ void Widget::setTitle (const std::string& title)
 	{
 		if (!focus_) 
 		{
-			focus_ = new Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (getUrid()) + "/focus"));
-			focus_->setBorder (BStyles::shadow80Border2pt);
-			focus_->setBackground (BStyles::shadow80Fill);
-			focus_->setStacking (STACKING_ESCAPE);
-			focus_->resize();
+			focus_ = new (std::nothrow) Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (getUrid()) + "/focus"));
+			if (focus_)
+			{
+				focus_->setLayer (BWIDGETS_DEFAULT_FOCUS_LAYER);
+				focus_->setBorder (BStyles::shadow80Border2pt);
+				focus_->setBackground (BStyles::shadow80Fill);
+				focus_->setStacking (STACKING_ESCAPE);
+				focus_->resize();
+			}
 		}
 
 		else
@@ -719,18 +724,18 @@ BUtilities::Area<> Widget::getAbsoluteFamilyArea (std::function<bool (const Widg
 	return a;
 }
 
-void Widget::display (cairo_surface_t* surface, const BUtilities::Area<>& area)
+void Widget::display (std::map<int, cairo_surface_t*>& surfaces, const BUtilities::Point<> surfaceExtends, const BUtilities::Area<>& area)
 {
 	if (isVisible())
 	{
 		// Calculate absolute area position and start private core method
 		BUtilities::Area<> absArea = area;
 		absArea.moveTo (absArea.getPosition() + getAbsolutePosition());
-		display (surface, absArea, absArea);
+		display (surfaces, surfaceExtends, absArea, absArea);
 	}
 }
 
-void Widget::display (cairo_surface_t* surface, const BUtilities::Area<>& outerArea, const BUtilities::Area<>& area)
+void Widget::display (std::map<int, cairo_surface_t*>& surfaces, const BUtilities::Point<> surfaceExtends, const BUtilities::Area<>& outerArea, const BUtilities::Area<>& area)
 {
 	BUtilities::Area<> a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
 	BUtilities::Area<> thisArea = getArea(); 
@@ -743,8 +748,14 @@ void Widget::display (cairo_surface_t* surface, const BUtilities::Area<>& outerA
 			// Update draw
 			if (scheduleDraw_) draw (BUtilities::Area<> (0, 0, getWidth (), getHeight ()));
 
-			// Copy widgets surface onto main surface
-			cairo_t* cr = cairo_create (surface);
+			// Copy widgets surface onto the map of layered surfaces
+			if (surfaces.find(getLayer()) == surfaces.end()) 
+			{
+				surfaces[getLayer()] = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, surfaceExtends.x, surfaceExtends.y);
+			}
+
+			cairo_surface_t* s =  surfaces[getLayer()];
+			cairo_t* cr = cairo_create (s);
 			cairo_set_source_surface (cr, cairoSurface(), thisArea.getX(), thisArea.getY());
 			cairo_rectangle (cr, a.getX (), a.getY (), a.getWidth (), a.getHeight ());
 			cairo_fill (cr);
@@ -754,7 +765,7 @@ void Widget::display (cairo_surface_t* surface, const BUtilities::Area<>& outerA
 		for (Linkable* l : children_)
 		{
 			Widget* w = dynamic_cast<Widget*> (l);
-			if (w) w->display (surface, outerArea, a);
+			if (w) w->display (surfaces, surfaceExtends, outerArea, a);
 		}
 	}
 }
