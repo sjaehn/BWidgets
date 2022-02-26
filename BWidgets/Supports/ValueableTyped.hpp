@@ -44,7 +44,7 @@ public:
     /**
      *  @brief  Constructs a default %ValueableTyped object.
      */
-    ValueableTyped () = default;
+    ValueableTyped ();
 
     /**
      *  @brief  Construct a new %ValueableTyped object.
@@ -83,6 +83,13 @@ public:
     void emitValueChanged ();
 
 };
+
+template<class T>
+ValueableTyped<T>::ValueableTyped () :
+    ValueableTyped (T())
+{
+
+}
 
 template<class T>
 ValueableTyped<T>::ValueableTyped (const T& value) :
