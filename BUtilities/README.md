@@ -51,19 +51,23 @@ messages. It may store additional words and translations but it also allows
 fallback access to the system provided vocabulary and translations.
 
 Additional vocabulary can be stored in the 
-`BUTILITIES_DICTIONARY_DATAFILE` (default "Dictionary.data") in the format:
+`BUTILITIES_DICTIONARY_DATAFILE` (default "Dictionary.data") in the format
+(example):
 ```
 {
     {
-        "Word or phrase1",       
+        "Yes",       
         {
-            {"language_code1", "Translation1"},
-            {"language_code2", "Translation2"},
-            {...}
+            {"de_DE", "Ja"},
+            {"fr_FR", "Oui"}
         }
     },
     {
-        ...
+       "No",       
+        {
+            {"de_DE", "Nein"},
+            {"fr_FR", "Non"}
+        }
     }
 }
 ```
@@ -72,7 +76,8 @@ with the language_code is represented as the full or partial POSIX locale
 
 To use an alternative dictionary, define the 
 `BUTILITIES_DICTIONARY_DATAFILE` variable prior the include of 
-Dictionary. Or add translations at runtime using `add()`.
+Dictionary. Or add translations at runtime using `add()`. Or include a GNU
+gettext message catalogue (.mo) as fallback using `alsoUseCatalogue()`.
 
 
 ### Point

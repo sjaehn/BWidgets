@@ -74,10 +74,12 @@ Then call the respective example, e. g.:
   - [x] Image-based widgets
   - [x] Dialog widgets (Box, TextBox, MessageBox, ...)
   - [x] File selection dialog widgets (FileChooser, SampleChooser)
-- [ ] URID
-- [ ] Dictionary
+- [x] URID
+  - [x] URID management
+  - [x] Assign URIDs to styles, widgets, ...
+- [x] Dictionary
   - [x] Add translations for words and phrases used by the widgets
-  - [ ] Fallback to installed third party dictionaries (e. g., GTK)
+  - [x] Fallback to installed third party dictionaries (e. g., GTK)
 - [ ] Styles
   - [x] Types (Color, ColorMap, Line, Border, ...)
   - [x] Set widget styles
@@ -115,8 +117,9 @@ Then call the respective example, e. g.:
 
 ### Until 1.2
 
-- [ ] Layout widgets.
-- [ ] Load images from SVG.
+- [ ] Layout widgets
+- [ ] Conditional widgets
+- [ ] Load images from SVG
 
 
 ### Until 1.4+
@@ -124,4 +127,6 @@ Then call the respective example, e. g.:
 - [ ] Time events
 - [ ] Enable scale (zoom) for all widgets
 - [ ] Vector-based zoom
-- [ ] Use NanoVG.
+- [ ] Use NanoVG
+- [ ] Link URID to third party
+- [ ] Journal

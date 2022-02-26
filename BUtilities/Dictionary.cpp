@@ -27,6 +27,7 @@ namespace BUtilities
 std::map<std::string, std::map<std::string, std::string>> Dictionary::map_ = Dictionary::makeMap();
 std::string Dictionary::lang_ = BUTILITIES_DICTIONARY_LANGUAGE;
 std::mutex Dictionary::mx_;
+std::string Dictionary::catalog_ = BUTILITIES_DICTIONARY_EXTERNAL_CATALOGUE;
 
 void Dictionary::setLanguage (const std::string& language)
 {
@@ -56,6 +57,13 @@ void Dictionary::add (const std::vector<std::pair<std::string, std::vector<std::
     {
         for (const std::pair<std::string, std::string>& t : w.second) map_[w.first][t.first] = t.second;
     }
+    mx_.unlock();
+}
+
+void Dictionary::alsoUseCatalogue (const std::string& cat)
+{
+    mx_.lock();
+    catalog_ = cat;
     mx_.unlock();
 }
 
@@ -101,22 +109,21 @@ std::string Dictionary::get (const std::string& word)
         }
     }
 
-    mx_.unlock();
-
     // Full locale symbol-based dictionary translation
-    /*if (translation == "")
+    if ((translation == "") && (catalog_ != ""))
     {
         std::locale loc (lang_);
         std::cout.imbue (loc);
         const std::messages<char>& facet = std::use_facet<std::messages<char>>(loc);
-        std::messages_base::catalog cat = facet.open ("sed", loc);
+        std::messages_base::catalog cat = facet.open (catalog_, loc);
         if (cat >= 0) translation = facet.get(cat, 0, 0, word);
         facet.close(cat);
-    }*/
+    }
 
     // No translation found
     if (translation == "") translation = word;
 
+    mx_.unlock();
     return translation;
 }
 

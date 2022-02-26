@@ -31,6 +31,10 @@
 #define BUTILITIES_DICTIONARY_LANGUAGE std::locale("").name()
 #endif
 
+#ifndef BUTILITIES_DICTIONARY_EXTERNAL_CATALOGUE
+#define BUTILITIES_DICTIONARY_EXTERNAL_CATALOGUE ""
+#endif
+
 namespace BUtilities 
 {
 
@@ -73,6 +77,7 @@ protected:
     static std::map<std::string, std::map<std::string, std::string>> map_;
     static std::string lang_;
     static std::mutex mx_;
+    static std::string catalog_;
     
 public:
 
@@ -106,6 +111,15 @@ public:
      *  english or word symbol, (language, translation)).
      */
     static void add (const std::vector<std::pair<std::string, std::vector<std::pair<std::string, std::string>>>>& translations);
+
+    /**
+     *  @brief  Additionally use a GNU gettext message catalogue.
+     *  @param cat  Catalogue name.
+     *
+     *  Defines a GNU gettext message catalogue as a fallback if no 
+     *  translation is provided in the dictionary.
+     */
+    static void alsoUseCatalogue (const std::string& cat);
 
     /**
      *  @brief  Translates a word or a phrase from the dictionary to the 
