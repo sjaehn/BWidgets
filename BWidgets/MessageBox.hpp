@@ -166,10 +166,8 @@ inline MessageBox::MessageBox	(const double x, const double y, const double widt
 	BStyles::Font hFont = this->headline.getFont();
 	hFont.weight = CAIRO_FONT_WEIGHT_BOLD;
 	this->headline.setFont (hFont);
-	this->symbol.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-    this->symbol.setEventPassable(BEvents::Event::POINTER_DRAG_EVENT, true);
-	this->headline.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-    this->headline.setEventPassable(BEvents::Event::POINTER_DRAG_EVENT, true);
+	this->symbol.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT + BEvents::Event::POINTER_DRAG_EVENT);
+	this->headline.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT + BEvents::Event::POINTER_DRAG_EVENT);
 	add (&this->symbol);
 	add (&this->headline);
 }

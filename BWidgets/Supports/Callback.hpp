@@ -18,6 +18,7 @@
 #ifndef BWIDGETS_CALLBACK_HPP_
 #define BWIDGETS_CALLBACK_HPP_
 
+#include <cstdint>
 #include <map>
 #include <functional>
 #include "../../BEvents/Event.hpp"
@@ -30,7 +31,7 @@ namespace BWidgets
  *
  *  The %Callback class provides callback functionality for EventTypes.
  */
-class Callback : protected std::map<BEvents::Event::EventType, std::function<void (BEvents::Event*)>>
+class Callback : protected std::map<uint8_t, std::function<void (BEvents::Event*)>>
 {
 public:
 
@@ -56,31 +57,54 @@ public:
      *  Callback functions fascilitate to handle events without changing the 
      *  widget onXXX method and thus changing the class definition.
 	 */
-	void setCallbackFunction (const BEvents::Event::EventType eventType, const std::function<void (BEvents::Event*)>& callbackFunction)
+	void setCallbackFunction (const uint32_t eventType, const std::function<void (BEvents::Event*)>& callbackFunction)
     {
-        operator[] (eventType) = callbackFunction;
+        for (uint32_t i = 0; i < 32; ++i)
+        {
+            if ((1 << i) & eventType) operator[] (i) = callbackFunction;
+        }
     }
 
     /**
 	 *  @brief  Removes the callback function for an event type. 
      *  @param eventType  EventType.
 	 */
-    void removeCallbackFunction (const BEvents::Event::EventType eventType)
+    void removeCallbackFunction (const uint32_t eventType)
     {
-        const_iterator cit = find (eventType);
-        if (cit != end()) erase (cit);
+        for (uint32_t i = 0; i < 32; ++i)
+        {
+            if ((1 << i) & eventType)
+            {
+                const_iterator cit = find (i);
+                if (cit != end()) erase (cit);
+            } 
+        }
     }
 
     /**
 	 *  @brief  Access the callback function for an event type. 
      *  @param eventType  EventType.
+     *
+     *  If multiple event types are passed, then only the callback function
+     *  for the first match is returned.
 	 */
     std::function<void (BEvents::Event*)> callback (const BEvents::Event::EventType eventType) 
     {
-        if (find(eventType) != end()) return operator[] (eventType);
+        for (uint32_t i = 0; i < 32; ++i)
+        {
+            if ((1 << i) & eventType)
+            {
+                if (find(i) != end()) return operator[] (i);
+            } 
+        }
+        
         return defaultCallback;
     }
 
+    /**
+     *  @brief  Empty default callback function.
+     *  @param event  Event.
+     */
     static void defaultCallback (BEvents::Event* event) {}
 };
 

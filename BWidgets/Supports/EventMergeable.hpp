@@ -18,6 +18,7 @@
 #ifndef BWIDGETS_EVENTMERGEABLE_HPP_
 #define BWIDGETS_EVENTMERGEABLE_HPP_
 
+#include <cstdint>
 #include <map>
 #include "../../BEvents/Event.hpp"
 
@@ -31,7 +32,7 @@ class EventMergeable
 {
 protected:
 
-    std::map<BEvents::Event::EventType, bool> eventMergeable_;
+    std::map<uint8_t, bool> eventMergeable_;
 
 public:
 
@@ -47,9 +48,12 @@ public:
      *  Note: %EventMergeable is only a hint. It will be ignored if it doesn't
      *  make any sense (e. g., CLOSE_REQUEST_EVENT).
      */
-    void setEventMergeable (const BEvents::Event::EventType eventType, const bool status) 
+    void setEventMergeable (const uint32_t eventType, const bool status) 
     {
-        eventMergeable_[eventType] = status;
+        for (uint32_t i = 0; i < 32; ++i)
+        {
+            if ((1 << i) & eventType) eventMergeable_[i] = status;
+        }
     }
 
     /**
@@ -59,12 +63,23 @@ public:
      *
      *  If an event type of a widget is mergeable, the main window event 
      *  handler may merge events of this type.
+     *
+     *  If multiple event types are passed, then only the callback function
+     *  for the first match is returned.
      */
-    bool isEventMergeable (const BEvents::Event::EventType eventType) const
+    bool isEventMergeable (const uint32_t eventType) const
     {
-        std::map<BEvents::Event::EventType, bool>::const_iterator it = eventMergeable_.find (eventType);
-        if (it == eventMergeable_.end()) return false;
-        return it->second;
+        for (uint32_t i = 0; i < 32; ++i)
+        {
+            if ((1 << i) & eventType)
+            {
+                std::map<uint8_t, bool>::const_iterator it = eventMergeable_.find (i);
+                if (it == eventMergeable_.end()) return false;
+                return it->second;
+            }
+        }
+
+        return false;
     }
 
 };

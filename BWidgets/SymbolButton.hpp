@@ -145,11 +145,8 @@ inline SymbolButton::SymbolButton	(const double x, const double y, const double 
 	symbol (0, 0, width, height, symbolIdx, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/symbol"))
 {
 	symbol.setFocusable(false);
-	symbol.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-	symbol.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
-	symbol.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
-    symbol.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
-	add (&symbol);
+	symbol.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT + BEvents::Event::BUTTON_CLICK_EVENT + BEvents::Event::FOCUS_EVENTS);
+    add (&symbol);
 	symbol.resize (BUtilities::Point<> (0.75 * extends_.x, 0.75 * extends_.y));
 	symbol.moveTo (symbol.center(), symbol.middle());
 }

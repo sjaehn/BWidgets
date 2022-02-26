@@ -182,12 +182,12 @@ void Window::addEventToQueue (BEvents::Event* event)
 		(
 			(event->getWidget()->isEventMergeable(eventType)) &&
 			(
-				(eventType == BEvents::Event::CONFIGURE_REQUEST_EVENT) ||
-				(eventType == BEvents::Event::EXPOSE_REQUEST_EVENT) ||
-				(eventType == BEvents::Event::POINTER_MOTION_EVENT) ||
-				(eventType == BEvents::Event::POINTER_DRAG_EVENT) ||
-				(eventType == BEvents::Event::WHEEL_SCROLL_EVENT) ||
-				(eventType == BEvents::Event::VALUE_CHANGED_EVENT)
+				(eventType & BEvents::Event::CONFIGURE_REQUEST_EVENT) ||
+				(eventType & BEvents::Event::EXPOSE_REQUEST_EVENT) ||
+				(eventType & BEvents::Event::POINTER_MOTION_EVENT) ||
+				(eventType & BEvents::Event::POINTER_DRAG_EVENT) ||
+				(eventType & BEvents::Event::WHEEL_SCROLL_EVENT) ||
+				(eventType & BEvents::Event::VALUE_CHANGED_EVENT)
 			)
 		)
 		{
@@ -196,10 +196,10 @@ void Window::addEventToQueue (BEvents::Event* event)
 			{
 				BEvents::Event* precursor = *rit;
 
-				if ((precursor->getEventType() == eventType) && (event->getWidget () == precursor->getWidget ()))
+				if ((precursor->getEventType() & eventType) && (event->getWidget () == precursor->getWidget ()))
 				{
 					// CONFIGURE_EVENT
-					if (eventType == BEvents::Event::CONFIGURE_REQUEST_EVENT)
+					if (eventType & BEvents::Event::CONFIGURE_REQUEST_EVENT)
 					{
 						BEvents::ExposeEvent* firstEvent = (BEvents::ExposeEvent*) precursor;
 						BEvents::ExposeEvent* nextEvent = (BEvents::ExposeEvent*) event;
@@ -212,7 +212,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 					}
 
 					// EXPOSE_EVENT
-					if (eventType == BEvents::Event::EXPOSE_REQUEST_EVENT)
+					if (eventType & BEvents::Event::EXPOSE_REQUEST_EVENT)
 					{
 						BEvents::ExposeEvent* firstEvent = (BEvents::ExposeEvent*) precursor;
 						BEvents::ExposeEvent* nextEvent = (BEvents::ExposeEvent*) event;
@@ -227,7 +227,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 
 
 					// POINTER_MOTION_EVENT
-					else if (eventType == BEvents::Event::POINTER_MOTION_EVENT)
+					else if (eventType & BEvents::Event::POINTER_MOTION_EVENT)
 					{
 						BEvents::PointerEvent* firstEvent = (BEvents::PointerEvent*) precursor;
 						BEvents::PointerEvent* nextEvent = (BEvents::PointerEvent*) event;
@@ -240,7 +240,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 					}
 
 					// POINTER_DRAG_EVENT
-					else if (eventType == BEvents::Event::POINTER_DRAG_EVENT)
+					else if (eventType & BEvents::Event::POINTER_DRAG_EVENT)
 					{
 						BEvents::PointerEvent* firstEvent = (BEvents::PointerEvent*) precursor;
 						BEvents::PointerEvent* nextEvent = (BEvents::PointerEvent*) event;
@@ -261,7 +261,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 
 
 					// WHEEL_SCROLL_EVENT
-					else if (eventType == BEvents::Event::WHEEL_SCROLL_EVENT)
+					else if (eventType & BEvents::Event::WHEEL_SCROLL_EVENT)
 					{
 						BEvents::WheelEvent* firstEvent = (BEvents::WheelEvent*) precursor;
 						BEvents::WheelEvent* nextEvent = (BEvents::WheelEvent*) event;
@@ -276,7 +276,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 					}
 
 					// VALUE_CHANGED_EVENT
-					else if (eventType == BEvents::Event::VALUE_CHANGED_EVENT)
+					else if (eventType & BEvents::Event::VALUE_CHANGED_EVENT)
 					{
 						if (dynamic_cast<BEvents::ValueChangedEvent*>(precursor))
 						{
@@ -856,9 +856,9 @@ void Window::purgeEventQueue (Widget* widget)
 				(
 					// Hit in request widgets
 					(
-						(event->getEventType () == BEvents::Event::CONFIGURE_REQUEST_EVENT) ||
-						(event->getEventType () == BEvents::Event::EXPOSE_REQUEST_EVENT) ||
-						(event->getEventType () == BEvents::Event::CLOSE_REQUEST_EVENT)
+						(event->getEventType () & BEvents::Event::CONFIGURE_REQUEST_EVENT) ||
+						(event->getEventType () & BEvents::Event::EXPOSE_REQUEST_EVENT) ||
+						(event->getEventType () & BEvents::Event::CLOSE_REQUEST_EVENT)
 					) &&
 					(widget == ((BEvents::WidgetEvent*)event)->getRequestWidget ())
 				)

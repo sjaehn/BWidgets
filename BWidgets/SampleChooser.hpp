@@ -281,15 +281,9 @@ inline SampleChooser::SampleChooser	(const double x, const double y, const doubl
 	waveform.setBorder ({{BStyles::grey, 1.0}, 0.0, 3.0, 0.0});
 	fileNameBox.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, filenameEnteredCallback);
 	startMarker.setCallbackFunction (BEvents::Event::POINTER_DRAG_EVENT, lineDraggedCallback);
-	startMarkerLine.setEventPassable (BEvents::Event::BUTTON_PRESS_EVENT);
-	startMarkerLine.setEventPassable (BEvents::Event::BUTTON_RELEASE_EVENT);
-	startMarkerLine.setEventPassable (BEvents::Event::BUTTON_CLICK_EVENT);
-	startMarkerLine.setEventPassable (BEvents::Event::POINTER_DRAG_EVENT);
+	startMarkerLine.setEventPassable (BEvents::Event::BUTTON_EVENTS + BEvents::Event::POINTER_DRAG_EVENT);
 	endMarker.setCallbackFunction (BEvents::Event::POINTER_DRAG_EVENT, lineDraggedCallback);
-	endMarkerLine.setEventPassable (BEvents::Event::BUTTON_PRESS_EVENT);
-	endMarkerLine.setEventPassable (BEvents::Event::BUTTON_RELEASE_EVENT);
-	endMarkerLine.setEventPassable (BEvents::Event::BUTTON_CLICK_EVENT);
-	endMarkerLine.setEventPassable (BEvents::Event::POINTER_DRAG_EVENT);
+	endMarkerLine.setEventPassable (BEvents::Event::BUTTON_EVENTS + BEvents::Event::POINTER_DRAG_EVENT);
 	scrollbar.setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, scrollbarChangedCallback);
 	
 	startMarker.add (&startMarkerLine);

@@ -148,10 +148,7 @@ inline TextButton::TextButton	(const double x, const double y, const double widt
 	font.valign = BStyles::Font::TextVAlign::TEXT_VALIGN_MIDDLE;
 	label.setFont (font);
 	label.setFocusable(false);
-	label.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-	label.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
-	label.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
-    label.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
+	label.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT + BEvents::Event::BUTTON_CLICK_EVENT + BEvents::Event::FOCUS_EVENTS);
 	add (&label);
 }
 

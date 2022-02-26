@@ -18,6 +18,7 @@
 #ifndef BWIDGETS_EVENTPASSABLE_HPP_
 #define BWIDGETS_EVENTPASSABLE_HPP_
 
+#include <cstdint>
 #include <map>
 #include "../../BEvents/Event.hpp"
 
@@ -40,7 +41,7 @@ class EventPassable
 {
 protected:
 
-    std::map<BEvents::Event::EventType, bool> eventPassable_;
+    std::map<uint8_t, bool> eventPassable_;
 
 public:
 
@@ -52,9 +53,12 @@ public:
      *  Makes an object transparent or intransparent for the respective 
      *  @a eventType.
      */
-    void setEventPassable (const BEvents::Event::EventType eventType, bool status = true) 
+    void setEventPassable (const uint32_t eventType, bool status = true) 
     {
-        eventPassable_[eventType] = status;
+        for (uint32_t i = 0; i < 32; ++i)
+        {
+            if ((1 << i) & eventType) eventPassable_[i] = status;
+        }
     }
 
     /**
@@ -64,12 +68,23 @@ public:
      *
      *  Information about the transparency of an object for the respective
      *  @a eventType.
+     *
+     *  If multiple event types are passed, then only the callback function
+     *  for the first match is returned.
      */
-    bool isEventPassable (const BEvents::Event::EventType eventType) const
+    bool isEventPassable (const uint32_t eventType) const
     {
-        std::map<BEvents::Event::EventType, bool>::const_iterator it = eventPassable_.find (eventType);
-        if (it == eventPassable_.end()) return false;
-        return it->second;
+        for (uint32_t i = 0; i < 32; ++i)
+        {
+            if ((1 << i) & eventType)
+            {
+                std::map<uint8_t, bool>::const_iterator it = eventPassable_.find (i);
+                if (it == eventPassable_.end()) return false;
+                return it->second;
+            }
+        }
+
+        return false;
     }
 
 };

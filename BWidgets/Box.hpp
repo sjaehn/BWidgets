@@ -487,7 +487,7 @@ inline void Box::update ()
 
 inline void Box::buttonClickCallback (BEvents::Event* event)
 {
-	if (event && (event->getEventType () == BEvents::Event::BUTTON_CLICK_EVENT))
+	if (event && (event->getEventType () & BEvents::Event::BUTTON_CLICK_EVENT))
 	{
 		BEvents::PointerEvent* ev = dynamic_cast<BEvents::PointerEvent*> (event);
 		if (!ev) return;

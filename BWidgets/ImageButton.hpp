@@ -219,10 +219,7 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	image (0, 0, width, height, surface, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
 	image.setFocusable(false);
-	image.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
-    image.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
+	image.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::BUTTON_PRESS_EVENT + BEvents::Event::BUTTON_CLICK_EVENT);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
@@ -233,10 +230,7 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	image (0, 0, width, height, filename, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
 	image.setFocusable(false);
-	image.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
-    image.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
+	image.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::BUTTON_PRESS_EVENT + BEvents::Event::BUTTON_CLICK_EVENT);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
@@ -247,10 +241,7 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	image (0, 0, width, height, surfaces, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
 	image.setFocusable(false);
-	image.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
-    image.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
+	image.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::BUTTON_PRESS_EVENT + BEvents::Event::BUTTON_CLICK_EVENT);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
@@ -261,10 +252,7 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	image (0, 0, width, height, surfaces, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
 	image.setFocusable(false);
-	image.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
-    image.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
+	image.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::BUTTON_PRESS_EVENT + BEvents::Event::BUTTON_CLICK_EVENT);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
@@ -275,10 +263,7 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	image (0, 0, width, height, filenames, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
 	image.setFocusable(false);
-	image.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
-    image.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
+	image.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::BUTTON_PRESS_EVENT + BEvents::Event::BUTTON_CLICK_EVENT);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
@@ -289,10 +274,7 @@ inline ImageButton::ImageButton	(const double x, const double y, const double wi
 	image (0, 0, width, height, filenames, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/image"))
 {
 	image.setFocusable(false);
-	image.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
-    image.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-	image.setEventPassable(BEvents::Event::BUTTON_CLICK_EVENT, true);
+	image.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::BUTTON_PRESS_EVENT + BEvents::Event::BUTTON_CLICK_EVENT);
 	add (&image);
 	image.moveTo (image.center(), image.middle());
 }
