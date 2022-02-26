@@ -85,23 +85,23 @@ using namespace BWidgets;
 using namespace BStyles;
 
 Font labelFont ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, BStyles::Font::TEXT_ALIGN_CENTER, BStyles::Font::TEXT_VALIGN_MIDDLE);
-
 const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-
-Window window (1500, 820, 0, URID_UNKNOWN_URID, "Window", true);
 
 static void configureCallback (BEvents::Event* event)
 {
     BEvents::ExposeEvent* ev = dynamic_cast<BEvents::ExposeEvent*>(event);
     if (!ev) return;
+    Window* w = dynamic_cast<Window*>(ev->getWidget());
+    if (!w) return;
 
 	const double sz = (ev->getArea().getWidth() / 1500 > ev->getArea().getHeight() / 820 ? ev->getArea().getHeight() / 820 : ev->getArea().getWidth() / 1500);
-	window.setZoom (sz);
+	w->setZoom (sz);
 }
 
 int main ()
 {
-    BUtilities::Dictionary::setLanguage ("pl");
+    // Window
+    Window window (1500, 820, 0, URID_UNKNOWN_URID, "Window", true);
     window.setCallbackFunction(BEvents::Event::CONFIGURE_REQUEST_EVENT, configureCallback);
 
     // Widget
