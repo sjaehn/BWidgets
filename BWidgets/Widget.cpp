@@ -746,7 +746,7 @@ void Widget::display (std::map<int, cairo_surface_t*>& surfaces, const BUtilitie
 		if (a != BUtilities::Area<> ())
 		{
 			// Update draw
-			if (scheduleDraw_) draw (BUtilities::Area<> (0, 0, getWidth (), getHeight ()));
+			if (scheduleDraw_) draw ();
 
 			// Copy widgets surface onto the map of layered surfaces
 			if (surfaces.find(getLayer()) == surfaces.end()) 

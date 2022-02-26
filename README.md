@@ -90,7 +90,7 @@ Then call the respective example, e. g.:
   - [x] Custom message events
   - [x] Handle events in main Window
   - [x] Enable events in widgets using interface classes (Supports)
-- [ ] Widget functionality
+- [x] Widget functionality
   - [x] Container functionality by supporting `Linkable`
   - [x] Visualization by supporting `Visualizable`
   - [x] Event handling in the main Window
@@ -108,7 +108,7 @@ Then call the respective example, e. g.:
   - [x] Show default hover text (widget title, if set) by supporting
         `Focusable`
   - [x] Layers
-  - [ ] Scale (zoom) main Window and linked child widgets
+  - [x] Scale (zoom) main Window and linked child widgets
 - [ ] Header files only (if possible)
 - [ ] Documentation
 
@@ -123,4 +123,5 @@ Then call the respective example, e. g.:
 
 - [ ] Time events
 - [ ] Enable scale (zoom) for all widgets
+- [ ] Vector-based zoom
 - [ ] Use NanoVG.

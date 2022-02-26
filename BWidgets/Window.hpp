@@ -65,6 +65,7 @@ namespace BWidgets
 class Window : public Widget, public Closeable
 {
 protected:
+	double zoom_;
 	BDevices::DeviceGrabStack<uint32_t> keyGrabStack_;
 	BDevices::DeviceGrabStack<BDevices::MouseDevice> buttonGrabStack_;
 	PuglWorld* world_;
@@ -107,6 +108,18 @@ public:
 		PuglWorldType worldType = PUGL_PROGRAM, int worldFlag = 0);
 
 	~Window ();
+
+	/**
+	 *  @brief  Sets the zoom factor visualization and user interaction.
+	 *  @param zoom  Zoom factor.
+	 */
+	void setZoom (const double zoom);
+
+	/**
+	 *  @brief  Gets the zoom factor visualization and user interaction.
+	 *  @return  Zoom factor.
+	 */
+	double getZoom () const;
 
 	/**
 	 *  @brief  Get in contact to the host system via Pugl.

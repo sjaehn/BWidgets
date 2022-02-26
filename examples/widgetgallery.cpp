@@ -72,6 +72,7 @@
 #include "../BWidgets/ImageDial.hpp"
 #include "../BWidgets/ImageHSlider.hpp"
 #include "../BWidgets/ImageVSlider.hpp"
+#include "../BEvents/ExposeEvent.hpp"
 #include <cairo/cairo.h>
 #include <cstdlib>
 #include <initializer_list>
@@ -87,11 +88,21 @@ Font labelFont ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0,
 
 const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
+Window window (1500, 820, 0, URID_UNKNOWN_URID, "Window", true);
+
+static void configureCallback (BEvents::Event* event)
+{
+    BEvents::ExposeEvent* ev = dynamic_cast<BEvents::ExposeEvent*>(event);
+    if (!ev) return;
+
+	const double sz = (ev->getArea().getWidth() / 1500 > ev->getArea().getHeight() / 820 ? ev->getArea().getHeight() / 820 : ev->getArea().getWidth() / 1500);
+	window.setZoom (sz);
+}
+
 int main ()
 {
     BUtilities::Dictionary::setLanguage ("pl");
-
-    Window window (1500, 820, 0, URID_UNKNOWN_URID, "Window");
+    window.setCallbackFunction(BEvents::Event::CONFIGURE_REQUEST_EVENT, configureCallback);
 
     // Widget
     Widget widget (10, 10, 80, 60, URID_UNKNOWN_URID, "Widget");

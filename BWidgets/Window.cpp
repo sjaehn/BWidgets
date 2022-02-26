@@ -52,6 +52,7 @@ Window::Window (const double width, const double height, PuglNativeView nativeWi
 		uint32_t urid, std::string title, bool resizable,
 		PuglWorldType worldType, int worldFlag) :
 		Widget (0.0, 0.0, width, height, urid, title),
+		zoom_ (1.0),
 		keyGrabStack_ (), 
 		buttonGrabStack_ (),
 		world_ (NULL), 
@@ -113,6 +114,20 @@ Window::~Window ()
 	}
 }
 
+void Window::setZoom (const double zoom)
+{
+	if (zoom != zoom_)
+	{
+		zoom_ = zoom;
+		update();
+	}
+}
+
+double Window::getZoom () const
+{
+	return zoom_;
+}
+
 PuglView* Window::getPuglView () {return view_;}
 
 cairo_t* Window::getPuglContext ()
@@ -128,8 +143,10 @@ void Window::run ()
 
 void Window::onConfigureRequest (BEvents::Event* event)
 {
+
+	Widget::onConfigureRequest (event);
 	BEvents::ExposeEvent* ev = dynamic_cast<BEvents::ExposeEvent*>(event);
-	if (ev && (getExtends () != ev->getArea().getExtends ())) Widget::resize (ev->getArea().getExtends ());
+	if (ev && (getExtends () != ev->getArea().getExtends () / getZoom())) Widget::resize (ev->getArea().getExtends () / getZoom());
 }
 
 void Window::onCloseRequest (BEvents::Event* event)
@@ -142,7 +159,10 @@ void Window::onCloseRequest (BEvents::Event* event)
 void Window::onExposeRequest (BEvents::Event* event)
 {
 	BEvents::ExposeEvent* ev = dynamic_cast<BEvents::ExposeEvent*>(event);
-	if (ev) puglPostRedisplayRect (view_, {ev->getArea().getX(), ev->getArea().getY(), ev->getArea().getWidth(), ev->getArea().getHeight()});
+	if (ev) puglPostRedisplayRect (view_,	{ev->getArea().getX() * getZoom(), 
+											 ev->getArea().getY() * getZoom(), 
+											 ev->getArea().getWidth() * getZoom(), 
+											 ev->getArea().getHeight() * getZoom()});
 }
 
 void Window::addEventToQueue (BEvents::Event* event)
@@ -489,7 +509,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 		case PUGL_BUTTON_PRESS:
 		{
-			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->button.x, puglEvent->button.y);
+			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->button.x, puglEvent->button.y) / w->getZoom();
 			Widget* widget = w->getWidgetAt	(position, 
 											 [] (Widget* w) {return w->isVisible () && (w->is<Clickable>() || w->is<Draggable>());},
 											 [] (Widget* w) {return w->isEventPassable(BEvents::Event::BUTTON_PRESS_EVENT);});
@@ -514,7 +534,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 	case PUGL_BUTTON_RELEASE:
 		{
-			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->button.x, puglEvent->button.y);
+			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->button.x, puglEvent->button.y) / w->getZoom();
 			BDevices::MouseDevice::ButtonCode button = (BDevices::MouseDevice::ButtonCode) puglEvent->button.button;
 			BDevices::MouseDevice mouse = BDevices::MouseDevice (button);
 			BDevices::DeviceGrab<BDevices::MouseDevice>* grab = w->getButtonGrabStack()->getGrab(mouse);
@@ -568,7 +588,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 	case PUGL_MOTION:
 		{
-			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->motion.x, puglEvent->motion.y);
+			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->motion.x, puglEvent->motion.y) / w->getZoom();
 			BDevices::MouseDevice::ButtonCode button = BDevices::MouseDevice::NO_BUTTON;
 
 			// Scan for pressed buttons associated with a widget
@@ -652,8 +672,8 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 	case PUGL_SCROLL:
 		{
-			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->scroll.x, puglEvent->scroll.y);
-			BUtilities::Point<> scroll = BUtilities::Point<> (puglEvent->scroll.dx, puglEvent->scroll.dy);
+			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->scroll.x, puglEvent->scroll.y) / w->getZoom();
+			BUtilities::Point<> scroll = BUtilities::Point<> (puglEvent->scroll.dx, puglEvent->scroll.dy) / w->getZoom();
 			Widget* widget = w->getWidgetAt	(position, 
 											 [] (Widget* widget) {return widget->isVisible() && widget->is<Scrollable>();},
 											 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::WHEEL_SCROLL_EVENT);});
@@ -695,14 +715,18 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 	// Expose events handled HERE
 	case PUGL_EXPOSE:
 		{
-			BUtilities::Area<> area = BUtilities::Area<> (puglEvent->expose.x, puglEvent->expose.y, puglEvent->expose.width, puglEvent->expose.height);
+			// Calculate the non-zoomed area from the event data
+			BUtilities::Area<> area = BUtilities::Area<>	(puglEvent->expose.x / w->getZoom(), 
+															 puglEvent->expose.y / w->getZoom(), 
+															 puglEvent->expose.width / w->getZoom(), 
+															 puglEvent->expose.height / w->getZoom());
 
 			// Get access to the host provided surface
 			cairo_t* crw = w->getPuglContext ();
 			if (crw && (cairo_status (crw) == CAIRO_STATUS_SUCCESS))
 			{
 				// Create a temporary window surface
-				cairo_surface_t* windowSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w->getWidth(), w->getHeight());
+				cairo_surface_t* windowSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w->getWidth() , w->getHeight());
 				if (windowSurface && (cairo_surface_status (windowSurface) == CAIRO_STATUS_SUCCESS))
 				{
 					//Get access to the temporary window surface
@@ -720,7 +744,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 							if (s && (cairo_surface_status (s) == CAIRO_STATUS_SUCCESS))
 							{
 								cairo_save (cr);
-								cairo_set_source_surface (cr, s, 0, 0);
+								cairo_set_source_surface (cr, s, 0.0, 0.0);
 								cairo_paint (cr);
 								cairo_restore (cr);
 								cairo_surface_destroy(s);
@@ -730,10 +754,10 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 						cairo_destroy (cr);	
 					}
 
-					
 					// Write temporary window surface to the host provided surface
 					cairo_save (crw);
-					cairo_set_source_surface (crw, windowSurface, 0, 0);
+					cairo_scale (crw, w->getZoom(), w->getZoom());
+					cairo_set_source_surface (crw, windowSurface, 0.0, 0.0);
 					cairo_paint (crw);
 					cairo_restore (crw);
 					cairo_surface_destroy (windowSurface);
