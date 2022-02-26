@@ -1,4 +1,4 @@
-/* ImageConditional.hpp
+/* ConditionalImage.hpp
  * Copyright (C) 2019 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -44,15 +44,15 @@ namespace BWidgets
 /**
  *  @brief  Widget displaying an image depending on a condition.
  *
- *  %ImageConditional is a Valueable widget which may take up multiple images
+ *  %ConditionalImage is a Valueable widget which may take up multiple images
  *  each linked to a specific value. The widget shows the image(s) depending
  *  on its value. By default, the widget shows the image whos value is the
  *  closest to the widget value.
  *
- *  %ImageConditional supports user interaction via Clickable, Draggable, and 
+ *  %ConditionalImage supports user interaction via Clickable, Draggable, and 
  *  Scrollable.
  */
-class ImageConditional :	public Widget, 
+class ConditionalImage :	public Widget, 
 							public ValueableTyped<double>, 
 							public ValidatableRange<double>, 
 							public ValueTransferable<double>,
@@ -62,23 +62,23 @@ class ImageConditional :	public Widget,
 {
 protected:
 	std::map<double, cairo_surface_t*> imageSurfaces_;
-	std::function<bool (ImageConditional* widget, const double& x)> showFunc_;
+	std::function<bool (ConditionalImage* widget, const double& x)> showFunc_;
 
 public:
 	/**
-	 *  @brief  Construct an empty default %ImageConditional.
+	 *  @brief  Construct an empty default %ConditionalImage.
 	 */
-	ImageConditional ();
+	ConditionalImage ();
 
 	/**
-	 *  @brief  Construct an empty default %ImageConditional.
+	 *  @brief  Construct an empty default %ConditionalImage.
 	 *  @param URID  URID.
 	 *  @param title  %Widget title.
 	 */
-	ImageConditional (const uint32_t urid, const std::string& title);
+	ConditionalImage (const uint32_t urid, const std::string& title);
 
 	/**
-	 *  @brief  Creates a multi Status %ImageConditional with defined 
+	 *  @brief  Creates a multi Status %ConditionalImage with defined 
 	 *  coordinates and size from an image file.
 	 *  @param filenames  Initializer list of pairs of values and filenames. 
 	 *  Supported file types are: PNG.
@@ -89,12 +89,12 @@ public:
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	ImageConditional	(const std::initializer_list<std::pair<double, std::string>>& filenames,
+	ConditionalImage	(const std::initializer_list<std::pair<double, std::string>>& filenames,
 						 double value = 0.0, double min = 0.0, double max = 1.0, double step = 0.0, 
 						 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 *  @brief  Creates a multi Status %ImageConditional with defined 
+	 *  @brief  Creates a multi Status %ConditionalImage with defined 
 	 *  coordinates and size from an image file.
 	 *  @param x  %Widget X origin coordinate.
 	 *  @param y  %Widget Y origin coordinate.
@@ -115,21 +115,21 @@ public:
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	ImageConditional	(const double x, const double y, const double width, const double height, 
+	ConditionalImage	(const double x, const double y, const double width, const double height, 
 						 const std::initializer_list<std::pair<double, std::string>>& filenames,
 						 double value = 0.0, double min = 0.0, double max = 1.0, double step = 0.0, 
 						 std::function<double (const double& x)> transferFunc = ValueTransferable<double>::noTransfer,
 						 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
-						 std::function<bool (ImageConditional* widget, const double& x)> showFunc = isClosestToValue,
+						 std::function<bool (ConditionalImage* widget, const double& x)> showFunc = isClosestToValue,
 						 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
-	virtual ~ImageConditional();
+	virtual ~ConditionalImage();
 
 	/**
-	 *  @brief  Creates a clone of the %ImageConditional. 
-	 *  @return  Pointer to the new %ImageConditional.
+	 *  @brief  Creates a clone of the %ConditionalImage. 
+	 *  @return  Pointer to the new %ConditionalImage.
 	 *
-	 *  Creates a clone of this %ImageConditional by copying all properties. But NOT its
+	 *  Creates a clone of this %ConditionalImage by copying all properties. But NOT its
 	 *  linkage.
 	 *
 	 *  Allocated heap memory needs to be freed using @c delete if the clone
@@ -138,12 +138,12 @@ public:
 	virtual Widget* clone () const override; 
 
 	/**
-	 *  @brief  Copies from another %ImageConditional. 
-	 *  @param that  Other %ImageConditional.
+	 *  @brief  Copies from another %ConditionalImage. 
+	 *  @param that  Other %ConditionalImage.
 	 *
-	 *  Copies all properties from another %ImageConditional. But NOT its linkage.
+	 *  Copies all properties from another %ConditionalImage. But NOT its linkage.
 	 */
-	void copy (const ImageConditional* that);
+	void copy (const ConditionalImage* that);
 
 	/**
 	 *  @brief  Clears all visual content. 
@@ -200,7 +200,7 @@ public:
 	 */
 	cairo_surface_t* getImageSurface (const double value);
 
-	static bool isClosestToValue (ImageConditional* widget, const double& value);
+	static bool isClosestToValue (ConditionalImage* widget, const double& value);
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -239,12 +239,12 @@ public:
 
 protected:
 	/**
-     *  @brief  Unclipped draw an %ImageConditional to the surface.
+     *  @brief  Unclipped draw an %ConditionalImage to the surface.
      */
     virtual void draw () override;
 
     /**
-     *  @brief  Clipped draw an %ImageConditional to the surface.
+     *  @brief  Clipped draw an %ConditionalImage to the surface.
      *  @param x0  X origin of the clipped area. 
      *  @param y0  Y origin of the clipped area. 
      *  @param width  Width of the clipped area.
@@ -253,14 +253,14 @@ protected:
     virtual void draw (const double x0, const double y0, const double width, const double height) override;
 
     /**
-     *  @brief  Clipped draw an %ImageConditional to the surface.
+     *  @brief  Clipped draw an %ConditionalImage to the surface.
      *  @param area  Clipped area. 
      */
     virtual void draw (const BUtilities::Area<>& area) override;
 };
 
-inline ImageConditional::ImageConditional () : 
-	ImageConditional	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGECONDITIONAL_WIDTH, BWIDGETS_DEFAULT_IMAGECONDITIONAL_HEIGHT,
+inline ConditionalImage::ConditionalImage () : 
+	ConditionalImage	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGECONDITIONAL_WIDTH, BWIDGETS_DEFAULT_IMAGECONDITIONAL_HEIGHT,
 						 {},
 						 0.0, 0.0, 1.0, 0.0,
 						 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer,
@@ -270,8 +270,8 @@ inline ImageConditional::ImageConditional () :
 
 }
 
-inline ImageConditional::ImageConditional (const uint32_t urid, const std::string& title) :
-	ImageConditional	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGECONDITIONAL_WIDTH, BWIDGETS_DEFAULT_IMAGECONDITIONAL_HEIGHT,
+inline ConditionalImage::ConditionalImage (const uint32_t urid, const std::string& title) :
+	ConditionalImage	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGECONDITIONAL_WIDTH, BWIDGETS_DEFAULT_IMAGECONDITIONAL_HEIGHT,
 						 {},
 						 0.0, 0.0, 1.0, 0.0,
 						 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -282,10 +282,10 @@ inline ImageConditional::ImageConditional (const uint32_t urid, const std::strin
 
 }
 
-inline ImageConditional::ImageConditional	(const std::initializer_list<std::pair<double, std::string>>& filenames,
+inline ConditionalImage::ConditionalImage	(const std::initializer_list<std::pair<double, std::string>>& filenames,
 											 double value, double min, double max, double step, 
 											 uint32_t urid, std::string title) :
-	ImageConditional	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGECONDITIONAL_WIDTH, BWIDGETS_DEFAULT_IMAGECONDITIONAL_HEIGHT, 
+	ConditionalImage	(0.0, 0.0, BWIDGETS_DEFAULT_IMAGECONDITIONAL_WIDTH, BWIDGETS_DEFAULT_IMAGECONDITIONAL_HEIGHT, 
 						 filenames, 
 						 value, min, max, step,
 						 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -297,12 +297,12 @@ inline ImageConditional::ImageConditional	(const std::initializer_list<std::pair
 
 
 
-inline ImageConditional::ImageConditional	(const double x, const double y, const double width, const double height, 
+inline ConditionalImage::ConditionalImage	(const double x, const double y, const double width, const double height, 
 											 const std::initializer_list<std::pair<double, std::string>>& filenames,
 											 double value, double min, double max, double step,
 											 std::function<double (const double& x)> transferFunc,
 											 std::function<double (const double& x)> reTransferFunc,
-											 std::function<bool (ImageConditional* widget,const double& x)> showFunc,
+											 std::function<bool (ConditionalImage* widget,const double& x)> showFunc,
 											 uint32_t urid, std::string title) :
 	Widget	(x, y, width, height, urid, title),
 	ValueableTyped<double> (value),
@@ -320,7 +320,7 @@ inline ImageConditional::ImageConditional	(const double x, const double y, const
 	}
 }
 
-inline ImageConditional::~ImageConditional ()
+inline ConditionalImage::~ConditionalImage ()
 {
 	while (!imageSurfaces_.empty())
 	{
@@ -330,14 +330,14 @@ inline ImageConditional::~ImageConditional ()
 	}
 }
 
-inline Widget* ImageConditional::clone () const 
+inline Widget* ConditionalImage::clone () const 
 {
-	Widget* f = new ImageConditional (urid_, title_);
+	Widget* f = new ConditionalImage (urid_, title_);
 	f->copy (this);
 	return f;
 }
 
-inline void ImageConditional::copy (const ImageConditional* that)
+inline void ConditionalImage::copy (const ConditionalImage* that)
 {
 	clear();
 	for (std::map<double, cairo_surface_t*>::const_reference t : that->imageSurfaces_) loadImage (t.first, t.second);
@@ -351,7 +351,7 @@ inline void ImageConditional::copy (const ImageConditional* that)
 	Widget::copy (that);
 }
 
-inline void ImageConditional::clear()
+inline void ConditionalImage::clear()
 {
 	while (!imageSurfaces_.empty())
 	{
@@ -363,7 +363,7 @@ inline void ImageConditional::clear()
 	update();
 }
 
-inline void ImageConditional::clear (const double value)
+inline void ConditionalImage::clear (const double value)
 {
 	std::map<double, cairo_surface_t*>::iterator it = imageSurfaces_.find (value);
 	if (it != imageSurfaces_.end())
@@ -374,7 +374,7 @@ inline void ImageConditional::clear (const double value)
 	}
 }
 
-inline void ImageConditional::resize ()
+inline void ConditionalImage::resize ()
 {
 	// Resize to the surface covered by the visible images
 	BUtilities::Area<> a = BUtilities::Area<>();
@@ -405,37 +405,37 @@ inline void ImageConditional::resize ()
 	resize (a.getExtends());
 }
 
-inline void ImageConditional::resize (const double width, const double height) 
+inline void ConditionalImage::resize (const double width, const double height) 
 {
 	resize (BUtilities::Point<> (width, height));
 }
 
-inline void ImageConditional::resize (const BUtilities::Point<> extends) 
+inline void ConditionalImage::resize (const BUtilities::Point<> extends) 
 {
 	Widget::resize (extends);
 }
 
-inline void ImageConditional::loadImage (const double value, cairo_surface_t* surface)
+inline void ConditionalImage::loadImage (const double value, cairo_surface_t* surface)
 {
 	clear (value);
 	imageSurfaces_[value] = cairoplus_image_surface_clone_from_image_surface (surface);
 	update ();
 }
 
-inline void ImageConditional::loadImage (const double value, const std::string& filename)
+inline void ConditionalImage::loadImage (const double value, const std::string& filename)
 {
 	clear (value);
 	imageSurfaces_[value] = cairo_image_surface_create_from_png (filename.c_str());
 	update ();
 }
 
-inline cairo_surface_t* ImageConditional::getImageSurface (const double value)
+inline cairo_surface_t* ConditionalImage::getImageSurface (const double value)
 {
 	if (imageSurfaces_.find(value) == imageSurfaces_.end()) return nullptr;
 	return imageSurfaces_[value];
 }
 
-inline bool ImageConditional::isClosestToValue (ImageConditional* widget, const double& value)
+inline bool ConditionalImage::isClosestToValue (ConditionalImage* widget, const double& value)
 {
 	if (!widget) return false;
 
@@ -474,7 +474,7 @@ inline bool ImageConditional::isClosestToValue (ImageConditional* widget, const 
 	}
 }
 
-inline void ImageConditional::update ()
+inline void ConditionalImage::update ()
 {
 	Label* f = dynamic_cast<Label*>(focus_);
 	if (f)
@@ -486,7 +486,7 @@ inline void ImageConditional::update ()
 	Widget::update();
 }
 
-inline void ImageConditional::onButtonPressed (BEvents::Event* event)
+inline void ConditionalImage::onButtonPressed (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
@@ -495,7 +495,7 @@ inline void ImageConditional::onButtonPressed (BEvents::Event* event)
 	Clickable::onButtonPressed (event);
 }
 
-inline void ImageConditional::onPointerDragged (BEvents::Event* event)
+inline void ConditionalImage::onPointerDragged (BEvents::Event* event)
 {
 	//if (isClickable()) onButtonPressed (event);
 	//else
@@ -513,7 +513,7 @@ inline void ImageConditional::onPointerDragged (BEvents::Event* event)
 	Draggable::onPointerDragged (event);
 }
 
-inline void ImageConditional::onWheelScrolled (BEvents::Event* event)
+inline void ConditionalImage::onWheelScrolled (BEvents::Event* event)
 {
 	BEvents::WheelEvent* wev = dynamic_cast<BEvents::WheelEvent*> (event);
 	if (!wev) return;
@@ -528,17 +528,17 @@ inline void ImageConditional::onWheelScrolled (BEvents::Event* event)
 	Scrollable::onWheelScrolled (event);
 }
 
-inline void ImageConditional::draw ()
+inline void ConditionalImage::draw ()
 {
 	draw (0, 0, getWidth(), getHeight());
 }
 
-inline void ImageConditional::draw (const double x0, const double y0, const double width, const double height)
+inline void ConditionalImage::draw (const double x0, const double y0, const double width, const double height)
 {
 	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
-inline void ImageConditional::draw (const BUtilities::Area<>& area)
+inline void ConditionalImage::draw (const BUtilities::Area<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 
