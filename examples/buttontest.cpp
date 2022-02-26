@@ -22,36 +22,41 @@ using namespace BWidgets;
 using namespace BStyles;
 using namespace BEvents;
 
+Window window (200, 100, 0);  // Creates an empty window with size 200 x 100
+
+Label label ("Button pressed"); // Creates a label with the text
+                                // "Button pressed" and optimized size.
+
+TextButton button (70, 40, 60, 20, "Press");    // Creates a text Button at 
+                                                // position 70, 40 with the 
+                                                // size 60 x 20 and the text 
+                                                // "Press".
+
 
 void valueChangedCallback (BEvents::Event* event)
 {
-    ValueChangeTypedEvent<bool>* e = dynamic_cast<ValueChangeTypedEvent<bool>*>(event);
-    if (e->getValue()) e->getWidget()->getMainWindow()->setBackground (redFill);
-    else e->getWidget()->getMainWindow()->setBackground (blackFill);
+    ValueChangeTypedEvent<bool>* e =                        // Cast type of
+        dynamic_cast<ValueChangeTypedEvent<bool>*>(event);  // event
+
+    if (e)
+    {
+        if (e->getValue()) label.show();                    // Show if press
+        else label.hide();                                  // Otherwise hide
+    }
+   
 }
 
 int main ()
 {
-    Window window;  // Creates an empty window with default size
-
-    Label label ("Button pressed"); // Creates a label with the text
-                                    // "Button pressed" and optimized size.
-
-    TextButton button (70, 40, 60, 20, "Press"); // Creates a text Button
-                                                 // at position 70, 40 with
-                                                 // the size 60 x 20 and
-                                                 // the text "Press".
-
     window.add (&label);     // Adds the label to the window.
     window.add (&button);    // Adds the button to the window. 
 
-    label.setTxColors (ColorMap ({black})); // Black label on ...
-    window.setBackground (blackFill);       // black window background
-    
+    label.hide ();                                  // Hide on start.
     label.moveTo (label.center(), label.bottom ()); // Move label to bottom
                                                     // center.
 
-    button.setCallbackFunction (Event::VALUE_CHANGED_EVENT, valueChangedCallback);
+    button.setCallbackFunction  (Event::VALUE_CHANGED_EVENT,    // Set callback
+                                 valueChangedCallback);         // function
 
     window.run();
 }

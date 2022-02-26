@@ -32,7 +32,7 @@ Widgets can be decorated using styles.
 
 2. Create a main window object.
    ```
-   Window window;  // Creates an empty window with default size
+   Window window (200, 100, 0);  // Creates an empty window with size 200 x 100
    ```
 
 3. Create the widget objects you need.
@@ -46,8 +46,8 @@ Widgets can be decorated using styles.
                                                 // the text "Press".
    ```
 
-4. Add the widgets to the main window (or to other widgets which are (or will 
-be) added to the main window).
+4. Inside `int main()`, add the widgets to the main window (or to other 
+widgets which are (or will be) added to the main window).
    ```
    window.add (&label);     // Adds the label to the window.
    window.add (&button);    // Adds the button to the window.
@@ -56,9 +56,6 @@ be) added to the main window).
 
 5. Optional, change widget attributes and change decoration.
    ```
-   label.setTxColors (ColorMap ({black})); // Black label on ...
-   window.setBackground (blackFill);       // black window background
-                                           // => Text invisible.
    
    label.moveTo (label.center(), label.bottom ()); // Move label to bottom
                                                    // center.
@@ -70,21 +67,21 @@ be) added to the main window).
    ```
    void valueChangedCallback (BEvents::Event* event)
    {
-      // Convert event to ValueChangeTypedEvent<bool>* 
-      ValueChangeTypedEvent<bool>* e = dynamic_cast<ValueChangeTypedEvent<bool>*>(event);
+       ValueChangeTypedEvent<bool>* e =                        // Cast type of
+           dynamic_cast<ValueChangeTypedEvent<bool>*>(event);  // event
 
-      // Set red background if button value is true (pressed) => Text becomes
-      // visible.
-      if (e->getValue()) e->getWidget()->getMainWindow()->setBackground (redFill);
-
-      // Otherwise set black background => text becomes invisible
-      else e->getWidget()->getMainWindow()->setBackground (blackFill);
+       if (e)
+       {
+           if (e->getValue()) label.show();                    // Show if press
+           else label.hide();                                  // Otherwise hide
+       } 
    }
    ```
 
    Then link this callback function.
    ```
-   button.setCallbackFunction (Event::VALUE_CHANGED_EVENT, valueChangedCallback);
+   button.setCallbackFunction (Event::VALUE_CHANGED_EVENT, 
+                               valueChangedCallback);
    ```
 
 7. For standalone applications, process until the main window will be closed.
