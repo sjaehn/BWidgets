@@ -1,4 +1,4 @@
-/* HelloWorld.cpp
+/* helloworld.cpp
  * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
