@@ -43,8 +43,6 @@ namespace BUtilities
 
 /**
  *  @brief  Map class to store and convert URIs.
- *
- *  TODO: Not fully implemented yet!
  */
 class Urid
 {
@@ -54,6 +52,8 @@ protected:
     static std::mutex mx_;
     
 public:
+
+    Urid() = delete;
 
     /**
      *  @brief  Adds an URI (if not exists before).

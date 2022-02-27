@@ -67,9 +67,7 @@ namespace BUtilities
  *
  *  To use an alternative dictionary, define the 
  *  @c BUTILITIES_DICTIONARY_DATAFILE variable prior the include of 
- *  %Dictionary. 
- *
- *  @todo  System locale / messages.
+ *  %Dictionary.
  */
 class Dictionary
 {
@@ -80,6 +78,8 @@ protected:
     static std::string catalog_;
     
 public:
+
+    Dictionary() = delete;
 
     /**
      *  @brief  Set the language for the global scope.
