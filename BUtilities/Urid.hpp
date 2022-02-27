@@ -22,10 +22,21 @@
 #include <map>
 #include <mutex>
 
+#ifndef URID_URI
 #define URID_URI "https://github.com/sjaehn/BWidgets/BUtilities/Urid.hpp"
+#endif
+
+#ifndef URID_UNKNOWN_URI
 #define URID_UNKNOWN_URI URID_URI "#Unknown"
+#endif
+
+#ifndef URID_UNKNOWN_URID
 #define URID_UNKNOWN_URID 0
+#endif
+
+#ifndef URID_ANONYMOUS_URI
 #define URID_ANONYMOUS_URI URID_URI "#Anonymous"
+#endif
 
 namespace BUtilities 
 {
