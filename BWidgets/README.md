@@ -1053,7 +1053,7 @@ Style style =
 ```
 
 You can switch on / off automatic pushing styles to child widgets by 
-`enablePushStyle`.
+`enablePushStyle()`.
 
 Some widget classes (e. g., switches, sliders, scales, dials, pads) use Draws
 functions (locaded in Draws/) to draw widget elements like pseudo 3D bars, 
@@ -1071,6 +1071,12 @@ A widget can take the states `STATUS_NORMAL`, `STATUS_ACTIVE`,
 decorations (like FgColors, BgColors, and TxColors) and widgets (like `Image`). 
 
 The status is set by `setStatus()` and returned by `getStatus()`.
+
+
+### Zoom
+
+Main Window attribute to scale the main window and all containing widgets.
+The zoom factor is set by `setZoom()` and returned by `getZoom()`.
 
 
 ### Widget-specific attributes and decorations
