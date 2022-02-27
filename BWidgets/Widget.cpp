@@ -49,7 +49,8 @@ Widget::Widget (const double x, const double y, const double width, const double
 	status_(BStyles::Status::STATUS_NORMAL),
 	title_ (title),
 	style_ (),
-	focus_ (title == "" ? nullptr : new (std::nothrow) Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/focus"), ""))
+	focus_ (title == "" ? nullptr : new (std::nothrow) Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/focus"), "")),
+	pushStyle_ (true)
 {
 	if (focus_) 
 	{
@@ -93,6 +94,8 @@ void Widget::copy (const Widget* that)
 
 	if (focus_) delete focus_;
 	focus_ = (that->focus_ ? that->focus_->clone() : nullptr);
+
+	pushStyle_ = that->pushStyle_;
 	
 	update();
 }
@@ -166,6 +169,12 @@ std::list<Linkable*>::iterator Widget::add (Linkable* child, std::function<void 
 			// TODO Stacking
 		}
 	);
+
+	if (pushStyle_)
+	{
+		BStyles::Style::iterator it = style_.find (childWidget->getUrid());
+		if (it != style_.end() && style_.isStyle (it)) childWidget->setStyle (it->second.get<BStyles::Style>());
+	}
 
 	return it;
 }
@@ -507,18 +516,25 @@ void Widget::setStyle (const BStyles::Style& style)
 		style_ = style;
 
 		// Pass child styles to respective children
-		for (Linkable* c : children_)
+		if (pushStyle_)
 		{
-			Widget* w = dynamic_cast<Widget*>(c);
-			if (w)
+			for (Linkable* c : children_)
 			{
-				BStyles::Style::iterator it = style_.find (w->getUrid());
-				if (it != style_.end() && style_.isStyle (it)) w->setStyle (it->second.get<BStyles::Style>());
+				Widget* w = dynamic_cast<Widget*>(c);
+				if (w)
+				{
+					BStyles::Style::iterator it = style_.find (w->getUrid());
+					if (it != style_.end() && style_.isStyle (it)) w->setStyle (it->second.get<BStyles::Style>());
+				}
 			}
 		}
-
-		//update();
+		update();
 	}
+}
+
+void Widget::enablePushStyle (bool pushStyle)
+{
+	pushStyle_ = pushStyle;
 }
 
 BStyles::Border Widget::getBorder() const

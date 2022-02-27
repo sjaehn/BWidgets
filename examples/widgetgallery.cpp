@@ -81,10 +81,12 @@
 #include <vector>
 #include <ctime>
 
+#define URI "https://github.com/sjaehn/BWidgets/widgetgallery.cpp"
+
 using namespace BWidgets;
 using namespace BStyles;
 
-Font labelFont ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, BStyles::Font::TEXT_ALIGN_CENTER, BStyles::Font::TEXT_VALIGN_MIDDLE);
+Font labelFont ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE);
 const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
 static void configureCallback (BEvents::Event* event)
@@ -348,7 +350,6 @@ int main ()
 
     // HSlider
     HSlider hSlider (1000, 390, 100, 20, 0.3, 0.0, 1.0, 0.0);
-    hSlider.setTitle ("HSlider");
     hSlider.setClickable (false);
     Label hSliderLabel (1010, 440, 80, 20, "HSlider");
     hSliderLabel.setFont (labelFont);

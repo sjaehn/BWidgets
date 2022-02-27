@@ -80,10 +80,10 @@ Then call the respective example, e. g.:
 - [x] Dictionary
   - [x] Add translations for words and phrases used by the widgets
   - [x] Fallback to installed third party dictionaries (e. g., GTK)
-- [ ] Styles
+- [x] Styles
   - [x] Types (Color, ColorMap, Line, Border, ...)
   - [x] Set widget styles
-  - [ ] Forward and update styles to child widgets with matching URID
+  - [x] Forward and update styles to child widgets with matching URID
 - [x] Events
   - [x] Base events (expose, close, ...)
   - [x] Mouse / Pointer events (press, release, click, drag, move, scroll, focus)
@@ -112,18 +112,20 @@ Then call the respective example, e. g.:
   - [x] Layers
   - [x] Scale (zoom) main Window and linked child widgets
 - [ ] Header files only (if possible)
+- [ ] Update pugl
 - [ ] Documentation
 
 
 ### Until 1.2
 
+- [ ] Reversed Valueable widgets
 - [ ] Layout widgets
 - [ ] Conditional widgets
-- [ ] Load images from SVG
 
 
 ### Until 1.4+
 
+- [ ] Load images from SVG
 - [ ] Time events
 - [ ] Enable scale (zoom) for all widgets
 - [ ] Vector-based zoom

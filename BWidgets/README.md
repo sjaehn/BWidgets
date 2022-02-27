@@ -1024,8 +1024,36 @@ Example: Changing the text colors of a label `l` is simply done by:
 l.setTxColors (reds);    // Changes text colors for l to reds
 ```
 
-Styles can also include other styles in a recursive way to describe 
-specific widget elements or to forward them to included child widgets.
+Styles can also include other styles in a recursive way to describe specific 
+widget elements or to forward them to linked child widgets which are idetified
+by their URIDs via push notifications (default behaviour). 
+
+The following example defines the style with ALL properties for the widget 
+addressed with `setStyle()` and forwards the "sliders" style to all child 
+widgets with the URID for `URI "/sliders"`:
+```
+Style style =
+{
+    {Urid::urid (STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
+    {Urid::urid (STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
+    {Urid::urid (STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
+    {Urid::urid (STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(darks)},
+    {Urid::urid (STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(greens)},
+    {Urid::urid (STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
+
+    {Urid::urid (URI "/sliders"), makeAny<Style>({
+        {Urid::urid (STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
+        {Urid::urid (STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
+        {Urid::urid (STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
+        {Urid::urid (STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(yellows)},
+        {Urid::urid (STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
+        {Urid::urid (STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
+    })}
+};
+```
+
+You can switch on / off automatic pushing styles to child widgets by 
+`enablePushStyle`.
 
 Some widget classes (e. g., switches, sliders, scales, dials, pads) use Draws
 functions (locaded in Draws/) to draw widget elements like pseudo 3D bars, 

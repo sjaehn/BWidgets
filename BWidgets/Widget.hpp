@@ -119,6 +119,7 @@ protected:
 	std::string title_;
 	BStyles::Style style_;
 	Widget* focus_;
+	bool pushStyle_;
 
 public:
 
@@ -527,6 +528,13 @@ public:
 	 *  @a style to embedded child widgets too.
 	 */
 	virtual void setStyle (const BStyles::Style& style);
+
+	/**
+	 *  @brief  Enables pushing styles to child widgets on @c add() or
+	 *  @c setStyle() . 
+	 *  @param pushStyle  True, if pushing enabled, otherwise false.
+	 */
+	void enablePushStyle (bool pushStyle = true);
 
 	/**
      *  @brief  Gets the border Property from the base level.
