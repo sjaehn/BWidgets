@@ -1,6 +1,8 @@
 # B.Widgets
-Rewrite of the widget toolkit of the B.Music project. Work in progress. And 
-still some space to fill (as you can see).
+
+Current version: 0.1.0 (alpha)
+
+Rewrite of the widget toolkit of the B.Music project.
 
 For a detailed description of the classes and methods of B.Widgets see
 [BWidgets](BWidgets/README.md) and the other namespaces below the widget gallery.
