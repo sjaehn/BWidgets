@@ -18,6 +18,10 @@
 #ifndef BWIDGETS_VRANGESCROLLBAR_HPP_
 #define BWIDGETS_VRANGESCROLLBAR_HPP_
 
+#ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#endif
+
 #include "VScrollBar.hpp"
 #include "Frame.hpp"
 #include "Symbol.hpp"
@@ -27,7 +31,7 @@
 #include "Supports/ValueTransferable.hpp"
 #include "Supports/Scrollable.hpp"
 #include "../BEvents/WheelEvent.hpp"
-#include "Draws/drawKnob.hpp"
+#include BWIDGETS_DEFAULT_DRAWKNOB_PATH
 #include <cairo/cairo.h>
 #include <utility>
 

@@ -18,13 +18,26 @@
 #ifndef BWIDGETS_DIAL_HPP_
 #define BWIDGETS_DIAL_HPP_
 
+#ifndef BWIDGETS_DEFAULT_DRAWARC_PATH
+#define BWIDGETS_DEFAULT_DRAWARC_PATH "Draws/drawArc.hpp"
+#endif
+
+#ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#endif
+
+#ifndef BWIDGETS_DEFAULT_DRAWARCHANDLE_PATH
+#define BWIDGETS_DEFAULT_DRAWARCHANDLE_PATH "Draws/drawArcHandle.hpp"
+#endif
+
 #include "RadialMeter.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
 #include "Supports/Scrollable.hpp"
 #include "../BEvents/WheelEvent.hpp"
-#include "Draws/drawArc.hpp"
-#include "Draws/drawKnob.hpp"
+#include BWIDGETS_DEFAULT_DRAWARC_PATH
+#include BWIDGETS_DEFAULT_DRAWKNOB_PATH
+#include BWIDGETS_DEFAULT_DRAWARCHANDLE_PATH
 #include <cairo/cairo.h>
 
 #ifndef BWIDGETS_DEFAULT_DIAL_WIDTH
@@ -345,20 +358,7 @@ inline void Dial::draw (const BUtilities::Area<>& area)
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
 			drawArc (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 0.0, rval, fgColor, bgColor);
 			drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth() + 0.5, scale_.getY() + 0.5 * scale_.getHeight() + 0.5, 0.6 * rad - 1.0, 1.0, bgColor, bgColor);
-			
-			// Draw spot
-			cairo_set_source_rgba(cr, CAIRO_RGBA(fgColor));
-			cairo_set_line_width(cr, 0.0);
-			cairo_arc
-			(
-				cr, 
-				scale_.getX() + 0.5 * scale_.getWidth() + 0.4 * rad * cos (BWIDGETS_DEFAULT_DRAWARC_START + rval * BWIDGETS_DEFAULT_DRAWARC_SIZE), 
-				scale_.getY() + 0.5 * scale_.getHeight() + 0.4 * rad * sin (BWIDGETS_DEFAULT_DRAWARC_START + rval * BWIDGETS_DEFAULT_DRAWARC_SIZE), 
-				0.075 * rad, 
-				0.0,
-				2.0 * M_PI
-			);
-			cairo_fill (cr);
+			drawArcHandle (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, rval, fgColor, bgColor);
 		}
 
 		cairo_destroy (cr);

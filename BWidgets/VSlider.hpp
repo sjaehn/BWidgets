@@ -18,8 +18,12 @@
 #ifndef BWIDGETS_VSLIDER_HPP_
 #define BWIDGETS_VSLIDER_HPP_
 
+#ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#endif
+
 #include "VScale.hpp"
-#include "Draws/drawKnob.hpp"
+#include BWIDGETS_DEFAULT_DRAWKNOB_PATH
 
 #ifndef BWIDGETS_DEFAULT_VSLIDER_WIDTH
 #define BWIDGETS_DEFAULT_VSLIDER_WIDTH 20.0

@@ -1057,7 +1057,10 @@ You can switch on / off automatic pushing styles to child widgets by
 
 Some widget classes (e. g., switches, sliders, scales, dials, pads) use Draws
 functions (locaded in Draws/) to draw widget elements like pseudo 3D bars, 
-pads, and arcs. Feel free to create your own drawing functions.
+pads, and arcs. Feel free to create your own drawing functions and implement
+them by pre-defining the respective symbol by 
+`#define BWIDGETS_DEFAULT_XXX_PATH "path/to/xxx.cpp"` with XXX being DRAWKNOB,
+DRAWARC, DRAWHBAR, ...
 
 
 ### Status

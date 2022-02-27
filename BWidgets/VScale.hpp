@@ -18,13 +18,16 @@
 #ifndef BWIDGETS_VSCALE_HPP_
 #define BWIDGETS_VSCALE_HPP_
 
+#ifndef BWIDGETS_DEFAULT_DRAWVBAR_PATH
+#define BWIDGETS_DEFAULT_DRAWVBAR_PATH "Draws/drawVBar.hpp"
+#endif
+
 #include "VMeter.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
 #include "Supports/Scrollable.hpp"
 #include "../BEvents/WheelEvent.hpp"
-#include "Draws/drawVBar.hpp"
-#include "Draws/drawKnob.hpp"
+#include BWIDGETS_DEFAULT_DRAWVBAR_PATH
 
 #ifndef BWIDGETS_DEFAULT_VSCALE_WIDTH
 #define BWIDGETS_DEFAULT_VSCALE_WIDTH 10.0

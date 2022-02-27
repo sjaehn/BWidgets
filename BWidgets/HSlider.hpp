@@ -18,8 +18,12 @@
 #ifndef BWIDGETS_HSLIDER_HPP_
 #define BWIDGETS_HSLIDER_HPP_
 
+#ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#endif
+
 #include "HScale.hpp"
-#include "Draws/drawKnob.hpp"
+#include BWIDGETS_DEFAULT_DRAWKNOB_PATH
 
 #ifndef BWIDGETS_DEFAULT_HSLIDER_WIDTH
 #define BWIDGETS_DEFAULT_HSLIDER_WIDTH 80.0

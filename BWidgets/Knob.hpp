@@ -18,8 +18,12 @@
 #ifndef BWIDGETS_KNOB_HPP_
 #define BWIDGETS_KNOB_HPP_
 
+#ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#endif
+
 #include "Button.hpp"
-#include "Draws/drawKnob.hpp"
+#include BWIDGETS_DEFAULT_DRAWKNOB_PATH
 
 #ifndef BWIDGETS_DEFAULT_KNOB_WIDTH
 #define BWIDGETS_DEFAULT_KNOB_WIDTH 20.0

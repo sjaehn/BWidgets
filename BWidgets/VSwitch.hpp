@@ -18,12 +18,20 @@
 #ifndef BWIDGETS_VSWITCH_HPP_
 #define BWIDGETS_VSWITCH_HPP_
 
+#ifndef BWIDGETS_DEFAULT_DRAWVBAR_PATH
+#define BWIDGETS_DEFAULT_DRAWVBAR_PATH "Draws/drawVBar.hpp"
+#endif
+
+#ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#endif
+
 #include "Button.hpp"
 #include "Supports/Draggable.hpp"
 #include "Supports/Scrollable.hpp"
 #include "../BEvents/WheelEvent.hpp"
-#include "Draws/drawVBar.hpp"
-#include "Draws/drawKnob.hpp"
+#include BWIDGETS_DEFAULT_DRAWVBAR_PATH
+#include BWIDGETS_DEFAULT_DRAWKNOB_PATH
 #include "Widget.hpp"
 
 #ifndef BWIDGETS_DEFAULT_VSWITCH_WIDTH
