@@ -237,7 +237,7 @@ inline void VScale::onButtonPressed (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
-	if (scale_.getHeight()) setValue (getValueFromRatio ((getHeight() - pev->getPosition().y - scale_.getY()) / scale_.getHeight(), transfer_, reTransfer_));
+	if (scale_.getHeight()) setValue (getValueFromRatio ((scale_.getHeight() - (pev->getPosition().y - scale_.getY())) / scale_.getHeight(), transfer_, reTransfer_));
 	Clickable::onButtonPressed (event);
 }
 
