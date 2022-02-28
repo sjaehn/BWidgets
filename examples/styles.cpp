@@ -1,4 +1,4 @@
-/* widgetgalery.cpp
+/* styles.cpp
  * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include "../BWidgets/ValueVSlider.hpp"
 #include <cairo/cairo.h>
 
-#define URI "https://github.com/sjaehn/BWidgets/widgetgallery.cpp"
+#define URI "https://github.com/sjaehn/BWidgets/styles.cpp"
 
 using namespace BWidgets;
 using namespace BStyles;

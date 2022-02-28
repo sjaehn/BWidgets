@@ -1069,6 +1069,11 @@ them by pre-defining the respective symbol by
 with XXX being DRAWKNOB,
 DRAWARC, DRAWHBAR, ...
 
+And there's an example for using Draws in 
+[../examples/draws.cpp](../examples/draws.cpp) :
+
+![draws](../suppl/Draws.png)
+
 
 ### Status
 
@@ -1117,11 +1122,11 @@ BWidgets uses the Cairo graphics context support of Pugl.
 
 ## Internationalization
 
-B.Widgets supports the system locale / messages translation and additionally
-uses its own dictionary. You can globally change the language of you project
-either by definition of `BUTILITIES_DICTIONARY_LANGUAGE` with the POSIX
-locale (language[_territory][.codeset][@modifier], e. g. "en_US.utf8") *prior* 
-including B.Widgets or using `Dictionary::setLanguage()`:
+B.Widgets supports the GNU gettext locale / messages translations catalogues
+and additionally uses its own dictionary. You can globally change the language 
+of your project either by definition of `BUTILITIES_DICTIONARY_LANGUAGE` with 
+the POSIX locale (language[_territory][.codeset][@modifier], e. g. 
+"en_US.utf8") *prior* including B.Widgets or using `Dictionary::setLanguage()`:
 ```
 BUtilities::Dictionary::setLanguage ("de_DE.utf8");
 ```
