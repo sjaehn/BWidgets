@@ -89,7 +89,7 @@ widgets which are (or will be) added to the main window).
    window.run ();
    ```
 
-Build and run. You can also find this source code at "../examples/buttontest.cpp".
+Build and run. You can also find this source code at [../examples/buttontest.cpp](../examples/buttontest.cpp).
 
 ![buttontest](../suppl/buttontest.png)
 
@@ -260,7 +260,7 @@ The main `Window` object controls the visibility of all linked widgets. All
 Widgets need be be linked to the main `Window` object to become visible.
 
 A simple example of linking and visualizing a "Hello World" `Label` to a 
-`Window` (see "../examples/helloworld.cpp"):
+`Window` (see [../examples/helloworld.cpp](../examples/helloworld.cpp)):
 ```
 int main ()
 {
@@ -715,7 +715,7 @@ displaying its value.
 
 ### ConditionalImage
 
-![imageconditional](../suppl/ConditionalImage.png)
+![conditionalimage](../suppl/ConditionalImage.png)
 
 `ConditionalImage` is a `Valueable` widget which may take up multiple images
 each linked to a specific value. The widget shows the image(s) depending
@@ -1003,8 +1003,6 @@ visualizable content.
 
 ### Style
 
-![styles](../suppl/Styles.png)
-
 Widgets can be decorates with styles using `setStyle()`. The setter methods
 `setBackground()`, `setBorder()`, `setFont()`, `setFgColors()`, 
 `setBgColors()`, and `setTxColors()` and their respective getter methods 
@@ -1028,11 +1026,13 @@ l.setTxColors (reds);    // Changes text colors for l to reds
 
 Styles can also include other styles in a recursive way to describe specific 
 widget elements or to forward them to linked child widgets which are idetified
-by their URIDs via push notifications (default behaviour). 
+by their URIDs via push notifications (default behaviour). Note: You can 
+switch on / off automatic pushing styles to child widgets by 
+`enablePushStyle()`.
 
-The following example defines the style with ALL properties for the widget 
-addressed with `setStyle()` and forwards the "sliders" style to all child 
-widgets with the URID for `URI "/sliders"`:
+The following example defines the style with ALL default StyleProperties for 
+the widget addressed with `setStyle()` and forwards the "sliders" style to all 
+child widgets with the URID for `URI "/sliders"`:
 ```
 Style style =
 {
@@ -1054,8 +1054,10 @@ Style style =
 };
 ```
 
-You can switch on / off automatic pushing styles to child widgets by 
-`enablePushStyle()`.
+You can find an example for using different Styles in 
+[../examples/styles.cpp](../examples/styles.cpp) :
+
+![styles](../suppl/Styles.png)
 
 Some widget classes (e. g., switches, sliders, scales, dials, pads) use Draws
 functions (locaded in Draws/) to draw widget elements like pseudo 3D bars, 
