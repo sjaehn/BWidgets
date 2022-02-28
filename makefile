@@ -22,9 +22,7 @@ CXX_INCL = \
 BUtilities/Urid.cpp \
 BUtilities/Dictionary.cpp \
 BWidgets/Supports/Closeable.cpp \
-BWidgets/Supports/Linkable.cpp \
 BWidgets/Supports/Messagable.cpp \
-BWidgets/Supports/Visualizable.cpp \
 BWidgets/Window.cpp \
 BWidgets/Widget.cpp 
 

@@ -19,6 +19,7 @@
 #define BWIDGETS_VISUALIZABLE_HPP_
 
 #include <cairo/cairo.h>
+#include "../../BUtilities/cairoplus.h"
 #include "../../BUtilities/Area.hpp"
 #include "Callback.hpp"
 #include "Support.hpp"
@@ -281,5 +282,202 @@ protected:
     virtual void draw (const BUtilities::Area<>& area);
 
 };
+
+inline Visualizable::Visualizable () : 
+    Visualizable (0, 0)
+{
+
+}
+
+inline Visualizable::Visualizable (const double width, const double height) :
+    Visualizable (BUtilities::Point<> (width, height))
+{
+
+}
+
+inline Visualizable::Visualizable (const BUtilities::Point<> extends) :
+    Callback(),
+    Support(),
+    scheduleDraw_ (true),
+    extends_ (extends),
+    surface_ (cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends.x, extends.y)),
+    layer_ (0)
+{
+
+}
+
+inline Visualizable::Visualizable (const Visualizable& that) :
+    Callback (that),
+    Support (that),
+    scheduleDraw_ (that.scheduleDraw_),
+    extends_ (that.extends_),
+    surface_ (cairoplus_image_surface_clone_from_image_surface (that.surface_)),
+    layer_ (that.layer_)
+{
+
+}
+
+inline Visualizable::~Visualizable ()
+{
+    cairo_surface_destroy (surface_);
+}
+
+inline Visualizable& Visualizable::operator= (const Visualizable& that)
+{
+    Callback::operator= (that);
+    Support::operator= (that);
+    scheduleDraw_ = that.scheduleDraw_;
+    extends_ = that.extends_;
+    if (surface_) cairo_surface_destroy (surface_);
+    surface_ = cairoplus_image_surface_clone_from_image_surface (that.surface_);
+    layer_ = that.layer_;
+
+    update();
+    return *this;
+}
+
+inline void Visualizable::setVisualizable (const bool status) 
+{
+    if (status) show ();
+    else hide ();
+}
+
+inline void Visualizable::show ()
+{
+    bool wasVisible = isVisible ();
+    setSupport (true);
+    if (wasVisible != isVisible ()) emitExposeEvent ();
+}
+
+inline void Visualizable::hide ()
+{
+    setSupport (false);
+}
+
+inline bool Visualizable::isVisualizable () const 
+{
+    return getSupport();
+}
+
+inline bool Visualizable::isVisible () const 
+{
+    return isVisualizable();
+}
+
+inline void Visualizable::setWidth (const double width)
+{
+    resize (width, extends_.y);
+}
+
+inline double Visualizable::getWidth () const
+{
+    return extends_.x;
+}
+
+inline void Visualizable::setHeight (const double height)
+{
+    resize (extends_.x, height);
+}
+
+inline double Visualizable::getHeight () const
+{
+    return extends_.y;
+}
+
+inline void Visualizable::resize ()
+{
+    resize (0, 0);
+}
+
+inline void Visualizable::resize (const double width, const double height)
+{
+    resize (BUtilities::Point<> (width, height));
+}
+
+inline void Visualizable::setLayer (const int layer)
+{
+    if (layer != layer_)
+    {
+        layer_ = layer;
+        update();
+    }
+}
+
+inline int Visualizable::getLayer() const
+{
+    return layer_;
+}
+
+inline void Visualizable::resize (const BUtilities::Point<> extends)
+{
+    if ((extends.x != extends_.x) || (extends.y != extends_.y))
+    {
+        extends_ = BUtilities::Point<> (std::max (extends.x, 0.0), std::max (extends.y, 0.0));
+
+        // Create new surface
+        cairo_surface_t* new_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends_.x, extends_.y);
+
+        // Copy surface
+		if (new_surface && (cairo_surface_status (new_surface) == CAIRO_STATUS_SUCCESS))
+		{
+            cairo_t* cr = cairo_create (new_surface);
+			if (cr && (cairo_status (cr) == CAIRO_STATUS_SUCCESS))
+			{
+				cairo_set_source_surface (cr, surface_, 0, 0);
+				cairo_paint (cr);
+				cairo_destroy (cr);
+			}
+		}
+
+        // Delete old surface
+        cairo_surface_destroy (surface_);
+
+        // Copy new surface pointer
+        surface_ = new_surface;
+
+        update();
+    }
+}
+
+inline BUtilities::Point<> Visualizable::getExtends () const 
+{
+    return extends_;
+}
+
+inline void Visualizable::update ()
+{
+    scheduleDraw_ = true;
+	if (isVisible ()) emitExposeEvent ();
+}
+
+inline cairo_surface_t* Visualizable::cairoSurface() const
+{
+    return surface_;
+}
+
+inline void Visualizable::onConfigureRequest (BEvents::Event* event)
+{
+    callback (BEvents::Event::EventType::CONFIGURE_REQUEST_EVENT) (event);
+}
+
+inline void Visualizable::onExposeRequest (BEvents::Event* event)
+{
+    callback (BEvents::Event::EventType::EXPOSE_REQUEST_EVENT) (event);
+}
+
+inline void Visualizable::draw ()
+{
+
+}
+
+inline void Visualizable::draw (const double x0, const double y0, const double width, const double height)
+{
+
+}
+
+inline void Visualizable::draw (const BUtilities::Area<>& area)
+{
+    scheduleDraw_ = false;
+}
 }
 #endif /* BWIDGETS_VISUALIZABLE_HPP_ */

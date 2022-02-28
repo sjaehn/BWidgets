@@ -18,6 +18,7 @@
 #ifndef BWIDGETS_LINKABLE_HPP_
 #define BWIDGETS_LINKABLE_HPP_
 
+#include <algorithm>
 #include <list>
 #include <functional>
 #include "Support.hpp"
@@ -173,5 +174,161 @@ public:
 						 std::function<bool (Linkable* obj)> func = [] (Linkable* obj) {return true;}) const;
 
 };
+
+inline Linkable::Linkable () :
+	Support(),
+    parent_ (nullptr),
+	main_ (this),
+    children_ ()
+{
+
+}
+
+inline Linkable::~Linkable ()
+{
+	// Release from parent (and main) if still linked
+	if (parent_) parent_->release (this);
+
+	// Release children
+	while (!children_.empty ()) Linkable::release (children_.back ());
+}
+
+inline void Linkable::setLinkable (const bool status) 
+{
+	setSupport (status);
+
+	if (!isLinkable())
+	{
+		if (parent_) parent_->release (this);
+		release();
+	}
+}
+
+inline bool Linkable::isLinkable () const 
+{
+	return getSupport();
+}
+
+inline std::list<Linkable*>::iterator Linkable::add	(Linkable* child,
+												 std::function<void (Linkable* obj)> addfunc)
+{
+	if (!isLinkable()) return children_.end();
+	if (!child) return children_.end();
+
+	// Check if already added? -> Release first
+	if (child->parent_) child->parent_->release (child);
+
+	// Connect child and add child to list
+	child->parent_ = this;
+	children_.push_back (child);
+
+	// Connect child and children of child to main_
+	forEachChild 
+	(
+		std::prev (children_.end()),
+		children_.end(),
+		[this, addfunc] (Linkable* l)
+		{
+			l->main_ = this->main_;
+			addfunc (l);
+			return true;
+		}
+	);
+
+	return std::prev (children_.end());
+}
+
+inline void Linkable::release (std::function<void (Linkable* obj)> releasefunc)
+{
+	while (!children_.empty ()) release (children_.back (), releasefunc);
+}
+
+inline void Linkable::release (Linkable* child, std::function<void (Linkable* obj)> releasefunc)
+{
+	if (child)
+	{
+		std::list<Linkable*>::iterator it = std::find (children_.begin(), children_.end(), child);
+
+		if (it != children_.end())
+		{
+			forEachChild 
+			(
+				it, 
+				std::next (it), 
+				[child, releasefunc] (Linkable* l)
+				{
+					releasefunc (l);
+					l->main_ = child;
+					return true;
+				}
+			);
+
+			child->parent_ = nullptr;
+			children_.erase (it);
+		}
+	}
+}
+
+inline Linkable* Linkable::getParent () const
+{
+	return parent_;
+}
+
+inline Linkable* Linkable::getMain () const
+{
+	return main_;
+}
+
+inline bool Linkable::hasChildren () const
+{
+	return !children_.empty();
+}
+
+inline bool Linkable::contains (const Linkable* child) const
+{
+	return std::find (children_.begin(), children_.end(), child) != children_.end();
+}
+
+inline const std::list<Linkable*>& Linkable::getChildren () const
+{
+	return children_;
+}
+
+inline std::list<Linkable*>& Linkable::getChildren ()
+{
+	return children_;
+}
+
+inline void Linkable::forEachChild	(std::function<bool (Linkable* obj)> func)
+{
+	forEachChild (children_.begin(), children_.end(), func);
+}
+
+inline void Linkable::forEachChild	(std::function<bool (Linkable* obj)> func) const
+{
+	forEachChild (children_.begin(), children_.end(), func);
+}
+	
+inline void Linkable::forEachChild	(std::list<Linkable*>::iterator first, 
+					 		 std::list<Linkable*>::iterator last,
+					 		 std::function<bool (Linkable* obj)> func)
+{
+	for (std::list<Linkable*>::iterator it = first; it != last; ++it)
+	{
+		Linkable* l = *it;
+		if (l && func (l)) l->forEachChild (func);
+	}
+}
+
+inline void Linkable::forEachChild	(std::list<Linkable*>::const_iterator first, 
+					 		 std::list<Linkable*>::const_iterator last,
+					 		 std::function<bool (Linkable* obj)> func) const
+{
+	for (std::list<Linkable*>::const_iterator it = first; it != last; ++it)
+	{
+		Linkable* l = *it;
+		if (l && func (l)) l->forEachChild (func);
+	}
+}
 }
 #endif /* BWIDGETS_LINKABLE_HPP_ */
