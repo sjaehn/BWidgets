@@ -199,7 +199,7 @@ inline ValueDial::ValueDial	(const double  x, const double y, const double width
 	Dial (x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
 	display_ (displayFunc),
 	reDisplay_ (reDisplayFunc),
-	label()
+	label (BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
 {
 	add (&label);
 	label.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, labelChangedCallback);

@@ -1,6 +1,6 @@
 # B.Widgets
 
-Current version: 0.1.2 (alpha)
+Current version: 0.1.3 (alpha)
 
 Rewrite of the widget toolkit of the B.Music project.
 

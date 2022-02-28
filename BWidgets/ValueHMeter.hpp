@@ -222,7 +222,7 @@ inline ValueHMeter::ValueHMeter	(const double  x, const double y, const double w
 	HMeter (x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
 	display_ (displayFunc),
 	reDisplay_ (reDisplayFunc),
-	label()
+	label (BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
 {
 	add (&label);
 }
