@@ -54,7 +54,7 @@ Style style =
     /* Alternative style 2*/
     {Urid::urid (URI "/bw"), makeAny<Style>({
         {Urid::urid (STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(whites)},
-        {Urid::urid (STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(darks)},
+        {Urid::urid (STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>({darkdarkgrey, darkgrey, black, black})},
         {Urid::urid (URI "/bw/label"), makeAny<Style>({
             {Urid::urid (STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("fantasy", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0))},
             {Urid::urid (STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
