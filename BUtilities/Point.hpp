@@ -21,6 +21,8 @@
 #ifndef BUTILITIES_POINT_HPP_
 #define BUTILITIES_POINT_HPP_
 
+#include <cmath>
+
 namespace BUtilities
 {
 
@@ -37,14 +39,14 @@ struct Point
 	 *  @brief  Constructs a new %Point object with default (origin) 
 	 *  coordinates.
 	 */
-	Point () : Point<T> (T(), T()) {}
+	constexpr Point () : Point<T> (T(), T()) {}
 
 	/**
 	 *  @brief  Constructs a new %Point object from provided coordinates.
 	 *  @param x  X coordninate.
 	 *  @param y  Y coordninate.
 	 */
-	Point (const T x, const T y) : x (x), y (y) {}
+	constexpr Point (const T x, const T y) : x (x), y (y) {}
 
 	/**
 	 *  @brief  2D Vector addition of %Point coordinates.
@@ -101,6 +103,37 @@ struct Point
 	friend Point<T> operator* (Point lhs, const T rhs) {return (lhs *= rhs);}
 	friend Point<T> operator* (const T lhs, Point rhs) {return (rhs *= lhs);}
 	friend Point<T> operator/ (Point lhs, const T rhs) {return (lhs /= rhs);}
+
+	/**
+	 *  @brief  Gets the length of an (Euklidean) vector from the origin (0, 0)
+	 *  to this %Point.
+	 *  @return  Length.
+	 */
+	constexpr T length () const
+	{
+		return sqrt (this->x * this->x + this->y * this->y);
+	}
+
+	/**
+	 *  @brief  Gets a normalized %Point with a distance from origin (0, 0) of
+	 *  1.
+	 *  @return  Normalized %Point.
+	 */
+	Point<T> normalize () const
+	{
+		return *this / length ();
+	}
+
+	/**
+	 *  @brief  Gets a normalized %Point with a distance from origin (0, 0) of
+	 *  @a dist.
+	 *  @param dist Distance from origin.
+	 *  @return  Normalized %Point.
+	 */
+	Point<T> normalize (const T dist) const
+	{
+		return *this * dist / length ();
+	}
 
 };
 
