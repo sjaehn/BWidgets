@@ -12,6 +12,7 @@ Contains a collection of different useful C and C++ tools.
  |    ├── cairoplus_rgba
  |    ╰── cairoplus_text_decorations
  ├── Dictionary
+ ├── Node
  ├── Point
  ├── Property
  ╰── URID
@@ -24,7 +25,7 @@ Container to type-safely take up the content of any copy constructible type.
 Similar classes are in the std (C++>=17) and boost.
 
 
-### Area
+### Area \<T\>
 
 2D coordinates of a rectangular area.
 
@@ -80,12 +81,17 @@ Dictionary. Or add translations at runtime using `add()`. Or include a GNU
 gettext message catalogue (.mo) as fallback using `alsoUseCatalogue()`.
 
 
-### Point
+### Node \<T\>
+
+Template class describing a node as a point with up to two handles.
+
+
+### Point \<T\>
 
 2D Point coordinates.
 
 
-### Property
+### Property  \<Tid, Tdata\>
 
 A Property is a data pair and consists of a constant @a ID and the assigned
 @a data. It can only be set upon construction. No change, no assignment.
