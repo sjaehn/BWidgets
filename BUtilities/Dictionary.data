@@ -47,7 +47,7 @@
     {
         "Can't create new folder",           
         {
-            {"de_DE", "Kann kein neues Vereichnis erstellen"},
+            {"de_DE", "Kann kein neues Verzeichnis erstellen"},
             {"es_ES", "No se pudo crear carpeta"},
             {"fr_FR", "Impossible de créer le nouveau dossier"},
             {"it_IT", "Impossibile creare una nuova cartella"},
@@ -352,7 +352,7 @@
     {
         "No audio file selected",       
         {
-            {"de_DE", "Keine Audiodatei augewählt"},
+            {"de_DE", "Keine Audiodatei ausgewählt"},
             {"es_ES", "Ningún archivo de audio seleccionado"},
             {"fr_FR", "Aucun fichier audio sélectionné "},
             {"it_IT", "Nessun file audio selezionato"},
