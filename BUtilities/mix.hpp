@@ -1,5 +1,5 @@
 /* mix.hpp
- * Copyright (C) 2020  Sven Jähnichen
+ * Copyright (C) 2020 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,21 @@
 #ifndef BUTILITIES_MIX_HPP_
 #define BUTILITIES_MIX_HPP_
 
-namespace BUtilities {
-
-template <class T> inline T mix (const T& t0, const T& t1, const double ratio)
+namespace BUtilities 
 {
-        return t1 * ratio + t0 * (1.0f - ratio);
+
+/**
+ *  @brief  Mixes two values in a given ratio.
+ *  @tparam T  Value type.
+ *  @param t0  First value.
+ *  @param t1  Second value.
+ *  @param ratio  Ratio.
+ *  @return T  Mixed value.
+ */
+template <class T> 
+inline T mix (const T& t0, const T& t1, const double ratio)
+{
+        return t1 * ratio + t0 * (1.0 - ratio);
 }
 
 }

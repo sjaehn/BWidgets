@@ -116,3 +116,8 @@ signs (point / comma).
 Converts a floaing point number into a string output with a defined format. 
 Similar to std::to_string. But the format specifier @a format allows a
 formatted value output.
+
+
+### mix
+
+Mixes two values in a given ratio.
