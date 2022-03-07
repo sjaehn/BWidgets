@@ -1,7 +1,5 @@
-/* B.Oops
- * Glitch effect sequencer LV2 plugin
- *
- * Copyright (C) 2020 by Sven Jähnichen
+/* SampleChooser.hpp
+ * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +16,8 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef SAMPLECHOOSER_HPP_
-#define SAMPLECHOOSER_HPP_
+#ifndef BWIDGETS_SAMPLECHOOSER_HPP_
+#define BWIDGETS_SAMPLECHOOSER_HPP_
 
 #include "FileChooser.hpp"
 #include "HRangeScrollBar.hpp"
@@ -857,4 +855,4 @@ inline std::function<void (BEvents::Event*)> SampleChooser::getFileListBoxClicke
 
 }
 
-#endif /* SAMPLECHOOSER_HPP_ */
+#endif /* BWIDGETS_SAMPLECHOOSER_HPP_ */
