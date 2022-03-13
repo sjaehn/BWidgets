@@ -18,7 +18,11 @@
 #ifndef BWIDGETS_VMETER_HPP_
 #define BWIDGETS_VMETER_HPP_
 
-#include "Draws/drawMeterVBar.hpp"
+#ifndef BWIDGETS_DEFAULT_DRAWVMETER_PATH
+#define BWIDGETS_DEFAULT_DRAWVMETER_PATH "Draws/drawVMeter.hpp"
+#endif
+
+#include BWIDGETS_DEFAULT_DRAWVMETER_PATH
 #include "Widget.hpp"
 #include "Label.hpp"
 #include "Supports/Validatable.hpp"
@@ -361,13 +365,13 @@ inline void VMeter::draw (const BUtilities::Area<>& area)
 
 			if (step_ >= 0.0)
 			{
-				drawMeterVBar	(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 0.0, rval, drv,
+				drawVMeter	(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 0.0, rval, drv,
 								 getFgColors()[getStatus()], getHiColors()[getStatus()], gradient_, getBgColors()[getStatus()]);
 			}
 
 			else
 			{
-				drawMeterVBar	(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 1.0 - rval, 1.0, drv,
+				drawVMeter	(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 1.0 - rval, 1.0, drv,
 								 getFgColors()[getStatus()], getHiColors()[getStatus()], gradient_, getBgColors()[getStatus()]);
 			}
 		}

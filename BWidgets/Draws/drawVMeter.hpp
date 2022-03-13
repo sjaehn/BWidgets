@@ -1,4 +1,4 @@
-/* drawMeterHBar.hpp
+/* drawVMeter.hpp
  * Copyright (C) 2018 - 2022  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BWIDGETS_DRAWMETERHBAR_HPP_
-#define BWIDGETS_DRAWMETERHBAR_HPP_
+#ifndef BWIDGETS_DRAWVMETER_HPP_
+#define BWIDGETS_DRAWVMETER_HPP_
 
 #include "../../BUtilities/cairoplus.h"
 #include <cmath>
@@ -41,13 +41,13 @@
  *  @param gradient  Color gradient function.
  *  @param bgColor  Bar RGBA color.
  */
-inline void drawMeterHBar    (cairo_t* cr, const double x0, const double y0, const double width, const double height, 
+inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const double width, const double height, 
                              const double min, const double max, const double step,
                              const BStyles::Color loColor, const BStyles::Color hiColor, std::function<double(const double &)> gradient, 
                              const BStyles::Color bgColor)
 {
 
-    const double dx = (width - 0.2 * height) * step;
+    const double dy = (height - 0.2 * width) * step;
     const BStyles::Color fgHi = loColor.illuminate (BStyles::Color::illuminated);
     const BStyles::Color fgLo = loColor;
     const BStyles::Color hiHi = hiColor.illuminate (BStyles::Color::illuminated);
@@ -59,7 +59,7 @@ inline void drawMeterHBar    (cairo_t* cr, const double x0, const double y0, con
     // Background fill
     cairo_set_line_width (cr, 0.0);
     cairo_set_source_rgba (cr, CAIRO_RGBA(bgDk));
-    cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.2 * height, 0b1111);
+    cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.2 * width, 0b1111);
     cairo_fill (cr);
 
     // Border
@@ -68,7 +68,7 @@ inline void drawMeterHBar    (cairo_t* cr, const double x0, const double y0, con
     {
         cairo_pattern_add_color_stop_rgba (pat, 0, CAIRO_RGBA(bgLo));
         cairo_pattern_add_color_stop_rgba (pat, 1, CAIRO_RGBA(bgHi));
-        cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.2 * height, 0b1111);
+        cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.2 * width, 0b1111);
         cairo_set_source (cr, pat);
         cairo_set_line_width (cr, 1.0);
         cairo_stroke (cr);
@@ -90,7 +90,7 @@ inline void drawMeterHBar    (cairo_t* cr, const double x0, const double y0, con
 
         for (double v = 0; v < 1.0; v += step)
         {
-            if ((v >= min) && (v <= max)) 
+            if ((v >= min) && ( v <= max)) 
             {
                 if ((fgHi != hiHi) || (fgLo != hiLo))
                 {
@@ -111,7 +111,6 @@ inline void drawMeterHBar    (cairo_t* cr, const double x0, const double y0, con
                         fgHi.value() * (1.0 - gradient (v)) + hiHi.value() * gradient (v),
                         fgHi.alpha * (1.0 - gradient (v)) + hiHi.alpha * gradient (v)
                     );
-
                     cairo_pattern_add_color_stop_rgba (fgPat, 0, CAIRO_RGBA(cLo));
                     cairo_pattern_add_color_stop_rgba (fgPat, 0.25, CAIRO_RGBA(cHi));
                     cairo_pattern_add_color_stop_rgba (fgPat, 1, CAIRO_RGBA(cLo));
@@ -121,10 +120,10 @@ inline void drawMeterHBar    (cairo_t* cr, const double x0, const double y0, con
 
             else cairo_set_source (cr, bgPat);
 
-            const double x = v * (width - 0.2 * height);
+            const double y = v * (height - 0.2 * width);
 
-            if (dx < 3.0) cairo_rectangle (cr, x0 + 0.1 * height + x, y0 + 0.1 * height, dx, height - 0.2 * height);
-            else cairo_rectangle (cr, x0 + 0.1 * height + x + 1.0, y0 + 0.1 * height, dx - 2.0, height - 0.2 * height);
+            if (dy < 3.0) cairo_rectangle (cr, x0 + 0.1 * width , y0 + height - 0.1 * width - y, width - 0.2 * width, dy);
+            else cairo_rectangle (cr, x0 + 0.1 * width, y0 + height - 0.1 * width - y - 1.0, width - 0.2 * width, dy - 2.0);
             cairo_fill (cr);
         }
 
@@ -133,4 +132,4 @@ inline void drawMeterHBar    (cairo_t* cr, const double x0, const double y0, con
     }
 }
 
-#endif /*  BWIDGETS_DRAWMETERHBAR_HPP_ */
+#endif /*  BWIDGETS_DRAWVMETER_HPP_ */

@@ -18,13 +18,17 @@
 #ifndef BWIDGETS_RADIALMETER_HPP_
 #define BWIDGETS_RADIALMETER_HPP_
 
+#ifndef BWIDGETS_DEFAULT_DRAWRMETER_PATH
+#define BWIDGETS_DEFAULT_DRAWRMETER_PATH "Draws/drawRMeter.hpp"
+#endif
+
 #include "Widget.hpp"
 #include "Label.hpp"
 #include "Supports/Validatable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/ValidatableRange.hpp"
 #include "Supports/ValueTransferable.hpp"
-#include "Draws/drawMeterArc.hpp"
+#include BWIDGETS_DEFAULT_DRAWRMETER_PATH
 #include <cairo/cairo.h>
 #include <cmath>
 
@@ -354,13 +358,13 @@ inline void RadialMeter::draw (const BUtilities::Area<>& area)
 
 			if (step_ >= 0.0)
 			{
-				drawMeterArc	(cr, 0.5 * scale_.getWidth(), 0.5 * scale_.getHeight(), rad, 0.0, rval, drv, 
+				drawRMeter	(cr, 0.5 * scale_.getWidth(), 0.5 * scale_.getHeight(), rad, 0.0, rval, drv, 
 								 getFgColors()[getStatus()], getHiColors()[getStatus()], gradient_, getBgColors()[getStatus()]);
 			}
 
 			else 
 			{
-				drawMeterArc	(cr, 0.5 * scale_.getWidth(), 0.5 * scale_.getHeight(), rad, 1.0 - rval, 1.0, drv, 
+				drawRMeter	(cr, 0.5 * scale_.getWidth(), 0.5 * scale_.getHeight(), rad, 1.0 - rval, 1.0, drv, 
 								 getFgColors()[getStatus()], getHiColors()[getStatus()], gradient_, getBgColors()[getStatus()]);
 			}
 		}

@@ -18,7 +18,11 @@
 #ifndef BWIDGETS_HMETER_HPP_
 #define BWIDGETS_HMETER_HPP_
 
-#include "Draws/drawMeterHBar.hpp"
+#ifndef BWIDGETS_DEFAULT_DRAWHMETER_PATH
+#define BWIDGETS_DEFAULT_DRAWHMETER_PATH "Draws/drawHMeter.hpp"
+#endif
+
+#include BWIDGETS_DEFAULT_DRAWHMETER_PATH
 #include "Widget.hpp"
 #include "Label.hpp"
 #include "Supports/Validatable.hpp"
@@ -352,13 +356,13 @@ inline void HMeter::draw (const BUtilities::Area<>& area)
 
 			if (step_ >= 0.0)
 			{
-				drawMeterHBar	(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 0.0, rval, drv,
+				drawHMeter	(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 0.0, rval, drv,
 								 getFgColors()[getStatus()], getHiColors()[getStatus()], gradient_, getBgColors()[getStatus()]);
 			}
 
 			else
 			{
-				drawMeterHBar	(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 1.0 - rval, 1.0, drv,
+				drawHMeter	(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 1.0 - rval, 1.0, drv,
 								 getFgColors()[getStatus()], getHiColors()[getStatus()], gradient_, getBgColors()[getStatus()]);
 			}
 		}
