@@ -42,8 +42,6 @@ namespace BWidgets
  *  a value as a vertical scale in the same way as ImageVMeter and 
  *  additionally supports user interaction via Clickable, Draggable, and 
  *  Scrollable.
- *
- *  @todo Inverse range, negative step.
  */
 class ImageVSlider :	public ImageVMeter, 
 						public Clickable, 
@@ -280,8 +278,28 @@ inline void ImageVSlider::onButtonPressed (BEvents::Event* event)
 		{
 			const double szs = ((w / ws < h / hs) ? (w / ws) : (h / hs));
 			const double y0s = x0 + 0.5 * h - 0.5 * hs * szs;
-			setValue (getValueFromRatio	((pev->getPosition().y - y0s - staticAnchors_.first.y * szs) / ((staticAnchors_.second.y - staticAnchors_.first.y) * szs), 
-										 transfer_, reTransfer_));
+
+			if (step_ >= 0)
+			{
+				setValue 
+				(
+					getValueFromRatio	
+					(
+						(pev->getPosition().y - y0s - staticAnchors_.first.y * szs) / ((staticAnchors_.second.y - staticAnchors_.first.y) * szs), 
+						transfer_, reTransfer_
+					)
+				);
+			}
+			else
+			{
+				setValue 
+				(
+					getValueFromRatio	
+					(	1.0 - (pev->getPosition().y - y0s - staticAnchors_.first.y * szs) / ((staticAnchors_.second.y - staticAnchors_.first.y) * szs), 
+						transfer_, reTransfer_
+					)
+				);
+			}
 		}
 	}
 	Clickable::onButtonPressed (event);

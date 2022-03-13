@@ -56,8 +56,6 @@ namespace BWidgets
  *  Advanced settings allow an %ImageVMeter to display a value in a non-linear
  *  manner (e.g. for levels and frequencies) using transfer functions and / or
  *  to use non-line color gradients for display using gradient functions. 
- *
- *  @todo Inverse range, negative step.
  */
 class ImageVMeter :	public Widget, 
 				public ValueableTyped<double>, 
@@ -403,9 +401,13 @@ inline void ImageVMeter::draw (const BUtilities::Area<>& area)
 				const double szs = ((w / ws < h / hs) ? (w / ws) : (h / hs));
 				const double x0s = x0 + 0.5 * w - 0.5 * ws * szs;
 				const double y0s = y0 + 0.5 * h - 0.5 * hs * szs;
-				const BUtilities::Point<> anchorv = BUtilities::Point<>	(staticAnchors_.first != staticAnchors_.second ?
-																		 staticAnchors_.first + rval * (staticAnchors_.second - staticAnchors_.first) :
-																		 staticAnchors_.first);
+				const BUtilities::Point<> anchorv = BUtilities::Point<>	
+				(
+					staticAnchors_.first != staticAnchors_.second ?
+					staticAnchors_.first + (step_ >= 0 ? rval : 1.0 - rval) * (staticAnchors_.second - staticAnchors_.first) :
+					staticAnchors_.first
+				);
+
 				cairo_save (cr);
 				cairo_translate(cr, x0s, y0s);
 				cairo_scale (cr, szs, szs);
@@ -417,8 +419,8 @@ inline void ImageVMeter::draw (const BUtilities::Area<>& area)
 				{
 					const double x0a = x0s + (staticAnchors_.first.x - activeAnchor_.x) * szs;
 					const double y0a = y0s + (staticAnchors_.first.y - activeAnchor_.y) * szs;
-					const double y0a0 = y0s + staticAnchors_.first.y * szs;
-					const double y0av = y0s + anchorv.y * szs;
+					const double y0a0 = y0s + (step_ >= 0 ? staticAnchors_.first.y : anchorv.y) * szs;
+					const double y0av = y0s + (step_ >= 0 ? anchorv.y : staticAnchors_.second.y) * szs;
 					cairo_save (cr);
 					cairo_rectangle (cr, x0, y0a0, w, y0av - y0a0);
 					cairo_translate(cr, x0a, y0a);

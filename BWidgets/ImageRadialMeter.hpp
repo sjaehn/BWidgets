@@ -58,8 +58,6 @@ namespace BWidgets
  *  Advanced settings allow an %ImageRadialMeter to display a value in a non-linear
  *  manner (e.g. for levels and frequencies) using transfer functions and / or
  *  to use non-line color gradients for display using gradient functions. 
- *
- *  @todo Inverse range, negative step.
  */
 class ImageRadialMeter :	public Widget, 
 							public ValueableTyped<double>, 
@@ -445,7 +443,8 @@ inline void ImageRadialMeter::draw (const BUtilities::Area<>& area)
 					);
 					cairo_save (cr);
 					cairo_move_to (cr, xca, yca);
-					cairo_arc (cr, xca, yca, rad, staticMinAngle_, staticMinAngle_ + (staticMaxAngle_ - staticMinAngle_) * rval);
+					if (step_ >= 0) cairo_arc (cr, xca, yca, rad, staticMinAngle_, staticMinAngle_ + (staticMaxAngle_ - staticMinAngle_) * rval);
+					else cairo_arc (cr, xca, yca, rad, staticMinAngle_ + (staticMaxAngle_ - staticMinAngle_) * (1.0 - rval), staticMaxAngle_);
 					cairo_close_path (cr);
 					cairo_translate(cr, x0a, y0a);
 					cairo_scale (cr, szs, szs);
@@ -457,7 +456,7 @@ inline void ImageRadialMeter::draw (const BUtilities::Area<>& area)
 
 				if (dynamicImageSurface_ && (cairo_surface_status (dynamicImageSurface_) == CAIRO_STATUS_SUCCESS))
 				{
-					const double ad = (staticMaxAngle_ - staticMinAngle_) * rval;
+					const double ad = (staticMaxAngle_ - staticMinAngle_) * (step_ >= 0 ? rval : 1.0 - rval);
 					cairo_save (cr);
 
 					cairo_translate (cr, x0s + staticAnchor_.x * szs, y0s + staticAnchor_.y * szs);

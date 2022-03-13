@@ -42,8 +42,6 @@ namespace BWidgets
  *  a value as a horizontal scale in the same way as ImageHMeter and 
  *  additionally supports user interaction via Clickable, Draggable, and 
  *  Scrollable.
- *
- *  @todo Inverse range, negative step.
  */
 class ImageHSlider :	public ImageHMeter, 
 						public Clickable, 
@@ -280,8 +278,28 @@ inline void ImageHSlider::onButtonPressed (BEvents::Event* event)
 		{
 			const double szs = ((w / ws < h / hs) ? (w / ws) : (h / hs));
 			const double x0s = x0 + 0.5 * w - 0.5 * ws * szs;
-			setValue (getValueFromRatio	((pev->getPosition().x - x0s - staticAnchors_.first.x * szs) / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs), 
-										transfer_, reTransfer_));
+
+			if (step_ >= 0)
+			{
+				setValue 
+				(
+					getValueFromRatio	
+					(
+						(pev->getPosition().x - x0s - staticAnchors_.first.x * szs) / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs), 
+						transfer_, reTransfer_
+					)
+				);
+			}
+			else
+			{
+				setValue 
+				(
+					getValueFromRatio	
+					(	1.0 - (pev->getPosition().x - x0s - staticAnchors_.first.x * szs) / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs), 
+						transfer_, reTransfer_
+					)
+				);
+			}
 		}
 	}
 	Clickable::onButtonPressed (event);

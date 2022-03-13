@@ -42,8 +42,6 @@ namespace BWidgets
  *  a value in a radial representation in the same way as ImageRadialMeter and 
  *  additionally supports user interaction via Clickable, Draggable, and 
  *  Scrollable.
- *
- *  @todo Inverse range, negative step.
  */
 class ImageDial :	public ImageRadialMeter, 
 					public Clickable, 
@@ -295,6 +293,7 @@ inline void ImageDial::onButtonPressed (BEvents::Event* event)
 				if (a > staticMaxAngle_) a -= 2.0 * M_PI;
 				if ((a >= staticMinAngle_) && (a <= staticMaxAngle_)) 
 				{
+					if (step_ < 0.0) a = staticMaxAngle_ - (a - staticMinAngle_);
 					setValue (getValueFromRatio	((a - staticMinAngle_) / (staticMaxAngle_ - staticMinAngle_), 
 												 transfer_, reTransfer_));
 				}

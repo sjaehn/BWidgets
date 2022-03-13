@@ -58,9 +58,7 @@ namespace BWidgets
  *  3D dial consisting of a knob and an arc scale. It supports user
  *  interaction via Clickable, Draggable, and Scrollable. Its appearance is 
  *  defined by the BgColors parameter (static elements) and by the FgColors 
- *  parameter (value). 
- *
- *  @todo Inverse range, negative step.
+ *  parameter (value).
  */
 class Dial :	public RadialMeter,
 				public Clickable, 
@@ -283,7 +281,8 @@ inline void Dial::onButtonPressed (BEvents::Event* event)
 			if (ang <= BWIDGETS_DEFAULT_DRAWARC_END)
 			{
 				const double rval = (ang - BWIDGETS_DEFAULT_DRAWARC_START) / BWIDGETS_DEFAULT_DRAWARC_SIZE;
-				setValue (getValueFromRatio (rval, transfer_, reTransfer_));
+				if (step_ >= 0) setValue (getValueFromRatio (rval, transfer_, reTransfer_));
+				else setValue (getValueFromRatio (1.0 - rval, transfer_, reTransfer_));
 			}
 		}
 	}
@@ -356,9 +355,20 @@ inline void Dial::draw (const BUtilities::Area<>& area)
 			const double rad = 0.5 * (scale_.getWidth() < scale_.getHeight() ? scale_.getWidth() : scale_.getHeight());
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
-			drawArc (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 0.0, rval, fgColor, bgColor);
-			drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth() + 0.5, scale_.getY() + 0.5 * scale_.getHeight() + 0.5, 0.6 * rad - 1.0, 1.0, bgColor, bgColor);
-			drawArcHandle (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, rval, fgColor, bgColor);
+
+			if (step_ >= 0.0)
+			{
+				drawArc (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 0.0, rval, fgColor, bgColor);
+				drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth() + 0.5, scale_.getY() + 0.5 * scale_.getHeight() + 0.5, 0.6 * rad - 1.0, 1.0, bgColor, bgColor);
+				drawArcHandle (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, rval, fgColor, bgColor);
+			}
+
+			else
+			{
+				drawArc (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 1.0 - rval, 1.0, fgColor, bgColor);
+				drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth() + 0.5, scale_.getY() + 0.5 * scale_.getHeight() + 0.5, 0.6 * rad - 1.0, 1.0, bgColor, bgColor);
+				drawArcHandle (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 1.0 - rval, fgColor, bgColor);
+			}
 		}
 
 		cairo_destroy (cr);

@@ -24,6 +24,7 @@
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/ValidatableRange.hpp"
 #include "Supports/ValueTransferable.hpp"
+#include "Draws/drawMeterArc.hpp"
 #include <cairo/cairo.h>
 #include <cmath>
 
@@ -53,9 +54,7 @@ namespace BWidgets
  *
  *  Advanced settings allow a %RadialMeter to display a value in a non-linear
  *  manner (e.g. for levels and frequencies) using transfer functions and / or
- *  to use non-line color gradients for display using gradient functions. 
- *
- *  @todo Inverse range, negative step.
+ *  to use non-line color gradients for display using gradient functions.
  */
 class RadialMeter :	public Widget, 
 				public ValueableTyped<double>, 
@@ -349,105 +348,20 @@ inline void RadialMeter::draw (const BUtilities::Area<>& area)
 			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 			cairo_clip (cr);
 
-			const double xc = 0.5 * scale_.getWidth();
-			const double yc = 0.5 * scale_.getHeight();
 			const double rad = 0.5 * (scale_.getWidth() < scale_.getHeight() ? scale_.getWidth() : scale_.getHeight());
 			const double rval = getRatioFromValue (getValue(), transfer_);
-			const double drv = (getStep() > 1.0 / (1.5 * M_PI * rad) ? getStep() / (getMax() - getMin()) : 1.0 / (1.5 * M_PI * rad));
-			const double da = (1.5 * M_PI) * drv;
-			const double sa = 1.0 / rad;
-			const BStyles::Color fgHi = getFgColors()[getStatus()].illuminate (BStyles::Color::illuminated);
-			const BStyles::Color fgLo = getFgColors()[getStatus()];
-			const BStyles::Color hiHi = getHiColors()[getStatus()].illuminate (BStyles::Color::illuminated);
-			const BStyles::Color hiLo = getHiColors()[getStatus()];
-			const BStyles::Color bgLo = getBgColors()[getStatus()].illuminate (BStyles::Color::shadowed);
-			const BStyles::Color bgHi = getBgColors()[getStatus()];
-			const BStyles::Color bgDk = getBgColors()[getStatus()].illuminate (-0.75);
+			const double drv = (std::fabs (getStep()) > 1.0 / (1.5 * M_PI * rad) ? fabs (getStep() / (getMax() - getMin())) : 1.0 / (1.5 * M_PI * rad));
 
-			// Background fill
-    		cairo_set_line_width (cr, 0.0);
-			cairo_set_source_rgba (cr, CAIRO_RGBA(bgDk));
-			cairo_arc (cr, xc, yc, 0.96 * rad, 0.75 * M_PI, 2.25 * M_PI);
-    		cairo_arc_negative (cr, xc, yc, 0.5 * rad, 2.25 * M_PI, 0.75 * M_PI);
-			cairo_fill (cr);
-
-			// Border
-			cairo_pattern_t* pat = cairo_pattern_create_linear (xc - rad, yc - rad, xc + rad, yc + rad);
-			if (pat && (cairo_pattern_status (pat) == CAIRO_STATUS_SUCCESS))
+			if (step_ >= 0.0)
 			{
-				cairo_pattern_add_color_stop_rgba (pat, 0, CAIRO_RGBA(bgLo));
-				cairo_pattern_add_color_stop_rgba (pat, 1, CAIRO_RGBA(bgHi));
-				cairo_arc (cr, xc, yc, 0.96 * rad, 0.75 * M_PI, 2.25 * M_PI);
-    			cairo_arc_negative (cr, xc, yc, 0.5 * rad, 2.25 * M_PI, 0.75 * M_PI);
-				cairo_set_source (cr, pat);
-				cairo_set_line_width (cr, 1.0);
-				cairo_stroke (cr);
-				cairo_pattern_destroy (pat);
+				drawMeterArc	(cr, 0.5 * scale_.getWidth(), 0.5 * scale_.getHeight(), rad, 0.0, rval, drv, 
+								 getFgColors()[getStatus()], getHiColors()[getStatus()], gradient_, getBgColors()[getStatus()]);
 			}
 
-			// Fill
-			cairo_set_line_width (cr, 0.0);
-			cairo_pattern_t* fgPat = cairo_pattern_create_linear (xc - rad, yc - rad, xc + rad, yc + rad);
-			cairo_pattern_t* bgPat = cairo_pattern_create_linear (xc - rad, yc - rad, xc + rad, yc + rad);
-			if (fgPat && bgPat && (cairo_pattern_status (fgPat) == CAIRO_STATUS_SUCCESS) && (cairo_pattern_status (bgPat) == CAIRO_STATUS_SUCCESS))
+			else 
 			{
-				cairo_pattern_add_color_stop_rgba (fgPat, 0, CAIRO_RGBA(fgLo));
-				cairo_pattern_add_color_stop_rgba (fgPat, 0.25, CAIRO_RGBA(fgHi));
-				cairo_pattern_add_color_stop_rgba (fgPat, 1, CAIRO_RGBA(fgLo));
-				cairo_pattern_add_color_stop_rgba (bgPat, 0, CAIRO_RGBA(bgLo));
-				cairo_pattern_add_color_stop_rgba (bgPat, 0.25, CAIRO_RGBA(bgHi));
-				cairo_pattern_add_color_stop_rgba (bgPat, 1, CAIRO_RGBA(bgLo));
-
-				for (double v = 0; v < 1.0; v += drv)
-				{
-					if (v <= rval) 
-					{
-						if ((fgHi != hiHi) || (fgLo != hiLo))
-						{
-							fgPat = cairo_pattern_create_linear (xc - rad, yc - rad, xc + rad, yc + rad);
-							BStyles::Color cLo; 
-							cLo.setHSV
-							(
-								fgLo.hue() * (1.0 - gradient_ (v)) + hiLo.hue() * gradient_ (v),
-								fgLo.saturation() * (1.0 - gradient_ (v)) + hiLo.saturation() * gradient_ (v),
-								fgLo.value() * (1.0 - gradient_ (v)) + hiLo.value() * gradient_ (v),
-								fgLo.alpha * (1.0 - gradient_ (v)) + hiLo.alpha * gradient_ (v)
-							);
-							BStyles::Color cHi;
-							cHi.setHSV
-							(
-								fgHi.hue() * (1.0 - gradient_ (v)) + hiHi.hue() * gradient_ (v),
-								fgHi.saturation() * (1.0 - gradient_ (v)) + hiHi.saturation() * gradient_ (v),
-								fgHi.value() * (1.0 - gradient_ (v)) + hiHi.value() * gradient_ (v),
-								fgHi.alpha * (1.0 - gradient_ (v)) + hiHi.alpha * gradient_ (v)
-							);
-
-							cairo_pattern_add_color_stop_rgba (fgPat, 0, CAIRO_RGBA(cLo));
-							cairo_pattern_add_color_stop_rgba (fgPat, 0.25, CAIRO_RGBA(cHi));
-							cairo_pattern_add_color_stop_rgba (fgPat, 1, CAIRO_RGBA(cLo));
-						}
-						cairo_set_source (cr, fgPat);
-					}
-
-					else cairo_set_source (cr, bgPat);
-
-					const double a = 0.75 * M_PI + v * (1.5 * M_PI);
-
-					if (da < 3.0 * sa) 
-					{
-						cairo_arc (cr, xc, yc, 0.91 * rad, a, a + da);
-    					cairo_arc_negative (cr, xc, yc, 0.55 * rad, a + da, a);
-					}
-					else 
-					{
-						cairo_arc (cr, xc, yc, 0.91 * rad, a + sa, a + da - sa);
-    					cairo_arc_negative (cr, xc, yc, 0.55 * rad, a + da - sa, a + sa);
-					}
-					cairo_fill (cr);
-				}
-
-				cairo_pattern_destroy (bgPat);
-				cairo_pattern_destroy (fgPat);
+				drawMeterArc	(cr, 0.5 * scale_.getWidth(), 0.5 * scale_.getHeight(), rad, 1.0 - rval, 1.0, drv, 
+								 getFgColors()[getStatus()], getHiColors()[getStatus()], gradient_, getBgColors()[getStatus()]);
 			}
 		}
 

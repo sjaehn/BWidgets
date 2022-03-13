@@ -1,6 +1,6 @@
 # B.Widgets
 
-Current version: 0.2.2 (alpha)
+Current version: 0.3.0 (alpha)
 
 Rewrite of the widget toolkit of the B.Music project.
 
@@ -62,7 +62,7 @@ Then call the respective example, e. g.:
 
 ### Until 1.0
 
-- [ ] Widgets
+- [x] Widgets
   - [x] Basic container widgets (Widget, Window, Frame, ...)
   - [x] Text widgets (Label, Text, ...)
   - [x] Button and switch widgets
@@ -71,7 +71,6 @@ Then call the respective example, e. g.:
   - [x] Sliders and dial widgets
   - [x] Pad widgets
   - [x] Pattern widget
-  - [ ] Shape widget
   - [x] Piano roll widget
   - [x] Image-based widgets
   - [x] Dialog widgets (Box, TextBox, MessageBox, ...)
@@ -113,19 +112,25 @@ Then call the respective example, e. g.:
         `Focusable`
   - [x] Layers
   - [x] Scale (zoom) main Window and linked child widgets
-- [ ] Header files only (if possible)
-- [ ] Update pugl
+- [x] Reversed Valueable widgets
+- [ ] Enable / fix transfer functions
+- [ ] Header files only (where possible)
 - [ ] Documentation
 
 
 ### Until 1.2
 
-- [ ] Reversed Valueable widgets
+- [ ] Shape widget
+- [ ] Update pugl
+
+
+### Until 1.4
+
 - [ ] Layout widgets
 - [ ] Conditional widgets
 
 
-### Until 1.4+
+### Until 1.6+
 
 - [ ] Load images from SVG
 - [ ] Time events

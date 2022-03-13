@@ -23,10 +23,6 @@
 #include "Validatable.hpp"
 #include "Visualizable.hpp"
 
-#ifndef LIMIT
-#define LIMIT(val, min, max) (val < min ? min : (val > max ? max : val))
-#endif /* LIMIT */
-
 namespace BWidgets
 {
 
@@ -411,11 +407,11 @@ T ValidatableRange<T>::validate (const T& value)
     
     if (getStep() && (getMax() >= getMin()))
     {
-        if (getStep() > 0) return LIMIT (getMin() + round ((value - getMin()) / getStep()) * getStep(), getMin(), getMax());
-        return LIMIT (getMax() - round ((getMax() - value) / getStep()) * getStep(), getMin(), getMax());
+        if (getStep() > 0) return std::min (std::max (getMin() + round ((value - getMin()) / getStep()) * getStep(), getMin()), getMax());
+        return std::min (std::max (getMax() - round ((getMax() - value) / getStep()) * getStep(), getMin()), getMax());
     }
 
-    return LIMIT (value, getMin(), getMax());
+    return std::min (std::max (value, getMin()), getMax());
 }
 
 template <class T>
@@ -578,7 +574,8 @@ std::pair<T1, T2> ValidatableRange<std::pair<T1, T2>>::validate (const std::pair
         else result.second =  getMax().second - round ((getMax().second - value.second) / getStep().second) * getStep().second;
     }
 
-    return std::pair<T1, T2> (LIMIT (result.first, getMin().first, getMax().first), LIMIT (result.second, getMin().second, getMax().second));
+    return std::pair<T1, T2>    (std::min (std::max (result.first, getMin().first), getMax().first), 
+                                 std::min (std::max (result.second, getMin().second), getMax().second));
 }
 
 template <class T1, class T2>

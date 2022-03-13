@@ -97,7 +97,7 @@ Base class. Supports value validation in combination with Valueable.
 Supports validity of the value in any case.
 
 
-## ValidatablePass\<T\>
+## ValidatableRange\<T\>
 
 Validates the value to be within a range.
 

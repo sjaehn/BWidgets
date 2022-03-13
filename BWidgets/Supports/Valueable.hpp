@@ -29,8 +29,6 @@ namespace BWidgets
  */
 class Valueable : virtual public Callback, public Support
 {
-protected:
-
 public:
 
     /**

@@ -43,8 +43,6 @@ namespace BWidgets
  *  slider and supports user interaction via Clickable, Draggable, and
  *  Scrollable. Its appearance is defined by the BgColors parameter (static
  *  elements, knob) and by the FgColors parameter (value). 
- *
- *  @todo Inverse range, negative step.
  */
 class VSlider :	public VScale
 {
@@ -242,7 +240,21 @@ inline void VSlider::draw (const BUtilities::Area<>& area)
 
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
 			const double rval = getRatioFromValue (getValue(), transfer_);
-			drawKnob (cr, scale_.getX() + 0.5 * scale_.getWidth() + 0.5, scale_.getY() + (1 - rval) * scale_.getHeight(), scale_.getWidth() - 1.0, 1.0, bgColor, bgColor);
+
+			if (step_ >= 0.0) drawKnob	(cr, 
+										 scale_.getX() + 0.5 * scale_.getWidth() + 0.5, 
+										 scale_.getY() + (1.0 - rval) * scale_.getHeight(), 
+										 scale_.getWidth() - 1.0, 
+										 1.0, 
+										 bgColor, bgColor);
+
+			else drawKnob				(cr, 
+										 scale_.getX() + 0.5 * scale_.getWidth() + 0.5, 
+										 scale_.getY() + rval * scale_.getHeight(), 
+										 scale_.getWidth() - 1.0, 
+										 1.0, 
+										 bgColor, bgColor);
+
 		}
 
 		cairo_destroy (cr);

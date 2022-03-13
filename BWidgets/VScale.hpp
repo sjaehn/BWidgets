@@ -46,9 +46,7 @@ namespace BWidgets
  *  %VScale is a Valueable Widget derived from VMeter. It displays a value as a 
  *  vertical scale and supports user interaction via Clickable, Draggable, and
  *  Scrollable. Its appearance is defined by the BgColors parameter (static
- *  elements) and by the FgColors parameter (value). 
- *
- *  @todo Inverse range, negative step.
+ *  elements) and by the FgColors parameter (value).
  */
 class VScale :	public VMeter,
 				public Clickable, 
@@ -237,7 +235,11 @@ inline void VScale::onButtonPressed (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
-	if (scale_.getHeight()) setValue (getValueFromRatio ((scale_.getHeight() - (pev->getPosition().y - scale_.getY())) / scale_.getHeight(), transfer_, reTransfer_));
+	if (scale_.getHeight()) 
+	{
+		if (step_ >= 0) setValue (getValueFromRatio ((scale_.getHeight() - (pev->getPosition().y - scale_.getY())) / scale_.getHeight(), transfer_, reTransfer_));
+		else setValue (getValueFromRatio ((pev->getPosition().y - scale_.getY()) / scale_.getHeight(), transfer_, reTransfer_));
+	}
 	Clickable::onButtonPressed (event);
 }
 
@@ -300,7 +302,9 @@ inline void VScale::draw (const BUtilities::Area<>& area)
 			const double rval = getRatioFromValue (getValue(), transfer_);
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
-			drawVBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 1.0 - rval, 1.0, fgColor, bgColor);
+
+			if (step_ >= 0.0) drawVBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 1.0 - rval, 1.0, fgColor, bgColor);
+			else drawVBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 0.0, rval, fgColor, bgColor);
 		}
 
 		cairo_destroy (cr);

@@ -40,8 +40,6 @@ namespace BWidgets
  *
  *  The value can be point value (vsize = 0) or a range value (start value
  *  = widget value; end value = start value + vsize).
- *
- *  @todo Inverse range, negative step.
  */
 class HScrollBar :	public HScale
 {
@@ -276,8 +274,8 @@ inline void HScrollBar::draw (const BUtilities::Area<>& area)
 			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 			cairo_clip (cr);
 
-			const double rval1 = getRatioFromValue (getValue(), transfer_);
-			const double rval2 = getRatioFromValue (getValue() + vsize_, transfer_);
+			const double rval1 = (step_ >= 0.0 ? getRatioFromValue (getValue(), transfer_) : 1.0 - getRatioFromValue (getValue() + vsize_, transfer_));
+			const double rval2 = (step_ >= 0.0 ? getRatioFromValue (getValue() + vsize_, transfer_) : 1.0 - getRatioFromValue (getValue(), transfer_));
 			const BStyles::Color fgColor = getBgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
 			drawHBar

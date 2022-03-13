@@ -46,9 +46,7 @@ namespace BWidgets
  *  %HScale is a Valueable Widget derived from HMeter. It displays a value as 
  *  a horizontal scale and supports user interaction via Clickable, Draggable, 
  *  and Scrollable. Its appearance is defined by the BgColors parameter (static
- *  elements) and by the FgColors parameter (value). 
- *
- *  @todo Inverse range, negative step.
+ *  elements) and by the FgColors parameter (value).
  */
 class HScale :	public HMeter, 
 				public Clickable, 
@@ -236,7 +234,11 @@ inline void HScale::onButtonPressed (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
-	if (scale_.getWidth()) setValue (getValueFromRatio ((pev->getPosition().x - scale_.getX()) / scale_.getWidth(), transfer_, reTransfer_));
+	if (scale_.getWidth()) 
+	{
+		if (step_ >= 0) setValue (getValueFromRatio ((pev->getPosition().x - scale_.getX()) / scale_.getWidth(), transfer_, reTransfer_));
+		else setValue (getValueFromRatio ((scale_.getWidth() - (pev->getPosition().x - scale_.getX())) / scale_.getWidth(), transfer_, reTransfer_));
+	}
 	Clickable::onButtonPressed (event);
 }
 
@@ -299,7 +301,9 @@ inline void HScale::draw (const BUtilities::Area<>& area)
 			const double rval = getRatioFromValue (getValue(), transfer_);
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
-			drawHBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 0.0, rval, fgColor, bgColor);
+
+			if (step_ >= 0.0) drawHBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 0.0, rval, fgColor, bgColor);
+			else drawHBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 1.0 - rval, 1.0, fgColor, bgColor);
 		}
 
 		cairo_destroy (cr);

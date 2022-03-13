@@ -42,9 +42,7 @@ namespace BWidgets
  *  %HSlider is a HScale Widget. It displays a value as a horizontal
  *  slider and supports user interaction via Clickable, Draggable, and
  *  Scrollable. Its appearance is defined by the BgColors parameter (static
- *  elements, knob) and by the FgColors parameter (value). 
- *
- *  @todo Inverse range, negative step.
+ *  elements, knob) and by the FgColors parameter (value).
  */
 class HSlider :	public HScale
 {
@@ -241,7 +239,20 @@ inline void HSlider::draw (const BUtilities::Area<>& area)
 
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
 			const double rval = getRatioFromValue (getValue(), transfer_);
-			drawKnob (cr, scale_.getX() + rval * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight() + 0.5, scale_.getHeight() - 1.0, 1.0, bgColor, bgColor);
+
+			if (step_ >= 0.0) drawKnob	(cr, 
+										 scale_.getX() + rval * scale_.getWidth(), 
+										 scale_.getY() + 0.5 * scale_.getHeight() + 0.5, 
+										 scale_.getHeight() - 1.0, 
+										 1.0, 
+										 bgColor, bgColor);
+
+			else drawKnob				(cr, 
+										 scale_.getX() + (1.0 - rval) * scale_.getWidth(), 
+										 scale_.getY() + 0.5 * scale_.getHeight() + 0.5, 
+										 scale_.getHeight() - 1.0, 
+										 1.0, 
+										 bgColor, bgColor);
 		}
 
 		cairo_destroy (cr);

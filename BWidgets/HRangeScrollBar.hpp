@@ -56,8 +56,6 @@ namespace BWidgets
  *  the range value. In addition, it supports dragging to move the value range
  *  or to move the ends (min, max). Its appearance is defined by the BgColors 
  *  parameter.
- *
- *  @todo Inverse range, negative step.
  */
 class HRangeScrollBar :	public Widget, 
 						public ValueableTyped<std::pair<double, double>>, 
@@ -380,6 +378,7 @@ inline void HRangeScrollBar::update ()
 
 		scrollbar.moveTo (x, y);
 		scrollbar.resize (w, h);
+		scrollbar.setRange (getMin().first, getMax().first, getStep().first);
 		scrollbar.setValue (v.first);
 		scrollbar.setValueSize(v.second - v.first);
 
@@ -389,10 +388,10 @@ inline void HRangeScrollBar::update ()
 		symbol2.moveTo (0.25 * h, 0.25 * h);
 		symbol2.resize (0.5 * h, 0.5 * h);
 
-		button1.moveTo (x + (w - h) * rv.first, y);
+		button1.moveTo (x + (w - h) * (step_.first >= 0.0 ? rv.first : 1.0 - rv.first), y);
 		button1.resize (h, h);
 
-		button2.moveTo (x + (w - h) * rv.second, y);
+		button2.moveTo (x + (w - h) * (step_.second >= 0.0 ? rv.second : 1.0 - rv.second), y);
 		button2.resize (h, h);
 
 		const BStyles::Color bgColor =getBgColors()[getStatus()];
@@ -446,7 +445,7 @@ inline void HRangeScrollBar::buttonDraggedCallback (BEvents::Event* event)
 	const double height = p->getEffectiveHeight ();
 	const double px = std::max (std::min (w->getPosition().x, x0 + width - height), x0);
 
-	const double rv = (px - x0) / (width - height);
+	const double rv = (p->step_.first >= 0.0 ? (px - x0) / (width - height) : 1.0 - (px - x0) / (width - height));
 	value_type v = p->getValue();
 	const value_type rv0 = p->getRatioFromValue (v, p->getTransferFunction());
 	if ((w ==&p->button1) && (rv <= rv0.second)) v.first = p->getValueFromRatio (value_type (rv, rv0.second)).first;
