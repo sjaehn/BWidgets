@@ -26,6 +26,8 @@
 #include "Image.hpp"
 #include "../BMusic/Sample.hpp"
 #include <cairo/cairo.h>
+#include <sndfile.h>
+#include <utility>
 
 #ifndef SF_FORMAT_MP3
 #ifndef MINIMP3_IMPLEMENTATION
@@ -361,25 +363,25 @@ inline void SampleChooser::setFileName (const std::string& filename)
 inline void SampleChooser::setStart (const int64_t start)
 {
 	if (!sample_) return;
-	sample_->start = LIMIT (start, 0, sample_->info.frames - 1);
+	sample_->start = std::min (std::max (start, 0l), sample_->info.frames - 1);
 	update();
 }
 
 inline int64_t SampleChooser::getStart() const 
 {
-	return (sample_ ? LIMIT (sample_->start, 0, sample_->info.frames - 1) : 0);
+	return (sample_ ? std::min (std::max (sample_->start, 0l), sample_->info.frames - 1) : 0);
 }
 
 inline void SampleChooser::setEnd (const int64_t end)
 {
 	if (!sample_) return;
-	sample_->end = LIMIT (end, 0, sample_->info.frames);
+	sample_->end = std::min (std::max (end, 0l), sample_->info.frames);
 	update();
 }
 
 inline int64_t SampleChooser::getEnd() const 
 {
-	return (sample_ ? LIMIT (sample_->end, 1, sample_->info.frames) : 0);
+	return (sample_ ? std::min (std::max (sample_->end, 1l), sample_->info.frames) : 0);
 }
 
 inline void SampleChooser::setLoop (const bool loop) 
@@ -693,8 +695,8 @@ inline void SampleChooser::lineDraggedCallback (BEvents::Event* event)
 	const double dp = pev->getDelta().x / fc->waveform.getEffectiveWidth();
 	const double df = dp * range * double (fc->sample_->info.frames);
 
-	if (w == &fc->startMarker) fc->sample_->start = LIMIT (fc->sample_->start + df, 0, fc->sample_->info.frames - 1);
-	else if (w == &fc->endMarker) fc->sample_->end = LIMIT (fc->sample_->end + df, 1, fc->sample_->info.frames);
+	if (w == &fc->startMarker) fc->sample_->start = std::min (std::max (fc->sample_->start + static_cast<sf_count_t>(df), 0l), fc->sample_->info.frames - 1);
+	else if (w == &fc->endMarker) fc->sample_->end = std::min (std::max (fc->sample_->end + static_cast<sf_count_t>(df), 1l), fc->sample_->info.frames);
 
 	if (fc->sample_->start >= fc->sample_->end) fc->sample_->start = fc->sample_->end - 1;
 	fc->drawWaveform();
@@ -741,7 +743,7 @@ inline void SampleChooser::drawWaveform()
 			double lo = sample_->get (start * double (sample_->info.frames), 0, sample_->info.samplerate);
 			double hi = lo;
 			const double step = 0.1 / w;
-			const double minstep = LIMIT (1.0 / (range * double (sample_->info.frames)), 0.01 * step, step);
+			const double minstep = std::min (std::max (1.0 / (range * double (sample_->info.frames)), 0.01 * step), step);
 			for (double x = 0; x < 1.0; x += step)
 			{
 				double s = 0;
