@@ -946,6 +946,8 @@ index 0. Negative indexed layers will be displayed in front of the
 default layer, positive indexed layers behind. The widget layer can be
 changed using `setLayer()` and is returned by `getLayer()`.
 
+![layersandlevels](../suppl/LayersAndLevels.png)
+
 
 ### Level and Stacking
 
@@ -1059,6 +1061,8 @@ You can find an example for using different Styles in
 
 ![styles](../suppl/Styles.png)
 
+### Draws
+
 Some widget classes (e. g., switches, sliders, scales, dials, pads) use Draws
 functions (locaded in Draws/) to draw widget elements like pseudo 3D bars, 
 pads, and arcs. Feel free to create your own drawing functions and implement
@@ -1091,11 +1095,59 @@ Main Window attribute to scale the main window and all containing widgets.
 The zoom factor is set by `setZoom()` and returned by `getZoom()`.
 
 
-### Widget-specific attributes and decorations
+### Values
 
-Specifc widgets may have got specific attributes and decorations. Like values,
-ranges, labels, ... . They may inherit their attributes and decorations from 
-their Supports (see there).
+Some widgets, like dials, sliders, buttons, and boxes, may also have got a 
+value if the widget inherits from `Valueable` or `ValueableTyped<T>`. The type
+of the value is defined by the respective widget and can principially be any
+*CopyConstructable* type:
+
+*  Buttons usually have got `bool` values (notable
+   exeption is `SpinButton` with `int` values of [-1,1]).
+*  Dials and sliders have got `double` values. 
+*  The range scrollbars `HRangeScrollbar` and `VRangeScrollbar` use 
+   `std::pair<double,double>` to define the range. 
+*  The value of box widgets (but NOT `CheckBox` which is a button widget) 
+   stores the index of the selected / activated element.
+*  The text of a `LabelEdit` is stored in its `std::string` value. 
+*  The complete file path of the selected file in `FileChooser` and 
+   `SampleChooser` is stored in a `std::string` value.
+*  And the value of HPianoRoll is a `std::map<uint8_t,uint8_t>` of all MIDI
+   indexes and their respective velocities.
+
+
+#### Validation
+
+Validates the value of an object.
+
+
+##### Pass
+
+Passes all values through the validation step.
+
+
+##### Range
+
+The value is (optional stepwisely) kept within a range between its range min
+and its range max. Therefore, the value type MUST support the default 
+comparison operators and default arithmetric operators.
+
+In addtion, a negative step signals a reversed orientation and the widget
+displays the content in a reversed manner (if possible).
+
+![setstep](../suppl/setStep.png)
+
+
+#### Value transfer
+
+TODO
+
+
+### Other widget-specific attributes and decorations
+
+Specifc widgets may have got additional / other specific attributes and 
+decorations. They may inherit their attributes and decorations from their 
+respective Supports (see there).
 
 
 ## Events
