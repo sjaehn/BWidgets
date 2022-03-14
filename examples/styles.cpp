@@ -29,6 +29,7 @@ using namespace BWidgets;
 using namespace BStyles;
 using namespace BUtilities;
 
+// Definition of a style with two substyles
 Style style =
 {
     /* Default style - don't need to be declared */
@@ -41,7 +42,7 @@ Style style =
     {Urid::urid (STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
     */
 
-    /* Alternative style 1*/
+    /* Alternative style 1 for widgets with the URID: URI "/ua" */
     {Urid::urid (URI "/ua"), makeAny<Style>({
         {Urid::urid (STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(yellows)},
         {Urid::urid (STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
@@ -51,7 +52,7 @@ Style style =
         })}
     })},
 
-    /* Alternative style 2*/
+    /* Alternative style 2 for widgets with the URID: URI "/bw" */
     {Urid::urid (URI "/bw"), makeAny<Style>({
         {Urid::urid (STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(whites)},
         {Urid::urid (STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>({darkdarkgrey, darkgrey, black, black})},
@@ -68,6 +69,7 @@ int main ()
     Window window (300, 360, 0, URID_UNKNOWN_URID, "Styles", true);
     window.setStyle(style);
 
+    // Widgets in default style with URID: URI "/default"
     Label defaultLabel (10, 10, 280, 20, "Default style");
     window.add (&defaultLabel);
     ValueDial defaultValueDial  (10, 30, 60, 75, 0.3, 0.0, 1.0, 0.0, 
@@ -86,6 +88,7 @@ int main ()
                                          Urid::urid (URI "/default"));
     window.add (&defaultValueVSlider);
 
+    // Widgets in the alternative style 1 with URID: URI "/ua"
     Label uaLabel (10, 130, 280, 20, "Alternative style 1");
     window.add (&uaLabel);
     ValueDial uaValueDial   (10, 150, 60, 75, 0.3, 0.0, 1.0, 0.0, 
@@ -104,6 +107,7 @@ int main ()
                                  Urid::urid (URI "/ua"));
     window.add (&uaValueVSlider);
 
+    // Widgets in alternaltive style 2 with URID: URI "/bw"
     Label bwLabel (10, 250, 280, 20, "Alternative style 2");
     window.add (&bwLabel);
     ValueDial bwValueDial   (10, 270, 60, 75, 0.3, 0.0, 1.0, 0.0, 

@@ -15,6 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+
+// Define path to alternative draws
 #define BWIDGETS_DEFAULT_DRAWARC_PATH "../examples/OopsDraws/drawArc.hpp"
 #define BWIDGETS_DEFAULT_DRAWARCHANDLE_PATH "../examples/OopsDraws/drawArcHandle.hpp"
 #define BWIDGETS_DEFAULT_DRAWHBAR_PATH "../examples/OopsDraws/drawHBar.hpp"
@@ -31,10 +33,13 @@ using namespace BWidgets;
 int main ()
 {
     // Window
-    Window window (300, 120, 0, URID_UNKNOWN_URID, "Styles", true);
+    Window window (300, 120, 0, URID_UNKNOWN_URID, "Draws", true);
 
+    // Label
     Label label (10, 10, 280, 20, "Using B.Oops-like Draws");
     window.add (&label);
+
+    // Dial and sliders
     ValueDial valueDial (10, 30, 60, 75, 0.3, 0.0, 1.0, 0.0);
     window.add (&valueDial);
     ValueHSlider valueHSlider (110, 40, 100, 60, 0.3, 0.0, 1.0, 0.0);
