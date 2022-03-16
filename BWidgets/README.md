@@ -922,7 +922,7 @@ The widget URID can be used to assign styles and to identify a widget.
 
 The widget title is shown in the case of a `Window` object in the title bar.
 All (other) widgets may show the title on hovering over the widget if the 
-title is set (not \"\") and the widget is `Focusable`.
+title is set (not \"\") and the widget is `PointerFocusable`.
 
 The title can also be used to identify a widget. The widget title is set with 
 `setTitle()` and returned by `getTitle()`.

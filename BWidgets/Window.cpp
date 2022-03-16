@@ -28,11 +28,11 @@
 #include "../BEvents/ValueChangedEvent.hpp"
 #include "../BEvents/WheelEvent.hpp"
 #include "../BEvents/KeyEvent.hpp"
-#include "../BEvents/FocusEvent.hpp"
+#include "../BEvents/PointerFocusEvent.hpp"
 #include "Supports/Closeable.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
-#include "Supports/Focusable.hpp"
+#include "Supports/PointerFocusable.hpp"
 #include "Supports/KeyPressable.hpp"
 #include "Supports/Messagable.hpp"
 #include "Supports/Pointable.hpp"
@@ -402,7 +402,7 @@ void Window::handleEvents ()
 							p, 
 							[] (const Widget* f) 
 							{
-								return f->isVisible() && dynamic_cast<const Focusable*>(f) && dynamic_cast<const Focusable*>(f)->isFocusable();
+								return f->isVisible() && dynamic_cast<const PointerFocusable*>(f) && dynamic_cast<const PointerFocusable*>(f)->isFocusable();
 							}
 						);
 						if (w)
@@ -436,12 +436,12 @@ void Window::handleEvents ()
 					if (widget->is<Valueable>()) dynamic_cast<Valueable*>(widget)->onValueChanged(event);
 					break;
 
-				case BEvents::Event::FOCUS_IN_EVENT:
-					if (widget->is<Focusable>()) dynamic_cast<Focusable*> (widget)->onFocusIn(event);
+				case BEvents::Event::POINTER_FOCUS_IN_EVENT:
+					if (widget->is<PointerFocusable>()) dynamic_cast<PointerFocusable*> (widget)->onFocusIn(event);
 					break;
 
-				case BEvents::Event::FOCUS_OUT_EVENT:
-					if (widget->is<Focusable>()) dynamic_cast<Focusable*> (widget)->onFocusOut(event);
+				case BEvents::Event::POINTER_FOCUS_OUT_EVENT:
+					if (widget->is<PointerFocusable>()) dynamic_cast<PointerFocusable*> (widget)->onFocusOut(event);
 					break;
 
 				case BEvents::Event::MESSAGE_EVENT:
@@ -648,8 +648,8 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 				// FOCUS_EVENT
 				widget = w->getWidgetAt	(position, 
-												 [] (Widget* widget) {return widget->isVisible() && widget->is<Focusable>();},
-												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::FOCUS_IN_EVENT);});
+												 [] (Widget* widget) {return widget->isVisible() && widget->is<PointerFocusable>();},
+												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::POINTER_FOCUS_IN_EVENT);});
 				if (widget && (widget != w))
 				{
 					w->addEventToQueue
@@ -786,7 +786,7 @@ void Window::translateTimeEvent ()
 		Widget* widget = grab->getWidget();
 		if (widget)
 		{
-			Focusable* focus = dynamic_cast<Focusable*> (widget);
+			PointerFocusable* focus = dynamic_cast<PointerFocusable*> (widget);
 			if (focus)
 			{
 				std::set<BDevices::MouseDevice> buttonDevices = grab->getDevices();
@@ -798,13 +798,13 @@ void Window::translateTimeEvent ()
 
 				if ((!focused_) && focus->isFocusActive (diffMs))
 				{
-					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::Event::FOCUS_IN_EVENT, position));
+					addEventToQueue (new BEvents::PointerFocusEvent (widget, BEvents::Event::POINTER_FOCUS_IN_EVENT, position));
 					focused_ = true;
 				}
 
 				else if (focused_ && (!focus->isFocusActive (diffMs)))
 				{
-					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::Event::FOCUS_OUT_EVENT, position));
+					addEventToQueue (new BEvents::PointerFocusEvent (widget, BEvents::Event::POINTER_FOCUS_OUT_EVENT, position));
 					focused_ = false;
 				}
 			}
@@ -826,13 +826,13 @@ void Window::unfocus ()
 			Widget* widget = grab->getWidget();
 			if (widget)
 			{
-				Focusable* focus = dynamic_cast<Focusable*> (widget);
+				PointerFocusable* focus = dynamic_cast<PointerFocusable*> (widget);
 				if (focus)
 				{
 					std::set<BDevices::MouseDevice> buttonDevices = grab->getDevices();
 					std::set<BDevices::MouseDevice>::iterator it = buttonDevices.find(mouse);
 					BUtilities::Point<> position = (it != buttonDevices.end() ? it->position : BUtilities::Point<> ());
-					addEventToQueue (new BEvents::FocusEvent (widget, BEvents::Event::FOCUS_OUT_EVENT, position));
+					addEventToQueue (new BEvents::PointerFocusEvent (widget, BEvents::Event::POINTER_FOCUS_OUT_EVENT, position));
 				}
 			}
 		}

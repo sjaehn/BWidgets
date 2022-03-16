@@ -191,7 +191,7 @@ inline SymbolPad<T>::SymbolPad	(const double x, const double y, const double wid
 							 BEvents::Event::BUTTON_CLICK_EVENT + 
 							 BEvents::Event::POINTER_DRAG_EVENT +
 							 BEvents::Event::WHEEL_SCROLL_EVENT + 
-							 BEvents::Event::FOCUS_EVENTS);
+							 BEvents::Event::POINTER_FOCUS_EVENTS);
 	symbol.setTxColors (symbol.getBgColors());
 	symbol.setStatus (BStyles::STATUS_INACTIVE);
 	this->add (&symbol);

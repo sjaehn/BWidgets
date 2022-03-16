@@ -1,6 +1,6 @@
 # B.Widgets
 
-Current version: 0.5.0 (alpha)
+Current version: 0.6.0 (alpha)
 
 Rewrite of the widget toolkit of the B.Music project.
 
@@ -100,7 +100,7 @@ Then call the respective example, e. g.:
   - [x] Event handling in the main Window
   - [x] Control of event handling by supporting `EventMergeable` and 
         `EventPassable`
-  - [x] User interaction by supporting `Clickable`, `Draggable`, `Focusable`,
+  - [x] User interaction by supporting `Clickable`, `Draggable`, `PointerFocusable`,
         `Toggleable`, `Scrollable` and `KeyPressable`
   - [x] Generic control over widget values using `Valueable`
   - [x] Additional messages by supporting `Messageable` 
@@ -110,11 +110,11 @@ Then call the respective example, e. g.:
   - [x] Define substitutable widget elemet draw functions (see Draws)
   - [x] Optimize widget size using `resize()`
   - [x] Show default hover text (widget title, if set) by supporting
-        `Focusable`
+        `PointerFocusable`
   - [x] Layers
   - [x] Scale (zoom) main Window and linked child widgets
-- [x] Reversed Valueable widgets
-- [x] Enable / fix transfer functions
+  - [x] Reversed Valueable widgets by `setStep()` with negative values
+  - [x] Enable / fix transfer functions
 - [ ] Header files only (where possible)
 - [ ] Documentation
 

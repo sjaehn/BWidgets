@@ -28,7 +28,7 @@ namespace BWidgets
 /**
  *  @brief  Support for passing events to subjacent widgets.
  *
- *  By default, host events (e. g., PointerEvent, WheelEvent, FocusEvent) are
+ *  By default, host events (e. g., PointerEvent, WheelEvent, PointerFocusEvent) are
  *  associated with the most frontward visible widget for the respective
  *  position. The event is then emitted by this widget if this widget actively
  *  supports (is<SupportClass>() == true) the respective event. Otherwise it

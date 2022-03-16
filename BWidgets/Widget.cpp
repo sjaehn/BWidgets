@@ -18,14 +18,14 @@
 
 #include "Widget.hpp"
 #include "Supports/EventPassable.hpp"
-#include "Supports/Focusable.hpp"
+#include "Supports/PointerFocusable.hpp"
 #include "Supports/Linkable.hpp"
 #include "Supports/Pointable.hpp"
 #include "Supports/Visualizable.hpp"
 #include "Window.hpp"
 #include "Label.hpp"
 #include "../BEvents/ExposeEvent.hpp"
-#include "../BEvents/FocusEvent.hpp"
+#include "../BEvents/PointerFocusEvent.hpp"
 #include <cstdint>
 #include <string>
 
@@ -42,7 +42,7 @@ Widget::Widget (const double x, const double y, const double width, const double
 	Visualizable (width, height),
 	EventMergeable(),
 	EventPassable(),
-	Focusable(),
+	PointerFocusable(),
 	urid_ (urid),
 	position_ (x, y),
 	stacking_ (STACKING_NORMAL),
@@ -85,7 +85,7 @@ void Widget::copy (const Widget* that)
 	Visualizable::operator= (*that);
 	EventMergeable::operator= (*that);
 	EventPassable::operator= (*that);
-	Focusable::operator= (*that);
+	PointerFocusable::operator= (*that);
 	position_ = that->position_;
 	stacking_ = that->stacking_;
 	status_ = that->status_;
@@ -640,7 +640,7 @@ void Widget::emitExposeEvent (const BUtilities::Area<>& area)
 
 void Widget::onFocusIn (BEvents::Event* event)
 {
-	BEvents::FocusEvent* fev = dynamic_cast<BEvents::FocusEvent*> (event);
+	BEvents::PointerFocusEvent* fev = dynamic_cast<BEvents::PointerFocusEvent*> (event);
 	if (!fev) return;
 
 	if (isFocusable() && focus_ && (!contains(focus_)))
@@ -650,17 +650,17 @@ void Widget::onFocusIn (BEvents::Event* event)
 		add (focus_);
 	}
 
-	Focusable::onFocusIn (event);
+	PointerFocusable::onFocusIn (event);
 }
 
 void Widget::onFocusOut (BEvents::Event* event)
 {
-	BEvents::FocusEvent* fev = dynamic_cast<BEvents::FocusEvent*> (event);
+	BEvents::PointerFocusEvent* fev = dynamic_cast<BEvents::PointerFocusEvent*> (event);
 	if (!fev) return;
 
 	if (isFocusable() && focus_ && (contains(focus_))) release (focus_);
 
-	Focusable::onFocusOut (event);
+	PointerFocusable::onFocusOut (event);
 }
 
 Widget* Widget::getWidgetAt	(const BUtilities::Point<>& position, 

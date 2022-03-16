@@ -291,19 +291,19 @@ inline VRangeScrollBar::VRangeScrollBar	(const double  x, const double y, const 
 	symbol2 (Symbol::ADD_SYMBOL, urid, title)
 {
 	scrollbar.setFocusable(false);
-	scrollbar.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::WHEEL_SCROLL_EVENT);
+	scrollbar.setEventPassable(BEvents::Event::POINTER_FOCUS_EVENTS + BEvents::Event::WHEEL_SCROLL_EVENT);
 	scrollbar.setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, scrollbarChangedCallback);
 	scrollbar.setScrollable (false);
 	button1.setFocusable(false);
-	button1.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::WHEEL_SCROLL_EVENT);
+	button1.setEventPassable(BEvents::Event::POINTER_FOCUS_EVENTS + BEvents::Event::WHEEL_SCROLL_EVENT);
 	button1.setCallbackFunction(BEvents::Event::POINTER_DRAG_EVENT, buttonDraggedCallback);
 	button2.setFocusable(false);
-	button2.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::WHEEL_SCROLL_EVENT);
+	button2.setEventPassable(BEvents::Event::POINTER_FOCUS_EVENTS + BEvents::Event::WHEEL_SCROLL_EVENT);
 	button2.setCallbackFunction(BEvents::Event::POINTER_DRAG_EVENT, buttonDraggedCallback);
 	symbol1.setFocusable(false);
-	symbol1.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::MOUSE_EVENTS);
+	symbol1.setEventPassable(BEvents::Event::POINTER_FOCUS_EVENTS + BEvents::Event::MOUSE_EVENTS);
 	symbol2.setFocusable(false);
-	symbol2.setEventPassable(BEvents::Event::FOCUS_EVENTS + BEvents::Event::MOUSE_EVENTS);
+	symbol2.setEventPassable(BEvents::Event::POINTER_FOCUS_EVENTS + BEvents::Event::MOUSE_EVENTS);
 	button1.add(&symbol1);
 	button2.add(&symbol2);
 	add (&scrollbar);

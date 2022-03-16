@@ -26,7 +26,7 @@
 #include "Supports/Visualizable.hpp"
 #include "Supports/EventMergeable.hpp"
 #include "Supports/EventPassable.hpp"
-#include "Supports/Focusable.hpp"
+#include "Supports/PointerFocusable.hpp"
 
 #include "../BUtilities/Any.hpp"
 
@@ -89,7 +89,7 @@ class Window;
  *  Note: The class %Widget is devoid of any copy constructor or assignment
  *  operator. 
  */
-class Widget : public Linkable, public Visualizable, public EventMergeable, public EventPassable, public Focusable
+class Widget : public Linkable, public Visualizable, public EventMergeable, public EventPassable, public PointerFocusable
 {
 
 protected:

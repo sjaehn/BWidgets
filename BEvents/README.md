@@ -10,7 +10,7 @@ Event
  ├── KeyEvent
  ├── PointerEvent
  ├── WheelEvent
- ├── FocusEvent
+ ├── PointerFocusEvent
  ├── ValueChangedEvent
  |    ╰── ValueChangeTypedEvent<T>
  ╰── MessageEvent
@@ -66,7 +66,7 @@ handled by the respective widget and can be redirected to external callback
 functions.
 
 
-## FocusEvent
+## PointerFocusEvent
 
 FocusEvents are emitted by widgets if the pointer rests for a predefined time
 over the widget.

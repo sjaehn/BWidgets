@@ -124,8 +124,8 @@ int main ()
     frameDragLabel.setFocusable(false);
     frameDragLabel.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
     frameDragLabel.setEventPassable(BEvents::Event::POINTER_DRAG_EVENT, true);
-    frameDragLabel.setEventPassable(BEvents::Event::FOCUS_IN_EVENT, true);
-    frameDragLabel.setEventPassable(BEvents::Event::FOCUS_OUT_EVENT, true);
+    frameDragLabel.setEventPassable(BEvents::Event::POINTER_FOCUS_IN_EVENT, true);
+    frameDragLabel.setEventPassable(BEvents::Event::POINTER_FOCUS_OUT_EVENT, true);
     frame.add (&frameDragLabel);
     frameDragLabel.moveTo(frameDragLabel.center(), frameDragLabel.middle());
     Label frameLabel (110, 80, 80, 20, "Frame");

@@ -61,9 +61,9 @@ public:
         VALUE_CHANGED_EVENT     = 0x0800,
         MESSAGE_EVENT           = 0x1000,
         CONTENT_EVENTS          = VALUE_CHANGED_EVENT + MESSAGE_EVENT,
-        FOCUS_IN_EVENT          = 0x2000,
-        FOCUS_OUT_EVENT         = 0x4000,
-        FOCUS_EVENTS            = FOCUS_IN_EVENT + FOCUS_OUT_EVENT
+        POINTER_FOCUS_IN_EVENT  = 0x2000,
+        POINTER_FOCUS_OUT_EVENT = 0x4000,
+        POINTER_FOCUS_EVENTS    = POINTER_FOCUS_IN_EVENT + POINTER_FOCUS_OUT_EVENT
     };
 
 protected:

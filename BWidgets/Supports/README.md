@@ -6,7 +6,7 @@ features to objects (incl. Widgets).
 ```
 Support
  ├── Pointable          < Callback
- ├── Focusable          < Callback
+ ├── PointerFocusable   < Callback
  ├── Clickable          < Callback
  ├── Draggable          < Callback
  ├── Scrollable         < Callback
@@ -42,9 +42,9 @@ The Callback class provides callback functionality for Events. Callback is suppo
 Supports pointer tracking by pointer motion events.
 
 
-## Focusable
+## PointerFocusable
 
-Focusable supports FocusEvents of the type FOCUS_IN_EVENT or FOCUS_OUT_EVENT.
+PointerFocusable supports FocusEvents of the type POINTER_FOCUS_IN_EVENT or POINTER_FOCUS_OUT_EVENT.
 FocusEvents are typically emitted if the (mouse) pointer rests over a widget.
 
 
@@ -142,8 +142,8 @@ Event merging support.
 
 ## EventPassable
 
-By default, host events (e. g., PointerEvent, WheelEvent, FocusEvent) are
-associated with the most frontward visible widget for the respective
+By default, host events (e. g., PointerEvent, WheelEvent, PointerFocusEvent) 
+are associated with the most frontward visible widget for the respective
 position. The event is then emitted by this widget if this widget supports
 the respective event. Otherwise it blocks this event.
 
