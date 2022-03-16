@@ -294,8 +294,7 @@ inline void ImageDial::onButtonPressed (BEvents::Event* event)
 				if ((a >= staticMinAngle_) && (a <= staticMaxAngle_)) 
 				{
 					if (step_ < 0.0) a = staticMaxAngle_ - (a - staticMinAngle_);
-					setValue (getValueFromRatio	((a - staticMinAngle_) / (staticMaxAngle_ - staticMinAngle_), 
-												 transfer_, reTransfer_));
+					setValue (getValueFromRatio	((a - staticMinAngle_) / (staticMaxAngle_ - staticMinAngle_)));
 				}
 			}
 		}
@@ -318,8 +317,7 @@ inline void ImageDial::onPointerDragged (BEvents::Event* event)
 		if ((staticMinAngle_ != staticMaxAngle_) && (r >= 1.0))
 		{
 			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-			else setValue (getValueFromRatio	(getRatioFromValue(getValue(), transfer_) - pev->getDelta().y / ((staticMaxAngle_ - staticMinAngle_) * r), 
-												 transfer_, reTransfer_));
+			else setValue (getValueFromRatio (getRatioFromValue(getValue()) - pev->getDelta().y / ((staticMaxAngle_ - staticMinAngle_) * r)));
 		}
 	}
 	Draggable::onPointerDragged (event);
@@ -337,8 +335,7 @@ inline void ImageDial::onWheelScrolled (BEvents::Event* event)
 		if ((staticMinAngle_ != staticMaxAngle_) && (r >= 1.0))
 	{
 		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-		else setValue (getValueFromRatio	(getRatioFromValue(getValue(), transfer_) - wev->getDelta().y / ((staticMaxAngle_ - staticMinAngle_) * r), 
-											transfer_, reTransfer_));
+		else setValue (getValueFromRatio (getRatioFromValue(getValue()) - wev->getDelta().y / ((staticMaxAngle_ - staticMinAngle_) * r)));
 	}
 
 	Scrollable::onWheelScrolled (event);

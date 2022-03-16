@@ -241,7 +241,7 @@ inline void HScrollBar::onPointerDragged (BEvents::Event* event)
 	if (scale_.getWidth()) 
 	{
 		if (getStep() != 0.0) setValue (getValue() + pev->getDelta().x * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) + pev->getDelta().x / scale_.getWidth(), transfer_, reTransfer_));
+		else setValue (getValueFromRatio (getRatioFromValue(getValue()) + pev->getDelta().x / scale_.getWidth()));
 	}
 	Draggable::onPointerDragged (event);
 }
@@ -274,8 +274,8 @@ inline void HScrollBar::draw (const BUtilities::Area<>& area)
 			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 			cairo_clip (cr);
 
-			const double rval1 = (step_ >= 0.0 ? getRatioFromValue (getValue(), transfer_) : 1.0 - getRatioFromValue (getValue() + vsize_, transfer_));
-			const double rval2 = (step_ >= 0.0 ? getRatioFromValue (getValue() + vsize_, transfer_) : 1.0 - getRatioFromValue (getValue(), transfer_));
+			const double rval1 = (step_ >= 0.0 ? getRatioFromValue (getValue()) : 1.0 - getRatioFromValue (getValue() + vsize_));
+			const double rval2 = (step_ >= 0.0 ? getRatioFromValue (getValue() + vsize_) : 1.0 - getRatioFromValue (getValue()));
 			const BStyles::Color fgColor = getBgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
 			drawHBar

@@ -237,8 +237,8 @@ inline void VScale::onButtonPressed (BEvents::Event* event)
 	if (!pev) return;
 	if (scale_.getHeight()) 
 	{
-		if (step_ >= 0) setValue (getValueFromRatio ((scale_.getHeight() - (pev->getPosition().y - scale_.getY())) / scale_.getHeight(), transfer_, reTransfer_));
-		else setValue (getValueFromRatio ((pev->getPosition().y - scale_.getY()) / scale_.getHeight(), transfer_, reTransfer_));
+		if (step_ >= 0) setValue (getValueFromRatio ((scale_.getHeight() - (pev->getPosition().y - scale_.getY())) / scale_.getHeight()));
+		else setValue (getValueFromRatio ((pev->getPosition().y - scale_.getY()) / scale_.getHeight()));
 	}
 	Clickable::onButtonPressed (event);
 }
@@ -253,7 +253,7 @@ inline void VScale::onPointerDragged (BEvents::Event* event)
 		if (scale_.getHeight()) 
 		{
 			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-			else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - pev->getDelta().y / scale_.getHeight(), transfer_, reTransfer_));
+			else setValue (getValueFromRatio (getRatioFromValue(getValue()) - pev->getDelta().y / scale_.getHeight()));
 		}
 	}
 	Draggable::onPointerDragged (event);
@@ -266,7 +266,7 @@ inline void VScale::onWheelScrolled (BEvents::Event* event)
 	if (scale_.getHeight()) 
 	{
 		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - wev->getDelta().y / scale_.getHeight(), transfer_, reTransfer_));
+		else setValue (getValueFromRatio (getRatioFromValue(getValue()) - wev->getDelta().y / scale_.getHeight()));
 	}
 	Scrollable::onWheelScrolled (event);
 }
@@ -299,7 +299,7 @@ inline void VScale::draw (const BUtilities::Area<>& area)
 			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 			cairo_clip (cr);
 
-			const double rval = getRatioFromValue (getValue(), transfer_);
+			const double rval = getRatioFromValue (getValue());
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
 

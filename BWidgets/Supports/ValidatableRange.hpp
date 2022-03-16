@@ -21,6 +21,7 @@
 #include <functional>
 #include "ValueableTyped.hpp"
 #include "Validatable.hpp"
+#include "ValueTransferable.hpp"
 #include "Visualizable.hpp"
 
 namespace BWidgets
@@ -127,23 +128,18 @@ public:
     virtual T validate (const T& value);
 
     /**
-     *  @brief  Gets the range position [0..1] from a value.
+     *  @brief  Gets the range position [0..1] for a passed @a value .
      *  @param value  Value.
-     *  @param func  Optional, transfer function.
      *  @return  Ratio.
      */
-    virtual double getRatioFromValue (const T& value, std::function<T (const T& x)> func = [] (const T& x) {return x;});
+    virtual double getRatioFromValue (const T& value) const;
 
     /**
-     *  @brief  Gets the value from a range position.
+     *  @brief  Gets a value from a range position ( @a ratio ).
      *  @param ratio  Ratio.
-     *  @param func  Optional, transfer function.
-     *  @param revfunc  Optional, re-transfer function.
      *  @return  Value.
      */
-    virtual T getValueFromRatio (const double ratio, 
-                                 std::function<T (const T& x)> func = [] (const T& x) {return x;},
-                                 std::function<T (const T& x)> revfunc = [] (const T& x) {return x;});
+    virtual T getValueFromRatio (const double ratio) const;
 
 };
 
@@ -247,31 +243,25 @@ public:
     virtual void setRange (const std::pair<T1, T2>& min, const std::pair<T1, T2>& max, const std::pair<T1, T2>& step);
 
     /**
+     *  @brief  Gets the range position [0..1] for a passed @a value .
+     *  @param value  Value.
+     *  @return  Ratio.
+     */
+    virtual std::pair<double, double> getRatioFromValue (const std::pair<T1, T2>& value) const;
+
+    /**
+     *  @brief  Gets a value from a range position ( @a ratio ).
+     *  @param ratio  Ratio.
+     *  @return  Value.
+     */
+    virtual std::pair<T1, T2> getValueFromRatio (const std::pair<double, double>& ratio) const;
+
+    /**
      *  @brief  Validates a value.
      *  @param value  Value to be validated.
      *  @return T  Validated value.
      */
     virtual std::pair<T1, T2> validate (const std::pair<T1, T2>& value);
-
-    /**
-     *  @brief  Gets the range position [0..1] from a value.
-     *  @param value  Value.
-     *  @param func  Optional, transfer function.
-     *  @return  Ratio.
-     */
-    virtual std::pair<double, double> getRatioFromValue (const std::pair<T1, T2>& value, 
-                                                         std::function<std::pair<T1, T2> (const std::pair<T1, T2>& x)> func = [] (const std::pair<T1, T2>& x) {return x;});
-
-    /**
-     *  @brief  Gets the value from a range position.
-     *  @param ratio  Ratio.
-     *  @param func  Optional, transfer function.
-     *  @param revfunc  Optional, re-transfer function.
-     *  @return  Value.
-     */
-    virtual std::pair<T1, T2> getValueFromRatio (const std::pair<double, double>& ratio, 
-                                                 std::function<std::pair<T1, T2> (const std::pair<T1, T2>& x)> func = [] (const std::pair<T1, T2>& x) {return x;},
-                                                 std::function<std::pair<T1, T2> (const std::pair<T1, T2>& x)> revfunc = [] (const std::pair<T1, T2>& x) {return x;});
 
 };
 
@@ -415,19 +405,22 @@ T ValidatableRange<T>::validate (const T& value)
 }
 
 template <class T>
-double ValidatableRange<T>::getRatioFromValue (const T& value, std::function<T (const T& x)> func)
+double ValidatableRange<T>::getRatioFromValue (const T& value) const
 {
-    const T min = func (getMin());
-	const T max = func (getMax());
-	return (min != max ? (func (value) - min) / (max - min) : 0.0);
+    const ValueTransferable<T>* vt = dynamic_cast<const ValueTransferable<T>*>(this);
+    const T min = (vt ? vt->transfer (getMin()) : getMin());
+	const T max = (vt ? vt->transfer (getMax()) : getMax());
+    const T val = (vt ? vt->transfer (value) : value);
+	return (min != max ? (val - min) / (max - min) : 0.0);
 }
 
 template <class T>
-T ValidatableRange<T>::getValueFromRatio (const double ratio, std::function<T (const T& x)> func, std::function<T (const T& x)> revfunc)
+T ValidatableRange<T>::getValueFromRatio (const double ratio) const
 {
-    const T min = func (getMin());
-	const T max = func (getMax());
-	return revfunc (ratio * (max - min) + min);
+    const ValueTransferable<T>* vt = dynamic_cast<const ValueTransferable<T>*>(this);
+    const T min = (vt ? vt->transfer (getMin()) : getMin());
+	const T max = (vt ? vt->transfer (getMax()) : getMax());
+	return (vt ? vt->retransfer (ratio * (max - min) + min) : (ratio * (max - min) + min));
 }
 
 template <class T1, class T2>
@@ -579,24 +572,27 @@ std::pair<T1, T2> ValidatableRange<std::pair<T1, T2>>::validate (const std::pair
 }
 
 template <class T1, class T2>
-std::pair <double, double> ValidatableRange<std::pair<T1, T2>>::getRatioFromValue   (const std::pair<T1, T2>& value, 
-                                                                                     std::function<std::pair<T1, T2> (const std::pair<T1, T2>& x)> func)
+std::pair <double, double> ValidatableRange<std::pair<T1, T2>>::getRatioFromValue   (const std::pair<T1, T2>& value) const
 {
-    const std::pair<T1, T2> min (func (getMin()));
-	const std::pair<T1, T2> max (func (getMax()));
-	return std::pair<T1, T2>    ((min.first != max.first ? (func (value).first - min.first) / (max.first - min.first) : 0.0),
-                                 (min.second != max.second ? (func (value).second - min.second) / (max.second - min.second) : 0.0));
+    const ValueTransferable<std::pair<T1, T2>>* vt = dynamic_cast<const ValueTransferable<std::pair<T1, T2>>*>(this);
+    const std::pair<T1, T2> min (vt ? vt->transfer (getMin()) : getMin());
+	const std::pair<T1, T2> max (vt ? vt->transfer (getMax()) : getMax());
+    const std::pair<T1, T2> val (vt ? vt->transfer (value) : value);
+	return std::pair<T1, T2>    ((min.first != max.first ? (val.first - min.first) / (max.first - min.first) : 0.0),
+                                 (min.second != max.second ? (val.second - min.second) / (max.second - min.second) : 0.0));
 }
 
 template <class T1, class T2>
-std::pair<T1, T2> ValidatableRange<std::pair<T1, T2>>::getValueFromRatio    (const std::pair<double, double>& ratio, 
-                                                                             std::function<std::pair<T1, T2> (const std::pair<T1, T2>& x)> func, 
-                                                                             std::function<std::pair<T1, T2> (const std::pair<T1, T2>& x)> revfunc)
+std::pair<T1, T2> ValidatableRange<std::pair<T1, T2>>::getValueFromRatio    (const std::pair<double, double>& ratio) const
 {
-    const std::pair<T1, T2> min (func (getMin()));
-	const std::pair<T1, T2> max (func (getMax()));
-	return std::pair<double, double>    (revfunc (std::pair<T1, T2> (ratio.first * (max.first - min.first) + min.first, 
-                                                                     ratio.second * (max.second - min.second) + min.second)));
+    const ValueTransferable<std::pair<T1, T2>>* vt = dynamic_cast<const ValueTransferable<std::pair<T1, T2>>*>(this);
+    const std::pair<T1, T2> min (vt ? vt->transfer (getMin()) : getMin());
+	const std::pair<T1, T2> max (vt ? vt->transfer (getMax()) : getMax());
+	return std::pair<double, double>    (vt ? 
+                                         vt->retransfer (std::pair<T1, T2>  (ratio.first * (max.first - min.first) + min.first, 
+                                                                             ratio.second * (max.second - min.second) + min.second)) :
+                                         std::pair<T1, T2>  (ratio.first * (max.first - min.first) + min.first, 
+                                                             ratio.second * (max.second - min.second) + min.second));
 }
 
 

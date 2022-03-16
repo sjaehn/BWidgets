@@ -236,8 +236,8 @@ inline void HScale::onButtonPressed (BEvents::Event* event)
 	if (!pev) return;
 	if (scale_.getWidth()) 
 	{
-		if (step_ >= 0) setValue (getValueFromRatio ((pev->getPosition().x - scale_.getX()) / scale_.getWidth(), transfer_, reTransfer_));
-		else setValue (getValueFromRatio ((scale_.getWidth() - (pev->getPosition().x - scale_.getX())) / scale_.getWidth(), transfer_, reTransfer_));
+		if (step_ >= 0) setValue (getValueFromRatio ((pev->getPosition().x - scale_.getX()) / scale_.getWidth()));
+		else setValue (getValueFromRatio ((scale_.getWidth() - (pev->getPosition().x - scale_.getX())) / scale_.getWidth()));
 	}
 	Clickable::onButtonPressed (event);
 }
@@ -252,7 +252,7 @@ inline void HScale::onPointerDragged (BEvents::Event* event)
 		if (scale_.getWidth()) 
 		{
 			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-			else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - pev->getDelta().y / scale_.getWidth(), transfer_, reTransfer_));
+			else setValue (getValueFromRatio (getRatioFromValue(getValue()) - pev->getDelta().y / scale_.getWidth()));
 		}
 	}
 	Draggable::onPointerDragged (event);
@@ -265,7 +265,7 @@ inline void HScale::onWheelScrolled (BEvents::Event* event)
 	if (scale_.getWidth()) 
 	{
 		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - wev->getDelta().y / scale_.getWidth(), transfer_, reTransfer_));
+		else setValue (getValueFromRatio (getRatioFromValue(getValue()) - wev->getDelta().y / scale_.getWidth()));
 	}
 	Scrollable::onWheelScrolled (event);
 }
@@ -298,7 +298,7 @@ inline void HScale::draw (const BUtilities::Area<>& area)
 			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 			cairo_clip (cr);
 
-			const double rval = getRatioFromValue (getValue(), transfer_);
+			const double rval = getRatioFromValue (getValue());
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
 

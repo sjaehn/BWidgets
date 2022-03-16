@@ -238,7 +238,7 @@ inline void HSlider::draw (const BUtilities::Area<>& area)
 			cairo_clip (cr);
 
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
-			const double rval = getRatioFromValue (getValue(), transfer_);
+			const double rval = getRatioFromValue (getValue());
 
 			if (step_ >= 0.0) drawKnob	(cr, 
 										 scale_.getX() + rval * scale_.getWidth(), 

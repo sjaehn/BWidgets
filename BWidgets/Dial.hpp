@@ -281,8 +281,8 @@ inline void Dial::onButtonPressed (BEvents::Event* event)
 			if (ang <= BWIDGETS_DEFAULT_DRAWARC_END)
 			{
 				const double rval = (ang - BWIDGETS_DEFAULT_DRAWARC_START) / BWIDGETS_DEFAULT_DRAWARC_SIZE;
-				if (step_ >= 0) setValue (getValueFromRatio (rval, transfer_, reTransfer_));
-				else setValue (getValueFromRatio (1.0 - rval, transfer_, reTransfer_));
+				if (step_ >= 0) setValue (getValueFromRatio (rval));
+				else setValue (getValueFromRatio (1.0 - rval));
 			}
 		}
 	}
@@ -299,9 +299,7 @@ inline void Dial::onPointerDragged (BEvents::Event* event)
 		if (scale_.getWidth() > 0) 
 		{
 			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-			else setValue (getValueFromRatio	(getRatioFromValue (getValue(), transfer_) - pev->getDelta().y / (0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE), 
-												 transfer_, 
-												 reTransfer_));
+			else setValue (getValueFromRatio (getRatioFromValue (getValue()) - pev->getDelta().y / (0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE)));
 		}
 	}
 	Draggable::onPointerDragged (event);
@@ -315,9 +313,7 @@ inline void Dial::onWheelScrolled (BEvents::Event* event)
 	{
 		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
 
-		else setValue (getValueFromRatio	(getRatioFromValue (getValue(), transfer_) - wev->getDelta().y / (0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE), 
-											 transfer_, 
-											 reTransfer_));
+		else setValue (getValueFromRatio (getRatioFromValue (getValue()) - wev->getDelta().y / (0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE)));
 		
 	}
 	Scrollable::onWheelScrolled (event);
@@ -351,7 +347,7 @@ inline void Dial::draw (const BUtilities::Area<>& area)
 			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 			cairo_clip (cr);
 
-			const double rval = getRatioFromValue (getValue(), transfer_);
+			const double rval = getRatioFromValue (getValue());
 			const double rad = 0.5 * (scale_.getWidth() < scale_.getHeight() ? scale_.getWidth() : scale_.getHeight());
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];

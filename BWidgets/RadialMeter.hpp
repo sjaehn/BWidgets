@@ -257,7 +257,6 @@ inline RadialMeter::RadialMeter	(const double  x, const double y, const double w
 	ValueTransferable<double> (transferFunc, reTransferFunc),
 	scale_ (0, 0, width, height)
 {
-
 }
 
 inline Widget* RadialMeter::clone () const 
@@ -353,7 +352,7 @@ inline void RadialMeter::draw (const BUtilities::Area<>& area)
 			cairo_clip (cr);
 
 			const double rad = 0.5 * (scale_.getWidth() < scale_.getHeight() ? scale_.getWidth() : scale_.getHeight());
-			const double rval = getRatioFromValue (getValue(), transfer_);
+			const double rval = getRatioFromValue (getValue());
 			const double drv = (std::fabs (getStep()) > 1.0 / (1.5 * M_PI * rad) ? fabs (getStep() / (getMax() - getMin())) : 1.0 / (1.5 * M_PI * rad));
 
 			if (step_ >= 0.0)

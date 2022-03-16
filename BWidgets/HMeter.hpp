@@ -351,7 +351,7 @@ inline void HMeter::draw (const BUtilities::Area<>& area)
 			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 			cairo_clip (cr);
 
-			const double rval = getRatioFromValue (getValue(), transfer_);
+			const double rval = getRatioFromValue (getValue());
 			const double drv = (std::fabs (getStep()) > 1.0 / scale_.getWidth() ? std::fabs (getStep() / (getMax() - getMin())) : 1.0 / scale_.getWidth());
 
 			if (step_ >= 0.0)

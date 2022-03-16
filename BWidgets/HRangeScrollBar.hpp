@@ -374,7 +374,7 @@ inline void HRangeScrollBar::update ()
 		const double w = getEffectiveWidth ();
 		const double h = getEffectiveHeight ();
 		const value_type v = getValue();
-		const value_type rv = getRatioFromValue (v, getTransferFunction());
+		const value_type rv = getRatioFromValue (v);
 
 		scrollbar.moveTo (x, y);
 		scrollbar.resize (w, h);
@@ -414,16 +414,12 @@ inline void HRangeScrollBar::onWheelScrolled (BEvents::Event* event)
 	{
 		value_type v = getValue();
 		if (getStep().first != 0.0) v.first += wev->getDelta().y * getStep ().first;
-		else v.first = getValueFromRatio	(value_type	(getRatioFromValue (v, transfer_).first + wev->getDelta().y / getEffectiveWidth(), 
-														 v.second), 
-											 transfer_, reTransfer_).first;
+		else v.first = getValueFromRatio (value_type (getRatioFromValue (v).first + wev->getDelta().y / getEffectiveWidth(), v.second)).first;
 
 		if (getStep().second != 0.0) v.second -= wev->getDelta().y * getStep ().second;
-		else v.second = getValueFromRatio	(value_type	(v.first,
-														 getRatioFromValue (v, transfer_).second - wev->getDelta().y / getEffectiveWidth()),
-											 transfer_, reTransfer_).second;
+		else v.second = getValueFromRatio (value_type (v.first, getRatioFromValue (v).second - wev->getDelta().y / getEffectiveWidth())).second;
 
-		const value_type vr = getRatioFromValue (v, transfer_);
+		const value_type vr = getRatioFromValue (v);
 		if (vr.first <= vr.second) setValue (v);
 	}
 	Scrollable::onWheelScrolled (event);
@@ -447,7 +443,7 @@ inline void HRangeScrollBar::buttonDraggedCallback (BEvents::Event* event)
 
 	const double rv = (p->step_.first >= 0.0 ? (px - x0) / (width - height) : 1.0 - (px - x0) / (width - height));
 	value_type v = p->getValue();
-	const value_type rv0 = p->getRatioFromValue (v, p->getTransferFunction());
+	const value_type rv0 = p->getRatioFromValue (v);
 	if ((w ==&p->button1) && (rv <= rv0.second)) v.first = p->getValueFromRatio (value_type (rv, rv0.second)).first;
 	else if ((w ==&p->button2) && (rv >= rv0.first)) v.second = p->getValueFromRatio (value_type (rv0.first, rv)).second;
 	p->setValue (v);

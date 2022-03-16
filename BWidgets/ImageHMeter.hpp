@@ -392,7 +392,7 @@ inline void ImageHMeter::draw (const BUtilities::Area<>& area)
 			const double y0 = getYOffset();
 			const double w = getEffectiveWidth();
 			const double h = getEffectiveHeight();
-			const double rval = getRatioFromValue (getValue(), transfer_);
+			const double rval = getRatioFromValue (getValue());
 			const double ws = cairo_image_surface_get_width (staticImageSurface_);
 			const double hs = cairo_image_surface_get_height (staticImageSurface_);
 

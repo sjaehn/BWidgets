@@ -507,7 +507,7 @@ inline void ConditionalImage::onPointerDragged (BEvents::Event* event)
 		if (h >= 1.0)
 		{
 			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-			else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - pev->getDelta().y / (h), transfer_, reTransfer_));
+			else setValue (getValueFromRatio (getRatioFromValue(getValue()) - pev->getDelta().y / (h)));
 		}
 	}
 	Draggable::onPointerDragged (event);
@@ -522,7 +522,7 @@ inline void ConditionalImage::onWheelScrolled (BEvents::Event* event)
 	if (h >= 1.0)
 	{
 		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue(), transfer_) - wev->getDelta().y / (h), transfer_, reTransfer_));
+		else setValue (getValueFromRatio (getRatioFromValue(getValue()) - wev->getDelta().y / (h)));
 	}
 
 	Scrollable::onWheelScrolled (event);

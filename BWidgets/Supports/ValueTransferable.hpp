@@ -132,7 +132,7 @@ public:
      *  [] (const double& x) {return log10 (x);}
      *  @endcode
      */
-    T transfer (const T& x);
+    T transfer (const T& x) const;
 
     /**
      *  @brief  Re-transfers a value.
@@ -148,7 +148,7 @@ public:
      *  [] (const double& x) {return pow (10, x);}
      *  @endcode
      */
-    T reTransfer (const T& x);
+    T retransfer (const T& x) const;
 
 };
 
@@ -204,13 +204,13 @@ inline std::function<T (const T& x)> ValueTransferable<T>::getReTransferFunction
 }
 
 template <class T>
-inline T ValueTransferable<T>::transfer (const T& x)
+inline T ValueTransferable<T>::transfer (const T& x) const
 {
     return transfer_ (x);
 }
 
 template <class T>
-inline T ValueTransferable<T>::reTransfer (const T& x)
+inline T ValueTransferable<T>::retransfer (const T& x) const
 {
     return reTransfer_ (x);
 }

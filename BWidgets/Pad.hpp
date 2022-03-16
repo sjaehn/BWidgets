@@ -332,7 +332,7 @@ inline void Pad<T>::onWheelScrolled (BEvents::Event* event)
 	if (getHeight()) 
 	{
 		if (this->getStep() != T()) this->setValue (this->getValue() - wev->getDelta().y * this->getStep ());
-		else this->setValue (this->getValueFromRatio (this->getRatioFromValue( this->getValue(), this->transfer_) - wev->getDelta().y / getHeight(), this->transfer_, this->reTransfer_));
+		else this->setValue (this->getValueFromRatio (this->getRatioFromValue (this->getValue()) - wev->getDelta().y / getHeight()));
 	}
 	Scrollable::onWheelScrolled (event);
 }
@@ -371,7 +371,7 @@ inline void Pad<T>::draw (const BUtilities::Area<>& area)
 				cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 				cairo_clip (cr);
 
-				const double rval = this->getRatioFromValue (this->getValue(), this->transfer_);
+				const double rval = this->getRatioFromValue (this->getValue());
 				const BStyles::Color butColor = getFgColors()[getStatus()].illuminate (-0.95 + 0.95 * rval);
 				drawButton (cr, x0, y0, w, h, butColor);
 				cairo_destroy (cr);

@@ -281,24 +281,11 @@ inline void ImageHSlider::onButtonPressed (BEvents::Event* event)
 
 			if (step_ >= 0)
 			{
-				setValue 
-				(
-					getValueFromRatio	
-					(
-						(pev->getPosition().x - x0s - staticAnchors_.first.x * szs) / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs), 
-						transfer_, reTransfer_
-					)
-				);
+				setValue (getValueFromRatio ((pev->getPosition().x - x0s - staticAnchors_.first.x * szs) / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs)));
 			}
 			else
 			{
-				setValue 
-				(
-					getValueFromRatio	
-					(	1.0 - (pev->getPosition().x - x0s - staticAnchors_.first.x * szs) / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs), 
-						transfer_, reTransfer_
-					)
-				);
+				setValue (getValueFromRatio (1.0 - (pev->getPosition().x - x0s - staticAnchors_.first.x * szs) / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs)));
 			}
 		}
 	}
@@ -324,8 +311,7 @@ inline void ImageHSlider::onPointerDragged (BEvents::Event* event)
 				const double szs = ((w / ws < h / hs) ? (w / ws) : (h / hs));
 
 				if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-				else setValue (getValueFromRatio	(getRatioFromValue(getValue(), transfer_) - pev->getDelta().y / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs), 
-													 transfer_, reTransfer_));
+				else setValue (getValueFromRatio (getRatioFromValue(getValue()) - pev->getDelta().y / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs)));
 			}
 		}
 	}
@@ -348,8 +334,7 @@ inline void ImageHSlider::onWheelScrolled (BEvents::Event* event)
 			const double szs = ((w / ws < h / hs) ? (w / ws) : (h / hs));
 
 			if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-			else setValue (getValueFromRatio	(getRatioFromValue(getValue(), transfer_) - wev->getDelta().y / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs), 
-													transfer_, reTransfer_));
+			else setValue (getValueFromRatio (getRatioFromValue(getValue()) - wev->getDelta().y / ((staticAnchors_.second.x - staticAnchors_.first.x) * szs)));
 		}
 	}
 

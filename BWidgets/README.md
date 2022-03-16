@@ -1140,7 +1140,16 @@ displays the content in a reversed manner (if possible).
 
 #### Value transfer
 
-TODO
+The `ValueTransferable` class and the transfer methods `transfer()` and
+`retransfer()` are used to transfer data from an external context (e. g.,
+frequencies in Hz from 20 Hz to 20 kHz) to an internal context (e. g.,
+logartihmic representation of frequencies). Transfer functions can be used to
+linearize a non-linear context.
+
+The transfer (and retransfer) is applied following validation.
+
+You can find an example for value transfer and range validation in 
+[../examples/values.cpp](../examples/values.cpp)
 
 
 ### Other widget-specific attributes and decorations

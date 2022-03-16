@@ -1,6 +1,6 @@
 # B.Widgets
 
-Current version: 0.4.0 (alpha)
+Current version: 0.5.0 (alpha)
 
 Rewrite of the widget toolkit of the B.Music project.
 
@@ -49,7 +49,8 @@ make [examples]
 ```
 
 with optional parameter `[examples]` which can be `widgetgallery`, 
-`helloworld`, `buttontest`, `symbols`, `pattern`, `styles`, and/or `draws`. 
+`helloworld`, `buttontest`, `symbols`, `pattern`, `styles`, `draws`, and/or 
+`values`. 
 This will only build the respective example.
 
 Then call the respective example, e. g.:
@@ -113,13 +114,14 @@ Then call the respective example, e. g.:
   - [x] Layers
   - [x] Scale (zoom) main Window and linked child widgets
 - [x] Reversed Valueable widgets
-- [ ] Enable / fix transfer functions
+- [x] Enable / fix transfer functions
 - [ ] Header files only (where possible)
 - [ ] Documentation
 
 
 ### Until 1.2
 
+- [ ] Class Shape
 - [ ] Shape widget
 - [ ] Update pugl
 
