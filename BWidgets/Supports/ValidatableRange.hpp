@@ -33,8 +33,6 @@ namespace BWidgets
  *
  *  @a T MUST support the comparison operators and MUST be comparable with 0.0
  *  and 1.0. 
- *
- *  @todo Inverse range, negative step.
  */
 template <class T>
 class ValidatableRange : public Validatable<T>
@@ -155,8 +153,6 @@ public:
  *
  *  @a T1 and @a T2 MUST support the standard comparison operators and the
  *  standard arithmetic operators. 
- *
- *  @todo Inverse range, negative step.
  */
 template <class T1, class T2>
 class ValidatableRange<std::pair<T1, T2>> : public Validatable<std::pair<T1, T2>>

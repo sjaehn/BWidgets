@@ -38,9 +38,7 @@ namespace BWidgets
  *  @brief  %ValueDial widget.
  *
  *  %ValueDial is a Dial Widget with an additional editable label for
- *  displaying its value. 
- *
- *  @todo Inverse range, negative step.
+ *  displaying its value.
  */
 class ValueDial : public Dial
 {

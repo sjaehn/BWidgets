@@ -40,8 +40,6 @@ namespace BWidgets
  *
  *  %ValueVMeter is a VMeter Widget with an additional label for
  *  displaying its value. 
- *
- *  @todo Inverse range, negative step.
  */
 class ValueVMeter : public VMeter
 {
