@@ -279,7 +279,10 @@ inline void ValueHSlider::update ()
 		0.25 * getEffectiveHeight()
 	);
 
+	const bool lv = label.isValueable();
+	label.setValueable (false);
 	label.setText (display_ (getValue()));
+	label.setValueable (lv);
 	label.resize();
 	const double rval = getRatioFromValue(getValue());
 	const double xc = scale_.getX() + rval * scale_.getWidth();

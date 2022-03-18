@@ -242,7 +242,10 @@ inline void ValueDial::update ()
 		2.0 * rad
 	);
 
+	const bool lv = label.isValueable();
+	label.setValueable (false);
 	label.setText (display_ (getValue()));
+	label.setValueable (lv);
 	label.resize();
 	label.moveTo (label.center(), scale_.getPosition().y + scale_.getHeight());
 

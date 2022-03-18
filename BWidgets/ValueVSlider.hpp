@@ -271,7 +271,10 @@ inline void ValueVSlider::update ()
 		f->resize();
 	}
 
+	const bool lv = label.isValueable();
+	label.setValueable (false);
 	label.setText (display_ (getValue()));
+	label.setValueable (lv);
 	label.resize();
 	label.moveTo (label.center(), getYOffset());
 
