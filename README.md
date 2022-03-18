@@ -1,6 +1,6 @@
 # B.Widgets
 
-Current version: 0.6.0 (alpha)
+Current version: 0.7.0 (alpha)
 
 Rewrite of the widget toolkit of the B.Music project.
 
@@ -57,6 +57,8 @@ Then call the respective example, e. g.:
 ```
 ./widgetgallery
 ```
+
+## Documentation
 
 
 ## TODO

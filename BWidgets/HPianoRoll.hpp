@@ -263,6 +263,18 @@ public:
 	std::map<uint8_t, uint8_t> getKeys () const;
 
 	/**
+	 *  @brief Sets the velocity to be applied upon clicking on a key.
+	 *  @param velocity  MIDI velocity [0,127].
+	 */
+	void setVelocity (const uint8_t velocity);
+
+	/**
+	 *  @brief Gets the velocity which is applied upon clicking on a key.
+	 *  @param return  MIDI velocity [0,127].
+	 */
+	uint8_t getVelocity () const;
+
+	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -606,6 +618,16 @@ inline void HPianoRoll::setKeys (const std::map<uint8_t, uint8_t>& keys)
 inline std::map<uint8_t, uint8_t> HPianoRoll::getKeys () const
 {
 	return value_;
+}
+
+inline void HPianoRoll::setVelocity (const uint8_t velocity)
+{
+	defaultVelocity_ = velocity;
+}
+
+inline uint8_t HPianoRoll::getVelocity () const
+{
+	return defaultVelocity_;
 }
 
 inline void HPianoRoll::onButtonPressed (BEvents::Event* event)
