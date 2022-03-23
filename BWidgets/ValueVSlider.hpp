@@ -19,7 +19,7 @@
 #define BWIDGETS_VALUEVSLIDER_HPP_
 
 #include "VSlider.hpp"
-#include "LabelEdit.hpp"
+#include "EditLabel.hpp"
 #include <exception>
 #include <functional>
 
@@ -55,7 +55,7 @@ protected:
 
 public:
 
-	LabelEdit label;
+	EditLabel label;
 
 	/**
 	 * @brief  Constructs a default %ValueVSlider object.
@@ -293,7 +293,7 @@ inline void ValueVSlider::labelChangedCallback (BEvents::Event* event)
 {
 	BEvents::ValueChangeTypedEvent<std::string>* vew = dynamic_cast<BEvents::ValueChangeTypedEvent<std::string>*>(event);
 	if (!vew) return;
-	LabelEdit* widget = dynamic_cast<LabelEdit*>(vew->getWidget());
+	EditLabel* widget = dynamic_cast<EditLabel*>(vew->getWidget());
 	if (!widget) return;
 	ValueVSlider* parent = dynamic_cast<ValueVSlider*>(widget->getParentWidget());
 	if (!parent) return;

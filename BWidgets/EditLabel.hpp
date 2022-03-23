@@ -1,4 +1,4 @@
-/* LabelEdit.hpp
+/* EditLabel.hpp
  * Copyright (C) 2018, 2019  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BWIDGETS_LABELEDIT_HPP_
-#define BWIDGETS_LABELEDIT_HPP_
+#ifndef BWIDGETS_EDITLABEL_HPP_
+#define BWIDGETS_EDITLABEL_HPP_
 
 #include "Label.hpp"
 #include "Supports/Clickable.hpp"
@@ -28,12 +28,12 @@
 #include <locale>
 #include <codecvt>
 
-#ifndef BWIDGETS_DEFAULT_LABELEDIT_WIDTH
-#define BWIDGETS_DEFAULT_LABELEDIT_WIDTH BWIDGETS_DEFAULT_LABEL_WIDTH
+#ifndef BWIDGETS_DEFAULT_EDITLABEL_WIDTH
+#define BWIDGETS_DEFAULT_EDITLABEL_WIDTH BWIDGETS_DEFAULT_LABEL_WIDTH
 #endif
 
-#ifndef BWIDGETS_DEFAULT_LABELEDIT_HEIGHT
-#define BWIDGETS_DEFAULT_LABELEDIT_HEIGHT BWIDGETS_DEFAULT_LABEL_HEIGHT
+#ifndef BWIDGETS_DEFAULT_EDITLABEL_HEIGHT
+#define BWIDGETS_DEFAULT_EDITLABEL_HEIGHT BWIDGETS_DEFAULT_LABEL_HEIGHT
 #endif
 
 namespace BWidgets
@@ -42,14 +42,14 @@ namespace BWidgets
 /**
  *  @brief  Single line text edit widget.
  *
- *  %LabelEdit allows the user to:
+ *  %EditLabel allows the user to:
  *  * set the edit cursor by clicking on the text (Clickable),
  *  * select a text region by dragging (Draggable),
  *  * change the text via the keyboard (KeyPressable),
  *  * keep the new text and emit it as a ValueChangedEvent (Valueable) once
  *    the edit is confirmed (<Enter>), or to discard changes (<Esc>).
  */
-class LabelEdit : public Label, public Clickable, public Draggable, public KeyPressable, public ValueableTyped<std::string>
+class EditLabel : public Label, public Clickable, public Draggable, public KeyPressable, public ValueableTyped<std::string>
 {
 protected:
 	bool editMode_;
@@ -59,44 +59,44 @@ protected:
 public:
 
 	/**
-	 *  @brief  Constructs an empty default %LabelEdit object.
+	 *  @brief  Constructs an empty default %EditLabel object.
 	 */
-	LabelEdit ();
+	EditLabel ();
 
 	/**
-	 *  @brief  Constructs an empty default %LabelEdit object.
+	 *  @brief  Constructs an empty default %EditLabel object.
 	 *  @param URID  URID.
 	 *  @param title  %Widget title.
 	 */
-	LabelEdit (const uint32_t urid, const std::string& title);
+	EditLabel (const uint32_t urid, const std::string& title);
 
 	/**
-	 *  @brief  Constructs a %LabelEdit object at the origin with optimized 
+	 *  @brief  Constructs a %EditLabel object at the origin with optimized 
 	 *  extends.
 	 *  @param text  Text.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
-	 *  @param title  Optional, %LabelEdit title (default = "").
+	 *  @param title  Optional, %EditLabel title (default = "").
 	 */
-	LabelEdit (const std::string& text, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	EditLabel (const std::string& text, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 *  @brief  Constructs a %LabelEdit object at the origin.
+	 *  @brief  Constructs a %EditLabel object at the origin.
 	 *  @param x  %Label X origin coordinate.
 	 *  @param y  %Label Y origin coordinate.
 	 *  @param width  %Label width.
 	 *  @param height  %Label height.
 	 *  @param text  Text.
 	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
-	 *  @param title  Optional, %LabelEdit title (default = "").
+	 *  @param title  Optional, %EditLabel title (default = "").
 	 */
-	LabelEdit	(const double x, const double y, const double width, const double height, 
+	EditLabel	(const double x, const double y, const double width, const double height, 
 				 const std::string& text, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
 
 	/**
-	 *  @brief  Creates a clone of the %LabelEdit. 
-	 *  @return  Pointer to the new %LabelEdit.
+	 *  @brief  Creates a clone of the %EditLabel. 
+	 *  @return  Pointer to the new %EditLabel.
 	 *
-	 *  Creates a clone of this %LabelEdit by copying all properties. But NOT 
+	 *  Creates a clone of this %EditLabel by copying all properties. But NOT 
 	 *  its linkage.
 	 *
 	 *  Allocated heap memory needs to be freed using @c delete if the clone
@@ -105,12 +105,12 @@ public:
 	virtual Widget* clone () const override; 
 
 	/**
-	 *  @brief  Copies from another %LabelEdit. 
-	 *  @param that  Other %LabelEdit.
+	 *  @brief  Copies from another %EditLabel. 
+	 *  @param that  Other %EditLabel.
 	 *
 	 *  Copies all properties from another %Label. But NOT its linkage.
 	 */
-	void copy (const LabelEdit* that);
+	void copy (const EditLabel* that);
 
 	/**
      *  @brief  Sets the label text (= value).
@@ -133,7 +133,7 @@ public:
 	 *  @return  Label text (= value).
 	 *
 	 *  Equivalent to getValue().
-	 *  If the LabelEdit is currently edited, then %getText() returns the last
+	 *  If the EditLabel is currently edited, then %getText() returns the last
 	 *  stored text.
 	 */
 	virtual std::string getText () const override;
@@ -246,25 +246,25 @@ protected:
     virtual void draw (const BUtilities::Area<>& area) override;
 };
 
-inline LabelEdit::LabelEdit () : 
-	LabelEdit (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, "", URID_UNKNOWN_URID, "") 
+inline EditLabel::EditLabel () : 
+	EditLabel (0.0, 0.0, BWIDGETS_DEFAULT_EDITLABEL_WIDTH, BWIDGETS_DEFAULT_EDITLABEL_HEIGHT, "", URID_UNKNOWN_URID, "") 
 {
 
 }
 
-inline LabelEdit::LabelEdit (const uint32_t urid, const std::string& title) :
-	LabelEdit (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, "", urid, title)
+inline EditLabel::EditLabel (const uint32_t urid, const std::string& title) :
+	EditLabel (0.0, 0.0, BWIDGETS_DEFAULT_EDITLABEL_WIDTH, BWIDGETS_DEFAULT_EDITLABEL_HEIGHT, "", urid, title)
 {
 	
 }
 
-inline LabelEdit::LabelEdit (const std::string& text, uint32_t urid, std::string title) :
-	LabelEdit (0.0, 0.0, BWIDGETS_DEFAULT_LABELEDIT_WIDTH, BWIDGETS_DEFAULT_LABELEDIT_HEIGHT, text, urid, title)
+inline EditLabel::EditLabel (const std::string& text, uint32_t urid, std::string title) :
+	EditLabel (0.0, 0.0, BWIDGETS_DEFAULT_EDITLABEL_WIDTH, BWIDGETS_DEFAULT_EDITLABEL_HEIGHT, text, urid, title)
 {
 	Label::resize();
 }
 
-inline LabelEdit::LabelEdit (const double x, const double y, const double width, const double height, const std::string& text, uint32_t urid, std::string title) :
+inline EditLabel::EditLabel (const double x, const double y, const double width, const double height, const std::string& text, uint32_t urid, std::string title) :
 	Label (x, y, width, height, text, urid, title),
 	Clickable(),
 	Draggable(),
@@ -277,14 +277,14 @@ inline LabelEdit::LabelEdit (const double x, const double y, const double width,
 	
 }
 
-inline Widget* LabelEdit::clone () const 
+inline Widget* EditLabel::clone () const 
 {
-	Widget* f = new LabelEdit (urid_, title_);
+	Widget* f = new EditLabel (urid_, title_);
 	f->copy (this);
 	return f;
 }
 
-inline void LabelEdit::copy (const LabelEdit* that)
+inline void EditLabel::copy (const EditLabel* that)
 {
 	Clickable::operator= (*that);
 	Draggable::operator= (*that);
@@ -296,7 +296,7 @@ inline void LabelEdit::copy (const LabelEdit* that)
     Label::copy (that);
 }
 
-inline void LabelEdit::setValue (const std::string& text)
+inline void EditLabel::setValue (const std::string& text)
 {
 	// Set displayed text
 	if (text != Label::getText())
@@ -311,17 +311,17 @@ inline void LabelEdit::setValue (const std::string& text)
 	ValueableTyped<std::string>::setValue (text);
 }
 
-inline void LabelEdit::setText (const std::string& text)
+inline void EditLabel::setText (const std::string& text)
 {
 	setValue (text);
 }
 
-inline std::string LabelEdit::getText () const
+inline std::string EditLabel::getText () const
 {
 	return getValue();
 }
 
-inline void LabelEdit::setEditMode (const bool mode)
+inline void EditLabel::setEditMode (const bool mode)
 {
 	if (mode != editMode_)
 	{
@@ -330,18 +330,18 @@ inline void LabelEdit::setEditMode (const bool mode)
 	}
 }
 
-inline bool LabelEdit::getEditMode () const 
+inline bool EditLabel::getEditMode () const 
 {
 	return 
 	editMode_;
 }
 
-inline void LabelEdit::setCursor (const size_t pos) 
+inline void EditLabel::setCursor (const size_t pos) 
 {
 	setCursor (pos, pos);
 }
 
-inline void LabelEdit::setCursor (const size_t from, const size_t to)
+inline void EditLabel::setCursor (const size_t from, const size_t to)
 {
 	// Check limits
 	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
@@ -359,21 +359,21 @@ inline void LabelEdit::setCursor (const size_t from, const size_t to)
 	}
 }
 
-inline void LabelEdit::applyEdit ()
+inline void EditLabel::applyEdit ()
 {
 	if (dynamic_cast<Window*>(main_)) dynamic_cast<Window*>(main_)->getKeyGrabStack()->remove (this);
 	setEditMode (false);
 	if (text_ != getValue()) setValue (text_);
 }
 
-inline void LabelEdit::discardEdit ()
+inline void EditLabel::discardEdit ()
 {
 	if (dynamic_cast<Window*>(main_)) dynamic_cast<Window*>(main_)->getKeyGrabStack()->remove (this);
 	setEditMode (false);
 	setValue (getValue());
 }
 
-inline void LabelEdit::onButtonClicked (BEvents::Event* event)
+inline void EditLabel::onButtonClicked (BEvents::Event* event)
 {
 	if 
 	(
@@ -392,7 +392,7 @@ inline void LabelEdit::onButtonClicked (BEvents::Event* event)
 	Clickable::onButtonClicked (event);
 }
 
-inline void LabelEdit::onPointerDragged (BEvents::Event* event)
+inline void EditLabel::onPointerDragged (BEvents::Event* event)
 {
 	if
 	(
@@ -411,7 +411,7 @@ inline void LabelEdit::onPointerDragged (BEvents::Event* event)
 	Draggable::onPointerDragged (event);
 }
 
-inline void LabelEdit::onKeyPressed (BEvents::Event* event)
+inline void EditLabel::onKeyPressed (BEvents::Event* event)
 {
 	if
 	(
@@ -504,7 +504,7 @@ inline void LabelEdit::onKeyPressed (BEvents::Event* event)
 	KeyPressable::onKeyPressed(event);
 }
 
-inline size_t LabelEdit::getCursorFromCoords (const BUtilities::Point<>& position)
+inline size_t EditLabel::getCursorFromCoords (const BUtilities::Point<>& position)
 {
 	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
 	const std::u32string u32labelText = convert.from_bytes (text_);
@@ -561,17 +561,17 @@ inline size_t LabelEdit::getCursorFromCoords (const BUtilities::Point<>& positio
 	return cursor;
 }
 
-inline void LabelEdit::draw ()
+inline void EditLabel::draw ()
 {
 	draw (0, 0, getWidth(), getHeight());
 }
 
-inline void LabelEdit::draw (const double x0, const double y0, const double width, const double height)
+inline void EditLabel::draw (const double x0, const double y0, const double width, const double height)
 {
 	draw (BUtilities::Area<> (x0, y0, width, height));
 }
 
-inline void LabelEdit::draw (const BUtilities::Area<>& area)
+inline void EditLabel::draw (const BUtilities::Area<>& area)
 {
 	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
 
@@ -681,4 +681,4 @@ inline void LabelEdit::draw (const BUtilities::Area<>& area)
 
 }
 
-#endif /* BWIDGETS_LABELEDIT_HPP_ */
+#endif /* BWIDGETS_EDITLABEL_HPP_ */

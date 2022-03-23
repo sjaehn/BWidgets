@@ -30,7 +30,7 @@
 #include "Supports/Closeable.hpp"
 #include "Symbol.hpp"
 #include "TextButton.hpp"
-#include "LabelEdit.hpp"
+#include "EditLabel.hpp"
 #include "ComboBox.hpp"
 #include "MessageBox.hpp"
 
@@ -56,13 +56,13 @@ namespace BWidgets
  *  * a Label to display the current path,
  *  * a new folder SymbolButton,
  *  * a ListBox with the (filtered) content of the current path,
- *  * a LabelEdit to display or edit the selected filename,
+ *  * a EditLabel to display or edit the selected filename,
  *  * a ComboBox to select filename filter options,
  *  * a "Cancel" button,
  *  * an "OK" / "Open" button,
  *
  *  The ListBox fascilitates selection of files and the navigation through
- *  the file system. A selected file is also shown in the LabelEdit.
+ *  the file system. A selected file is also shown in the EditLabel.
  *  
  *  Clicking on the new folder SymbolButton opens a dialog and the user is
  *  asked to enter a new folder name. The new folder is created within the
@@ -94,7 +94,7 @@ public:
 	SymbolButton newFolderButton;
 	ListBox fileListBox;
 	Label fileNameLabel;
-	LabelEdit fileNameBox;
+	EditLabel fileNameBox;
 	ComboBox filterComboBox;
 	TextButton cancelButton;
 	TextButton okButton;
@@ -106,7 +106,7 @@ public:
 
 	Box createBox;
 	Label createLabel;
-	LabelEdit createInput;
+	EditLabel createInput;
 	Label createError;
 
 	/**

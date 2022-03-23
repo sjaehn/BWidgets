@@ -21,7 +21,7 @@
 #include "../BWidgets/Window.hpp"
 #include "../BWidgets/Label.hpp"
 #include "../BWidgets/Frame.hpp"
-#include "../BWidgets/LabelEdit.hpp"
+#include "../BWidgets/EditLabel.hpp"
 #include "../BWidgets/Text.hpp"
 #include "../BWidgets/Symbol.hpp"
 #include "../BWidgets/Image.hpp"
@@ -142,11 +142,11 @@ int main ()
     window.add (&label);
     window.add (&labelLabel);
 
-    // LabelEdit
-    LabelEdit labelEdit (110, 130, 80, 60, "Edit me");
-    labelEdit.setTitle("LabelEdit");
+    // EditLabel
+    EditLabel labelEdit (110, 130, 80, 60, "Edit me");
+    labelEdit.setTitle("EditLabel");
     labelEdit.setFont(Font ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD, 18.0, BStyles::Font::TEXT_ALIGN_CENTER, BStyles::Font::TEXT_VALIGN_MIDDLE));
-    Label labelEditLabel (110, 200, 80, 20, "LabelEdit");
+    Label labelEditLabel (110, 200, 80, 20, "EditLabel");
     labelEditLabel.setFont (labelFont);
     window.add (&labelEdit);
     window.add (&labelEditLabel);

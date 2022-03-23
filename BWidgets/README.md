@@ -148,7 +148,7 @@ additionally inherit from [Support](#Supports) classes to extend its features.
 Widget
  ├── Window
  ├── Label
- |    ├── LabelEdit
+ |    ├── EditLabel
  |    ╰── Text
  ├── Symbol
  ├── Button
@@ -332,16 +332,16 @@ a font and a text color in addtion to the style properties supported by
 `Widget`. 
 
 
-### LabelEdit
+### EditLabel
 
-![labeledit](../suppl/LabelEdit.png)
+![labeledit](../suppl/EditLabel.png)
 
-`LabelEdit` is an editable version of `Label`. It additionally supports:
+`EditLabel` is an editable version of `Label`. It additionally supports:
 * `Clickable` and `Draggable` to set the cursor,
 * `KeyPressable` to enter / change a text via the keyboard, and
 * `Valueable` to store the text and inform the event handler.
 
-`LabelEdit` can be decorated like a `Label`.
+`EditLabel` can be decorated like a `Label`.
 
 
 ### Text
@@ -880,13 +880,13 @@ The `FileChooser` is a `Valueable` widget based on `Frame`. It consists of:
 * a `Label` to display the current path,
 * a "new folder" `SymbolButton`,
 * a `ListBox` with the (filtered) content of the current path,
-* a `LabelEdit` to display or edit the selected filename,
+* a `EditLabel` to display or edit the selected filename,
 * a `ComboBox` to select filename filter options,
 * a "Cancel" button, and
 * an "OK" / "Open" button,
 
 The ListBox fascilitates selection of files and the navigation through
-the file system. A selected file is also shown in the LabelEdit.
+the file system. A selected file is also shown in the EditLabel.
 
 Clicking on the new folder SymbolButton opens a dialog and the user is
 asked to enter a new folder name. The new folder is created within the
@@ -1109,7 +1109,7 @@ of the value is defined by the respective widget and can principially be any
    `std::pair<double,double>` to define the range. 
 *  The value of box widgets (but NOT `CheckBox` which is a button widget) 
    stores the index of the selected / activated element.
-*  The text of a `LabelEdit` is stored in its `std::string` value. 
+*  The text of a `EditLabel` is stored in its `std::string` value. 
 *  The complete file path of the selected file in `FileChooser` and 
    `SampleChooser` is stored in a `std::string` value.
 *  And the value of HPianoRoll is a `std::map<uint8_t,uint8_t>` of all MIDI

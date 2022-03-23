@@ -19,7 +19,7 @@
 #define BWIDGETS_VALUEDIAL_HPP_
 
 #include "Dial.hpp"
-#include "LabelEdit.hpp"
+#include "EditLabel.hpp"
 #include <exception>
 #include <functional>
 
@@ -55,7 +55,7 @@ protected:
 
 public:
 
-	LabelEdit label;
+	EditLabel label;
 
 	/**
 	 *  @brief  Constructs a default %ValueDial object.
@@ -256,7 +256,7 @@ inline void ValueDial::labelChangedCallback (BEvents::Event* event)
 {
 	BEvents::ValueChangeTypedEvent<std::string>* vew = dynamic_cast<BEvents::ValueChangeTypedEvent<std::string>*>(event);
 	if (!vew) return;
-	LabelEdit* widget = dynamic_cast<LabelEdit*>(vew->getWidget());
+	EditLabel* widget = dynamic_cast<EditLabel*>(vew->getWidget());
 	if (!widget) return;
 	ValueDial* parent = dynamic_cast<ValueDial*>(widget->getParentWidget());
 	if (!parent) return;
