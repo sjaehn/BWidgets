@@ -19,6 +19,7 @@
 #define BWIDGETS_IMAGE_HPP_
 
 #include "Widget.hpp"
+#include <cairo/cairo-deprecated.h>
 #include <cairo/cairo.h>
 #include <initializer_list>
 
@@ -247,6 +248,12 @@ public:
 	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
+	 *  @brief  Creates an empty image.
+	 *  @param status  Widget status for the image to be created.
+	 */
+	virtual void createImage (const BStyles::Status status);
+
+	/**
 	 *  @brief  Loads an image from a Cairo surface or an image file.
 	 *  @param status  Widget status for the image to be loaded.
 	 *  @param surface  Cairo surface with the image.
@@ -451,6 +458,13 @@ inline void Image::clear (const BStyles::Status status)
 		imageSurfaces_.erase (it);
 		if (status == getStatus()) update();
 	}
+}
+
+inline void Image::createImage (const BStyles::Status status)
+{
+	clear (status);
+	imageSurfaces_[status] = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, getEffectiveWidth(), getEffectiveHeight());
+	update ();
 }
 
 inline void Image::loadImage (const BStyles::Status status, cairo_surface_t* surface)
