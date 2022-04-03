@@ -1,6 +1,6 @@
 # B.Widgets
 
-Current version: 0.9.0 (alpha)
+Current version: 0.10.0 (alpha)
 
 Rewrite of the widget toolkit of the B.Music project.
 
@@ -141,5 +141,6 @@ Then call the respective example, e. g.:
 - [ ] Enable scale (zoom) for all widgets
 - [ ] Vector-based zoom
 - [ ] Use NanoVG
+- [ ] Simplify mp3 support
 - [ ] Link URID to third party
 - [ ] Journal

@@ -191,8 +191,27 @@ public:
 	 *  @return  ListBox extends. 
 	 */
 	BUtilities::Point<> getListBoxExtends () const;
+	
+	/**
+     *  @brief  Method called when pointer button pressed.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  pointer button pressed.
+     */
+	virtual void onButtonPressed (BEvents::Event* event) override;
 
 protected:
+
+	/**
+	 *  @brief  Creates and shows the listbox.
+	 */
+	void showListbox ();
+
+	/**
+	 *  @brief Hides and deletes the listbox.
+	 */
+	void hideListbox ();
 
 	/**
 	 *  @brief  Callback function which handles and forwards 
@@ -320,6 +339,46 @@ inline BUtilities::Point<> ComboBox::getListBoxExtends () const
 	return listBoxArea_.getExtends();
 }
 
+inline void ComboBox::onButtonPressed (BEvents::Event* event)
+{
+	if (listBox_) hideListbox();
+	else showListbox();
+	Clickable::onButtonPressed (event);
+}
+
+inline void ComboBox::showListbox()
+{
+	listBox_ = new ListBox	(listBoxArea_.getX(), listBoxArea_.getY(), listBoxArea_.getWidth(), listBoxArea_.getHeight(), 
+							 {}, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (getUrid()) + "/listbox"), "");
+
+	ListBox* l = dynamic_cast<ListBox*>(listBox_);
+	if (l)
+	{
+		if (!items_.empty())
+		{
+			for (std::list<Widget*>::iterator it = std::next (items_.begin()); it != items_.end(); ++it)
+			{
+				Label* wl = dynamic_cast<Label*>(*it);
+				if (wl)
+				{
+					l->addItem (wl->getText());
+				}
+			}
+		}
+		l->setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, ComboBox::listBoxChangedCallback);
+		l->setStacking (STACKING_ESCAPE);
+		l->setValue (getValue());
+		raiseToFront();
+		add (l);
+	}
+}
+
+inline void ComboBox::hideListbox()
+{
+	delete listBox_;
+	listBox_ = nullptr;
+}
+
 inline void ComboBox::buttonChangedCallback (BEvents::Event* event)
 {
 	BEvents::ValueChangeTypedEvent<bool>* vev = dynamic_cast<BEvents::ValueChangeTypedEvent<bool>*>(event);
@@ -331,38 +390,8 @@ inline void ComboBox::buttonChangedCallback (BEvents::Event* event)
 	if (!vev->getValue()) return;
 	if	(w != p->button_) return;
 
-	if (p->listBox_)
-	{
-		delete p->listBox_;
-		p->listBox_ = nullptr;
-	}
-
-	else 
-	{
-		p->listBox_ = new ListBox	(p->listBoxArea_.getX(), p->listBoxArea_.getY(), p->listBoxArea_.getWidth(), p->listBoxArea_.getHeight(), 
-									 {}, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (p->getUrid()) + "/listbox"), "");
-
-		ListBox* l = dynamic_cast<ListBox*>(p->listBox_);
-		if (l)
-		{
-			if (!p->items_.empty())
-			{
-				for (std::list<Widget*>::iterator it = std::next (p->items_.begin()); it != p->items_.end(); ++it)
-				{
-					Label* wl = dynamic_cast<Label*>(*it);
-					if (wl)
-					{
-						l->addItem (wl->getText());
-					}
-				}
-			}
-			l->setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, ComboBox::listBoxChangedCallback);
-			l->setStacking (STACKING_ESCAPE);
-			l->setValue (p->getValue());
-			p->raiseToFront();
-			p->add (l);
-		}
-	}
+	if (p->listBox_) p->hideListbox();
+	else p->showListbox();
 }
 
 inline void ComboBox::listBoxChangedCallback (BEvents::Event* event)

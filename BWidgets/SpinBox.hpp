@@ -20,6 +20,7 @@
 
 #include "SpinButton.hpp"
 #include "Label.hpp"
+#include "Supports/Clickable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Scrollable.hpp"
 #include "../BEvents/WheelEvent.hpp"
@@ -63,7 +64,7 @@ namespace BWidgets
  *  @todo  Resize()
  *  @todo  Import item widgets.
  */
-class SpinBox : public Widget, public ValueableTyped<size_t>, public Scrollable
+class SpinBox : public Widget, public ValueableTyped<size_t>, public Clickable, public Scrollable
 {
 protected:
 	Widget* button_;
@@ -270,6 +271,7 @@ inline SpinBox::SpinBox	(const double x, const double y, const double width, con
 			 	 		 std::initializer_list<const std::string> items, size_t value, uint32_t urid, std::string title) :
 	Widget (x, y, width, height, urid, title),
 	ValueableTyped<size_t> (value),
+	Clickable(),
 	Scrollable(),
 	button_ (new SpinButton (x + width - height, y, height, height, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"))),
 	items_ ({new Label (0, 0, getWidth() - getHeight(), getHeight(), "")}),	// Init with Null item
@@ -331,6 +333,7 @@ inline void SpinBox::copy (const SpinBox* that)
 	buttonWidth_ = that->buttonWidth_;
 
 	Scrollable::operator= (*that);
+	Clickable::operator= (*that);
 	ValueableTyped<size_t>::operator= (*that);
     Widget::copy (that);
 }

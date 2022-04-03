@@ -48,7 +48,7 @@ namespace BWidgets
  *  @todo  Resize()
  *  @todo  Import item widgets.
  */
-class ListBox : public SpinBox, public Clickable
+class ListBox : public SpinBox
 {
 public:
 
@@ -161,8 +161,7 @@ inline ListBox::ListBox	(const std::initializer_list<const std::string> items, s
 
 inline ListBox::ListBox	(const double x, const double y, const double width, const double height, 
 			 	 		 std::initializer_list<const std::string> items, size_t value, uint32_t urid, std::string title) :
-	SpinBox (x, y, width, height, items, value, urid, title),
-	Clickable()
+	SpinBox (x, y, width, height, items, value, urid, title)
 {
 	buttonWidth_ = 0.5 * BWIDGETS_DEFAULT_SPINBOX_BUTTON_WIDTH;
 	if (button_) delete button_;
@@ -185,7 +184,6 @@ inline Widget* ListBox::clone () const
 
 inline void ListBox::copy (const ListBox* that)
 {
-	Clickable::operator= (*that);
 	SpinBox::copy (that);
 }
 
