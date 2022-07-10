@@ -27,6 +27,7 @@
 #include <cmath>
 #include <cstdint>
 #include <vector>
+#include <array>
 
 #ifndef BWIDGETS_DEFAULT_HPIANOROLL_WIDTH
 #define BWIDGETS_DEFAULT_HPIANOROLL_WIDTH 400.0
