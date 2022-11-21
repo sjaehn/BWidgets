@@ -15,6 +15,7 @@ Contains a collection of different useful C and C++ tools.
  ├── Node
  ├── Point
  ├── Property
+ ├── Shape
  ╰── URID
 ```
 
@@ -95,6 +96,12 @@ Template class describing a node as a point with up to two handles.
 
 A Property is a data pair and consists of a constant @a ID and the assigned
 @a data. It can only be set upon construction. No change, no assignment.
+
+
+### Shape \<T, res\>
+
+A Shape is a container of transferred nodes to interpolate any point between 
+the nodes and thus to create a 2D graph.
 
 
 ### URID
