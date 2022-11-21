@@ -1,7 +1,8 @@
 # BEvents
 
 Events are emitted by a widget (or by the system via the main window) to the 
-main window event queue.
+main window event queue. The main window is the place for event handling in
+its `handleEvents()` method.
 
 ```
 Event

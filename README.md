@@ -144,3 +144,8 @@ Then call the respective example, e. g.:
 - [ ] Simplify mp3 support
 - [ ] Link URID to third party
 - [ ] Journal
+
+
+### Later
+- [ ] Import styles from TTL
+- [ ] Import styles from JSON(-LD)

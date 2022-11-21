@@ -995,12 +995,15 @@ e. g.:
 #define BWIDGETS_DEFAULT_BUTTON_HEIGHT 40
 ```
 
-The size of a created widget can be changed using `resize()` and is returned by
-`getExtends()`, `getWidth()`, or `getHeight()`. The parameter-free `resize()`
-methods tries to optimize (or minimalize, depending on the widget type) the 
-widget size and to fit the widget size to its content. The parameter-free 
-`resize()` may resize the widget to (0, 0) if it has got no children and no 
-visualizable content.
+The size (= the extends of the area covered by a widget) of a created widget 
+can be changed using `resize()` and is returned by `getExtends()`, 
+`getWidth()`, or `getHeight()`. The parameter-free `resize()` methods tries 
+to optimize (or minimalize, depending on the widget type) the widget size and 
+to fit the widget size to its content. The parameter-free `resize()` may 
+resize the widget to (0, 0) if it has got no children and no visualizable 
+content.
+
+Note: Resizing a widget does not necessarily mean scaling!
 
 
 ### Style
