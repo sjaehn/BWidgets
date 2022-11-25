@@ -1,6 +1,6 @@
 # B.Widgets
 
-Current version: 0.12.0 (alpha)
+Current version: 0.13.0 (alpha)
 
 Rewrite of the widget toolkit of the B.Music project.
 
@@ -118,7 +118,7 @@ Then call the respective example, e. g.:
   - [x] Scale (zoom) main Window and linked child widgets
   - [x] Reversed Valueable widgets by `setStep()` with negative values
   - [x] Enable / fix transfer functions
-- [ ] Define shortcut macros
+- [x] Define shortcut macros
 - [ ] Header files only (where possible)
 - [ ] Documentation
 

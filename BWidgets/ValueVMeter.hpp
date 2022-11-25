@@ -32,6 +32,14 @@
 #define BWIDGETS_DEFAULT_VALUEVMETER_HEIGHT 80.0
 #endif
 
+#ifndef BDOUBLE_TO_STRING
+#define BDOUBLE_TO_STRING(x) BWidgets::ValueVMeter::valueToString(x)
+#endif
+
+#ifndef BSTRING_TO_DOUBLE
+#define BSTRING_TO_DOUBLE(x) BWidgets::ValueVMeter::stringToValue(x)
+#endif
+
 namespace BWidgets
 {
 

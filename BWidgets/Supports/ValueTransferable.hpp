@@ -21,6 +21,26 @@
 #include "Support.hpp"
 #include <functional>
 
+#ifndef BNOTRANSFERD
+#define BNOTRANSFERD (BWidgets::ValueTransferable<double>::noTransfer)
+#endif
+
+#ifndef BNOTRANSFERF
+#define BNOTRANSFERF (BWidgets::ValueTransferable<float>::noTransfer)
+#endif
+
+#ifndef BNOTRANSFERI
+#define BNOTRANSFERI (BWidgets::ValueTransferable<int>::noTransfer)
+#endif
+
+#ifndef BNOTRANSFERL
+#define BNOTRANSFERL (BWidgets::ValueTransferable<long>::noTransfer)
+#endif
+
+#ifndef BNOTRANSFERB
+#define BNOTRANSFERB (BWidgets::ValueTransferable<bool>::noTransfer)
+#endif
+
 namespace BWidgets
 {
 

@@ -38,6 +38,14 @@
 #define BUTILITIES_URID_ANONYMOUS_URI BUTILITIES_URID_URI "#Anonymous"
 #endif
 
+#ifndef BURI
+#define BURI(x) (BUtilities::Urid::uri (x))
+#endif
+
+#ifndef BURID
+#define BURID(x) (BUtilities::Urid::urid (x))
+#endif
+
 namespace BUtilities 
 {
 

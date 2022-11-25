@@ -35,6 +35,10 @@
 #define BUTILITIES_DICTIONARY_EXTERNAL_CATALOGUE ""
 #endif
 
+#ifndef BDICT
+#define BDICT(x) (BUtilities::Dictionary::get(x))
+#endif
+
 namespace BUtilities 
 {
 

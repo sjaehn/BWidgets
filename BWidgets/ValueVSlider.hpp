@@ -31,6 +31,14 @@
 #define BWIDGETS_DEFAULT_VALUEVSLIDER_HEIGHT 80.0
 #endif
 
+#ifndef BDOUBLE_TO_STRING
+#define BDOUBLE_TO_STRING(x) BWidgets::ValueVSlider::valueToString(x)
+#endif
+
+#ifndef BSTRING_TO_DOUBLE
+#define BSTRING_TO_DOUBLE(x) BWidgets::ValueVSlider::stringToValue(x)
+#endif
+
 namespace BWidgets
 {
 
