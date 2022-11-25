@@ -61,10 +61,10 @@ public:
 	 *  @brief  Creates a %RadioButton with default size.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	RadioButton	(bool toggleable, bool clicked = false, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	RadioButton	(bool toggleable, bool clicked = false, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %RadioButton.
@@ -74,12 +74,12 @@ public:
 	 *  @param height  %Widget height.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	RadioButton	(const double x, const double y, const double width, const double height, 
 			 	 bool toggleable = false, bool clicked = false,
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %RadioButton. 
@@ -129,7 +129,7 @@ protected:
 };
 
 inline RadioButton::RadioButton () :
-	RadioButton (0.0, 0.0, BWIDGETS_DEFAULT_RADIOBUTTON_WIDTH, BWIDGETS_DEFAULT_RADIOBUTTON_HEIGHT, false, false, URID_UNKNOWN_URID, "")
+	RadioButton (0.0, 0.0, BWIDGETS_DEFAULT_RADIOBUTTON_WIDTH, BWIDGETS_DEFAULT_RADIOBUTTON_HEIGHT, false, false, BUTILITIES_URID_UNKNOWN_URID, "")
 {
 
 }

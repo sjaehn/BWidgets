@@ -20,7 +20,7 @@
 
 #include "Style.hpp"
 
-#define THEME_URI "https://github.com/sjaehn/BWidgets/BStyles/Theme.hpp"
+#define BSTYLES_THEME_URI "https://github.com/sjaehn/BWidgets/BStyles/Theme.hpp"
 
 namespace BStyles
 {

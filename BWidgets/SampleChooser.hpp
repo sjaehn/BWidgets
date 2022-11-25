@@ -94,11 +94,11 @@ public:
 	 *  @param path  Sample path.
 	 *  @param filters  Optional, initializer list with filename search
 	 *  filters.
-     *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+     *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %SampleChooser title.
 	 */
 	SampleChooser	(const std::string& path, std::initializer_list<Filter> filters = {},
-					 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+					 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Constructs a SampleChooser object with default size
@@ -109,7 +109,7 @@ public:
 	 *  @param path  Sample path.
 	 *  @param filters  Optional, initializer list with filename search
 	 *  filters.
-     *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+     *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %SampleChooser title.
 	 */
 	SampleChooser	(const double x, const double y, const double width, const double height,
@@ -118,7 +118,7 @@ public:
 					 													 std::regex (".*")},
 					 											 Filter	{BUtilities::Dictionary::get ("Sound files"), 
 																  		 BWIDGETS_DEFAULT_SAMPLECHOOSER_SOUNDFILES_REGEX}},
-					 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+					 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 
 	/**
@@ -232,7 +232,7 @@ inline SampleChooser::SampleChooser () :
 					 ".",	
 					 {Filter {BUtilities::Dictionary::get ("All files"), std::regex (".*")},
 					  Filter {BUtilities::Dictionary::get ("Sound files"), BWIDGETS_DEFAULT_SAMPLECHOOSER_SOUNDFILES_REGEX}},
-					 URID_UNKNOWN_URID, "") 
+					 BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

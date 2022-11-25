@@ -33,7 +33,7 @@ using namespace BWidgets;
 int main ()
 {
     // Window
-    Window window (300, 120, 0, URID_UNKNOWN_URID, "Draws", true);
+    Window window (300, 120, 0, BUTILITIES_URID_UNKNOWN_URID, "Draws", true);
 
     // Label
     Label label (10, 10, 280, 20, "Using B.Oops-like Draws");

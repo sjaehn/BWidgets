@@ -61,12 +61,12 @@ public:
 	 *  @param text  Text string.
 	 *  @param buttonlabels  Optional, initializer list with butten label 
 	 *  strings.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  The box only hosts an OK button if no button labels are provided.
 	 */
-	TextBox (const std::string& text, std::initializer_list<std::string> buttonlabels = {}, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	TextBox (const std::string& text, std::initializer_list<std::string> buttonlabels = {}, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Construct a %TextBox object.
@@ -77,13 +77,13 @@ public:
 	 *  @param text  Text string.
 	 *  @param buttonlabels  Optional, initializer list with button label 
 	 *  strings.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  The box only hosts an OK button if no button labels are provided.
 	 */
 	TextBox (const double x, const double y, const double width, const double height,
-		 const std::string& text, std::initializer_list<std::string> buttons = {}, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+		 const std::string& text, std::initializer_list<std::string> buttons = {}, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %TextBox. 
@@ -129,7 +129,7 @@ public:
     virtual void update () override;
 };
 
-inline TextBox::TextBox () : TextBox (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBOX_WIDTH, BWIDGETS_DEFAULT_TEXTBOX_HEIGHT, "", {}, URID_UNKNOWN_URID, "") 
+inline TextBox::TextBox () : TextBox (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBOX_WIDTH, BWIDGETS_DEFAULT_TEXTBOX_HEIGHT, "", {}, BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

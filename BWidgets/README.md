@@ -1041,20 +1041,20 @@ child widgets with the URID for `URI "/sliders"`:
 ```
 Style style =
 {
-    {Urid::urid (STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
-    {Urid::urid (STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
-    {Urid::urid (STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
-    {Urid::urid (STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(darks)},
-    {Urid::urid (STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(greens)},
-    {Urid::urid (STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
+    {Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
+    {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
+    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
+    {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(darks)},
+    {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(greens)},
+    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
 
     {Urid::urid (URI "/sliders"), makeAny<Style>({
-        {Urid::urid (STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
-        {Urid::urid (STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
-        {Urid::urid (STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
-        {Urid::urid (STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(yellows)},
-        {Urid::urid (STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
-        {Urid::urid (STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
+        {Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
+        {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
+        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
+        {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(yellows)},
+        {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
+        {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
     })}
 };
 ```

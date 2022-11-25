@@ -84,7 +84,7 @@ static void buttonChangedCallback (BEvents::Event* event)
 int main ()
 {
     // Create a window
-    Window window (720, 420, 0, URID_UNKNOWN_URID, "B.Widgets Symbols");
+    Window window (720, 420, 0, BUTILITIES_URID_UNKNOWN_URID, "B.Widgets Symbols");
 
     // Create a Pattern 8x8
     pattern = std::unique_ptr<Pattern<>>(new Pattern<> (70, 10, 640, 400, 8, 8));

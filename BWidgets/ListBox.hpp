@@ -69,10 +69,10 @@ public:
 	 *  @param items  Initializer list of item strings.
 	 *  @param value  Optional, list index of the selected item starting with
 	 *  1 (default = 0 = unselected).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	ListBox	(const std::initializer_list<const std::string> items, size_t value = 0, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	ListBox	(const std::initializer_list<const std::string> items, size_t value = 0, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %ListBox.
@@ -83,12 +83,12 @@ public:
 	 *  @param items  Optional, initializer list of item strings.
 	 *  @param value  Optional, list index of the selected item starting with
 	 *  1 (default = 0 = unselected).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	ListBox	(const double x, const double y, const double width, const double height,
 			 std::initializer_list<const std::string> items = {}, size_t value = 0,
-			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %ListBox. 
@@ -151,7 +151,7 @@ protected:
 	static void valueChangedCallback (BEvents::Event* event);
 };
 
-inline ListBox::ListBox () : ListBox (0.0, 0.0, BWIDGETS_DEFAULT_LISTBOX_WIDTH, BWIDGETS_DEFAULT_LISTBOX_HEIGHT, {}, 0, URID_UNKNOWN_URID, "") {}
+inline ListBox::ListBox () : ListBox (0.0, 0.0, BWIDGETS_DEFAULT_LISTBOX_WIDTH, BWIDGETS_DEFAULT_LISTBOX_HEIGHT, {}, 0, BUTILITIES_URID_UNKNOWN_URID, "") {}
 
 inline ListBox::ListBox	(const uint32_t urid, const std::string& title) :
 	ListBox (0.0, 0.0, BWIDGETS_DEFAULT_LISTBOX_WIDTH, BWIDGETS_DEFAULT_LISTBOX_HEIGHT, {}, 0, urid, title) {}

@@ -66,10 +66,10 @@ public:
 	 *  @brief  Creates a %Button with default size.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	Button	(bool toggleable, bool clicked = false, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	Button	(bool toggleable, bool clicked = false, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %Button.
@@ -79,12 +79,12 @@ public:
 	 *  @param height  %Widget height.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	Button	(const double x, const double y, const double width, const double height, 
 			 bool toggleable = false, bool clicked = false,
-			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %Button. 
@@ -166,7 +166,7 @@ public:
     virtual void update () override;
 };
 
-inline Button::Button () : Button (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, false, false, URID_UNKNOWN_URID, "") {}
+inline Button::Button () : Button (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, false, false, BUTILITIES_URID_UNKNOWN_URID, "") {}
 
 inline Button::Button	(const uint32_t urid, const std::string& title) : 
 	Button (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, false, false, urid, title) {}

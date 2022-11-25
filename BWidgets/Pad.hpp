@@ -87,11 +87,11 @@ public:
 	 *  @param min  Lower value limit.
 	 *  @param max  Upper value limit.
 	 *  @param step  Optional, value increment steps.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	Pad	(const T value, const T min, const T max, T step = 0.0, 
-		 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+		 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %Pad.
@@ -107,14 +107,14 @@ public:
 	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
 	 *  internal context to an external context.
 	 *  @param step  Optional, value increment steps.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	Pad	(const double x, const double y, const double width, const double height, 
 		 const T value, const T min, const T max, T step = 0.0,
 		 std::function<T (const T& x)> transferFunc = ValueTransferable<T>::noTransfer,
 		 std::function<T (const T& x)> reTransferFunc = ValueTransferable<T>::noTransfer,
-		 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+		 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %Pad. 
@@ -210,7 +210,7 @@ inline Pad<T>::Pad () :
 	Pad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT,
 		 T(), T(), T() + 1.0, T(), 
 		 ValueTransferable<T>::noTransfer, ValueTransferable<T>::noTransfer,  
-		 URID_UNKNOWN_URID, "") 
+		 BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

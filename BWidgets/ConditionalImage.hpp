@@ -86,12 +86,12 @@ public:
 	 *  @param min  Optional, lower value limit.
 	 *  @param max  Optional, upper value limit.
 	 *  @param step  Optional, value increment steps.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	ConditionalImage	(const std::initializer_list<std::pair<double, std::string>>& filenames,
 						 double value = 0.0, double min = 0.0, double max = 1.0, double step = 0.0, 
-						 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+						 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a multi Status %ConditionalImage with defined 
@@ -112,7 +112,7 @@ public:
 	 *  internal context to an external context.
 	 *  @param showFunc  Optinonal, function to test if an image represented
 	 *  by its value will be shown or not.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	ConditionalImage	(const double x, const double y, const double width, const double height, 
@@ -121,7 +121,7 @@ public:
 						 std::function<double (const double& x)> transferFunc = ValueTransferable<double>::noTransfer,
 						 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
 						 std::function<bool (ConditionalImage* widget, const double& x)> showFunc = isClosestToValue,
-						 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+						 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	virtual ~ConditionalImage();
 
@@ -265,7 +265,7 @@ inline ConditionalImage::ConditionalImage () :
 						 0.0, 0.0, 1.0, 0.0,
 						 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer,
 						 isClosestToValue,
-						 URID_UNKNOWN_URID, "") 
+						 BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

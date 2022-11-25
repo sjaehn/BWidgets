@@ -103,10 +103,10 @@ public:
 	/**
 	 *  @brief  Constructs a %Symbol object at the origin with optimized extends.
 	 *  @param symbol  SymbolType index.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Symbol title (default = "").
 	 */
-	Symbol (SymbolType symbol, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	Symbol (SymbolType symbol, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Constructs a %Symbol object at the origin with optimized extends.
@@ -115,11 +115,11 @@ public:
 	 *  @param width  %Symbol width.
 	 *  @param height  %Symbol height.
 	 *  @param symbol  SymbolType index.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Symbol title (default = "").
 	 */
 	Symbol	(const double x, const double y, const double width, const double height, 
-			 SymbolType symbol, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 SymbolType symbol, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %Symbol. 
@@ -197,7 +197,7 @@ protected:
 };
 
 inline Symbol::Symbol () : 
-	Symbol (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOL_WIDTH, BWIDGETS_DEFAULT_SYMBOL_HEIGHT, NO_SYMBOL, URID_UNKNOWN_URID, "") 
+	Symbol (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOL_WIDTH, BWIDGETS_DEFAULT_SYMBOL_HEIGHT, NO_SYMBOL, BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

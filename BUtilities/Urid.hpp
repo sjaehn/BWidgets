@@ -22,20 +22,20 @@
 #include <map>
 #include <mutex>
 
-#ifndef URID_URI
-#define URID_URI "https://github.com/sjaehn/BWidgets/BUtilities/Urid.hpp"
+#ifndef BUTILITIES_URID_URI
+#define BUTILITIES_URID_URI "https://github.com/sjaehn/BWidgets/BUtilities/Urid.hpp"
 #endif
 
-#ifndef URID_UNKNOWN_URI
-#define URID_UNKNOWN_URI URID_URI "#Unknown"
+#ifndef BUTILITIES_URID_UNKNOWN_URI
+#define BUTILITIES_URID_UNKNOWN_URI BUTILITIES_URID_URI "#Unknown"
 #endif
 
-#ifndef URID_UNKNOWN_URID
-#define URID_UNKNOWN_URID 0
+#ifndef BUTILITIES_URID_UNKNOWN_URID
+#define BUTILITIES_URID_UNKNOWN_URID 0
 #endif
 
-#ifndef URID_ANONYMOUS_URI
-#define URID_ANONYMOUS_URI URID_URI "#Anonymous"
+#ifndef BUTILITIES_URID_ANONYMOUS_URI
+#define BUTILITIES_URID_ANONYMOUS_URI BUTILITIES_URID_URI "#Anonymous"
 #endif
 
 namespace BUtilities 
@@ -67,7 +67,7 @@ public:
      *  @return  URID.
      *
      *  Adds the URI if not exists before.
-     *  If no URI is provided (uri = ""), then URID_ANONYMOUS_URI + "_" and 
+     *  If no URI is provided (uri = ""), then BUTILITIES_URID_ANONYMOUS_URI + "_" and 
      *  the next free URID number is used.
      */
     static uint32_t urid (const std::string& uri);

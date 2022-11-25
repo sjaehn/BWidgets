@@ -58,10 +58,10 @@ public:
 	/**
 	 *  @brief  Constructs a %Text object at the origin with optimized extends.
 	 *  @param text  %Text string.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Text title (default = "").
 	 */
-	Text (const std::string& text, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	Text (const std::string& text, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Constructs a %Text object at the origin.
@@ -70,10 +70,10 @@ public:
 	 *  @param width  %Text width.
 	 *  @param height  %Text height.
 	 *  @param text  %Text string.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Text title (default = "").
 	 */
-	Text (const double x, const double y, const double width, const double height, const std::string& text, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	Text (const double x, const double y, const double width, const double height, const std::string& text, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %Text. 
@@ -166,7 +166,7 @@ protected:
 	virtual void draw (const BUtilities::Area<>& area) override;
 };
 
-inline Text::Text () : Text (0.0, 0.0, BWIDGETS_DEFAULT_TEXT_WIDTH, BWIDGETS_DEFAULT_TEXT_HEIGHT, "", URID_UNKNOWN_URID, "") 
+inline Text::Text () : Text (0.0, 0.0, BWIDGETS_DEFAULT_TEXT_WIDTH, BWIDGETS_DEFAULT_TEXT_HEIGHT, "", BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

@@ -61,11 +61,11 @@ public:
 	 *  @param text  Label text.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	TextButton	(const std::string& text, bool toggleable = false, bool clicked = false,
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %TextButton.
@@ -76,12 +76,12 @@ public:
 	 *  @param text  Label text.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	TextButton	(const double x, const double y, const double width, const double height, 
 				 const std::string& text, bool toggleable = false, bool clicked = false,
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %TextButton. 
@@ -130,7 +130,7 @@ public:
     virtual void update () override;
 };
 
-inline TextButton::TextButton () : TextButton (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBUTTON_WIDTH, BWIDGETS_DEFAULT_TEXTBUTTON_HEIGHT, "", false, false, URID_UNKNOWN_URID, "") {}
+inline TextButton::TextButton () : TextButton (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBUTTON_WIDTH, BWIDGETS_DEFAULT_TEXTBUTTON_HEIGHT, "", false, false, BUTILITIES_URID_UNKNOWN_URID, "") {}
 
 inline TextButton::TextButton	(const uint32_t urid, const std::string& title) :
 	TextButton (0.0, 0.0, BWIDGETS_DEFAULT_TEXTBUTTON_WIDTH, BWIDGETS_DEFAULT_TEXTBUTTON_HEIGHT, "", false, false, urid, title) {}

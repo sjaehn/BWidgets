@@ -75,12 +75,12 @@ public:
 	/**
 	 *  @brief  Construct a %Box object with default size.
 	 *  @param buttonlabels  Initializer list with butten label strings.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  The box only hosts an OK button if no button labels are provided.
 	 */
-	Box (const std::initializer_list<std::string>& buttonlabels, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	Box (const std::initializer_list<std::string>& buttonlabels, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Construct a %Box object.
@@ -89,13 +89,13 @@ public:
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
 	 *  @param buttonlabels  Initializer list with butten label strings.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  The box only hosts an OK button if no button labels are provided.
 	 */
 	Box (const double x, const double y, const double width, const double height,
-		 const std::initializer_list<std::string>& buttons = {}, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+		 const std::initializer_list<std::string>& buttons = {}, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	~Box ();
 
@@ -203,7 +203,7 @@ protected:
 	static void buttonClickCallback (BEvents::Event* event);
 };
 
-inline Box::Box () : Box (0.0, 0.0, BWIDGETS_DEFAULT_BOX_WIDTH, BWIDGETS_DEFAULT_BOX_HEIGHT, {}, URID_UNKNOWN_URID, "") 
+inline Box::Box () : Box (0.0, 0.0, BWIDGETS_DEFAULT_BOX_WIDTH, BWIDGETS_DEFAULT_BOX_HEIGHT, {}, BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

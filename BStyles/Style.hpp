@@ -26,7 +26,7 @@
 #include "../BUtilities/Urid.hpp"
 #include <initializer_list>
 
-#define STYLE_URI "https://github.com/sjaehn/BWidgets/BStyles/Style.hpp"
+#define BSTYLES_STYLE_URI "https://github.com/sjaehn/BWidgets/BStyles/Style.hpp"
 
 namespace BStyles
 {
@@ -291,74 +291,74 @@ inline bool Style::isStyle (const uint32_t urid) const
 
 inline Border Style::getBorder() const
 {
-    const_iterator it = find (BUtilities::Urid::urid (STYLEPROPERTY_BORDER_URI));
+    const_iterator it = find (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI));
     if ((it == end()) || isStyle (it)) return noBorder;
     else return it->second.get<Border>();
 }
 
 inline void Style::setBorder(const Border& border)
 {
-    operator[] (BUtilities::Urid::urid (STYLEPROPERTY_BORDER_URI)) = BUtilities::makeAny<Border> (border);
+    operator[] (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI)) = BUtilities::makeAny<Border> (border);
 }
 
 inline Fill Style::getBackground() const
 {
-    const_iterator it = find (BUtilities::Urid::urid (STYLEPROPERTY_BACKGROUND_URI));
+    const_iterator it = find (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI));
     if ((it == end()) || isStyle (it)) return noFill;
     else return it->second.get<Fill>();
 }
 
 inline void Style::setBackground(const Fill& fill)
 {
-    operator[] (BUtilities::Urid::urid (STYLEPROPERTY_BACKGROUND_URI)) = BUtilities::makeAny<Fill> (fill);
+    operator[] (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI)) = BUtilities::makeAny<Fill> (fill);
 }
 
 inline Font Style::getFont() const
 {
-    const_iterator it = find (BUtilities::Urid::urid (STYLEPROPERTY_FONT_URI));
+    const_iterator it = find (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI));
     if ((it == end()) || isStyle (it)) return sans12pt;
     else return it->second.get<Font>();
 }
 
 inline void Style::setFont(const Font& font)
 {
-    operator[] (BUtilities::Urid::urid (STYLEPROPERTY_FONT_URI)) = BUtilities::makeAny<Font> (font);
+    operator[] (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI)) = BUtilities::makeAny<Font> (font);
 }
 
 inline ColorMap Style::getFgColors() const
 {
-    const_iterator it = find (BUtilities::Urid::urid (STYLEPROPERTY_FGCOLORS_URI));
+    const_iterator it = find (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI));
     if ((it == end()) || isStyle (it)) return greens;
     else return it->second.get<ColorMap>();
 }
 
 inline void Style::setFgColors (const ColorMap& colors)
 {
-    operator[] (BUtilities::Urid::urid (STYLEPROPERTY_FGCOLORS_URI)) = BUtilities::makeAny<ColorMap> (colors);
+    operator[] (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI)) = BUtilities::makeAny<ColorMap> (colors);
 }
 
 inline ColorMap Style::getBgColors() const
 {
-    const_iterator it = find (BUtilities::Urid::urid (STYLEPROPERTY_BGCOLORS_URI));
+    const_iterator it = find (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI));
     if ((it == end()) || isStyle (it)) return darks;
     else return it->second.get<ColorMap>();
 }
 
 inline void Style::setBgColors (const ColorMap& colors)
 {
-    operator[] (BUtilities::Urid::urid (STYLEPROPERTY_BGCOLORS_URI)) = BUtilities::makeAny<ColorMap> (colors);
+    operator[] (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI)) = BUtilities::makeAny<ColorMap> (colors);
 }
 
 inline ColorMap Style::getTxColors() const
 {
-    const_iterator it = find (BUtilities::Urid::urid (STYLEPROPERTY_TXCOLORS_URI));
+    const_iterator it = find (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI));
     if ((it == end()) || isStyle (it)) return whites;
     else return it->second.get<ColorMap>();
 }
 
 inline void Style::setTxColors (const ColorMap& colors)
 {
-    operator[] (BUtilities::Urid::urid (STYLEPROPERTY_TXCOLORS_URI)) = BUtilities::makeAny<ColorMap> (colors);
+    operator[] (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI)) = BUtilities::makeAny<ColorMap> (colors);
 }
 
 

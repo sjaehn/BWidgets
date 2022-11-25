@@ -74,10 +74,10 @@ public:
 	 *  @brief  Creates a %HSwitch with default size.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	HSwitch	(bool toggleable, bool clicked = false, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	HSwitch	(bool toggleable, bool clicked = false, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %HSwitch.
@@ -87,12 +87,12 @@ public:
 	 *  @param height  %Widget height.
 	 *  @param toggleable  Support of button toggling.
 	 *  @param clicked  Default click status.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	HSwitch	(const double x, const double y, const double width, const double height, 
 			 bool toggleable = true, bool clicked = false,
-			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %HSwitch. 
@@ -174,7 +174,7 @@ protected:
 };
 
 inline HSwitch::HSwitch () :
-	HSwitch (0.0, 0.0, BWIDGETS_DEFAULT_HSWITCH_WIDTH, BWIDGETS_DEFAULT_HSWITCH_HEIGHT, true, false, URID_UNKNOWN_URID, "")
+	HSwitch (0.0, 0.0, BWIDGETS_DEFAULT_HSWITCH_WIDTH, BWIDGETS_DEFAULT_HSWITCH_HEIGHT, true, false, BUTILITIES_URID_UNKNOWN_URID, "")
 {
 
 }

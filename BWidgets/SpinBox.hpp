@@ -92,10 +92,10 @@ public:
 	 *  @param items  Initializer list of item strings.
 	 *  @param value  Optional, list index of the selected item starting with
 	 *  1 (default = 0 = unselected).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	SpinBox	(const std::initializer_list<const std::string> items, size_t value = 0, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	SpinBox	(const std::initializer_list<const std::string> items, size_t value = 0, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %SpinBox.
@@ -106,12 +106,12 @@ public:
 	 *  @param items  Optional, initializer list of item strings.
 	 *  @param value  Optional, list index of the selected item starting with
 	 *  1 (default = 0 = unselected).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	SpinBox	(const double x, const double y, const double width, const double height, 
 			 std::initializer_list<const std::string> items = {}, size_t value = 0,
-			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	~SpinBox();
 
@@ -259,7 +259,7 @@ protected:
 	static void valueChangedCallback (BEvents::Event* event);
 };
 
-inline SpinBox::SpinBox () : SpinBox (0.0, 0.0, BWIDGETS_DEFAULT_SPINBOX_WIDTH, BWIDGETS_DEFAULT_SPINBOX_HEIGHT, {}, 0, URID_UNKNOWN_URID, "") {}
+inline SpinBox::SpinBox () : SpinBox (0.0, 0.0, BWIDGETS_DEFAULT_SPINBOX_WIDTH, BWIDGETS_DEFAULT_SPINBOX_HEIGHT, {}, 0, BUTILITIES_URID_UNKNOWN_URID, "") {}
 
 inline SpinBox::SpinBox	(const uint32_t urid, const std::string& title) :
 	SpinBox (0.0, 0.0, BWIDGETS_DEFAULT_SPINBOX_WIDTH, BWIDGETS_DEFAULT_SPINBOX_HEIGHT, {}, 0, urid, title) {}

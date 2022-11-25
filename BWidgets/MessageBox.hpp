@@ -65,13 +65,13 @@ public:
 	 *  @param text  Optional, text string.
 	 *  @param buttonlabels  Optional, initializer list with butten label 
 	 *  strings.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  The box only hosts an OK button if no button labels are provided.
 	 */
 	MessageBox	(const Symbol::SymbolType symbol, const std::string& headline, std::string text = "", 
-				 std::initializer_list<std::string> buttonlabels = {}, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 std::initializer_list<std::string> buttonlabels = {}, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Construct a %MessageBox object.
@@ -84,14 +84,14 @@ public:
 	 *  @param text  Optional, text string.
 	 *  @param buttonlabels  Optional, initializer list with button label 
 	 *  strings.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  The box only hosts an OK button if no button labels are provided.
 	 */
 	MessageBox	(const double x, const double y, const double width, const double height,
 				 const Symbol::SymbolType symbol, const std::string& headline, std::string text = "", 
-				 std::initializer_list<std::string> buttons = {}, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 std::initializer_list<std::string> buttons = {}, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %MessageBox. 
@@ -138,7 +138,7 @@ public:
 };
 
 inline MessageBox::MessageBox () : 
-	MessageBox (0.0, 0.0, BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH, BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT, Symbol::NO_SYMBOL, "", "", {}, URID_UNKNOWN_URID, "") 
+	MessageBox (0.0, 0.0, BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH, BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT, Symbol::NO_SYMBOL, "", "", {}, BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

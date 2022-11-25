@@ -23,7 +23,7 @@ using namespace BWidgets;
 
 int main ()
 {
-    Window window (660, 440, 0, URID_UNKNOWN_URID, "B.Widgets Symbols");
+    Window window (660, 440, 0, BUTILITIES_URID_UNKNOWN_URID, "B.Widgets Symbols");
 
     std::array<std::unique_ptr<Symbol>, Symbol::NEW_FOLDER_SYMBOL + 1> symbols;
     for (int i = 0; i <= Symbol::NEW_FOLDER_SYMBOL; ++i)

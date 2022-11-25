@@ -97,14 +97,14 @@ public:
 	 *  @param height  Window height.
 	 *  @param nativeWindow  Pointer to the host provided native window or
 	 *  NULL.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, Window title.
 	 *  @param resizable  Optional, Window resizable or fixed size (default).
 	 *  @param worldType  Optional, Program (default) or module / plugin.
 	 *  @param worldFlag  Optional, PuglWorldFlags (default = 0).
 	 */
 	Window (const double width, const double height, PuglNativeView nativeWindow, 
-		uint32_t urid = URID_UNKNOWN_URID, std::string title = "BWidgets", bool resizable = false,
+		uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "BWidgets", bool resizable = false,
 		PuglWorldType worldType = PUGL_PROGRAM, int worldFlag = 0);
 
 	~Window ();

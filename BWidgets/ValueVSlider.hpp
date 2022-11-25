@@ -75,11 +75,11 @@ public:
 	 *  @param min  Lower value limit.
 	 *  @param max  Upper value limit.
 	 *  @param step  Optional, value increment steps.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	ValueVSlider	(const double value, const double min, const double max, double step = 0.0, 
-					 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+					 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %ValueVSlider.
@@ -99,7 +99,7 @@ public:
 	 *  which will be displayed as a label.
 	 *  @param reDisplayFunc  Optional, function to convert the string from
 	 *  the (edited) label to the value.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %ValueVSlider title (default = "").
 	 *
 	 *  The optional parameters @a displayFunc and @a reDisplayFunc can be used
@@ -115,7 +115,7 @@ public:
 					 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
 					 std::function<std::string (const double& x)> displayFunc = valueToString,
 					 std::function<double (const std::string& s)> reDisplayFunc = stringToValue,
-					 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+					 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %ValueVSlider. 
@@ -180,7 +180,7 @@ inline ValueVSlider::ValueVSlider () :
 					 ValueTransferable<double>::noTransfer, 
 					 valueToString,
 					 stringToValue,
-					 URID_UNKNOWN_URID, "")
+					 BUTILITIES_URID_UNKNOWN_URID, "")
 {
 
 }

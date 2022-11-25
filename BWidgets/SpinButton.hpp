@@ -63,10 +63,10 @@ public:
 	/**
 	 *  @brief  Creates a %SpinButton with default size.
 	 *  @param value  Default value (-1 or 0 or 1).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	SpinButton	(const int value, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	SpinButton	(const int value, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %SpinButton.
@@ -75,12 +75,12 @@ public:
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
 	 *  @param value  Default value (-1 or 0 or 1).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	SpinButton	(const double x, const double y, const double width, const double height, 
 				 int value = 0,
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %SpinButton. 
@@ -139,7 +139,7 @@ protected:
 	static void valueChangedCallback (BEvents::Event* event);
 };
 
-inline SpinButton::SpinButton () : SpinButton (0.0, 0.0, BWIDGETS_DEFAULT_SPINBUTTON_WIDTH, BWIDGETS_DEFAULT_SPINBUTTON_HEIGHT, 0, URID_UNKNOWN_URID, "") {}
+inline SpinButton::SpinButton () : SpinButton (0.0, 0.0, BWIDGETS_DEFAULT_SPINBUTTON_WIDTH, BWIDGETS_DEFAULT_SPINBUTTON_HEIGHT, 0, BUTILITIES_URID_UNKNOWN_URID, "") {}
 
 inline SpinButton::SpinButton	(const uint32_t urid, const std::string& title) :
 	SpinButton (0.0, 0.0, BWIDGETS_DEFAULT_SPINBUTTON_WIDTH, BWIDGETS_DEFAULT_SPINBUTTON_HEIGHT, 0, urid, title) {}

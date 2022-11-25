@@ -92,11 +92,11 @@ public:
 	 *  @param max  Upper value limit.
 	 *  @param step  Optional, value increment steps.
 	 *  @param vsize  Optional, range covered by the value.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	HRangeScrollBar	(const double value1, const double value2, const double min, const double max, double step = 0.0,
-					 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+					 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %HRangeScrollBar with default size.
@@ -105,11 +105,11 @@ public:
 	 *  @param max  Upper value limit.
 	 *  @param step  Optional, value increment steps.
 	 *  @param vsize  Optional, range covered by the value.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	HRangeScrollBar	(const value_type value, const double min, const double max, double step = 0.0,
-					 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+					 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %HRangeScrollBar.
@@ -126,14 +126,14 @@ public:
 	 *  external context to the internal context.
 	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
 	 *  internal context to an external context.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %HRangeScrollBar title (default = "").
 	 */
 	HRangeScrollBar	(const double x, const double y, const double width, const double height, 
 			 const double value1, const double value2, const double min, const double max, double step = 0.0,
 			 std::function<value_type (const value_type& x)> transferFunc = ValueTransferable<value_type>::noTransfer,
 			 std::function<value_type (const value_type& x)> reTransferFunc = ValueTransferable<value_type>::noTransfer,
-			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %HRangeScrollBar.
@@ -149,14 +149,14 @@ public:
 	 *  external context to the internal context.
 	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
 	 *  internal context to an external context.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %HRangeScrollBar title (default = "").
 	 */
 	HRangeScrollBar	(const double x, const double y, const double width, const double height, 
 			 const value_type value, const double min, const double max, double step = 0.0,
 			 std::function<value_type (const value_type& x)> transferFunc = ValueTransferable<value_type>::noTransfer,
 			 std::function<value_type (const value_type& x)> reTransferFunc = ValueTransferable<value_type>::noTransfer,
-			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %HRangeScrollBar. 
@@ -227,7 +227,7 @@ inline HRangeScrollBar::HRangeScrollBar () :
 	HRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_HRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_HRANGESCROLLBAR_HEIGHT, 
 					 value_type (0.0, 0.0), 0.0, 1.0, 0.0, 
 					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
-			 		 URID_UNKNOWN_URID, "")
+			 		 BUTILITIES_URID_UNKNOWN_URID, "")
 {
 
 }

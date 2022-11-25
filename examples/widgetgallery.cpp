@@ -103,11 +103,11 @@ static void configureCallback (BEvents::Event* event)
 int main ()
 {
     // Window
-    Window window (1500, 820, 0, URID_UNKNOWN_URID, "Window", true);
+    Window window (1500, 820, 0, BUTILITIES_URID_UNKNOWN_URID, "Window", true);
     window.setCallbackFunction(BEvents::Event::CONFIGURE_REQUEST_EVENT, configureCallback);
 
     // Widget
-    Widget widget (10, 10, 80, 60, URID_UNKNOWN_URID, "Widget");
+    Widget widget (10, 10, 80, 60, BUTILITIES_URID_UNKNOWN_URID, "Widget");
     widget.setTitle ("Widget");
     widget.setBorder (lightgreyBorder1pt);
     Label widgetLabel (10, 80, 80, 20, "Widget");
@@ -180,7 +180,7 @@ int main ()
     window.add (&buttonLabel);
 
     // TextButton
-    TextButton textButton (810, 30, 80, 20, "Text", false, false, URID_UNKNOWN_URID, "TextButton");
+    TextButton textButton (810, 30, 80, 20, "Text", false, false, BUTILITIES_URID_UNKNOWN_URID, "TextButton");
     textButton.setTitle("TextButton");
     Label textButtonLabel (810, 80, 80, 20, "TextButton");
     textButtonLabel.setFont (labelFont);
@@ -188,7 +188,7 @@ int main ()
     window.add (&textButtonLabel);
 
     // SymbolButton
-    SymbolButton symbolButton (910, 30, 80, 20, Symbol::ADD_SYMBOL, false, false, URID_UNKNOWN_URID, "SymbolButton");
+    SymbolButton symbolButton (910, 30, 80, 20, Symbol::ADD_SYMBOL, false, false, BUTILITIES_URID_UNKNOWN_URID, "SymbolButton");
     symbolButton.setTitle("SymbolButton");
     Label symbolButtonLabel (900, 80, 100, 20, "SymbolButton");
     symbolButtonLabel.setFont (labelFont);

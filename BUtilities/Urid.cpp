@@ -31,7 +31,7 @@ uint32_t Urid::add (const std::string& uri)
 {
     mx_.lock();
     if (uri != "") map_[uri] = count_;
-    else map_[std::string (URID_ANONYMOUS_URI) + "_" + std::to_string (count_)] = count_;
+    else map_[std::string (BUTILITIES_URID_ANONYMOUS_URI) + "_" + std::to_string (count_)] = count_;
     mx_.unlock();
     return count_++;
 }
@@ -69,7 +69,7 @@ uint32_t Urid::urid (const std::string& uri)
 std::map<std::string, uint32_t> Urid::makeMap ()
 {
     std::map<std::string, uint32_t> m;
-    m[URID_UNKNOWN_URI] = URID_UNKNOWN_URID;
+    m[BUTILITIES_URID_UNKNOWN_URI] = BUTILITIES_URID_UNKNOWN_URID;
     return m;
 }
 

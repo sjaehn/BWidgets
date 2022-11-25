@@ -146,10 +146,10 @@ public:
 	 *  @param y  %Widget Y origin coordinate.
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	Widget (const double x, const double y, const double width, const double height, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	Widget (const double x, const double y, const double width, const double height, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	Widget (const Widget& that) = delete;
 	virtual ~Widget();

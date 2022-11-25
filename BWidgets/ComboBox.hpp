@@ -76,10 +76,10 @@ public:
 	 *  @param items  Initializer list of item strings.
 	 *  @param value  Optional, list index of the selected item starting with
 	 *  1 (default = 0 = unselected).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	ComboBox	(const std::initializer_list<const std::string> items, size_t value = 0, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	ComboBox	(const std::initializer_list<const std::string> items, size_t value = 0, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %ComboBox with default ListBox size.
@@ -90,12 +90,12 @@ public:
 	 *  @param items  Optional, initializer list of item strings.
 	 *  @param value  Optional, list index of the selected item starting with
 	 *  1 (default = 0 = unselected).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	ComboBox	(const double x, const double y, const double width, const double height,
 				 std::initializer_list<const std::string> items = {}, size_t value = 0,
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %ComboBox.
@@ -110,13 +110,13 @@ public:
 	 *  @param items  Optional, initializer list of item strings.
 	 *  @param value  Optional, list index of the selected item starting with
 	 *  1 (default = 0 = unselected).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	ComboBox	(const double x, const double y, const double width, const double height,
 				 const double listBoxX, const double listBoxY, const double listBoxWidth, const double listBoxHeight,
 				 std::initializer_list<const std::string> items = {}, size_t value = 0,
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	virtual ~ComboBox();
 
@@ -231,7 +231,7 @@ protected:
 inline ComboBox::ComboBox () : 
 	ComboBox	(0.0, 0.0, BWIDGETS_DEFAULT_COMBOBOX_WIDTH, BWIDGETS_DEFAULT_COMBOBOX_HEIGHT, 
 				 0.0, BWIDGETS_DEFAULT_COMBOBOX_HEIGHT, BWIDGETS_DEFAULT_COMBOBOX_WIDTH, BWIDGETS_DEFAULT_COMBOBOX_LISTBOX_HEIGHT, 
-				 {}, 0, URID_UNKNOWN_URID, "") {}
+				 {}, 0, BUTILITIES_URID_UNKNOWN_URID, "") {}
 
 inline ComboBox::ComboBox	(const uint32_t urid, const std::string& title) :
 	ComboBox	(0.0, 0.0, BWIDGETS_DEFAULT_COMBOBOX_WIDTH, BWIDGETS_DEFAULT_COMBOBOX_HEIGHT, 

@@ -223,10 +223,10 @@ public:
 	 *  @brief  Creates a %Pattern with default size.
 	 *  @param columns  Number of columns.
 	 *  @param rows  Number of rows.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
-	Pattern	(const size_t columns, const size_t rows, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	Pattern	(const size_t columns, const size_t rows, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %Pattern.
@@ -236,12 +236,12 @@ public:
 	 *  @param height  %Widget height.
 	 *  @param columns  Number of columns.
 	 *  @param rows  Number of rows.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	Pattern	(const double x, const double y, const double width, const double height, 
 			 const size_t columns, const size_t rows,
-			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	~Pattern();
 
@@ -503,7 +503,7 @@ inline void Pattern<T>::PadsTemplType::setReTransferFunction (std::function<type
 
 template <class T>
 inline Pattern<T>::Pattern () : 
-	Pattern	(0.0, 0.0, BWIDGETS_DEFAULT_PATTERN_WIDTH, BWIDGETS_DEFAULT_PATTERN_HEIGHT, 0, 0, URID_UNKNOWN_URID, "") 
+	Pattern	(0.0, 0.0, BWIDGETS_DEFAULT_PATTERN_WIDTH, BWIDGETS_DEFAULT_PATTERN_HEIGHT, 0, 0, BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

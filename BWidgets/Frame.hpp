@@ -60,10 +60,10 @@ public:
 	 *  @param y  %Frame Y origin coordinate.
 	 *  @param width  %Frame width.
 	 *  @param height  %Frame height.
-     *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+     *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Frame title.
 	 */
-	Frame (const double x, const double y, const double width, const double height, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	Frame (const double x, const double y, const double width, const double height, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
     /**
 	 *  @brief  Creates a clone of the %Frame. 

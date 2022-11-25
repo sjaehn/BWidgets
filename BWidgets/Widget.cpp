@@ -475,7 +475,7 @@ BUtilities::Area<> Widget::getAbsoluteArea () const
 
 double Widget::getXOffset () const
 {
-	if (style_.contains (BUtilities::Urid::urid (STYLEPROPERTY_BORDER_URI)))
+	if (style_.contains (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI)))
 	{
 		BStyles::Border border = getBorder();
 		return border.margin + border.line.width + border.padding;

@@ -127,11 +127,11 @@ public:
 	 *  @param path  File path.
 	 *  @param filters  Optional, initializer list with filename search
 	 *  filters.
-     *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+     *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %FileChooser title.
 	 */
 	FileChooser	(const std::string& path, std::initializer_list<Filter> filters = {},
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Constructs a FileChooser object with default size
@@ -142,12 +142,12 @@ public:
 	 *  @param path  File path.
 	 *  @param filters  Optional, initializer list with filename search
 	 *  filters.
-     *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+     *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %FileChooser title.
 	 */
 	FileChooser	(const double x, const double y, const double width, const double height,
 				 std::string path = ".", std::initializer_list<Filter> filters = {Filter {BUtilities::Dictionary::get ("All files"), std::regex (".*")}},
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 
 	/**
@@ -260,7 +260,7 @@ protected:
 };
 
 inline FileChooser::FileChooser () : 
-	FileChooser (0.0, 0.0, BWIDGETS_DEFAULT_FILECHOOSER_WIDTH, BWIDGETS_DEFAULT_FILECHOOSER_HEIGHT, "", {}, URID_UNKNOWN_URID, "") 
+	FileChooser (0.0, 0.0, BWIDGETS_DEFAULT_FILECHOOSER_WIDTH, BWIDGETS_DEFAULT_FILECHOOSER_HEIGHT, "", {}, BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

@@ -69,10 +69,10 @@ public:
 	/**
 	 *  @brief  Constructs a %Label object at the origin with optimized extends.
 	 *  @param text  Text.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Label title (default = "").
 	 */
-	Label (const std::string& text, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	Label (const std::string& text, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Constructs a %Label object at the origin.
@@ -81,10 +81,10 @@ public:
 	 *  @param width  %Label width.
 	 *  @param height  %Label height.
 	 *  @param text  Text.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Label title (default = "").
 	 */
-	Label (const double x, const double y, const double width, const double height, const std::string& text, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	Label (const double x, const double y, const double width, const double height, const std::string& text, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %Label. 
@@ -169,7 +169,7 @@ protected:
 };
 
 inline Label::Label () : 
-	Label (0.0, 0.0, BWIDGETS_DEFAULT_LABEL_WIDTH, BWIDGETS_DEFAULT_LABEL_HEIGHT, "", URID_UNKNOWN_URID, "") 
+	Label (0.0, 0.0, BWIDGETS_DEFAULT_LABEL_WIDTH, BWIDGETS_DEFAULT_LABEL_HEIGHT, "", BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }

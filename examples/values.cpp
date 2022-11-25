@@ -28,7 +28,7 @@ Font labelFont ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0,
 int main ()
 {
     // Window
-    Window window (240, 420, 0, URID_UNKNOWN_URID, "Values and transfer functions", false);
+    Window window (240, 420, 0, BUTILITIES_URID_UNKNOWN_URID, "Values and transfer functions", false);
 
     // No transfer: x' = x
     Label title1 (10, 10, 180, 20, "No transfer: x' = x");

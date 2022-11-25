@@ -62,11 +62,11 @@ public:
 	 *  @param y  %Widget Y origin coordinate.
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
-			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a single status %Image with defined coordinates and
@@ -76,7 +76,7 @@ public:
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
 	 *  @param surface  Pointer to a Cairo surface.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  Most simple case of an %Image. The visual content provided by the
@@ -84,7 +84,7 @@ public:
 	 *  a new visual content is added by loadImage().
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
-			 cairo_surface_t* surface, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 cairo_surface_t* surface, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a single status %Image with defined coordinates and
@@ -94,7 +94,7 @@ public:
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
 	 *  @param filename  Filename, supported file types are: PNG.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  Most simple case of an %Image. The visual content provided by the
@@ -102,7 +102,7 @@ public:
 	 *  a new visual content is added by loadImage().
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
-			 const std::string& filename, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 const std::string& filename, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a multi Status %Image with defined coordinates and
@@ -112,7 +112,7 @@ public:
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
 	 *  @param surfaces  Initializer list of pointers to Cairo surfaces.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  Creates an %Image with visual contents for each Widget Status as
@@ -124,7 +124,7 @@ public:
 	 *  missing states.
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
-			 const std::initializer_list<cairo_surface_t*>& surfaces, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 const std::initializer_list<cairo_surface_t*>& surfaces, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a multi Status %Image with defined coordinates and
@@ -134,7 +134,7 @@ public:
 	 *  @param width  %Widget width.
 	 *  @param height  %Widget height.
 	 *  @param surfaces  Map of pointer to Cairo surfaces for each Status.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  Creates an %Image with visual contents for each Widget Status as
@@ -144,7 +144,7 @@ public:
 	 *  STATUS_NORMAL also acts for missing states.
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
-			 const std::map<BStyles::Status, cairo_surface_t*>& surfaces, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 const std::map<BStyles::Status, cairo_surface_t*>& surfaces, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a multi Status %Image with defined coordinates and
@@ -155,7 +155,7 @@ public:
 	 *  @param height  %Widget height.
 	 *  @param filenames  Initializer list of filenames. Supported file types
 	 *  are: PNG.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  Creates an %Image with visual contents for each Widget Status as
@@ -167,7 +167,7 @@ public:
 	 *  missing states.
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
-			 const std::initializer_list<std::string>& filenames, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 const std::initializer_list<std::string>& filenames, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a multi Status %Image with defined coordinates and
@@ -178,7 +178,7 @@ public:
 	 *  @param height  %Widget height.
 	 *  @param filenames  Map of filenames for each Status. Supported file 
 	 *  types are: PNG.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  Creates an %Image with visual contents for each Widget Status as
@@ -188,7 +188,7 @@ public:
 	 *  STATUS_NORMAL also acts for missing states.
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
-			 const std::map<BStyles::Status, std::string>& filenames, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 const std::map<BStyles::Status, std::string>& filenames, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	virtual ~Image();
 

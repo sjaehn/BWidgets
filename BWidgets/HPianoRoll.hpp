@@ -80,11 +80,11 @@ public:
 	 *  @param endMidiKey  Last MIDI key number of the roll.
 	 *  @param keys  Map containing active keys (key_value) and their
 	 *  respective velocities (mapped_value).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	HPianoRoll	(const uint8_t startMidiKey, uint8_t endMidiKey = 127, std::map<uint8_t, uint8_t> keys = {}, 
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %HPianoRoll with keys in the default (released) 
@@ -96,12 +96,12 @@ public:
 	 *  @param startMidiKey  First MIDI key number of the roll.
 	 *  @param endMidiKey  Last MIDI key number of the roll.
 	 *  @param keys  Vector containing active keys.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	HPianoRoll	(const double x, const double y, const double width, const double height, 
 				 uint8_t startMidiKey = 0, uint8_t endMidiKey = 127, std::vector<uint8_t> keys = {}, 
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 	
 	/**
 	 *  @brief  Creates a %HPianoRoll with initialized key velocities.
@@ -113,12 +113,12 @@ public:
 	 *  @param endMidiKey  Last MIDI key number of the roll.
 	 *  @param keys  Map containing active keys (key_value) and their
 	 *  respective velocities (mapped_value).
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	HPianoRoll	(const double x, const double y, const double width, const double height, 
 				 const uint8_t startMidiKey, const uint8_t endMidiKey, const std::map<uint8_t, uint8_t>& keys, 
-				 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %HPianoRoll. 
@@ -364,7 +364,7 @@ constexpr std::array<PianoKeyCoords, 12> keyCoords=
 
 
 inline HPianoRoll::HPianoRoll () :
-	HPianoRoll (0, 0, BWIDGETS_DEFAULT_HPIANOROLL_WIDTH, BWIDGETS_DEFAULT_HPIANOROLL_HEIGHT, 0, 127, std::map<uint8_t, uint8_t>(), URID_UNKNOWN_URID, "")
+	HPianoRoll (0, 0, BWIDGETS_DEFAULT_HPIANOROLL_WIDTH, BWIDGETS_DEFAULT_HPIANOROLL_HEIGHT, 0, 127, std::map<uint8_t, uint8_t>(), BUTILITIES_URID_UNKNOWN_URID, "")
 {
 
 }

@@ -40,8 +40,8 @@
 #define BWIDGETS_DEFAULT_VMETER_HEIGHT 80.0
 #endif
 
-#ifndef STYLEPROPERTY_HICOLORS_URI
-#define STYLEPROPERTY_HICOLORS_URI STYLEPROPERTY_URI "#HiColors"
+#ifndef BSTYLES_STYLEPROPERTY_HICOLORS_URI
+#define BSTYLES_STYLEPROPERTY_HICOLORS_URI BSTYLES_STYLEPROPERTY_URI "#HiColors"
 #endif
 
 namespace BWidgets
@@ -90,11 +90,11 @@ public:
 	 *  @param min  Lower value limit.
 	 *  @param max  Upper value limit.
 	 *  @param step  Optional, value increment steps.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %Widget title (default = "").
 	 */
 	VMeter	(const double value, const double min, const double max, double step = 0.0, 
-			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a %VMeter.
@@ -110,14 +110,14 @@ public:
 	 *  external context to the internal context.
 	 *  @param reTransferFunc  Optinonal, function to transfer a value from the
 	 *  internal context to an external context.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %VMeter title (default = "").
 	 */
 	VMeter	(const double x, const double y, const double width, const double height, 
 			 const double value, const double min, const double max, double step = 0.0,
 			 std::function<double (const double& x)> transferFunc = ValueTransferable<double>::noTransfer,
 			 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
-			 uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %VMeter. 
@@ -224,7 +224,7 @@ inline VMeter::VMeter () :
 	VMeter	(0.0, 0.0, BWIDGETS_DEFAULT_VMETER_WIDTH, BWIDGETS_DEFAULT_VMETER_HEIGHT, 
 			0.0, 0.0, 1.0, 0.0, 
 			ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
-			URID_UNKNOWN_URID, "")
+			BUTILITIES_URID_UNKNOWN_URID, "")
 {
 
 }
@@ -322,14 +322,14 @@ inline void VMeter::update ()
 
 inline BStyles::ColorMap VMeter::getHiColors() const
 {
-    BStyles::Style::const_iterator it = style_.find (BUtilities::Urid::urid (STYLEPROPERTY_HICOLORS_URI));
+    BStyles::Style::const_iterator it = style_.find (BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_HICOLORS_URI));
     if ((it == style_.end()) || style_.isStyle (it)) return getFgColors();
     else return it->second.get<BStyles::ColorMap>();
 }
 
 inline void VMeter::setHiColors (const BStyles::ColorMap& colors)
 {
-    style_[BUtilities::Urid::urid (STYLEPROPERTY_HICOLORS_URI)] = BUtilities::makeAny<BStyles::ColorMap> (colors);
+    style_[BUtilities::Urid::urid (BSTYLES_STYLEPROPERTY_HICOLORS_URI)] = BUtilities::makeAny<BStyles::ColorMap> (colors);
 }
 
 inline void VMeter::draw ()

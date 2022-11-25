@@ -74,10 +74,10 @@ public:
 	 *  @brief  Constructs a %EditLabel object at the origin with optimized 
 	 *  extends.
 	 *  @param text  Text.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %EditLabel title (default = "").
 	 */
-	EditLabel (const std::string& text, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+	EditLabel (const std::string& text, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Constructs a %EditLabel object at the origin.
@@ -86,11 +86,11 @@ public:
 	 *  @param width  %Label width.
 	 *  @param height  %Label height.
 	 *  @param text  Text.
-	 *  @param urid  Optional, URID (default = URID_UNKNOWN_URID).
+	 *  @param urid  Optional, URID (default = BUTILITIES_URID_UNKNOWN_URID).
 	 *  @param title  Optional, %EditLabel title (default = "").
 	 */
 	EditLabel	(const double x, const double y, const double width, const double height, 
-				 const std::string& text, uint32_t urid = URID_UNKNOWN_URID, std::string title = "");
+				 const std::string& text, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
 	 *  @brief  Creates a clone of the %EditLabel. 
@@ -247,7 +247,7 @@ protected:
 };
 
 inline EditLabel::EditLabel () : 
-	EditLabel (0.0, 0.0, BWIDGETS_DEFAULT_EDITLABEL_WIDTH, BWIDGETS_DEFAULT_EDITLABEL_HEIGHT, "", URID_UNKNOWN_URID, "") 
+	EditLabel (0.0, 0.0, BWIDGETS_DEFAULT_EDITLABEL_WIDTH, BWIDGETS_DEFAULT_EDITLABEL_HEIGHT, "", BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }
