@@ -30,7 +30,7 @@
 
 #include "../BUtilities/Any.hpp"
 
-#include "../BStyles/Style.hpp"
+#include "../BStyles/Theme.hpp"
 #include "../BStyles/Status.hpp"
 
 #include "../BEvents/Event.hpp"
@@ -82,9 +82,11 @@ class Window;
  *  * an @a URID to identify the %Widget,
  *  * a @a position to be placed (relative to its parent %Widget),
  *  * an infomation about its @a stacking type,
- *  * a @a status ,
- *  * a @a title , and
- *  * a @a style .
+ *  * a @a status,
+ *  * a @a title, 
+ *  * a @a style,
+ *  * a @a theme,
+ *  * and an information about pushing styles from nested styles or themes.
  * 
  *  Note: The class %Widget is devoid of any copy constructor or assignment
  *  operator. 
@@ -105,7 +107,6 @@ protected:
 	enum Stacking
 	{
 		STACKING_NORMAL,					// Embedded in parent, overhang cut
-		//STACKING_CATCH,
 		//STACKING_FIT,
 		//STACKING_RESIZE_TO_FIT,
 		//STACKING_RESIZE_PARENT_TO_FIT,
@@ -118,6 +119,7 @@ protected:
 	BStyles::Status status_;
 	std::string title_;
 	BStyles::Style style_;
+	BStyles::Theme theme_;
 	Widget* focus_;
 	bool pushStyle_;
 
@@ -530,8 +532,14 @@ public:
 	virtual void setStyle (const BStyles::Style& style);
 
 	/**
+	 *  @brief  Copies the theme from another object.
+	 *  @param theme  Other theme.
+	 */
+	virtual void setTheme (const BStyles::Theme& theme);
+
+	/**
 	 *  @brief  Enables pushing styles to child widgets on @c add() or
-	 *  @c setStyle() . 
+	 *  @c setStyle() or @c setTheme(). 
 	 *  @param pushStyle  True, if pushing enabled, otherwise false.
 	 */
 	void enablePushStyle (bool pushStyle = true);

@@ -172,8 +172,28 @@ std::list<Linkable*>::iterator Widget::add (Linkable* child, std::function<void 
 
 	if (pushStyle_)
 	{
+		bool changed = false;
+		// 1) Forward styles in nested styles
 		BStyles::Style::iterator it = style_.find (childWidget->getUrid());
-		if (it != style_.end() && style_.isStyle (it)) childWidget->setStyle (it->second.get<BStyles::Style>());
+		if (it != style_.end() && style_.isStyle (it)) 
+		{
+			childWidget->setStyle (it->second.get<BStyles::Style>());
+			changed = true;
+		}
+
+		// 2) Forward styles from themes
+		for (Widget* p = childWidget; p != nullptr; p = p->getParentWidget())
+		{
+			if (p->theme_.contains(childWidget->urid_)) 
+			{
+				childWidget->setStyle (p->theme_[childWidget->urid_]);
+				changed = true;
+				break;
+			}
+		}
+		
+		// 3) No change, only to start the setStyle() cascade.
+		if (!changed) childWidget->setStyle (childWidget->style_);
 	}
 
 	return it;
@@ -511,24 +531,53 @@ Widget::Stacking Widget::getStacking () const
 
 void Widget::setStyle (const BStyles::Style& style)
 {
-	//if (style != style_)
-	{
-		style_ = style;
+	style_ = style;
 
-		// Pass child styles to respective children
-		if (pushStyle_)
+	// Pass child styles to respective children
+	if (pushStyle_)
+	{
+		for (Linkable* c : children_)
 		{
-			for (Linkable* c : children_)
+			Widget* w = dynamic_cast<Widget*>(c);
+			if (w)
 			{
-				Widget* w = dynamic_cast<Widget*>(c);
-				if (w)
+				bool changed = false;
+				// 1) Forward styles in nested styles
+				BStyles::Style::iterator it = style_.find (w->getUrid());
+				if (it != style_.end() && style_.isStyle (it)) 
 				{
-					BStyles::Style::iterator it = style_.find (w->getUrid());
-					if (it != style_.end() && style_.isStyle (it)) w->setStyle (it->second.get<BStyles::Style>());
+					w->setStyle (it->second.get<BStyles::Style>());
+					changed = true;
 				}
+
+				// 2) Forward styles from themes
+				for (Widget* p = w; p != nullptr; p = p->getParentWidget())
+				{
+					if (p->theme_.contains(w->urid_)) 
+					{
+						w->setStyle (p->theme_[w->urid_]);
+						changed = true;
+						break;
+					}
+				}
+
+				// 3) Don't change style, but proceed cascade
+				if (!changed) w->setStyle (w->style_);
 			}
 		}
-		update();
+	}
+	update();
+}
+
+void Widget::setTheme (const BStyles::Theme &theme)
+{
+	theme_ = theme;
+
+	// Pass child styles to respective children
+	if (pushStyle_)
+	{
+		if (theme_.contains (urid_)) setStyle (theme_[urid_]);
+		else setStyle (style_);	// No change, only to start the setStyle() cascade.
 	}
 }
 

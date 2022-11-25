@@ -16,7 +16,7 @@ PKGCFLAGS = `$(PKG_CONFIG) --cflags $(PKG_LIBS)`
 PKGLFLAGS = `$(PKG_CONFIG) --libs $(PKG_LIBS)`
 LDFLAGS +=
 
-BUNDLE = widgetgallery helloworld buttontest symbols pattern styles draws values
+BUNDLE = widgetgallery helloworld buttontest symbols pattern styles themes draws values
 
 CXX_INCL = \
 BUtilities/Urid.cpp \

@@ -88,6 +88,7 @@ Then call the respective example, e. g.:
   - [x] Types (Color, ColorMap, Line, Border, ...)
   - [x] Set widget styles
   - [x] Forward and update styles to child widgets with matching URID
+  - [x] Use themes
 - [x] Events
   - [x] Base events (expose, close, ...)
   - [x] Mouse / Pointer events (press, release, click, drag, move, scroll, focus)
@@ -123,7 +124,7 @@ Then call the respective example, e. g.:
 
 ### Until 1.2
 
-- [ ] Class Shape
+- [x] Class Shape
 - [ ] Shape widget
 - [ ] Update pugl
 
@@ -144,8 +145,7 @@ Then call the respective example, e. g.:
 - [ ] Simplify mp3 support
 - [ ] Link URID to third party
 - [ ] Journal
-
-
-### Later
 - [ ] Import styles from TTL
 - [ ] Import styles from JSON(-LD)
+- [ ] Import dictionary from TTL
+- [ ] Import dictionary from JSON(-LD)

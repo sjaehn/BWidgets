@@ -33,8 +33,13 @@ border.
 Style objects describe a whole widget style. Styles may take up multiple 
 [StyleProperties](#StyleProperties) within a `std::map`. Like a widget
 foreground and a widget background and a widget border. Styles may also take up
-other Styles within its StyleProperty elements. This can be used to describe
-composite widgets.
+other Styles within its StyleProperty elements (nested styles). The Style 
+subset within another Style is then pushed to the child widgets with the same 
+URID. This can be used to describe composite widgets.
+
+Note: In contrast to Theme styles which are visible over the whole widget tree,
+a Style within a Style is only visible for the widget (and its child widgets) 
+where it has been pushed too.
 
 Example:
 ```
@@ -50,3 +55,11 @@ Example:
 ╰───────────────────────────────────────────────────────┘
 ```
 
+
+## Themes
+
+A Theme is a collection of Styles realized as a `std::map` with the widget 
+URID as th key and the Style as value. The Styles of a Theme associated to a
+widget can be pushed to the respective child widgets (same URID) all over the
+widget tree. Themes are recommended to describe a larger part or a whole
+user interface.
