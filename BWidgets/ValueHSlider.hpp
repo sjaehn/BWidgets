@@ -32,11 +32,11 @@
 #endif
 
 #ifndef BDOUBLE_TO_STRING
-#define BDOUBLE_TO_STRING(x) BWidgets::ValueHSlider::valueToString(x)
+#define BDOUBLE_TO_STRING BWidgets::ValueHSlider::valueToString
 #endif
 
 #ifndef BSTRING_TO_DOUBLE
-#define BSTRING_TO_DOUBLE(x) BWidgets::ValueHSlider::stringToValue(x)
+#define BSTRING_TO_DOUBLE BWidgets::ValueHSlider::stringToValue
 #endif
 
 namespace BWidgets

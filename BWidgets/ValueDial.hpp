@@ -32,11 +32,11 @@
 #endif
 
 #ifndef BDOUBLE_TO_STRING
-#define BDOUBLE_TO_STRING(x) BWidgets::ValueDial::valueToString(x)
+#define BDOUBLE_TO_STRING BWidgets::ValueDial::valueToString
 #endif
 
 #ifndef BSTRING_TO_DOUBLE
-#define BSTRING_TO_DOUBLE(x) BWidgets::ValueDial::stringToValue(x)
+#define BSTRING_TO_DOUBLE BWidgets::ValueDial::stringToValue
 #endif
 
 namespace BWidgets

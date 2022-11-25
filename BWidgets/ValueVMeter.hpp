@@ -33,11 +33,11 @@
 #endif
 
 #ifndef BDOUBLE_TO_STRING
-#define BDOUBLE_TO_STRING(x) BWidgets::ValueVMeter::valueToString(x)
+#define BDOUBLE_TO_STRING BWidgets::ValueVMeter::valueToString
 #endif
 
 #ifndef BSTRING_TO_DOUBLE
-#define BSTRING_TO_DOUBLE(x) BWidgets::ValueVMeter::stringToValue(x)
+#define BSTRING_TO_DOUBLE BWidgets::ValueVMeter::stringToValue
 #endif
 
 namespace BWidgets

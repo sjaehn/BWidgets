@@ -33,11 +33,11 @@
 #endif
 
 #ifndef BDOUBLE_TO_STRING
-#define BDOUBLE_TO_STRING(x) BWidgets::ValueRadialMeter::valueToString(x)
+#define BDOUBLE_TO_STRING BWidgets::ValueRadialMeter::valueToString
 #endif
 
 #ifndef BSTRING_TO_DOUBLE
-#define BSTRING_TO_DOUBLE(x) BWidgets::ValueRadialMeter::stringToValue(x)
+#define BSTRING_TO_DOUBLE BWidgets::ValueRadialMeter::stringToValue
 #endif
 
 namespace BWidgets
