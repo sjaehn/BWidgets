@@ -320,7 +320,7 @@ inline void ValueVSlider::labelChangedCallback (BEvents::Event* event)
 
 inline std::string ValueVSlider::valueToString (const double& x)
 {
-	const int dPre = ((x == 0) || (fabs (x) <= 1.0) ? 1 : log10 (fabs (x)));
+	const int dPre = ((x == 0) || (fabs (x) <= 1.0) ? 1 : log10 (fabs (x)) + 1);
 	const int dPost = std::max (4 - dPre, 0);
 	char buf[256];
 	std::sprintf (buf, ("%1." + std::to_string (dPost) + "f").c_str(), x);
