@@ -116,7 +116,7 @@ void ValueableTyped<T>::setValue (const T& value)
     if (value_ != nval)
     {
         value_ = nval;
-        emitValueChanged();
+        if (isValueable()) emitValueChanged();
         if (dynamic_cast<Widget*>(this)) dynamic_cast<Widget*>(this)->update();
     }
 }
