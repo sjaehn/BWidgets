@@ -21,7 +21,7 @@
 #include <algorithm>
 #include <cmath>
 
-#define CAIRO_RGB(col) (col).red, (col).green, blue
+#define CAIRO_RGB(col) (col).red, (col).green, (col).blue
 #define CAIRO_RGBA(col) (col).red, (col).green, (col).blue, (col).alpha
 
 namespace BStyles
