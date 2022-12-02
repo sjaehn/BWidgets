@@ -77,7 +77,7 @@ with the language_code is represented as the full or partial POSIX locale
 (language[_territory][.codeset][@modifier], e. g. "en_US.utf8").
 
 To use an alternative dictionary, define the 
-`BUTILITIES_DICTIONARY_DATAFILE` variable prior the include of 
+`BUTILITIES_DICTIONARY_DATAFILE` variable prior to the *compiling* of the
 Dictionary. Or add translations at runtime using `add()`. Or include a GNU
 gettext message catalogue (.mo) as fallback using `alsoUseCatalogue()`.
 
