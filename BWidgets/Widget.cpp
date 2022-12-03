@@ -726,6 +726,8 @@ Widget* Widget::getWidgetAt	(const BUtilities::Point<>& abspos,
 							 std::function<bool (Widget* widget)> func,
 							 std::function<bool (Widget* widget)> passfunc)
 {
+	if (! isVisible()) return nullptr; // Pass invisible widgets
+	
 	BUtilities::Area<> a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
 	BUtilities::Area<> thisArea = getArea();
 	thisArea.moveTo (getAbsolutePosition());

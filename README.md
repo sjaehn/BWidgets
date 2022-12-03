@@ -114,12 +114,16 @@ Then call the respective example, e. g.:
   - [x] Optimize widget size using `resize()`
   - [x] Show default hover text (widget title, if set) by supporting
         `PointerFocusable`
-  - [x] Layers
+  - [ ] Layers
+    - [x] Layers visualization
+    - [ ] Layers event handling
   - [x] Scale (zoom) main Window and linked child widgets
   - [x] Reversed Valueable widgets by `setStep()` with negative values
   - [x] Enable / fix transfer functions
 - [x] Define shortcut macros
+- [ ] Make at least the setters virtual (where possible)
 - [ ] Header files only (where possible)
+- [ ] Remove redundant methods, members and parameters before release of version 1.0
 - [ ] Documentation
 
 
@@ -127,6 +131,7 @@ Then call the respective example, e. g.:
 
 - [x] Class Shape
 - [ ] Shape widget
+- [ ] Functional focus label text
 - [ ] Update pugl
 
 

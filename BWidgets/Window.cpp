@@ -402,7 +402,7 @@ void Window::handleEvents ()
 							p, 
 							[] (const Widget* f) 
 							{
-								return f->isVisible() && dynamic_cast<const PointerFocusable*>(f) && dynamic_cast<const PointerFocusable*>(f)->isFocusable();
+								return dynamic_cast<const PointerFocusable*>(f) && dynamic_cast<const PointerFocusable*>(f)->isFocusable();
 							}
 						);
 						if (w)
@@ -511,7 +511,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 		{
 			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->button.x, puglEvent->button.y) / w->getZoom();
 			Widget* widget = w->getWidgetAt	(position, 
-											 [] (Widget* w) {return w->isVisible () && (w->is<Clickable>() || w->is<Draggable>());},
+											 [] (Widget* w) {return w->is<Clickable>() || w->is<Draggable>();},
 											 [] (Widget* w) {return w->isEventPassable(BEvents::Event::BUTTON_PRESS_EVENT);});
 			if (widget && (widget != w))
 			{
@@ -563,7 +563,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 					// Also emit BUTTON_CLICK_EVENT ?
 					Widget* widget2 = w->getWidgetAt	(position, 
-														 [] (Widget* w) {return w->isVisible () && (w->is<Clickable>() || w->is<Draggable>());},
+														 [] (Widget* w) {return w->is<Clickable>() || w->is<Draggable>();},
 														 [] (Widget* w) {return w->isEventPassable (BEvents::Event::BUTTON_CLICK_EVENT);});
 					if (widget == widget2)
 					{
@@ -630,7 +630,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 			{
 				// POINTER_MOTION_EVENT
 				Widget* widget = w->getWidgetAt	(position, 
-												 [] (Widget* widget) {return widget->isVisible() && widget->is<Pointable>();},
+												 [] (Widget* widget) {return widget->is<Pointable>();},
 												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::POINTER_MOTION_EVENT);});
 				if (widget && (widget != w))
 				{
@@ -648,7 +648,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 				// FOCUS_EVENT
 				widget = w->getWidgetAt	(position, 
-												 [] (Widget* widget) {return widget->isVisible() && widget->is<PointerFocusable>();},
+												 [] (Widget* widget) {return widget->is<PointerFocusable>();},
 												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::POINTER_FOCUS_IN_EVENT);});
 				if (widget && (widget != w))
 				{
@@ -675,7 +675,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->scroll.x, puglEvent->scroll.y) / w->getZoom();
 			BUtilities::Point<> scroll = BUtilities::Point<> (puglEvent->scroll.dx, puglEvent->scroll.dy) / w->getZoom();
 			Widget* widget = w->getWidgetAt	(position, 
-											 [] (Widget* widget) {return widget->isVisible() && widget->is<Scrollable>();},
+											 [] (Widget* widget) {return widget->is<Scrollable>();},
 											 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::WHEEL_SCROLL_EVENT);});
 			if (widget && (widget != w))
 			{
