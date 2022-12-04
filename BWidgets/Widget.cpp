@@ -26,6 +26,7 @@
 #include "Label.hpp"
 #include "../BEvents/ExposeEvent.hpp"
 #include "../BEvents/PointerFocusEvent.hpp"
+#include <cstddef>
 #include <cstdint>
 #include <string>
 
@@ -670,6 +671,16 @@ void Widget::setTxColors (const BStyles::ColorMap& colors)
 	}
 }
 
+int Widget::getLayer () const
+{
+	for (const Widget* w = this; w != nullptr; w = w->getParentWidget())
+	{
+		if (w->layer_ != BWIDGETS_UNDEFINED_LAYER) return w->layer_;
+	}
+
+	return BWIDGETS_UNDEFINED_LAYER;
+}
+
 void Widget::emitExposeEvent ()
 {
 	BUtilities::Area<> area = getFamilyArea ([] (const Widget* w) {return w->isVisible();});
@@ -754,7 +765,11 @@ Widget* Widget::getWidgetAt	(const BUtilities::Point<>& abspos,
 			if (w)
 			{
 				Widget* nextw = w->getWidgetAt (abspos, outerArea, thisArea, func, passfunc);
-				if (nextw) finalw = nextw;
+				if (nextw) 
+				{
+					if (finalw && (nextw->getLayer() <= finalw->getLayer())) finalw = nextw;
+					else finalw = nextw;
+				}
 			}
 		}
 		return finalw;

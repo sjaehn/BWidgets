@@ -941,10 +941,11 @@ shown again.
 
 Widgets can be stored in different layers to be displayed on the screen.
 The layer index represents the Z position of the surface. The higher
-the index, the more to the background. The default layer has got the
-index 0. Negative indexed layers will be displayed in front of the 
-default layer, positive indexed layers behind. The widget layer can be
-changed using `setLayer()` and is returned by `getLayer()`.
+the index, the more to the background. The default widget has got no layer 
+index set (BWIDGETS_UNDEFINED_LAYER) and thus uses the index of the subjacent 
+widget. Lower indexed layers will be displayed in front of the default layer, 
+higher indexed layers behind. The widget layer can be changed using 
+`setLayer()` and is returned by `getLayer()`.
 
 ![layersandlevels](../suppl/LayersAndLevels.png)
 

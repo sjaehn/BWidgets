@@ -53,7 +53,7 @@
 #endif
 
 #ifndef BWIDGETS_DEFAULT_WINDOW_LAYER
-#define BWIDGETS_DEFAULT_WINDOW_LAYER (std::numeric_limits<int>::max())
+#define BWIDGETS_DEFAULT_WINDOW_LAYER (std::numeric_limits<int>::max() - 1)
 #endif
 
 namespace BWidgets
@@ -651,6 +651,18 @@ public:
      *  colors URID.
      */
     virtual void setTxColors (const BStyles::ColorMap& colors);
+
+    /**
+     *  @brief  Gets the object surface.
+     *  @param layer  Layer index.
+     *
+     *  The layer index represents the Z position of the surface. The higher
+     *  the index, the more to the background. If no layer has been set
+     *  (BWIDGETS_UNDEFINED_LAYER), then the index of the subjacent widjet will
+	 *  be used. Lower indexed layers will be displayed in front of the 
+     *  default layer, higher indexed layers behind.
+     */
+    virtual int getLayer () const override;
 
 	/**
 	 *  @brief  Requests a redisplay of the %Widget area.
