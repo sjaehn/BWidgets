@@ -767,7 +767,10 @@ Widget* Widget::getWidgetAt	(const BUtilities::Point<>& abspos,
 				Widget* nextw = w->getWidgetAt (abspos, outerArea, thisArea, func, passfunc);
 				if (nextw) 
 				{
-					if (finalw && (nextw->getLayer() <= finalw->getLayer())) finalw = nextw;
+					if (finalw)
+					{
+						if (nextw->getLayer() <= finalw->getLayer()) finalw = nextw;
+					}
 					else finalw = nextw;
 				}
 			}
