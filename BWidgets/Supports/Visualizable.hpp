@@ -19,10 +19,15 @@
 #define BWIDGETS_VISUALIZABLE_HPP_
 
 #include <cairo/cairo.h>
+#include <limits>
 #include "../../BUtilities/cairoplus.h"
 #include "../../BUtilities/Area.hpp"
 #include "Callback.hpp"
 #include "Support.hpp"
+
+#ifndef BWIDGETS_UNDEFINED_LAYER
+#define BWIDGETS_UNDEFINED_LAYER (std::numeric_limits<int>::max())
+#endif
 
 namespace BWidgets
 {
@@ -198,8 +203,8 @@ public:
      *
      *  The layer index represents the Z position of the surface. The higher
      *  the index, the more to the background. The default layer has got the
-     *  index 0. Negative indexed layers will be displayed in front of the 
-     *  default layer, positive indexed layers behind.
+     *  index BWIDGETS_UNDEFINED_LAYER. Lower indexed layers will be 
+     *  displayed in front of the default layer, higher indexed layers behind.
      */
     virtual void setLayer (const int layer);
 
@@ -209,8 +214,8 @@ public:
      *
      *  The layer index represents the Z position of the surface. The higher
      *  the index, the more to the background. The default layer has got the
-     *  index 0. Negative indexed layers will be displayed in front of the 
-     *  default layer, positive indexed layers behind.
+     *  index BWIDGETS_UNDEFINED_LAYER. Lower indexed layers will be displayed 
+     *  in front of the default layer, higher indexed layers behind.
      */
     virtual int getLayer () const;
 

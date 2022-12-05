@@ -114,9 +114,7 @@ Then call the respective example, e. g.:
   - [x] Optimize widget size using `resize()`
   - [x] Show default hover text (widget title, if set) by supporting
         `PointerFocusable`
-  - [ ] Layers
-    - [x] Layers visualization
-    - [ ] Layers event handling
+  - [x] Layers visualization and event handling
   - [x] Scale (zoom) main Window and linked child widgets
   - [x] Reversed Valueable widgets by `setStep()` with negative values
   - [x] Enable / fix transfer functions
