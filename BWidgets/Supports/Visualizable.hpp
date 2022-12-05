@@ -48,9 +48,15 @@ namespace BWidgets
 class Visualizable : virtual public Callback, public Support
 {
 protected:
+    struct Surface
+    {
+        cairo_surface_t* surface;
+        double scale;
+    };
+
     bool scheduleDraw_;
     BUtilities::Point<> extends_;
-    cairo_surface_t* surface_;
+    Surface surface_;
     int layer_;
 
 public:
@@ -300,7 +306,7 @@ inline Visualizable::Visualizable (const BUtilities::Point<> extends) :
     Support(),
     scheduleDraw_ (true),
     extends_ (extends),
-    surface_ (cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends.x, extends.y)),
+    surface_ {cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends.x, extends.y), 1.0},
     layer_ (0)
 {
 
@@ -311,7 +317,7 @@ inline Visualizable::Visualizable (const Visualizable& that) :
     Support (that),
     scheduleDraw_ (that.scheduleDraw_),
     extends_ (that.extends_),
-    surface_ (cairoplus_image_surface_clone_from_image_surface (that.surface_)),
+    surface_ {cairoplus_image_surface_clone_from_image_surface (that.surface_.surface), that.surface_.scale},
     layer_ (that.layer_)
 {
 
@@ -319,7 +325,7 @@ inline Visualizable::Visualizable (const Visualizable& that) :
 
 inline Visualizable::~Visualizable ()
 {
-    cairo_surface_destroy (surface_);
+    cairo_surface_destroy (surface_.surface);
 }
 
 inline Visualizable& Visualizable::operator= (const Visualizable& that)
@@ -328,8 +334,9 @@ inline Visualizable& Visualizable::operator= (const Visualizable& that)
     Support::operator= (that);
     scheduleDraw_ = that.scheduleDraw_;
     extends_ = that.extends_;
-    if (surface_) cairo_surface_destroy (surface_);
-    surface_ = cairoplus_image_surface_clone_from_image_surface (that.surface_);
+    if (surface_.surface) cairo_surface_destroy (surface_.surface);
+    surface_.surface = cairoplus_image_surface_clone_from_image_surface (that.surface_.surface);
+    surface_.scale = that.surface_.scale;
     layer_ = that.layer_;
 
     update();
@@ -423,17 +430,17 @@ inline void Visualizable::resize (const BUtilities::Point<> extends)
             cairo_t* cr = cairo_create (new_surface);
 			if (cr && (cairo_status (cr) == CAIRO_STATUS_SUCCESS))
 			{
-				cairo_set_source_surface (cr, surface_, 0, 0);
+				cairo_set_source_surface (cr, cairoSurface(), 0, 0);
 				cairo_paint (cr);
 				cairo_destroy (cr);
 			}
 		}
 
         // Delete old surface
-        cairo_surface_destroy (surface_);
+        cairo_surface_destroy (cairoSurface());
 
         // Copy new surface pointer
-        surface_ = new_surface;
+        surface_.surface = new_surface;
 
         update();
     }
@@ -452,7 +459,7 @@ inline void Visualizable::update ()
 
 inline cairo_surface_t* Visualizable::cairoSurface() const
 {
-    return surface_;
+    return surface_.surface;
 }
 
 inline void Visualizable::onConfigureRequest (BEvents::Event* event)

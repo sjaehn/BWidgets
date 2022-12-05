@@ -510,9 +510,9 @@ inline size_t EditLabel::getCursorFromCoords (const BUtilities::Point<>& positio
 	const std::u32string u32labelText = convert.from_bytes (text_);
 	size_t cursor = u32labelText.length ();
 
-	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return 0;
+	if ((!cairoSurface()) || (cairo_surface_status (cairoSurface()) != CAIRO_STATUS_SUCCESS)) return 0;
 
-	cairo_t* cr = cairo_create (surface_);
+	cairo_t* cr = cairo_create (cairoSurface());
 
 	if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 	{
@@ -573,12 +573,12 @@ inline void EditLabel::draw (const double x0, const double y0, const double widt
 
 inline void EditLabel::draw (const BUtilities::Area<>& area)
 {
-	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
+	if ((!cairoSurface()) || (cairo_surface_status (cairoSurface()) != CAIRO_STATUS_SUCCESS)) return;
 
 	// Draw super class widget elements first
 	Widget::draw (area);
 
-	cairo_t* cr = cairo_create (surface_);
+	cairo_t* cr = cairo_create (cairoSurface());
 
 	if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 	{

@@ -225,7 +225,7 @@ inline void Knob::draw (const double x0, const double y0, const double width, co
 
 inline void Knob::draw (const BUtilities::Area<>& area)
 {
-	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
+	if ((!cairoSurface()) || (cairo_surface_status (cairoSurface()) != CAIRO_STATUS_SUCCESS)) return;
 
 	// Draw super class widget elements first
 	Widget::draw (area);
@@ -239,7 +239,7 @@ inline void Knob::draw (const BUtilities::Area<>& area)
 	// only if minimum requirements satisfied
 	if ((heff >= 1) && (weff >= 1))
 	{
-		cairo_t* cr = cairo_create (surface_);
+		cairo_t* cr = cairo_create (cairoSurface());
 
 		if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 		{

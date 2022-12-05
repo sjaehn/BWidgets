@@ -222,7 +222,7 @@ inline std::string Label::getText () const
 
 inline BUtilities::Point<> Label::getTextExtends (std::string& text) const
 {
-	cairo_t* cr = cairo_create (surface_);
+	cairo_t* cr = cairo_create (cairoSurface());
 	cairo_text_extents_t ext = getFont().getCairoTextExtents(cr, text.c_str ());
 	cairo_destroy (cr);
 	return BUtilities::Point<> (ext.width, ext.height);
@@ -231,7 +231,7 @@ inline BUtilities::Point<> Label::getTextExtends (std::string& text) const
 inline void Label::resize ()
 {
 	// Get label text size
-	cairo_t* cr = cairo_create (surface_);
+	cairo_t* cr = cairo_create (cairoSurface());
 	BStyles::Font font = getFont();
 	cairo_text_extents_t ext = font.getCairoTextExtents(cr, text_.c_str ());
 	double w = ext.width;
@@ -273,12 +273,12 @@ inline void Label::draw (const double x0, const double y0, const double width, c
 
 inline void Label::draw (const BUtilities::Area<>& area)
 {
-	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
+	if ((!cairoSurface()) || (cairo_surface_status (cairoSurface()) != CAIRO_STATUS_SUCCESS)) return;
 
 	// Draw super class widget elements first
 	Widget::draw (area);
 
-	cairo_t* cr = cairo_create (surface_);
+	cairo_t* cr = cairo_create (cairoSurface());
 
 	if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 	{

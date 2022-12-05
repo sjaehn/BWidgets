@@ -352,7 +352,7 @@ inline void Pad<T>::draw (const double x0, const double y0, const double width, 
 template <class T>
 inline void Pad<T>::draw (const BUtilities::Area<>& area)
 	{
-		if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
+		if ((!cairoSurface()) || (cairo_surface_status (cairoSurface()) != CAIRO_STATUS_SUCCESS)) return;
 
 		const double x0 = getXOffset ();
 		const double y0 = getYOffset ();
@@ -364,7 +364,7 @@ inline void Pad<T>::draw (const BUtilities::Area<>& area)
 			// Draw super class widget elements first
 			Widget::draw (area);
 
-			cairo_t* cr = cairo_create (surface_);
+			cairo_t* cr = cairo_create (cairoSurface());
 			if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 			{
 				// Limit cairo-drawing area

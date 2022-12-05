@@ -498,7 +498,7 @@ inline void Image::draw (const double x0, const double y0, const double width, c
 
 inline void Image::draw (const BUtilities::Area<>& area)
 {
-	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
+	if ((!cairoSurface()) || (cairo_surface_status (cairoSurface()) != CAIRO_STATUS_SUCCESS)) return;
 
 	if ((getWidth () >= 1) && (getHeight () >= 1))
 	{
@@ -519,7 +519,7 @@ inline void Image::draw (const BUtilities::Area<>& area)
 
 				if (stateSurface && (cairo_surface_status (stateSurface) == CAIRO_STATUS_SUCCESS) && (w > 0) && (h > 0))
 				{
-					cairo_t* cr = cairo_create (surface_);
+					cairo_t* cr = cairo_create (cairoSurface());
 					if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 					{
 						// Limit cairo-drawing area

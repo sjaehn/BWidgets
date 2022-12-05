@@ -385,7 +385,7 @@ inline void ImageRadialMeter::draw (const double x0, const double y0, const doub
 
 inline void ImageRadialMeter::draw (const BUtilities::Area<>& area)
 {
-	if ((!surface_) || (cairo_surface_status (surface_) != CAIRO_STATUS_SUCCESS)) return;
+	if ((!cairoSurface()) || (cairo_surface_status (cairoSurface()) != CAIRO_STATUS_SUCCESS)) return;
 
 	// Draw super class widget elements first
 	Widget::draw (area);
@@ -393,7 +393,7 @@ inline void ImageRadialMeter::draw (const BUtilities::Area<>& area)
 	// Draw only if minimum requirements satisfied
 	if ((getHeight () >= 1) && (getWidth () >= 1) && (getMin() < getMax()))
 	{
-		cairo_t* cr = cairo_create (surface_);
+		cairo_t* cr = cairo_create (cairoSurface());
 
 		if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 		{
