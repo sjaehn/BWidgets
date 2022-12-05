@@ -24,6 +24,7 @@
 #include "SymbolButton.hpp"
 #include "Widget.hpp"
 #include <cstddef>
+#include <initializer_list>
 
 #ifndef BWIDGETS_DEFAULT_COMBOBOX_WIDTH
 #define BWIDGETS_DEFAULT_COMBOBOX_WIDTH BWIDGETS_DEFAULT_SPINBOX_WIDTH
@@ -368,6 +369,7 @@ inline void ComboBox::showListbox()
 		l->setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, ComboBox::listBoxChangedCallback);
 		l->setStacking (STACKING_ESCAPE);
 		l->setValue (getValue());
+		l->setTop(getValue() == 0 ? 0 : 1);
 		raiseToFront();
 		add (l);
 	}
