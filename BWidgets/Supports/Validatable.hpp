@@ -40,7 +40,7 @@ public:
      *  @brief  Switch the support for value validation on/off.
      *  @param status  True if on, otherwise false.
      */
-    void setValidatable (const bool status);
+    virtual void setValidatable (const bool status);
 
     /**
      *  @brief  Information about the support for value validation.

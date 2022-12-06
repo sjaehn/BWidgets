@@ -34,7 +34,7 @@ public:
      *  @brief  Switch the support for button toggling on/off.
      *  @param status  True if on, otherwise false.
      */
-    void setToggleable (const bool status) {setSupport(status);}
+    virtual void setToggleable (const bool status) {setSupport(status);}
 
     /**
      *  @brief  Information about the support for button toggling.

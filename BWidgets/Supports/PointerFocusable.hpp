@@ -77,7 +77,7 @@ public:
 	 *  @brief  (Re-)defines the time to wait to emit a POINTER_FOCUS_IN_EVENT.
 	 *  @param ms  Focus in time as std::chrono:ms.
 	 */
-	void setFocusInMilliseconds (const std::chrono::milliseconds ms) 
+	virtual void setFocusInMilliseconds (const std::chrono::milliseconds ms) 
 	{
 		focusInMs_ = ms;
 	}
@@ -95,7 +95,7 @@ public:
 	 *  @brief  (Re-)defines the time to wait to emit a POINTER_FOCUS_OUT_EVENT.
 	 *  @param ms  Focus out time as std::chrono:ms.
 	 */
-	void setFocusOutMilliseconds (const std::chrono::milliseconds ms) 
+	virtual void setFocusOutMilliseconds (const std::chrono::milliseconds ms) 
 	{
 			focusOutMs_ = ms;
 	}
@@ -127,7 +127,7 @@ public:
 	 *  with the type POINTER_XXX_EVENT (with XXX is IN or OUT) will 
      *  be scheduled and send to the widget.
      */
-    void setFocusable (const bool status) {setSupport (status);}
+    virtual void setFocusable (const bool status) {setSupport (status);}
 
     /**
      *  @brief  Information pointer button click support.

@@ -100,7 +100,7 @@ public:
 	 *  @brief  Redefines the pointer coordinates of the %PointerEvent.
 	 *  @param point  Pointer coordinate relative to the widgets origin.
 	 */
-	void setPosition (const BUtilities::Point<>& coords)
+	virtual void setPosition (const BUtilities::Point<>& coords)
  	{
         point_ = coords;
     }
@@ -119,7 +119,7 @@ public:
 	 *  @param origin  Original pointer coordinates relative to the widgets 
      *  origin.
 	 */
-	void setOrigin (const BUtilities::Point<>& coords)
+	virtual void setOrigin (const BUtilities::Point<>& coords)
 	{
         origin_ = coords;
     }
@@ -141,7 +141,7 @@ public:
 	 *  @brief  Redefines the pointer movement.
 	 *  @param delta  Movement coordinates of the pointer.
 	 */
-	void setDelta (const BUtilities::Point<>& coords)
+	virtual void setDelta (const BUtilities::Point<>& coords)
 	{
         delta_ = coords;
     }
@@ -159,7 +159,7 @@ public:
 	 *  @brief  Redefines the button pressed of the %PointerEvent.
 	 *  @param button  Button pressed.
 	 */
-	void setButton (const BDevices::MouseDevice::ButtonCode button)
+	virtual void setButton (const BDevices::MouseDevice::ButtonCode button)
 	{
         button_ = button;
     }

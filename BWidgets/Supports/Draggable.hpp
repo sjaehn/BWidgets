@@ -40,7 +40,7 @@ public:
      *  buttons from the host system. In this case, a PointerEvent with the 
      *  type POINTER_DRAG_EVENT will be scheduled and send to the widget.
      */
-    void setDraggable (const bool status) {setSupport (status);}
+    virtual void setDraggable (const bool status) {setSupport (status);}
 
     /**
      *  @brief  Information pointer drag support.

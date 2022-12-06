@@ -73,7 +73,7 @@ public:
 	 *  @brief  Redefines the pointers coordinate.
 	 *  @param coords Pointer coordinate relative to the widgets origin.
 	 */
-	void setPosition (const BUtilities::Point<>& coords)
+	virtual void setPosition (const BUtilities::Point<>& coords)
   	{
         point_ = coords;
     }

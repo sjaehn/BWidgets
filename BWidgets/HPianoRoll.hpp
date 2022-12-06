@@ -167,7 +167,7 @@ public:
 	 *  @param startMidiKey  First MIDI key number of the roll.
 	 *  @param endMidiKey  Last MIDI key number of the roll.
 	 */
-	void setRange (const uint8_t startMidiKey, const uint8_t endMidiKey);
+	virtual void setRange (const uint8_t startMidiKey, const uint8_t endMidiKey);
 
 	/**
 	 *  @brief  Gets the start of the MIDI key range of the HPianoRoll.
@@ -185,7 +185,7 @@ public:
 	 *  @brief  Activates (or inactivates) all keys. 
 	 *  @param active  True if active (default), otherwise false.
 	 */
-	void activate (bool active = true);
+	virtual void activate (bool active = true);
 
 	/**
 	 *  @brief  Activates (or inactivates) a single key and keeps the 
@@ -193,7 +193,7 @@ public:
 	 *  @param key  MIDI key number.
 	 *  @param active  True if active (default), otherwise false.
 	 */
-	void activate (const uint8_t key, bool active = true);
+	virtual void activate (const uint8_t key, bool active = true);
 
 	/**
 	 *  @brief  Activates (or inactivates) a range of keys and keeps the 
@@ -202,14 +202,14 @@ public:
 	 *  @param to  MIDI key number of the range end.
 	 *  @param active  True if active (default), otherwise false.
 	 */
-	void activate (const uint8_t from, const uint8_t to, bool active = true);
+	virtual void activate (const uint8_t from, const uint8_t to, bool active = true);
 
 	/**
 	 *  @brief  Activates all passed keys and inactivates the remaining keys. 
 	 *  @param keys  Vector containing the MIDI key numbers of the keys to be
 	 *  activated.
 	 */
-	void activate (const std::vector<uint8_t>& keys);
+	virtual void activate (const std::vector<uint8_t>& keys);
 
 	/**
 	 *  @brief  Checks if the key is active. 
@@ -230,7 +230,7 @@ public:
 	 *  @param key  MIDI key number.
 	 *  @param velocity  MIDI velocity of pressed keys. 0 for release.
 	 */
-	void setKey (const uint8_t key, uint8_t velocity);
+	virtual void setKey (const uint8_t key, uint8_t velocity);
 
 	/**
 	 *  @brief  Gets the velosity of a single key. 
@@ -246,7 +246,7 @@ public:
 	 *  (first) and velocity (second).
 	 *  @param velocity  MIDI velocity of pressed keys. 0 for release.
 	 */
-	void setKeys (const std::vector<uint8_t>& keys, uint8_t velocity);
+	virtual void setKeys (const std::vector<uint8_t>& keys, uint8_t velocity);
 
 	/**
 	 *  @brief  Presses all passed keys, and releases the remaining keys (if 
@@ -254,7 +254,7 @@ public:
 	 *  @param keys  Map containing key number (key_value) and velocity 
 	 *  (mapped_value).
 	 */
-	void setKeys (const std::map<uint8_t, uint8_t>& keys);
+	virtual void setKeys (const std::map<uint8_t, uint8_t>& keys);
 
 	/**
 	 *  @brief Gets a map for all active keys.
@@ -267,7 +267,7 @@ public:
 	 *  @brief Sets the velocity to be applied upon clicking on a key.
 	 *  @param velocity  MIDI velocity [0,127].
 	 */
-	void setVelocity (const uint8_t velocity);
+	virtual void setVelocity (const uint8_t velocity);
 
 	/**
 	 *  @brief Gets the velocity which is applied upon clicking on a key.

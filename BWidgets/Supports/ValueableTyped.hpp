@@ -80,7 +80,7 @@ public:
 	 *  Emits a ValueChangeTypedEvent of the type VALUE_CHANGED_EVENT to the 
      *  main Window event queue. 
 	 */
-    void emitValueChanged ();
+    virtual void emitValueChanged ();
 
 };
 

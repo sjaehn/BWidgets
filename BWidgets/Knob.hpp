@@ -119,7 +119,7 @@ public:
 	 *  @brief  Sets the pseudo 3D depth of the knob.
 	 *  @param depth  Pseudo 3D depth.
 	 */
-	void setDepth (const double depth);
+	virtual void setDepth (const double depth);
 
 	/**
 	 *  @brief  Gets the pseudo 3D depth of the knob.

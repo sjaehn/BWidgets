@@ -145,7 +145,7 @@ public:
 	 *  The edit mode allows editing the text. The edit mode is entered by
 	 *  clicking on the text. And it is leaved by pressing <Enter> or <Esc>. 
 	 */
-	void setEditMode (const bool mode);
+	virtual void setEditMode (const bool mode);
 
 	/**
 	 *  @brief  Gets the edit mode.
@@ -161,7 +161,7 @@ public:
 	 *  @param pos  Cursor position starting from 0 (before the first char) to
 	 *  text_.size() (behind the last char).
 	 */
-	void setCursor (const size_t pos);
+	virtual void setCursor (const size_t pos);
 
 	/**
 	 *  @brief  Sets a selection range between two cursor positions.
@@ -171,19 +171,19 @@ public:
 	 *  Cursor positions start from 0 (before the first char) to text_.size() 
 	 *  (behind the last char).
 	 */
-	void setCursor (const size_t from, const size_t to);
+	virtual void setCursor (const size_t from, const size_t to);
 
 	/**
 	 *  @brief  Applies the changes of the text, leaves the edit mode and emits
 	 *  a ValueChangedEvent.
 	 */
-	void applyEdit ();
+	virtual void applyEdit ();
 
 	/**
 	 *  @brief  Discards the changes of the text, restores the previously stored 
 	 *  text and leaves the edit mode.
 	 */
-	void discardEdit ();
+	virtual void discardEdit ();
 
 	/**
      *  @brief  Method called when pointer button clicked (pressed and 

@@ -40,7 +40,7 @@ public:
      *  with the type KEY_PRESS_EVENT or KEY_RELEASE_EVENT will be scheduled 
      *  and send to the widget.
      */
-    void setKeyPressable (const bool status) {setSupport (status);}
+    virtual void setKeyPressable (const bool status) {setSupport (status);}
 
     /**
      *  @brief  Information about the support for key press and release events.

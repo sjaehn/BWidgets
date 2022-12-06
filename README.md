@@ -119,7 +119,7 @@ Then call the respective example, e. g.:
   - [x] Reversed Valueable widgets by `setStep()` with negative values
   - [x] Enable / fix transfer functions
 - [x] Define shortcut macros
-- [ ] Make at least the setters virtual (where possible)
+- [x] Make at least the setters virtual (where possible)
 - [ ] Header files only (where possible)
 - [ ] Remove redundant methods, members and parameters before release of version 1.0
 - [ ] Documentation

@@ -234,22 +234,22 @@ public:
 	/**
 	 *  @brief  Drops this %Widget one step towards the background.
 	 */
-	void drop ();
+	virtual void drop ();
 
 	/**
 	 *  @brief  Raises this %Widget one step towards the foreground.
 	 */
-	void raise ();
+	virtual void raise ();
 
 	/**
 	 *  @brief  Drops this %Widget to the background.
 	 */
-	void dropToBack ();
+	virtual void dropToBack ();
 
 	/**
 	 *  @brief  Raises this %Widget to the foreground.
 	 */
-	void raiseToFront ();
+	virtual void raiseToFront ();
 
 	/**
 	 *  @brief  Access to the main Window of this %Widget.
@@ -276,7 +276,7 @@ public:
 	 *  all its parent widgets is switched on, and (ii) it is connected to a
 	 *  main window, and (iii) it draws to its RGBA surface.
      */
-    void show () override;
+    virtual void show () override;
 
     /**
      *  @brief  Switch visibility off.
@@ -285,7 +285,7 @@ public:
 	 *  all its parent widgets is switched on, and (ii) it is connected to a
 	 *  main window, and (iii) it draws to its RGBA surface.
      */
-    void hide () override;
+    virtual void hide () override;
 
 	/**
      *  @brief  Information about visibility.
@@ -498,7 +498,7 @@ public:
 	 *  @brief  Sets the %Widget status.
 	 *  @param status  %Widget status.
 	 */
-	void setStatus (const BStyles::Status status);
+	virtual void setStatus (const BStyles::Status status);
 
 	/**
 	 *  @brief  Gets the %Widgets status.
@@ -514,7 +514,7 @@ public:
 	 *  Widgets are clipped on default if they exceed the limits of their
 	 *  respective parent %Widget (STACKING_NORMAL).
 	 */
-	void setStacking (const Stacking stacking);
+	virtual void setStacking (const Stacking stacking);
 
 	/**
 	 *  @brief  Gets the type of stacking this %Widget.
@@ -542,7 +542,7 @@ public:
 	 *  @c setStyle() or @c setTheme(). 
 	 *  @param pushStyle  True, if pushing enabled, otherwise false.
 	 */
-	void enablePushStyle (bool pushStyle = true);
+	virtual void enablePushStyle (bool pushStyle = true);
 
 	/**
      *  @brief  Gets the border Property from the base level.
@@ -670,7 +670,7 @@ public:
 	 *  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT to the main
 	 *  Window event queue. 
 	 */
-	void emitExposeEvent () override;
+	virtual void emitExposeEvent () override;
 
 	/**
 	 *  @brief  Requests a redisplay of a part of the %Widget area.
@@ -679,7 +679,7 @@ public:
 	 *  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT to the main
 	 *  Window event queue. 
 	 */
-	void emitExposeEvent (const BUtilities::Area<>& area) override;
+	virtual void emitExposeEvent (const BUtilities::Area<>& area) override;
 
 	/**
      *  @brief  Method called when focus in time is passed.
@@ -742,7 +742,7 @@ protected:
 	 *  in their respective RGBA surfaces to the system provided RGBA surface
 	 *  of the main %Window.  
 	 */
-	void display (std::map<int, cairo_surface_t*>& surfaces, const BUtilities::Point<> surfaceExtends, const BUtilities::Area<>& area);
+	virtual void display (std::map<int, cairo_surface_t*>& surfaces, const BUtilities::Point<> surfaceExtends, const BUtilities::Area<>& area);
 
 	/**
      *  @brief  Unclipped draw a %Widget to the surface.

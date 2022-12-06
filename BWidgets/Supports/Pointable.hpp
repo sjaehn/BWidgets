@@ -41,7 +41,7 @@ public:
      *  widget. In this case, a PointerEvent with the type 
      *  POINTER_MOTION_EVENT will be scheduled and send to the widget.
      */
-    void setPointable (const bool status) {setSupport (status);}
+    virtual void setPointable (const bool status) {setSupport (status);}
 
     /**
      *  @brief  Information about the support for value changed events.

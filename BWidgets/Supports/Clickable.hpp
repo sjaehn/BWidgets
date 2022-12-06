@@ -40,7 +40,7 @@ public:
      *  type POINTER_XXX_EVENT (with XXX is PRESS, RELEASE, or CLICK) will 
      *  be scheduled by the main window and send to the widget.
      */
-    void setClickable (const bool status) {setSupport (status);}
+    virtual void setClickable (const bool status) {setSupport (status);}
 
     /**
      *  @brief  Information pointer button click support.

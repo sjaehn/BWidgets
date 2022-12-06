@@ -36,6 +36,8 @@ protected:
 
 public:
 
+    virtual ~EventMergeable() {};
+
     /**
      *  @brief  Switch event merging support on/off.
      *  @param eventType  EventType.
@@ -48,7 +50,7 @@ public:
      *  Note: %EventMergeable is only a hint. It will be ignored if it doesn't
      *  make any sense (e. g., CLOSE_REQUEST_EVENT).
      */
-    void setEventMergeable (const uint32_t eventType, const bool status) 
+    virtual void setEventMergeable (const uint32_t eventType, const bool status) 
     {
         for (uint32_t i = 0; i < 32; ++i)
         {

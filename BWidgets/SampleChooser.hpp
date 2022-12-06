@@ -151,7 +151,7 @@ public:
 	 *  @brief  Sets the start point of the sample within a sound file.
 	 *  @param start  Start point in frames.
 	 */
-	void setStart (const int64_t start);
+	virtual void setStart (const int64_t start);
 
 	/**
 	 *  @brief  Gets the start point of the sample within a sound file.
@@ -163,7 +163,7 @@ public:
 	 *  @brief  Sets the end point of the sample within a sound file.
 	 *  @param start  End point in frames.
 	 */
-	void setEnd (const int64_t end);
+	virtual void setEnd (const int64_t end);
 
 	/**
 	 *  @brief  Gets the end point of the sample within a sound file.
@@ -175,7 +175,7 @@ public:
 	 *  @brief  Defines whether the sample will be played in a loop or not.
 	 *  @param loop  True if playback in a loop, otherwise false.
 	 */
-	void setLoop (const bool loop);
+	virtual void setLoop (const bool loop);
 
 	/**
 	 *  @brief  Information if the sample will be played in a loop or not.
@@ -220,9 +220,9 @@ protected:
 	static void lineDraggedCallback (BEvents::Event* event);
 	static void filenameEnteredCallback (BEvents::Event* event);
 
-	void drawWaveform();
+	virtual void drawWaveform();
 
-	void drawMarkers();
+	virtual void drawMarkers();
 	
 	virtual std::function<void (BEvents::Event*)> getFileListBoxClickedCallback() override;
 };

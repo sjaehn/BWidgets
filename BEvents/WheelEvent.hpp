@@ -87,7 +87,7 @@ public:
 	 *  @brief  Redefines the pointers coordinate.
 	 *  @param coords  Pointer coordinate relative to the widgets origin.
 	 */
-	void setPosition (const BUtilities::Point<>& coords)
+	virtual void setPosition (const BUtilities::Point<>& coords)
   	{
         point_ = coords;
     }
@@ -105,7 +105,7 @@ public:
 	 *  @brief  Redefines the wheels movement
 	 *  @param delta  Movement of the wheel.
 	 */
-	void setDelta (const BUtilities::Point<>& coords)
+	virtual void setDelta (const BUtilities::Point<>& coords)
  	{
         delta_ = coords;
     }

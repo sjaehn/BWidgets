@@ -107,13 +107,13 @@ public:
 		uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "BWidgets", bool resizable = false,
 		PuglWorldType worldType = PUGL_PROGRAM, int worldFlag = 0);
 
-	~Window ();
+	virtual ~Window ();
 
 	/**
 	 *  @brief  Sets the zoom factor visualization and user interaction.
 	 *  @param zoom  Zoom factor.
 	 */
-	void setZoom (const double zoom);
+	virtual void setZoom (const double zoom);
 
 	/**
 	 *  @brief  Gets the zoom factor visualization and user interaction.
@@ -138,7 +138,7 @@ public:
 	 *
 	 *  For stand-alone applications.
 	 */
-	void run ();
+	virtual void run ();
 
 	/**
 	 *  @brief  Queues an event until the next call of the @c handleEvents() 
@@ -153,7 +153,7 @@ public:
 	 *  4. The emitting widget allows event merging for the respective event
 	 *     type (see @c EventMergeable::setEventMergeable() ).
 	 */
-	void addEventToQueue (BEvents::Event* event);
+	virtual void addEventToQueue (BEvents::Event* event);
 
 	/**
 	 *  @brief  Main Event handler. 
@@ -161,7 +161,7 @@ public:
 	 *  Iterates through the event queue, analyzes the events, and and routes
 	 *  them to their respective @c onXXX() handling methods.
 	 */
-	void handleEvents ();
+	virtual void handleEvents ();
 
 	/**
 	 *  @brief  Method called upon an expose request event. Exposes the visual 
@@ -208,7 +208,7 @@ public:
 	 *  @brief  Removes events from the event queue.
 	 *  @param widget  Emitting widget (nullptr for all widgets).
 	 */
-	void purgeEventQueue (Widget* widget = nullptr);
+	virtual void purgeEventQueue (Widget* widget = nullptr);
 
 	/**
 	 *  @brief  Checks if close of the main %Window is scheduled.
@@ -237,7 +237,7 @@ protected:
 
 	void translateTimeEvent ();
 
-	void unfocus();
+	virtual void unfocus();
 };
 
 }

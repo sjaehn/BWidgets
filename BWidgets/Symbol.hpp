@@ -145,7 +145,7 @@ public:
 	 *  @brief  Sets the SymbolType index.
 	 *  @param text  SymbolType index.
 	 */
-	void setSymbol (const SymbolType symbol);
+	virtual void setSymbol (const SymbolType symbol);
 
 	/**
 	 *  @brief  Gets the SymbolType index.

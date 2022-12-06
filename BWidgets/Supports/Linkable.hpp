@@ -52,7 +52,7 @@ public:
      *  Defines whether a Linkable object may take up child objects.
      *  Note:  Status off releases all children!
      */
-    void setLinkable (const bool status);
+    virtual void setLinkable (const bool status);
 
     /**
      *  @brief  Information about linking ability to child objects.

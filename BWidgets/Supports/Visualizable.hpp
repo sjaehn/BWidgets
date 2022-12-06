@@ -105,7 +105,7 @@ public:
      *  Defines whether the object may draw to its RGBA surface an may emit
      *  ExposeEvents or not.
      */
-    void setVisualizable (const bool status);
+    virtual void setVisualizable (const bool status);
 
     /**
      *  @brief  Switch visualization support on.

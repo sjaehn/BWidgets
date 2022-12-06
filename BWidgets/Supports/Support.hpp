@@ -31,11 +31,13 @@ protected:
     bool support_ = true; 
 public:
 
+    virtual ~Support() {};
+
     /**
      *  @brief  Switch the support on/off.
      *  @param status  True if on, otherwise false.
      */
-    void setSupport (const bool support) {support_ = support;}
+    virtual void setSupport (const bool support) {support_ = support;}
 
     /**
      *  @brief  Information about the support status.

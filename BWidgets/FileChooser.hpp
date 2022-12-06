@@ -210,7 +210,7 @@ public:
 	 *  @brief  Selects and activates a filter.
 	 *  @param name Filter name
 	 */
-	void selectFilter (const std::string& name);
+	virtual void selectFilter (const std::string& name);
 	
 	/**
      *  @brief  Optimizes the widget extends.

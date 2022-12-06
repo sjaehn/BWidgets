@@ -40,7 +40,7 @@ public:
      *  a WidgetEvent with the type CLOSE_REQUEST_EVENT will be scheduled and 
      *  send to the widget.
      */
-    void setCloseable (const bool status);
+    virtual void setCloseable (const bool status);
 
     /**
      *  @brief  Information about the widget close request support.
@@ -54,13 +54,13 @@ public:
     /**
 	 *  @brief  Requests widget close with handle from main window.
 	 */
-	void postCloseRequest ();
+	virtual void postCloseRequest ();
 
      /**
 	 *  @brief  Requests widget close.
 	 *  @param handle  Widget that will handle the close request event.
 	 */
-	void postCloseRequest (Widget* handle);
+	virtual void postCloseRequest (Widget* handle);
 
     /**
      *  @brief  Method called upon an close request event.

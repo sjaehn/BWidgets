@@ -181,7 +181,7 @@ public:
      *  Sets the base level high range value colors Property using the default 
      *  high range value colors URID.
      */
-    void setHiColors (const BStyles::ColorMap& colors);
+    virtual void setHiColors (const BStyles::ColorMap& colors);
 
 	/**
 	 *  @brief  Set the color gradient function.
@@ -191,7 +191,7 @@ public:
 	 *  transition from FgColors to HiColors (if defined). By default, the
 	 *  gradient is a linear function ([] (const double& x) {return x;}).
 	 */
-	void setGradientFunction (std::function<double (const double& x)> gradientFunc)
+	virtual void setGradientFunction (std::function<double (const double& x)> gradientFunc)
 	{
 		gradient_ = gradientFunc;
 	}

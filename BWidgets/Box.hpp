@@ -97,7 +97,7 @@ public:
 	Box (const double x, const double y, const double width, const double height,
 		 const std::initializer_list<std::string>& buttons = {}, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
-	~Box ();
+	virtual ~Box ();
 
 	/**
 	 *  @brief  Creates a clone of the %Box. 
@@ -143,7 +143,7 @@ public:
 	 *
 	 *  Buttons are added in the order left to right.
 	 */
-	void addButton (const std::string& label);
+	virtual void addButton (const std::string& label);
 
 	/**
 	 *  @brief  Creates and adds a series of TextButtons to the message box.
@@ -152,7 +152,7 @@ public:
 	 *
 	 *  Buttons are added in the order left to right.
 	 */
-	void addButton (std::initializer_list<std::string> labels);
+	virtual void addButton (std::initializer_list<std::string> labels);
 
 	/**
 	 *  @brief  Removes and deletes a button.
@@ -162,7 +162,7 @@ public:
 	 *  one will be removed and deleted. The internal OK button can only be
 	 *  removed but not deleted. Removing may cause renumbering of the buttons.
 	 */
-	void removeButton (const std::string& label);
+	virtual void removeButton (const std::string& label);
 
 	/**
 	 *  @brief  Removes and deletes a button.
@@ -171,7 +171,7 @@ public:
 	 *  The internal OK button can only be removed but not deleted. Removing
 	 *  may cause renumbering of the buttons.
 	 */
-	void removeButton (const size_t index);
+	virtual void removeButton (const size_t index);
 
 	/**
 	 *  @brief  Gets the index of the button.

@@ -80,7 +80,7 @@ namespace BEvents
     *  @brief  Redefines the pointer coordinates of the %KeyEvent.
     *  @param coords  Pointer coordinates relative to the widgets origin.
     */
-    void setPosition (const BUtilities::Point<>& coords)
+    virtual void setPosition (const BUtilities::Point<>& coords)
     {
         point_ = coords;
     }

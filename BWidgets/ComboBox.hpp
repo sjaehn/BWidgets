@@ -159,14 +159,14 @@ public:
 	 *  @brief  Changes the position of the ListBox.
 	 *  @param position  New position.
 	 */
-	void moveListBox (const BUtilities::Point<> position);
+	virtual void moveListBox (const BUtilities::Point<> position);
 
 	/**
 	 *  @brief  Changes the position of the ListBox.
 	 *  @param x  New x coordinate.
 	 *  @param y  New y coordinate.
 	 */
-	void moveListBox (const double x, const double y);
+	virtual void moveListBox (const double x, const double y);
 
 	/**
 	 *  @brief  Gets the ListBox position.
@@ -178,14 +178,14 @@ public:
 	 *  @brief  Changes the extends of the ListBox.
 	 *  @param extends  New extends.
 	 */
-	void resizeListBox (const BUtilities::Point<> extends);
+	virtual void resizeListBox (const BUtilities::Point<> extends);
 
 	/**
 	 *  @brief  Changes the extends of the ListBox.
 	 *  @param width  New ListBox width.
 	 *  @param height  New ListBox height.
 	 */
-	void resizeListBox (const double width, const double height);
+	virtual void resizeListBox (const double width, const double height);
 
 	/**
 	 *  @brief  Gets the ListBox extends.
@@ -207,12 +207,12 @@ protected:
 	/**
 	 *  @brief  Creates and shows the listbox.
 	 */
-	void showListbox ();
+	virtual void showListbox ();
 
 	/**
 	 *  @brief Hides and deletes the listbox.
 	 */
-	void hideListbox ();
+	virtual void hideListbox ();
 
 	/**
 	 *  @brief  Callback function which handles and forwards 

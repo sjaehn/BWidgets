@@ -62,7 +62,7 @@ public:
      *  @brief  Changes the name of the message.
      *  @param name  Name or identifier (e.g., an URI) for the message.
      */
-	void setName (const std::string& name)
+	virtual void setName (const std::string& name)
 	{
         messageName_ = name;
     }
@@ -80,7 +80,7 @@ public:
      *  @brief  Replaces the message content.
      *  @param content  Message content.
      */
-	void setContent (const BUtilities::Any& content)
+	virtual void setContent (const BUtilities::Any& content)
 	{
         messageContent_ = content;
     }

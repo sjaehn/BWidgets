@@ -156,7 +156,7 @@ public:
 	 *  Also increases the widget value if the insertion takes place in front 
 	 *  of the currently selected item.
 	 */
-	void addItem (const std::string item, size_t pos = std::numeric_limits<size_t>::max());
+	virtual void addItem (const std::string item, size_t pos = std::numeric_limits<size_t>::max());
 
 	/**
 	 *  @brief  Adds an item to the %SpinBox. 
@@ -167,7 +167,7 @@ public:
 	 *  Also increases the widget value if the insertion takes place in front 
 	 *  of the currently selected item.
 	 */
-	void addItem (const std::initializer_list<const std::string> items, size_t pos = std::numeric_limits<size_t>::max());
+	virtual void addItem (const std::initializer_list<const std::string> items, size_t pos = std::numeric_limits<size_t>::max());
 
 	/**
 	 *  @brief  Deletes an item.
@@ -176,14 +176,14 @@ public:
 	 *  Also decreases the widget value if the deletion takes place in front 
 	 *  of the currently selected item.
 	 */
-	void deleteItem (const size_t pos);
+	virtual void deleteItem (const size_t pos);
 
 	/**
 	 *  @brief  Deletes all items (except the Null item).
 	 *
 	 *  Also sets the widget value to 0.
 	 */
-	void deleteItem ();
+	virtual void deleteItem ();
 
 	/**
 	 *  @brief   Access to an item of the %SpinBox
@@ -203,7 +203,7 @@ public:
 	 *  @brief  Sets the width of the button.
 	 *  @param width  Button width.
 	 */
-	void setButtonWidth (const double width);
+	virtual void setButtonWidth (const double width);
 
 	/**
 	 *  @brief  Gets the width of the button.
@@ -218,7 +218,7 @@ public:
 	 *  The change of the item height only takes effect for items added after
 	 *  the call of @c setItemHeight() of after call @c resizeItems() . 
 	 */
-	void setItemHeight (const double height);
+	virtual void setItemHeight (const double height);
 
 	/**
 	 *  @brief  Gets the height of each item to be added.
@@ -232,7 +232,7 @@ public:
 	 *  The size is defined by the widgets effective width, the button width,
 	 *  and the item height.
 	 */
-	void resizeItems();
+	virtual void resizeItems();
 
 	/**
      *  @brief  Method to be called following an object state change.

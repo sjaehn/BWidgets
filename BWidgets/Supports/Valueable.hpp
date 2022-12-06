@@ -40,7 +40,7 @@ public:
      *  ValueChangedEvent with the type VALUE_CHANGED_EVENT will be scheduled 
      *  and send to the widget.
      */
-    void setValueable (const bool status);
+    virtual void setValueable (const bool status);
 
     /**
      *  @brief  Information about the support for value changed events.

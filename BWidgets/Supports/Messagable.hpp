@@ -40,7 +40,7 @@ public:
      *  a MessageEvent with the type MESSAGE_EVENT will be scheduled and 
      *  send to the widget.
      */
-    void setMessagable (const bool status);
+    virtual void setMessagable (const bool status);
 
     /**
      *  @brief  Information about the support for custom message events.
@@ -57,7 +57,7 @@ public:
      *  @param name  Event name.
      *  @param content  Event data.
      */
-    void postMessage (const std::string& name, const BUtilities::Any content);
+    virtual void postMessage (const std::string& name, const BUtilities::Any content);
 
     /**
      *  @brief  Method when a MessageEvent is received.

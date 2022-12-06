@@ -86,7 +86,7 @@ public:
 	 *  @brief  Redefines the area coordinates of the output region.
 	 *  @param area  Area coordinates relative to the widgets origin.
 	 */
-	void setArea (const BUtilities::Area<>& area)
+	virtual void setArea (const BUtilities::Area<>& area)
 	{
         exposeArea_ = area;
     }

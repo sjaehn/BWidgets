@@ -45,6 +45,8 @@ protected:
 
 public:
 
+    virtual ~EventPassable() {};
+
     /**
      *  @brief  Switch event passing support on/off.
      *  @param eventType  EventType.
@@ -53,7 +55,7 @@ public:
      *  Makes an object transparent or intransparent for the respective 
      *  @a eventType.
      */
-    void setEventPassable (const uint32_t eventType, bool status = true) 
+    virtual void setEventPassable (const uint32_t eventType, bool status = true) 
     {
         for (uint32_t i = 0; i < 32; ++i)
         {
