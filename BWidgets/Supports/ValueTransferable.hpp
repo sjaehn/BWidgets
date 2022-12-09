@@ -86,7 +86,7 @@ public:
      *  @brief  Switch the support for value transfer on/off.
      *  @param status  True if on, otherwise false.
      */
-    void setValueTransferable (const bool status);
+    virtual void setValueTransferable (const bool status);
 
     /**
      *  @brief  Information about the support for value transfer.

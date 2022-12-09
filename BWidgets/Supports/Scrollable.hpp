@@ -39,7 +39,7 @@ public:
      *  host system. In this case, a WheelEvent with the type 
      *  WHEEL_SCROLL_EVENT will be scheduled and send to the widget.
      */
-    void setScrollable (const bool status) {setSupport (status);}
+    virtual void setScrollable (const bool status) {setSupport (status);}
 
     /**
      *  @brief  Information about the (mouse) wheel support.
