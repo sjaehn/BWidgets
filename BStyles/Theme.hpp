@@ -84,7 +84,7 @@ public:
 inline Theme::Theme (const std::initializer_list<std::pair<const uint32_t, Style>>& list) :  
     std::map<uint32_t, Style> ()
 {
-    for (const std::pair<const uint32_t, Style> l : list) operator[](l.first) = l.second;
+    for (const std::pair<const uint32_t, Style>& l : list) operator[](l.first) = l.second;
 }
 
 inline bool Theme::contains (const uint32_t urid) const
