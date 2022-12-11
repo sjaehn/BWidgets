@@ -910,6 +910,10 @@ selected audio file and allows to select a range as a `Sample`.
 
 ## Attributes and decorations
 
+Attributes and decorations are member parameters of the class `Widget` and all
+other classes derived from it. Members are set using (commonly) virtual setter
+methods and requestes using (commonly) non-virtual getter methods. 
+
 
 ### URID
 
@@ -1036,6 +1040,10 @@ by their URIDs via push notifications (default behaviour). Note: You can
 switch on / off automatic pushing styles to child widgets by 
 `enablePushStyle()`.
 
+Therefore Styles can be used to design single widgets or composite widgets with
+a defined structure. If you want to design a whole user interface, you should
+use `Theme`s instead.
+
 The following example defines the style with ALL default StyleProperties for 
 the widget addressed with `setStyle()` and forwards the "sliders" style to all 
 child widgets with the URID for `URI "/sliders"`:
@@ -1064,6 +1072,73 @@ You can find an example for using different Styles in
 [../examples/styles.cpp](../examples/styles.cpp) :
 
 ![styles](../suppl/Styles.png)
+
+### Themes
+
+Themes are collections of URID-assiciated styles. Themes are intented to be 
+used to design larger parts or even a whole user interface.
+
+Once a theme is set to a widget by `setTheme()`, the style with the same URID 
+as the widget will be applied to the widget. In addition, styles with matching 
+URIDs are pushed to child widget (and child widgets of child widgets and so on) 
+if pushing of styles is enabled (default = enabled). Note: You can switch on / 
+off automatic pushing styles to child widgets by `enablePushStyle()`.
+
+The following example defines a theme with all widget styles for the main
+window (addressed by URI/window), dials and sliders (addressed by URI/dial), 
+and buttons (addressd by URI/button) as shown below:
+```
+Theme theme2 =
+{
+    {
+        Urid::urid (URI "/window"),
+        Style
+        ({
+            {Urid::urid(BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(Fill(Color(0.333, 0.167, 0.0, 1.0)))}
+        })
+    },
+
+    {
+        Urid::urid (URI "/dial"),
+        Style
+        ({
+            {Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
+            {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
+            {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(yellows)},
+            {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
+            {
+                Urid::urid (URI "/dial/label"), makeAny<Style>  // Nested styles are allowed too
+                ({
+                    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
+                    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
+                })
+            }
+        })
+    },
+
+    {
+        Urid::urid (URI "/button"),
+        Style
+        ({
+            {Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI), makeAny<Border>(whiteBorder1pt)},
+            {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(blueFill)},
+            {
+                Urid::urid (URI "/button/label"), makeAny<Style>  // Nested styles are allowed too
+                ({
+                    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
+                    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
+                })
+            }
+        })
+    }
+};
+```
+
+You can find an example for using different Themes in 
+[../examples/themes.cpp](../examples/themes.cpp) :
+
+![themes](../suppl/Themes.png)
+
 
 ### Draws
 

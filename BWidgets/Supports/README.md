@@ -27,14 +27,22 @@ Support
  ╰── EventPassable
 ```
 
+Supports can be switched on or off by calling its respective virtual setXXX 
+method (e. g., `setDraggable()` for the class Draggable). The status can be
+requsted using the respective non-virtual isXXX method (e. g., 
+`isDraggable()`). Inheriting classes may contain additional member parameters
+with virtual setter and non-virtual getter methods. 
+
 ## Support
 
-Base class of all supports (except EventMergeable) containing a simple switch for the respective support functionality.
+Base class of all supports (except EventMergeable) containing a simple switch 
+for the respective support functionality.
 
 
 ## Callback
 
-The Callback class provides callback functionality for Events. Callback is supported by all Widgets via Visualizable.
+The Callback class provides callback functionality for Events. Callback is 
+supported by all Widgets via Visualizable.
 
 
 ## Pointable
@@ -44,8 +52,9 @@ Supports pointer tracking by pointer motion events.
 
 ## PointerFocusable
 
-PointerFocusable supports FocusEvents of the type POINTER_FOCUS_IN_EVENT or POINTER_FOCUS_OUT_EVENT.
-FocusEvents are typically emitted if the (mouse) pointer rests over a widget.
+PointerFocusable supports FocusEvents of the type POINTER_FOCUS_IN_EVENT or 
+POINTER_FOCUS_OUT_EVENT. FocusEvents are typically emitted if the (mouse) 
+pointer rests over a widget.
 
 
 ## Clickable

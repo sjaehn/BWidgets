@@ -66,6 +66,7 @@ public:
     /**
      *  @brief  Adds an URI (if not exists before).
      *  @param uri  URI.
+     *  @return  URID.
      */
     static uint32_t add (const std::string& uri);
 

@@ -49,8 +49,8 @@ make [examples]
 ```
 
 with optional parameter `[examples]` which can be `widgetgallery`, 
-`helloworld`, `buttontest`, `symbols`, `pattern`, `styles`, `draws`, and/or 
-`values`. 
+`helloworld`, `buttontest`, `symbols`, `pattern`, `styles`, `themes`, `draws`, 
+and/or `values`. 
 This will only build the respective example.
 
 Then call the respective example, e. g.:
