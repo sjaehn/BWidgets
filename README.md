@@ -1,6 +1,6 @@
 # B.Widgets
 
-Current version: 0.13.0 (alpha)
+Current version: 0.14.0 (alpha)
 
 Rewrite of the widget toolkit of the B.Music project.
 
@@ -10,7 +10,7 @@ For a detailed description of the classes and methods of B.Widgets see
 ![widgetgallery](suppl/widgetgallery.png)
 
 The toolkit uses tools from six namespaces (further info there):
-* `BDevices`
+* [`BDevices`](BDevices/README.md)
 * [`BEvents`](BEvents/README.md)
 * [`BMusic`](BMusic/README.md)
 * [`BStyles`](BStyles/README.md)
@@ -30,19 +30,23 @@ the parameter in the makefile.
 
 ## Installation
 
-Clone or copy this repository as a subfolder into your project. Then you can
-include the widgets (or events) you need into your project, e. g.:
-```
-#include "path_to_BWidgets/BWidgets/Label.hpp"
-#include "path_to_BWidgets/BEvents/PointerEvent.hpp"
-```
-
-To build the example binaries, simply call
+Clone or copy this repository.
 
 ```
+git clone https://github.com/sjaehn/BWidgets
+```
+
+will create a folder called `BWidgets` which contains all the files including
+the examples.
+
+To build all the example binaries, simply call
+
+```
+cd BWidgets
 make
 ```
-from the root directory of the clone to build all examples, or
+
+If you only want to install selected examples, call instead
 
 ```
 make [examples]
@@ -51,14 +55,42 @@ make [examples]
 with optional parameter `[examples]` which can be `widgetgallery`, 
 `helloworld`, `buttontest`, `symbols`, `pattern`, `styles`, `themes`, `draws`, 
 and/or `values`. 
-This will only build the respective example.
 
-Then call the respective example, e. g.:
+Then execute the respective example, e. g.:
 ```
 ./widgetgallery
 ```
 
+Note: If you want to use BWidgets within your project, copy or clone it as a
+subdirectory of your project.
+
 ## Documentation
+
+### Getting started ("Hello world!")
+
+Once B.Widgets is installed, you can start coding. You have to
+* include the widgets (or events, or ...) you need into your project,
+* create a main window,
+* create widgets (like a label),
+* add the widgets to the main window,
+* and call the main loop:
+
+```
+#include "path_to_BWidgets/BWidgets/Window.hpp"
+#include "path_to_BWidgets/BWidgets/Label.hpp"
+
+using namespace BWidgets;
+
+int main ()
+{
+    Window w;
+    Label l ("Hello World!");
+    w.add (&l);
+    w.run();
+}
+```
+
+Further reading: [BWidgets/README.md](BWidgets/README.md)
 
 
 ## TODO
