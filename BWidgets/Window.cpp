@@ -375,11 +375,13 @@ void Window::handleEvents ()
 					break;
 
 				case BEvents::Event::KEY_PRESS_EVENT:
+					unfocus();
 					freeDevice (BDevices::MouseButton (BDevices::MouseButton::MOUSE_NO_BUTTON));
 					if (widget->is<KeyPressable>()) dynamic_cast<KeyPressable*> (widget)->onKeyPressed (event);
 					break;
 
 				case BEvents::Event::KEY_RELEASE_EVENT:
+					unfocus();
 					freeDevice (BDevices::MouseButton (BDevices::MouseButton::MOUSE_NO_BUTTON));
 					if (widget->is<KeyPressable>()) dynamic_cast<KeyPressable*> (widget)->onKeyReleased (event);
 					break;
