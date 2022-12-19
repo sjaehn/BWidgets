@@ -20,7 +20,9 @@
 
 #include <cstdint>
 #include <functional>
+#include <set>
 
+#include "../BDevices/Device.hpp"
 #include "../BUtilities/Dictionary.hpp"
 #include "Supports/Linkable.hpp"
 #include "Supports/Visualizable.hpp"
@@ -122,6 +124,7 @@ protected:
 	BStyles::Theme theme_;
 	Widget* focus_;
 	bool pushStyle_;
+	std::set<BDevices::Device*> devices_;
 
 public:
 
@@ -230,6 +233,42 @@ public:
 	virtual void 
 	release (Linkable* child, std::function<void (Linkable* obj)> releasefunc = [] (Linkable* obj) {}) 
 	override;
+
+	/**
+	 * @brief  Takes control over a device. 
+	 * 
+	 * @param device  Device.
+	 */
+	virtual void grabDevice (const BDevices::Device& device);
+
+	/**
+	 * @brief  Releases the control over all devices.
+	 */
+	virtual void freeDevice ();
+
+	/**
+	 * @brief  Releases the control over a device.
+	 * 
+	 * @param device  Device
+	 */
+	virtual void freeDevice (const BDevices::Device& device);
+
+	/**
+	 * @brief  Checks if a device is under the control of this widget.
+	 * 
+	 * @param device  Device
+	 * @return  True if device is under control of this widget, otherwise 
+	 * false.
+	 */
+	bool isDeviceGrabbed (const BDevices::Device& device) const;
+
+	/**
+	 * @brief  Get access to the Device object which is equal to @a device.
+	 * 
+	 * @param device  Device
+	 * @return  Pointer to the device object, or nullptr if no matching device.
+	 */
+	BDevices::Device* getDevice (const BDevices::Device& device) const;
 
 	/**
 	 *  @brief  Drops this %Widget one step towards the background.

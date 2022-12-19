@@ -23,8 +23,11 @@
 #include "Supports/KeyPressable.hpp"
 #include "Supports/Draggable.hpp"
 #include "Supports/ValueableTyped.hpp"
+#include "../BDevices/Keys.hpp"
 #include "../BEvents/KeyEvent.hpp"
+#include "Widget.hpp"
 #include "Window.hpp"
+#include <cstdio>
 #include <locale>
 #include <codecvt>
 
@@ -361,14 +364,14 @@ inline void EditLabel::setCursor (const size_t from, const size_t to)
 
 inline void EditLabel::applyEdit ()
 {
-	if (dynamic_cast<Window*>(main_)) dynamic_cast<Window*>(main_)->getKeyGrabStack()->remove (this);
+	freeDevice (BDevices::Keys ());
 	setEditMode (false);
 	if (text_ != getValue()) setValue (text_);
 }
 
 inline void EditLabel::discardEdit ()
 {
-	if (dynamic_cast<Window*>(main_)) dynamic_cast<Window*>(main_)->getKeyGrabStack()->remove (this);
+	freeDevice (BDevices::Keys ());
 	setEditMode (false);
 	setValue (getValue());
 }
@@ -380,10 +383,21 @@ inline void EditLabel::onButtonClicked (BEvents::Event* event)
 		isValueable() && 
 		dynamic_cast<BEvents::PointerEvent*>(event) && 
 		(dynamic_cast<BEvents::PointerEvent*>(event)->getWidget () == this) && 
+		(dynamic_cast<BEvents::PointerEvent*>(event)->getPosition() == dynamic_cast<BEvents::PointerEvent*>(event)->getOrigin()) &&
 		dynamic_cast<Window*>(main_)
 	)
 	{
-		dynamic_cast<Window*>(main_)->getKeyGrabStack()->add (this);
+		// Apply all other edits first (and remove their grabbed keys)
+		Window* main = dynamic_cast<Window*>(main_);
+		std::list<Widget*> gwidgets = main->listDeviceGrabbed (BDevices::Keys ());
+		for (Widget* widget : gwidgets)
+		{
+			EditLabel* e = dynamic_cast<EditLabel*>(widget);
+			if (e && (e != this)) e->applyEdit();
+		}
+
+		// Now grab the keyboard for new text entry
+		if (!isDeviceGrabbed(BDevices::Keys())) grabDevice (BDevices::Keys());
 		setEditMode (true);
 		size_t cursor = getCursorFromCoords (dynamic_cast<BEvents::PointerEvent*>(event)->getPosition ());
 		setCursor (cursor, cursor);
@@ -400,8 +414,7 @@ inline void EditLabel::onPointerDragged (BEvents::Event* event)
 		editMode_ &&
 		dynamic_cast<BEvents::PointerEvent*>(event) &&
 		(dynamic_cast<BEvents::PointerEvent*>(event)->getWidget () == this) &&
-		dynamic_cast<Window*>(main_) &&
-		(dynamic_cast<Window*>(main_)->getKeyGrabStack()->getGrab(0)->getWidget() == this)
+		isDeviceGrabbed(BDevices::Keys())
 	)
 	{
 		size_t cursor = getCursorFromCoords (dynamic_cast<BEvents::PointerEvent*>(event)->getPosition ());
@@ -418,7 +431,7 @@ inline void EditLabel::onKeyPressed (BEvents::Event* event)
 		dynamic_cast<BEvents::KeyEvent*>(event) &&
 		(event->getWidget () == this) &&
 		dynamic_cast<Window*>(main_) &&
-		(dynamic_cast<Window*>(main_)->getKeyGrabStack()->getGrab(0)->getWidget() == this)
+		isDeviceGrabbed(BDevices::Keys())
 	)
 	{
 		uint32_t key = dynamic_cast<BEvents::KeyEvent*>(event)->getKey ();

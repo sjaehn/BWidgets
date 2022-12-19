@@ -89,6 +89,11 @@ Then call the respective example, e. g.:
   - [x] Set widget styles
   - [x] Forward and update styles to child widgets with matching URID
   - [x] Use themes
+- [x] Devices
+  - [x] Keyboard support
+  - [x] Mouse support
+  - [x] Take control (grab) or release control (free) over devices
+  - [x] Implement to support dragging, clicking, enter text
 - [x] Events
   - [x] Base events (expose, close, ...)
   - [x] Mouse / Pointer events (press, release, click, drag, move, scroll, focus)
@@ -153,3 +158,5 @@ Then call the respective example, e. g.:
 - [ ] Import styles from JSON(-LD)
 - [ ] Import dictionary from TTL
 - [ ] Import dictionary from JSON(-LD)
+- [ ] Support fine adjustment for dials and sliders
+- [ ] Support keyboard shortcuts in menus

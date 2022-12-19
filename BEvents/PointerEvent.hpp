@@ -19,7 +19,7 @@
 #define BEVENTS_POINTEREVENT_HPP_
 
 #include "Event.hpp"
-#include "../BDevices/BDevices.hpp"
+#include "../BDevices/MouseButton.hpp"
 #include "../BUtilities/Point.hpp"
 
 namespace BEvents
@@ -37,7 +37,7 @@ class PointerEvent : public Event
 {
 protected:
 	BUtilities::Point<> point_, origin_, delta_;
-	BDevices::MouseDevice::ButtonCode button_;
+	BDevices::MouseButton::ButtonType button_;
 
 public:
 
@@ -45,7 +45,7 @@ public:
      *  @brief  Creates an empty %PointerEvent.
      */
 	PointerEvent () :
-		PointerEvent (nullptr, NO_EVENT, 0, 0, 0, 0, 0, 0, BDevices::MouseDevice::NO_BUTTON) 
+		PointerEvent (nullptr, NO_EVENT, 0, 0, 0, 0, 0, 0, BDevices::MouseButton::MOUSE_NO_BUTTON) 
     {
 
     }
@@ -68,7 +68,7 @@ public:
 			         const double x, const double y, 
                      const double xOrigin, const double yOrigin,
 			         const double deltaX, const double deltaY, 
-                     const BDevices::MouseDevice::ButtonCode button) :
+                     const BDevices::MouseButton::ButtonType button) :
 		PointerEvent (widget, type, BUtilities::Point<> (x, y), BUtilities::Point<> (xOrigin, yOrigin), BUtilities::Point<> (deltaX, deltaY), button) 
     {
 
@@ -89,7 +89,7 @@ public:
                      const BUtilities::Point<>& point,
 			         const BUtilities::Point<>& origin, 
                      const BUtilities::Point<>& delta,
-			         const BDevices::MouseDevice::ButtonCode button) :
+			         const BDevices::MouseButton::ButtonType button) :
 		Event (widget, type), 
         point_ (point), 
         origin_ (origin), 
@@ -159,7 +159,7 @@ public:
 	 *  @brief  Redefines the button pressed of the %PointerEvent.
 	 *  @param button  Button pressed.
 	 */
-	virtual void setButton (const BDevices::MouseDevice::ButtonCode button)
+	virtual void setButton (const BDevices::MouseButton::ButtonType button)
 	{
         button_ = button;
     }
@@ -168,7 +168,7 @@ public:
 	 *  @brief  Gets the button pressed of the %PointerEvent.
 	 *  @return  Button pressed
 	 */
-	BDevices::MouseDevice::ButtonCode getButton () const
+	BDevices::MouseButton::ButtonType getButton () const
 	{
         return button_;
     }

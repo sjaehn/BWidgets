@@ -1243,6 +1243,20 @@ respective Supports (see there).
 Also see main Window.
 
 
+## Devices
+
+Widgets may take over control over a device by `grabDevice()`. This is used to
+realize, e. g. for:
+  * Dragging by capturing the pressed mouse button until its release,
+  * Clicking (= press & release over the same position),
+  * Text entering widgets.
+
+If a widget has taken control over a device, then the respective event will be
+emitted from the main window event handler to the respective widget.
+
+Widgets may release grabbed devices by `freeDevice()`.
+
+
 ## Supports
 
 Part of the BWidgets namespace. [Supports](Supports/README.md) are fully or
@@ -1269,4 +1283,32 @@ the POSIX locale (language[_territory][.codeset][@modifier], e. g.
 "en_US.utf8") *prior* including B.Widgets or using `Dictionary::setLanguage()`:
 ```
 BUtilities::Dictionary::setLanguage ("de_DE.utf8");
+```
+
+## Build
+
+You can build B.Widgets-based binaries with the C and C++ compilers of your
+choice.
+
+Neither B.Wigets nor the Pugl library used by B.Widgets is header only. This means that you have to compile the respective .c and .cpp files you directly or indirectly need as well and link them. 
+
+To compile for a X11-based system, you need the Pugl .c files \
+  path/to/BWidgets/BWidgets/pugl/implementation.c, \
+  path/to/BWidgets/BWidgets/pugl/x11_stub.c, \
+  path/to/BWidgets/BWidgets/pugl/x11_cairo.c, and \
+  path/to/BWidgets/BWidgets/pugl/x11.c. \
+To compile for Mac or Windows, please use the respective mac*.c or win*.c files.
+
+And from B.Widgets itself, you need at least \
+  path/to/BWidgets/BUtilities/Urid.cpp, \
+	path/to/BWidgets/BWidgets/Supports/Closeable.cpp, \
+	path/to/BWidgets/BWidgets/Window.cpp, and \
+	path/to/BWidgets/BWidgets/Widget.cpp.
+
+
+If you want to build B.Widgets-based plugins, get sure that symbols are not
+exposed. Tell Pugl to hide symbols by setting `PUGL_API` to "hidden", e. g.
+by using the option flag `-D` and passing to the compiler:
+```
+g++ ... -DPUGL_API="__attribute__((visibility(\"hidden\")))" ...
 ```

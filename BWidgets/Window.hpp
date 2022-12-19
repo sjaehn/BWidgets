@@ -24,7 +24,6 @@
 #include <chrono>
 #include "Widget.hpp"
 #include "pugl/pugl/pugl.h"
-#include "../BDevices/BDevices.hpp"
 #include "Supports/Closeable.hpp"
 
 #ifndef BWIDGETS_DEFAULT_WINDOW_WIDTH
@@ -66,8 +65,6 @@ class Window : public Widget, public Closeable
 {
 protected:
 	double zoom_;
-	BDevices::DeviceGrabStack<uint32_t> keyGrabStack_;
-	BDevices::DeviceGrabStack<BDevices::MouseDevice> buttonGrabStack_;
 	PuglWorld* world_;
 	PuglWorldType worldType_;
 	PuglView* view_;
@@ -108,6 +105,29 @@ public:
 		PuglWorldType worldType = PUGL_PROGRAM, int worldFlag = 0);
 
 	virtual ~Window ();
+
+	/**
+	 * @brief  Releases the control over all devices for all linked child
+	 * widgets.
+	 */
+	virtual void freeDevice () override;
+
+	/**
+	 * @brief  Releases the control over a device for all linked child
+	 * widgets.
+	 * 
+	 * @param device  Device
+	 */
+	virtual void freeDevice (const BDevices::Device& device) override;
+
+	/**
+	 * @brief  Get a list of all widgets linked to this window which grabbed
+	 * a given device. 
+	 * 
+	 * @param device  Device
+	 * @return  List of all widgets with device grabbed
+	 */
+	std::list<Widget*> listDeviceGrabbed (const BDevices::Device& device) const;
 
 	/**
 	 *  @brief  Sets the zoom factor visualization and user interaction.
@@ -192,18 +212,6 @@ public:
 	 */
 	virtual void onCloseRequest (BEvents::Event* event) override;
 
-	/* Gets (the pointer to) the keyGrabStack and thus enables access to the
-	 * keyboard input.
-	 * @return	Pointer to keyGrabStack_.
-	 */
-	BDevices::DeviceGrabStack<uint32_t>* getKeyGrabStack ();
-
-	/* Gets (the pointer to) the buttonGrabStack and thus enables access to
-	 * the mouse buttons pressed.
-	 * @return	Pointer to buttonGrabStack_.
-	 */
-	BDevices::DeviceGrabStack<BDevices::MouseDevice>* getButtonGrabStack ();
-
 	/**
 	 *  @brief  Removes events from the event queue.
 	 *  @param widget  Emitting widget (nullptr for all widgets).
@@ -216,8 +224,7 @@ public:
 	 */
 	bool isQuit () const;
 
-protected:
-
+private:
 	/**
 	 *  @brief  Static event translation method to be called by Pugl.
 	 *  @param view  Pointer to the PuglView.
@@ -237,7 +244,7 @@ protected:
 
 	void translateTimeEvent ();
 
-	virtual void unfocus();
+	void unfocus();
 };
 
 }

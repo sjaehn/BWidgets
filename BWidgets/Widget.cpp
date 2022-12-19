@@ -28,6 +28,7 @@
 #include "../BEvents/PointerFocusEvent.hpp"
 #include <cstddef>
 #include <cstdint>
+#include <iterator>
 #include <string>
 
 namespace BWidgets
@@ -51,7 +52,8 @@ Widget::Widget (const double x, const double y, const double width, const double
 	title_ (title),
 	style_ (),
 	focus_ (title == "" ? nullptr : new (std::nothrow) Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/focus"), "")),
-	pushStyle_ (true)
+	pushStyle_ (true),
+	devices_()
 {
 	if (focus_) 
 	{
@@ -65,6 +67,10 @@ Widget::Widget (const double x, const double y, const double width, const double
 
 Widget::~Widget ()
 {
+	// Delete all grapped devices
+	for (const BDevices::Device* d : devices_) delete d;
+	devices_.clear();
+
 	// Release from parent (and main) if still linked
 	if (parent_) parent_->release (this);
 
@@ -92,11 +98,14 @@ void Widget::copy (const Widget* that)
 	status_ = that->status_;
 	title_ = that->title_;
 	style_ = that->style_;
+	theme_ = that->theme_;
 
 	if (focus_) delete focus_;
 	focus_ = (that->focus_ ? that->focus_->clone() : nullptr);
 
 	pushStyle_ = that->pushStyle_;
+
+	// Don't copy devices
 	
 	update();
 }
@@ -225,11 +234,11 @@ void Widget::release (Linkable* child, std::function<void (Linkable* obj)> relea
 		[releasefunc] (Linkable* l)
 		{
 			Widget* w = dynamic_cast<Widget*>(l);
+			w->freeDevice();
+
 			if (w && w->getMainWindow())
 			{
 				w->getMainWindow()->purgeEventQueue (w);
-				w->getMainWindow()->getButtonGrabStack()->remove (w);
-				w->getMainWindow()->getKeyGrabStack()->remove (w);
 				w->main_ = nullptr;
 				releasefunc (l);
 			}
@@ -242,6 +251,53 @@ void Widget::release (Linkable* child, std::function<void (Linkable* obj)> relea
 		emitExposeEvent (childWidget->getArea());
 		childWidget->show();
 	}
+}
+
+void Widget::grabDevice (const BDevices::Device &device)
+{
+	devices_.insert(device.clone());
+}
+
+void Widget::freeDevice ()
+{
+	for (BDevices::Device* d : devices_) delete d;
+	devices_.clear();
+}
+
+void Widget::freeDevice (const BDevices::Device &device)
+{
+	for (std::set<BDevices::Device*>::iterator it = devices_.begin(); it != devices_.end(); /* empty */)
+	{
+		std::set<BDevices::Device*>::iterator nit = std::next(it);
+		BDevices::Device* d = *it;
+		if (*d == device)
+		{
+			delete d;
+			devices_.erase (it);
+		}
+
+		it = nit;
+	}
+}
+
+bool Widget::isDeviceGrabbed (const BDevices::Device& device) const
+{
+	for (BDevices::Device* d : devices_)
+	{
+		if (*d == device) return true;
+	}
+
+	return false;
+}
+
+BDevices::Device* Widget::getDevice (const BDevices::Device& device) const
+{
+	for (BDevices::Device* d : devices_)
+	{
+		if (*d == device) return d;
+	}
+
+	return nullptr;
 }
 
 void Widget::raise ()
