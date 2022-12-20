@@ -106,7 +106,8 @@ The toolkit uses tools from six namespaces:
 
 ### BDevices
 
-Interaction with the system input devices (mouse, keyboard).
+The [`BDevices`](../BDevices/README.md) namespace contains classes for the
+interaction with the system input devices (mouse, keyboard).
 
 
 ### BEvents
@@ -118,7 +119,8 @@ window) to the main window event queue.
 
 ### BMusic
 
-The [`BMusic`](../BMusic/README.md) namespace contains classes and algorithms for audio processing.
+The [`BMusic`](../BMusic/README.md) namespace contains classes and algorithms 
+for audio processing.
 
 
 ### BStyles
@@ -129,7 +131,8 @@ widget style.
 
 ### BUtilities
 
-The `BUtilities` namespace contains a collection of different useful tools.
+The [`BUtilities`](../BUtilities/README.md) namespace contains a collection of 
+different useful tools.
 
 
 ### BWidgets
@@ -1048,7 +1051,7 @@ The following example defines the style with ALL default StyleProperties for
 the widget addressed with `setStyle()` and forwards the "sliders" style to all 
 child widgets with the URID for `URI "/sliders"`:
 ```
-Style style =
+Style style = Style
 {
     {Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
     {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
@@ -1057,14 +1060,19 @@ Style style =
     {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(greens)},
     {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
 
-    {Urid::urid (URI "/sliders"), makeAny<Style>({
-        {Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
-        {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
-        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
-        {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(yellows)},
-        {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
-        {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
-    })}
+    {Urid::urid (URI "/sliders"), makeAny<Style>
+        (
+            Style
+            {
+                {Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
+                {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
+                {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
+                {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(yellows)},
+                {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
+                {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
+            }
+        )
+    }
 };
 ```
 
@@ -1088,7 +1096,7 @@ The following example defines a theme with all widget styles for the main
 window (addressed by URI/window), dials and sliders (addressed by URI/dial), 
 and buttons (addressd by URI/button) as shown below:
 ```
-Theme theme2 =
+Theme theme2 = Theme
 {
     {
         Urid::urid (URI "/window"),
@@ -1108,10 +1116,13 @@ Theme theme2 =
             {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
             {
                 Urid::urid (URI "/dial/label"), makeAny<Style>  // Nested styles are allowed too
-                ({
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
-                })
+                (
+                    Style
+                    {
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
+                    }
+                )
             }
         })
     },
@@ -1124,10 +1135,13 @@ Theme theme2 =
             {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(blueFill)},
             {
                 Urid::urid (URI "/button/label"), makeAny<Style>  // Nested styles are allowed too
-                ({
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
-                })
+                (
+                    Style
+                    {
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
+                    }
+                )
             }
         })
     }
