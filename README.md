@@ -49,6 +49,7 @@ make
 If you only want to install selected examples, call instead
 
 ```
+cd BWidgets
 make [examples]
 ```
 
@@ -68,7 +69,8 @@ subdirectory of your project.
 
 ### Getting started ("Hello world!")
 
-Once B.Widgets is installed, you can start coding. You have to
+Once B.Widgets is installed, you can create a helloworld.cpp file and start 
+coding. You have to
 * include the widgets (or events, or ...) you need into your project,
 * create a main window,
 * create widgets (like a label),
@@ -88,6 +90,39 @@ int main ()
     w.add (&l);
     w.run();
 }
+```
+
+This is all of the magic.
+
+To build this example, you have compile and link the .c and .cpp of B.Widgets 
+and its Pugl graphics library. For the GNU C++ compiler for X11-based systems
+you may call:
+```
+mkdir tmp
+cd tmp
+gcc -DPIC -DPUGL_HAVE_CAIRO -std=c99 -fPIC `pkg-config --cflags x11 cairo` \
+../BWidgets/BUtilities/cairoplus.c \
+../BWidgets/BWidgets/pugl/implementation.c \ 
+../BWidgets/BWidgets/pugl/x11_stub.c \
+../BWidgets/BWidgets/pugl/x11_cairo.c \
+../BWidgets/BWidgets/pugl/x11.c -c
+g++ -DPIC -DPUGL_HAVE_CAIRO -std=c++11 -fPIC `pkg-config --cflags x11 cairo` \
+../helloworld.cpp
+../BWidgets/BUtilities/Urid.cpp \
+../BWidgets/BUtilities/Dictionary.cpp \
+../BWidgets/BWidgets/Supports/Closeable.cpp \
+../BWidgets/BWidgets/Supports/Messagable.cpp \
+../BWidgets/BWidgets/Window.cpp \
+../BWidgets/BWidgets/Widget.cpp -c
+cd ..
+g++ -DPIC -DPUGL_HAVE_CAIRO -iquote -std=c++11 -fPIC -Wl,--start-group \ 
+`pkg-config --libs x11 cairo` tmp/*.o -Wl,--end-group -o helloworld
+rm -rf tmp
+```
+
+To see the result, call
+```
+./helloworld
 ```
 
 Further reading: [BWidgets/README.md](BWidgets/README.md)
@@ -157,7 +192,7 @@ Further reading: [BWidgets/README.md](BWidgets/README.md)
   - [x] Enable / fix transfer functions
 - [x] Define shortcut macros
 - [x] Make at least the setters virtual (where possible)
-- [ ] Header files only (where possible)
+- [x] Header files only (where possible)
 - [ ] Remove redundant methods, members and parameters before release of version 1.0
 - [ ] Documentation
 
