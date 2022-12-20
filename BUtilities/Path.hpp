@@ -33,7 +33,7 @@ class Path
 {
 public:
         Path () : dir_(), file_(), ext_() {}
-        Path (const std::string& path) {split (path);}
+        explicit Path (const std::string& path) {split (path);}
 
         Path& operator= (const std::string& path)
         {

@@ -49,7 +49,7 @@ public:
      *
      *  Data from the @a colors vector are copy construted.
      */
-    ColorMap (const std::initializer_list<const Color>& colors)
+    explicit ColorMap (const std::initializer_list<const Color>& colors)
     {
         size_t i = 0;
         for (const Color& c : colors)

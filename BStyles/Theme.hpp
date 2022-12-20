@@ -54,7 +54,7 @@ public:
      *  Styles.
      *  @param list Initializer list of URIDs and Styles.
      */
-    Theme (const std::initializer_list<std::pair<const uint32_t, Style>>& list);
+    explicit Theme (const std::initializer_list<std::pair<const uint32_t, Style>>& list);
 
     /**
      *  @brief  Checks if a URID exists within the Theme.

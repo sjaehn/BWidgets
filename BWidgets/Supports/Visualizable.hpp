@@ -82,7 +82,7 @@ public:
      *  @brief  Creates an empty %Visualizable object.
      *  @param area  Drawing surface area.
      */
-    Visualizable (const BUtilities::Point<> extends);
+    explicit Visualizable (const BUtilities::Point<> extends);
 
     /**
      *  @brief  Create a copy of a %Visualizable object.

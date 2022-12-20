@@ -44,8 +44,8 @@ public:
 	};
 
 protected:
-    DeviceType type_;
-    int param_;
+    const DeviceType type_;
+    const int param_;
 	std::chrono::steady_clock::time_point actionTime_;
 
 public:
@@ -55,7 +55,7 @@ public:
      * @param dev  Device type code
      * classes.
      */
-	Device (const DeviceType dev) : Device (dev, 0) {}
+	explicit Device (const DeviceType dev) : Device (dev, 0) {}
 
 protected:
     /**
@@ -66,10 +66,12 @@ protected:
      * @param param  Device parameter type code, to be used for inheriting
      * classes.
      */
-	Device (const DeviceType dev, int param = 0) : type_(dev), param_(param), actionTime_ (std::chrono::steady_clock::now()) {}
+	Device (const DeviceType dev, int param) : type_(dev), param_(param), actionTime_ (std::chrono::steady_clock::now()) {}
 
 public:
     virtual ~Device() {}
+
+    Device& operator= (const Device& that) = delete;
 
     /**
      * @brief  Creates a clone of this object.

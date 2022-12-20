@@ -74,7 +74,7 @@ public:
 	 *
 	 * @param key  Key type (code)
      */
-	Keys (const KeyType key) : Device(DEVICE_KEYS, key) {}
+	explicit Keys (const KeyType key) : Device(DEVICE_KEYS, key) {}
 
 	/**
      * @brief  Creates a clone of this object.

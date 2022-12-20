@@ -93,7 +93,7 @@ public:
      *  @param urid  URID.
      *  @param properties Initializer list of properties.
      */
-    Style (const std::initializer_list<StyleProperty>& properties);
+    explicit Style (const std::initializer_list<StyleProperty>& properties);
 
     /**
      *  @brief  Checks if an included element with the provided @a urid exists

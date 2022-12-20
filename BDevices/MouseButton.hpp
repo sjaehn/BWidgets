@@ -51,7 +51,7 @@ public:
      * 
      * @param but  Button type code
      */
-	MouseButton (const ButtonType but);
+	explicit MouseButton (const ButtonType but);
 
     /**
      * @brief  Construct a new mouse button device object.

@@ -61,7 +61,7 @@ public:
      *  @brief  Creates a plain single color %Fill.
      *  @param color  %Fill @a color.
      */
-	Fill (const Color& color) : 
+	explicit Fill (const Color& color) : 
         color_ (color), 
         surface_ (nullptr),
         type_ (FILL_COLOR)
@@ -75,7 +75,7 @@ public:
      *
      *  The constructor creates a copy of the Cairo image surface.
      */
-	Fill (cairo_surface_t* surface) :
+	explicit Fill (cairo_surface_t* surface) :
         color_ (),
         surface_    (surface && (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS) ? 
                      cairoplus_image_surface_clone_from_image_surface (surface) : 
@@ -89,7 +89,7 @@ public:
      *  @brief  Creates an image %Fill from a png file.
      *  @param filename  png file name.
      */
-	Fill (const std::string& filename) :
+	explicit Fill (const std::string& filename) :
         color_ (),
         surface_ (cairo_image_surface_create_from_png (filename.c_str())),
         type_ (FILL_IMAGE)
