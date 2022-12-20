@@ -30,7 +30,7 @@ using namespace BStyles;
 using namespace BUtilities;
 
 // Definition of a style with two substyles
-Style style =
+Style style = Style
 {
     /* Default style - don't need to be declared */
     /*
@@ -43,24 +43,52 @@ Style style =
     */
 
     /* Alternative style 1 for widgets with the URID: URI "/ua" */
-    {Urid::urid (URI "/ua"), makeAny<Style>({
-        {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(yellows)},
-        {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
-        {Urid::urid (URI "/ua/label"), makeAny<Style>({
-            {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0))},
-            {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
-        })}
-    })},
+    {
+        Urid::urid (URI "/ua"), 
+        makeAny<Style>
+        ( 
+            Style
+            {
+                {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(yellows)},
+                {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
+                {
+                    Urid::urid (URI "/ua/label"), 
+                    makeAny<Style>
+                    ( 
+                        Style
+                        {
+                            {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0))},
+                            {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
+                        }
+                    )
+                }
+            }
+        )
+    },
 
     /* Alternative style 2 for widgets with the URID: URI "/bw" */
-    {Urid::urid (URI "/bw"), makeAny<Style>({
-        {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(whites)},
-        {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>({darkdarkgrey, darkgrey, black, black})},
-        {Urid::urid (URI "/bw/label"), makeAny<Style>({
-            {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("fantasy", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0))},
-            {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
-        })}
-    })}
+    {
+        Urid::urid (URI "/bw"), 
+        makeAny<Style>
+        (
+            Style
+            {
+                {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(whites)},
+                {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>( ColorMap{darkdarkgrey, darkgrey, black, black})},
+                {
+                    Urid::urid (URI "/bw/label"), 
+                    makeAny<Style>
+                    (
+                        Style
+                        {
+                            {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("fantasy", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0))},
+                            {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
+                        }
+                    )
+                }
+            }
+        )
+    }
 };
 
 int main ()

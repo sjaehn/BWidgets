@@ -64,7 +64,7 @@ TextButton b2 (160, 130, 80, 20, "Theme2");
 TextButton b3 (260, 130, 80, 20, "Theme3");
 
 // Definition of themes
-Theme theme1 =
+Theme theme1 = Theme
 {
     {
         Urid::urid (URI "/window"),
@@ -84,10 +84,13 @@ Theme theme1 =
             {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(greens)},
             {
                 Urid::urid (URI "/dial/label"), makeAny<Style>  // Nested styles are allowed too
-                ({
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
-                })
+                (
+                    Style
+                    {
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
+                    }
+                )
             }
         })
     },
@@ -100,16 +103,19 @@ Theme theme1 =
             {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(Fill(darkgreen))},
             {
                 Urid::urid (URI "/button/label"), makeAny<Style>  // Nested styles are allowed too
-                ({
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
-                })
+                (
+                    Style
+                    {
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(sans12pt)},
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
+                    }
+                )
             }
         })
     }
 };
 
-Theme theme2 =
+Theme theme2 = Theme
 {
     {
         Urid::urid (URI "/window"),
@@ -129,10 +135,13 @@ Theme theme2 =
             {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(blues)},
             {
                 Urid::urid (URI "/dial/label"), makeAny<Style>  // Nested styles are allowed too
-                ({
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
-                })
+                (
+                    Style
+                    {
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
+                    }
+                )
             }
         })
     },
@@ -145,16 +154,19 @@ Theme theme2 =
             {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(blueFill)},
             {
                 Urid::urid (URI "/button/label"), makeAny<Style>  // Nested styles are allowed too
-                ({
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
-                })
+                (
+                    Style
+                    {
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
+                    }
+                )
             }
         })
     }
 };
 
-Theme theme3 =
+Theme theme3 = Theme
 {
     {
         Urid::urid (URI "/window"),
@@ -171,13 +183,16 @@ Theme theme3 =
             {Urid::urid (BSTYLES_STYLEPROPERTY_BORDER_URI), makeAny<Border>(noBorder)},
             {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(noFill)},
             {Urid::urid (BSTYLES_STYLEPROPERTY_FGCOLORS_URI), makeAny<ColorMap>(whites)},
-            {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>({darkdarkgrey, darkgrey, black, black})},
+            {Urid::urid (BSTYLES_STYLEPROPERTY_BGCOLORS_URI), makeAny<ColorMap>(ColorMap{darkdarkgrey, darkgrey, black, black})},
             {
                 Urid::urid (URI "/dial/label"), makeAny<Style>  // Nested styles are allowed too
-                ({
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("fantasy", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
-                })
+                (
+                    Style
+                    {
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("fantasy", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
+                    }
+                )
             }
         })
     },
@@ -190,10 +205,13 @@ Theme theme3 =
             {Urid::urid (BSTYLES_STYLEPROPERTY_BACKGROUND_URI), makeAny<Fill>(Fill(darkdarkgrey))},
             {
                 Urid::urid (URI "/button/label"), makeAny<Style>  // Nested styles are allowed too
-                ({
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("fantasy", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
-                    {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
-                })
+                (
+                    Style
+                    {
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("fantasy", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(whites)},
+                    }
+                )
             }
         })
     }
