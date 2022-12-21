@@ -1304,7 +1304,9 @@ BUtilities::Dictionary::setLanguage ("de_DE.utf8");
 You can build B.Widgets-based binaries with the C and C++ compilers of your
 choice.
 
-Neither B.Wigets nor the Pugl library used by B.Widgets is header only. This means that you have to compile the respective .c and .cpp files you directly or indirectly need as well and link them. 
+Neither B.Wigets nor the Pugl library used by B.Widgets is header only. This 
+means that you have to compile the respective .c and .cpp files you directly 
+or indirectly need as well and link them. 
 
 To compile for a X11-based system, you need the Pugl .c files \
   path/to/BWidgets/BWidgets/pugl/implementation.c, \
@@ -1315,6 +1317,7 @@ To compile for Mac or Windows, please use the respective mac*.c or win*.c files.
 
 And from B.Widgets itself, you need at least \
   path/to/BWidgets/BUtilities/Urid.cpp, \
+  path/to/BWidgets/BUtilities/Dictionary.cpp \
 	path/to/BWidgets/BWidgets/Supports/Closeable.cpp, \
   path/to/BWidgets/BWidgets/Supports/Messagable.cpp \
 	path/to/BWidgets/BWidgets/Window.cpp, and \

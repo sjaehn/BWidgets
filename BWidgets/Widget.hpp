@@ -88,7 +88,8 @@ class Window;
  *  * a @a title, 
  *  * a @a style,
  *  * a @a theme,
- *  * and an information about pushing styles from nested styles or themes.
+ *  * an information about pushing styles from nested styles or themes,
+ *  * and a set of @a devices it has taken control over.
  * 
  *  Note: The class %Widget is devoid of any copy constructor or assignment
  *  operator. 
