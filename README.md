@@ -107,7 +107,7 @@ gcc -DPIC -DPUGL_HAVE_CAIRO -std=c99 -fPIC `pkg-config --cflags x11 cairo` \
 ../BWidgets/BWidgets/pugl/x11_cairo.c \
 ../BWidgets/BWidgets/pugl/x11.c -c
 g++ -DPIC -DPUGL_HAVE_CAIRO -std=c++11 -fPIC `pkg-config --cflags x11 cairo` \
-../helloworld.cpp
+../helloworld.cpp \
 ../BWidgets/BUtilities/Urid.cpp \
 ../BWidgets/BUtilities/Dictionary.cpp \
 ../BWidgets/BWidgets/Supports/Closeable.cpp \
@@ -193,8 +193,8 @@ Further reading: [BWidgets/README.md](BWidgets/README.md)
 - [x] Define shortcut macros
 - [x] Make at least the setters virtual (where possible)
 - [x] Header files only (where possible)
-- [ ] Remove redundant methods, members and parameters before release of version 1.0
-- [ ] Documentation
+- [x] Remove redundant methods, members and parameters before release of version 1.0
+- [x] Documentation
 
 
 ### Until 1.2
