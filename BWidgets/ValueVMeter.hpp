@@ -206,7 +206,7 @@ inline ValueVMeter::ValueVMeter (const uint32_t urid, const std::string& title) 
 
 }
 
-inline ValueVMeter::ValueVMeter (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline ValueVMeter::ValueVMeter (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	ValueVMeter	(0.0, 0.0, BWIDGETS_DEFAULT_VALUEVMETER_WIDTH, BWIDGETS_DEFAULT_VALUEVMETER_HEIGHT, 
 					 value, min, max, step, 
 					 ValueTransferable<double>::noTransfer, 
@@ -219,7 +219,7 @@ inline ValueVMeter::ValueVMeter (double value, const double min, const double ma
 }
 
 inline ValueVMeter::ValueVMeter	(const double  x, const double y, const double width, const double height, 
-									 double value, const double min, const double max, double step, 
+									 const double value, const double min, const double max, double step, 
 									 std::function<double (const double& x)> transferFunc,
 						 			 std::function<double (const double& x)> reTransferFunc,
 									 std::function<std::string (const double& x)> displayFunc,

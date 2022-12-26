@@ -183,7 +183,7 @@ inline ValueDial::ValueDial (const uint32_t urid, const std::string& title) :
 
 }
 
-inline ValueDial::ValueDial (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline ValueDial::ValueDial (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	ValueDial	(0.0, 0.0, BWIDGETS_DEFAULT_VALUEDIAL_WIDTH, BWIDGETS_DEFAULT_VALUEDIAL_HEIGHT, 
 				 value, min, max, step, 
 				 ValueTransferable<double>::noTransfer, 
@@ -196,7 +196,7 @@ inline ValueDial::ValueDial (double value, const double min, const double max, d
 }
 
 inline ValueDial::ValueDial	(const double  x, const double y, const double width, const double height, 
-							 double value, const double min, const double max, double step, 
+							 const double value, const double min, const double max, double step, 
 							 std::function<double (const double& x)> transferFunc,
 				 			 std::function<double (const double& x)> reTransferFunc,
 							 std::function<std::string (const double& x)> displayFunc,

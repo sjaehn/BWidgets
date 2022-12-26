@@ -238,7 +238,7 @@ inline VMeter::VMeter (const uint32_t urid, const std::string& title) :
 
 }
 
-inline VMeter::VMeter (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline VMeter::VMeter (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	VMeter	(0.0, 0.0, BWIDGETS_DEFAULT_VMETER_WIDTH, BWIDGETS_DEFAULT_VMETER_HEIGHT, 
 			 value, min, max, step, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -248,7 +248,7 @@ inline VMeter::VMeter (double value, const double min, const double max, double 
 }
 
 inline VMeter::VMeter	(const double  x, const double y, const double width, const double height, 
-						 double value, const double min, const double max, double step, 
+						 const double value, const double min, const double max, double step, 
 						 std::function<double (const double& x)> transferFunc,
 			 			 std::function<double (const double& x)> reTransferFunc,
 						 uint32_t urid, std::string title) :

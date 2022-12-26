@@ -209,7 +209,7 @@ inline Dial::Dial (const uint32_t urid, const std::string& title) :
 
 }
 
-inline Dial::Dial (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline Dial::Dial (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	Dial	(0.0, 0.0, BWIDGETS_DEFAULT_DIAL_WIDTH, BWIDGETS_DEFAULT_DIAL_HEIGHT, 
 			 value, min, max, step, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 

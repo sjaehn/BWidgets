@@ -193,7 +193,7 @@ inline VScale::VScale (const uint32_t urid, const std::string& title) :
 
 }
 
-inline VScale::VScale (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline VScale::VScale (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	VScale	(0.0, 0.0, BWIDGETS_DEFAULT_VSCALE_WIDTH, BWIDGETS_DEFAULT_VSCALE_HEIGHT, 
 			 value, min, max, step, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -203,7 +203,7 @@ inline VScale::VScale (double value, const double min, const double max, double 
 }
 
 inline VScale::VScale	(const double  x, const double y, const double width, const double height, 
-						 double value, const double min, const double max, double step, 
+						 const double value, const double min, const double max, double step, 
 						 std::function<double (const double& x)> transferFunc,
 			 			 std::function<double (const double& x)> reTransferFunc,
 						 uint32_t urid, std::string title) :

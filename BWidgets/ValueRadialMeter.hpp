@@ -206,7 +206,7 @@ inline ValueRadialMeter::ValueRadialMeter (const uint32_t urid, const std::strin
 
 }
 
-inline ValueRadialMeter::ValueRadialMeter (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline ValueRadialMeter::ValueRadialMeter (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	ValueRadialMeter	(0.0, 0.0, BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH, BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT, 
 					 value, min, max, step, 
 					 ValueTransferable<double>::noTransfer, 
@@ -219,7 +219,7 @@ inline ValueRadialMeter::ValueRadialMeter (double value, const double min, const
 }
 
 inline ValueRadialMeter::ValueRadialMeter	(const double  x, const double y, const double width, const double height, 
-									 double value, const double min, const double max, double step, 
+									 const double value, const double min, const double max, double step, 
 									 std::function<double (const double& x)> transferFunc,
 						 			 std::function<double (const double& x)> reTransferFunc,
 									 std::function<std::string (const double& x)> displayFunc,

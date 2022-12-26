@@ -237,7 +237,7 @@ inline RadialMeter::RadialMeter (const uint32_t urid, const std::string& title) 
 
 }
 
-inline RadialMeter::RadialMeter (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline RadialMeter::RadialMeter (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	RadialMeter	(0.0, 0.0, BWIDGETS_DEFAULT_RADIALMETER_WIDTH, BWIDGETS_DEFAULT_RADIALMETER_HEIGHT, 
 				 value, min, max, step, 
 				 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -247,7 +247,7 @@ inline RadialMeter::RadialMeter (double value, const double min, const double ma
 }
 
 inline RadialMeter::RadialMeter	(const double  x, const double y, const double width, const double height, 
-								 double value, const double min, const double max, double step, 
+								 const double value, const double min, const double max, double step, 
 								 std::function<double (const double& x)> transferFunc,
 			 					 std::function<double (const double& x)> reTransferFunc,
 								 uint32_t urid, std::string title) :

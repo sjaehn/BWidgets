@@ -160,7 +160,7 @@ inline HSlider::HSlider (const uint32_t urid, const std::string& title) :
 	
 }
 
-inline HSlider::HSlider (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline HSlider::HSlider (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	HSlider	(0.0, 0.0, BWIDGETS_DEFAULT_HSLIDER_WIDTH, BWIDGETS_DEFAULT_HSLIDER_HEIGHT, 
 			 value, min, max, step, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -170,7 +170,7 @@ inline HSlider::HSlider (double value, const double min, const double max, doubl
 }
 
 inline HSlider::HSlider	(const double  x, const double y, const double width, const double height, 
-						 double value, const double min, const double max, double step, 
+						 const double value, const double min, const double max, double step, 
 						 std::function<double (const double& x)> transferFunc,
 			 			 std::function<double (const double& x)> reTransferFunc,
 						 uint32_t urid, std::string title) :

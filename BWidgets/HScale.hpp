@@ -192,7 +192,7 @@ inline HScale::HScale (const uint32_t urid, const std::string& title) :
 
 }
 
-inline HScale::HScale (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline HScale::HScale (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	HScale	(0.0, 0.0, BWIDGETS_DEFAULT_HSCALE_WIDTH, BWIDGETS_DEFAULT_HSCALE_HEIGHT, 
 			 value, min, max, step, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -202,7 +202,7 @@ inline HScale::HScale (double value, const double min, const double max, double 
 }
 
 inline HScale::HScale	(const double  x, const double y, const double width, const double height, 
-						 double value, const double min, const double max, double step, 
+						 const double value, const double min, const double max, double step, 
 						 std::function<double (const double& x)> transferFunc,
 			 			 std::function<double (const double& x)> reTransferFunc,
 						 uint32_t urid, std::string title) :

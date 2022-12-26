@@ -186,7 +186,7 @@ inline HScrollBar::HScrollBar (const uint32_t urid, const std::string& title) :
 
 }
 
-inline HScrollBar::HScrollBar (double value, const double min, const double max, double step, double vsize, uint32_t urid, std::string title) : 
+inline HScrollBar::HScrollBar (const double value, const double min, const double max, double step, double vsize, uint32_t urid, std::string title) : 
 	HScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_HSCROLLBAR_WIDTH, BWIDGETS_DEFAULT_HSCROLLBAR_HEIGHT, 
 			 value, min, max, step, vsize,
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -196,7 +196,7 @@ inline HScrollBar::HScrollBar (double value, const double min, const double max,
 }
 
 inline HScrollBar::HScrollBar	(const double  x, const double y, const double width, const double height, 
-						 double value, const double min, const double max, double step, double vsize,
+						 const double value, const double min, const double max, double step, double vsize,
 						 std::function<double (const double& x)> transferFunc,
 			 			 std::function<double (const double& x)> reTransferFunc,
 						 uint32_t urid, std::string title) :

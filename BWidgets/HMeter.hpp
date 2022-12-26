@@ -236,7 +236,7 @@ inline HMeter::HMeter (const uint32_t urid, const std::string& title) :
 
 }
 
-inline HMeter::HMeter (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline HMeter::HMeter (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	HMeter	(0.0, 0.0, BWIDGETS_DEFAULT_HMETER_WIDTH, BWIDGETS_DEFAULT_HMETER_HEIGHT, 
 			 value, min, max, step, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -246,7 +246,7 @@ inline HMeter::HMeter (double value, const double min, const double max, double 
 }
 
 inline HMeter::HMeter	(const double  x, const double y, const double width, const double height, 
-						 double value, const double min, const double max, double step, 
+						 const double value, const double min, const double max, double step, 
 						 std::function<double (const double& x)> transferFunc,
 			 			 std::function<double (const double& x)> reTransferFunc,
 						 uint32_t urid, std::string title) :

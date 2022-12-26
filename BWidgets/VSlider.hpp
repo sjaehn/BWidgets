@@ -161,7 +161,7 @@ inline VSlider::VSlider (const uint32_t urid, const std::string& title) :
 
 }
 
-inline VSlider::VSlider (double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
+inline VSlider::VSlider (const double value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	VSlider	(0.0, 0.0, BWIDGETS_DEFAULT_VSLIDER_WIDTH, BWIDGETS_DEFAULT_VSLIDER_HEIGHT, 
 			 value, min, max, step, 
 			 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
@@ -171,7 +171,7 @@ inline VSlider::VSlider (double value, const double min, const double max, doubl
 }
 
 inline VSlider::VSlider	(const double  x, const double y, const double width, const double height, 
-						 double value, const double min, const double max, double step, 
+						 const double value, const double min, const double max, double step, 
 						 std::function<double (const double& x)> transferFunc,
 			 			 std::function<double (const double& x)> reTransferFunc,
 						 uint32_t urid, std::string title) :
