@@ -201,7 +201,7 @@ protected:
 
 
 private:
-	bool padOn_;	// Status of the pad where button pressed, used for 
+	bool padOn__;	// Status of the pad where button pressed, used for 
 					// onPointerDragged()
 
 
@@ -538,7 +538,7 @@ inline Pattern<T>::Pattern	(const double x, const double y, const double width, 
 	editMode_ (MODE_EDIT),
 	allowYMerge_ (false),
 	clipBoard_(),
-	padOn_ (false)
+	padOn__ (false)
 {
 	pads.setValue (1.0);
 	for (size_t r = 0; r < rows_; ++r)
@@ -625,7 +625,7 @@ inline void Pattern<T>::copy (const Pattern<T>* that)
 	editMode_ = that->editMode_;
 	allowYMerge_ = that->allowYMerge_;
 	clipBoard_ = that->clipBoard_;
-	padOn_ = that->padOn;
+	padOn__ = that->padOn;
 
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);
@@ -864,8 +864,8 @@ inline void Pattern<T>::onButtonPressed (BEvents::Event* event)
 	{
 		T* w = dynamic_cast<T*>(pads_[p.y][p.x]);
 		typename T::value_type v = pads.getValue();
-		padOn_ = (w->getValue() != v);
-		w->setValue (padOn_ ? v : w->getMin());
+		padOn__ = (w->getValue() != v);
+		w->setValue (padOn__ ? v : w->getMin());
 	}
 
 	Clickable::onButtonPressed (event);
@@ -912,7 +912,7 @@ inline void Pattern<T>::onPointerDragged (BEvents::Event* event)
 			else if (editMode_ == MODE_PASTE) pasteValues (p);
 
 			// Default: Set or unset pad
-			else w->setValue (padOn_ ? pads.getValue() : w->getMin());
+			else w->setValue (padOn__ ? pads.getValue() : w->getMin());
 		}
 	}
 	Draggable::onPointerDragged (event);
