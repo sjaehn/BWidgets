@@ -131,8 +131,8 @@ public:
 	 */
 	VRangeScrollBar	(const double x, const double y, const double width, const double height, 
 			 const double value1, const double value2, const double min, const double max, double step = 0.0,
-			 std::function<value_type (const value_type& x)> transferFunc = ValueTransferable<value_type>::noTransfer,
-			 std::function<value_type (const value_type& x)> reTransferFunc = ValueTransferable<value_type>::noTransfer,
+			 std::function<double (const double& x)> transferFunc = ValueTransferable<double>::noTransfer,
+			 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
 			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
@@ -154,8 +154,8 @@ public:
 	 */
 	VRangeScrollBar	(const double x, const double y, const double width, const double height, 
 			 const value_type value, const double min, const double max, double step = 0.0,
-			 std::function<value_type (const value_type& x)> transferFunc = ValueTransferable<value_type>::noTransfer,
-			 std::function<value_type (const value_type& x)> reTransferFunc = ValueTransferable<value_type>::noTransfer,
+			 std::function<double (const double& x)> transferFunc = ValueTransferable<double>::noTransfer,
+			 std::function<double (const double& x)> reTransferFunc = ValueTransferable<double>::noTransfer,
 			 uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
 
 	/**
@@ -215,6 +215,85 @@ public:
      */
     virtual void onWheelScrolled (BEvents::Event* event) override;
 
+	/**
+     *  @brief  Sets the transfer function.
+     *  @param func  Transfer function.
+     *
+     *  The transfer function is used
+     *  to transfer a value from an external context (e. g., frequencies with a
+     *  logarithmic distribution) to an internal context (e. g., a slider with 
+     *  linear distribution). In this case a possible transfer function would be:
+     *  @code
+     *  [] (const std::pair<double, double>& x) 
+	 *     {return std::pair<double, double>(log10 (x), log10 (x));}
+     *  @endcode
+     *
+     *  The transfer function (and its re-transfer function) MUST be biunique.
+	 *  Also, it's strongly recommended that both pair members (first and 
+	 *  second) are handled in the same way. 
+	 *
+	 *  Better use the double to double transfer function 
+	 *  setTransferFunction (std::function<double (const double& x)> func).
+     */
+    virtual void setTransferFunction (std::function<value_type (const value_type& x)> func) override;
+
+	/**
+     *  @brief  Sets the transfer function.
+     *  @param func  Transfer function.
+     *
+     *  The transfer function is used
+     *  to transfer a value from an external context (e. g., frequencies with a
+     *  logarithmic distribution) to an internal context (e. g., a slider with 
+     *  linear distribution). In this case a possible transfer function would be:
+     *  @code
+     *  [] (const double& x) {return log10 (x);}
+     *  @endcode
+     *
+     *  The transfer function (and its re-transfer function) MUST be biunique.
+     */
+    virtual void setTransferFunction (std::function<double (const double& x)> func);
+
+	/**
+     *  @brief  Sets the re-transfer function.
+     *  @param func  Re-transfer function.
+     *
+     *  The re-transfer function is used to transfer a value from an internal 
+     *  context (e. g., a
+     *  position within a slider with linear distribution) to an external
+     *  context (e. g., frequencies with a logarithmic distribution). In this
+     *  case a possible re-transfer function would be:
+     *  @code
+     *  [] (const std::pair<double, double>& x) 
+	 *     {return std::pair<double, double>(pow (10, x), pow (10, x));}
+     *  @endcode
+     *
+     *  The transfer function (and its re-transfer function) MUST be biunique.
+	 *  Also, it's strongly recommended that both pair members (first and 
+	 *  second) are handled in the same way. 
+	 *
+	 *  Better use the double to double re-transfer function 
+	 *  setTransferFunction (std::function<double (const double& x)> func).
+     */
+    virtual void setReTransferFunction (std::function<value_type (const value_type& x)> func) override;
+
+	/**
+     *  @brief  Sets the re-transfer function.
+     *  @param func  Re-transfer function.
+     *
+     *  The re-transfer function is used to transfer a value from an internal 
+     *  context (e. g., a
+     *  position within a slider with linear distribution) to an external
+     *  context (e. g., frequencies with a logarithmic distribution). In this
+     *  case a possible re-transfer function would be:
+     *  @code
+     *  [] [] (const double& x) {return pow (10, x);}
+     *  @endcode
+     *
+     *  The transfer function (and its re-transfer function) MUST be biunique.
+     */
+    virtual void setReTransferFunction (std::function<double (const double& x)> func);
+	
+
 protected:
 
 	static void buttonDraggedCallback (BEvents::Event* event);
@@ -226,7 +305,7 @@ protected:
 inline VRangeScrollBar::VRangeScrollBar () :
 	VRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VRANGESCROLLBAR_HEIGHT, 
 					 value_type (0.0, 0.0), 0.0, 1.0, 0.0, 
-					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
+					 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 			 		 BUTILITIES_URID_UNKNOWN_URID, "")
 {
 
@@ -237,7 +316,7 @@ inline VRangeScrollBar::VRangeScrollBar () :
 inline VRangeScrollBar::VRangeScrollBar (const uint32_t urid, const std::string& title) : 
 	VRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VRANGESCROLLBAR_HEIGHT, 
 					 value_type (0.0, 0.0), 0.0, 1.0, 0.0, 
-					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
+					 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 					 urid, title) 
 {
 
@@ -246,7 +325,7 @@ inline VRangeScrollBar::VRangeScrollBar (const uint32_t urid, const std::string&
 inline VRangeScrollBar::VRangeScrollBar (const double value1, const double value2, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	VRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VRANGESCROLLBAR_HEIGHT, 
 					 value_type (value1, value2), min, max, step,
-					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
+					 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 					 urid, title) 
 {
 
@@ -255,7 +334,7 @@ inline VRangeScrollBar::VRangeScrollBar (const double value1, const double value
 inline VRangeScrollBar::VRangeScrollBar (const value_type value, const double min, const double max, double step, uint32_t urid, std::string title) : 
 	VRangeScrollBar	(0.0, 0.0, BWIDGETS_DEFAULT_VRANGESCROLLBAR_WIDTH, BWIDGETS_DEFAULT_VRANGESCROLLBAR_HEIGHT, 
 					 value, min, max, step,
-					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
+					 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 					 urid, title) 
 {
 
@@ -263,26 +342,27 @@ inline VRangeScrollBar::VRangeScrollBar (const value_type value, const double mi
 
 inline VRangeScrollBar::VRangeScrollBar	(const double  x, const double y, const double width, const double height, 
 										 const double value1, const double value2, const double min, const double max, double step,
-										 std::function<value_type (const value_type& x)> transferFunc,
-							 			 std::function<value_type (const value_type& x)> reTransferFunc,
+										 std::function<double (const double& x)> transferFunc,
+							 			 std::function<double (const double& x)> reTransferFunc,
 										 uint32_t urid, std::string title) :
 	VRangeScrollBar	(x, y, width, height, 
 					 value_type (value1, value2), min, max, step,
-					 ValueTransferable<value_type>::noTransfer, ValueTransferable<value_type>::noTransfer, 
+					 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer, 
 					 urid, title)
 {
 
 }
 
 inline VRangeScrollBar::VRangeScrollBar	(const double  x, const double y, const double width, const double height, 
-						 const value_type value, const double min, const double max, double step, 
-						 std::function<value_type (const value_type& x)> transferFunc,
-			 			 std::function<value_type (const value_type& x)> reTransferFunc,
-						 uint32_t urid, std::string title) :
+										 const value_type value, const double min, const double max, double step, 
+										 std::function<double (const double& x)> transferFunc,
+							 			 std::function<double (const double& x)> reTransferFunc,
+										 uint32_t urid, std::string title) :
 	Widget (x, y, width, height, urid, title), 
 	ValueableTyped<value_type> (value), 
 	ValidatableRange<value_type> (value_type (min, min), value_type (max, max), value_type (step, step)), 
-	ValueTransferable<value_type> (transferFunc, reTransferFunc),
+	ValueTransferable<value_type> ([transferFunc] (const value_type& x) {return value_type (transferFunc (x.first), transferFunc (x.second));},
+	 							   [reTransferFunc] (const value_type& x) {return value_type (reTransferFunc (x.first), reTransferFunc (x.second));}),
 	Scrollable (),
 	scrollbar (urid, title),
 	button1 (urid, title),
@@ -290,6 +370,8 @@ inline VRangeScrollBar::VRangeScrollBar	(const double  x, const double y, const 
 	symbol1 (Symbol::MINUS_SYMBOL, urid, title),
 	symbol2 (Symbol::ADD_SYMBOL, urid, title)
 {
+	scrollbar.setTransferFunction(transferFunc);
+	scrollbar.setReTransferFunction(reTransferFunc);
 	scrollbar.setFocusable(false);
 	scrollbar.setEventPassable(BEvents::Event::POINTER_FOCUS_EVENTS + BEvents::Event::WHEEL_SCROLL_EVENT);
 	scrollbar.setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, scrollbarChangedCallback);
@@ -424,6 +506,35 @@ inline void VRangeScrollBar::onWheelScrolled (BEvents::Event* event)
 	}
 	Scrollable::onWheelScrolled (event);
 }
+
+inline void VRangeScrollBar::setTransferFunction (std::function<value_type (const value_type& x)> func)
+{
+	scrollbar.setTransferFunction([func] (const double& x) {return func(value_type(x, x)).first;});
+	ValueTransferable<value_type>::setTransferFunction(func);
+	update();
+}
+
+inline void VRangeScrollBar::setTransferFunction (std::function<double (const double& x)> func)
+{
+	scrollbar.setTransferFunction(func);
+	ValueTransferable<value_type>::setTransferFunction([func] (const value_type& x) {return value_type (func (x.first), func (x.second));});
+	update();
+}
+
+inline void VRangeScrollBar::setReTransferFunction (std::function<value_type (const value_type& x)> func) 
+{
+	scrollbar.setReTransferFunction([func] (const double& x) {return func(value_type(x, x)).first;});
+	ValueTransferable<value_type>::setReTransferFunction(func);
+	update();
+}
+
+inline void VRangeScrollBar::setReTransferFunction (std::function<double (const double& x)> func)
+{
+	scrollbar.setReTransferFunction(func);
+	ValueTransferable<value_type>::setReTransferFunction([func] (const value_type& x) {return value_type (func (x.first), func (x.second));});
+	update();
+}
+
 
 inline void VRangeScrollBar::buttonDraggedCallback (BEvents::Event* event)
 {

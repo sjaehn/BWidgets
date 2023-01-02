@@ -1,8 +1,14 @@
 # B.Widgets
 
-Current version: 1.0.0-beta2
-
 Rewrite of the widget toolkit of the B.Music project.
+
+**Current version:** 0.16.0 (alpha)
+
+**Pre-release notice:** The B.Widgets toolkit is currently being developed 
+and still not officially released (alpha). Thus, there's no stable API yet.
+This means the API still may change until the final release. This may cause
+breaks. Keeping this in your mind, you may use this pre-release at your own 
+risk. 
 
 For a detailed description of the classes and methods of B.Widgets see
 [BWidgets](BWidgets/README.md) and the other namespaces below the widget gallery.
@@ -63,7 +69,7 @@ Then execute the respective example, e. g.:
 ```
 
 Note: If you want to use BWidgets within your project, copy or clone it as a
-subdirectory of your project.
+subdirectory into your project.
 
 ## Documentation
 
@@ -201,6 +207,7 @@ Further reading: [BWidgets/README.md](BWidgets/README.md)
 
 - [x] Class Shape
 - [ ] Shape widget
+- [ ] Range widgets
 - [ ] Functional focus label text
 - [ ] Update pugl
 
