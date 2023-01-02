@@ -114,7 +114,7 @@ public:
      *  @brief  Gets the transfer function.
      *  @param func  Transfer function.
      */
-    virtual std::function<T (const T& x)> getTransferFunction () const;
+    std::function<T (const T& x)> getTransferFunction () const;
 
     /**
      *  @brief  Sets the re-transfer function.
@@ -137,7 +137,7 @@ public:
      *  @brief  Gets the re-transfer function.
      *  @param func  Re-transfer function.
      */
-    virtual std::function<T (const T& x)> getReTransferFunction () const;
+    std::function<T (const T& x)> getReTransferFunction () const;
 
     /**
      *  @brief  Transfers a value.
