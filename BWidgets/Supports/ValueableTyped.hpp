@@ -50,7 +50,7 @@ public:
      *  @brief  Construct a new %ValueableTyped object.
      *  @param value  Value.
      */
-    ValueableTyped (const T& value);
+    explicit ValueableTyped (const T& value);
 
     /**
      *  @brief  Copiess the value from another %ValueableTyped object.
