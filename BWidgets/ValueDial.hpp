@@ -209,6 +209,9 @@ inline ValueDial::ValueDial	(const double  x, const double y, const double width
 {
 	add (&label);
 	label.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, labelChangedCallback);
+	label.setEventPassable(BEvents::Event::WHEEL_SCROLL_EVENT);
+	label.setEventPassable(BEvents::Event::POINTER_DRAG_EVENT);
+	label.setEventPassable(BEvents::Event::POINTER_FOCUS_EVENTS);
 }
 
 inline Widget* ValueDial::clone () const 

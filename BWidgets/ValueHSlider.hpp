@@ -231,6 +231,9 @@ inline ValueHSlider::ValueHSlider	(const double  x, const double y, const double
 {
 	add (&label);
 	label.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, labelChangedCallback);
+	label.setEventPassable(BEvents::Event::WHEEL_SCROLL_EVENT);
+	label.setEventPassable(BEvents::Event::POINTER_DRAG_EVENT);
+	label.setEventPassable(BEvents::Event::POINTER_FOCUS_EVENTS);
 }
 
 inline Widget* ValueHSlider::clone () const 
