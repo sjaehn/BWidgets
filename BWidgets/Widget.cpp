@@ -813,7 +813,8 @@ Widget* Widget::getWidgetAt	(const BUtilities::Point<>& abspos,
 					getMainWindow() // "Sink" to block passing events
 				)
 			) :
-			nullptr);
+			nullptr
+		);
 
 		for (Linkable* l : children_)
 		{
@@ -825,7 +826,7 @@ Widget* Widget::getWidgetAt	(const BUtilities::Point<>& abspos,
 				{
 					if (finalw)
 					{
-						if (nextw->getLayer() <= finalw->getLayer()) finalw = nextw;
+						if (nextw->getLayer() <= getLayer()) finalw = nextw;
 					}
 					else finalw = nextw;
 				}

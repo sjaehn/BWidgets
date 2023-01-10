@@ -7,7 +7,7 @@ project. This toolkit includes widgets, styles, event handling, device support,
 and internationalization. B.Widgets also takes care about the special needs for
 user interaction elements in music production.
 
-**Current version:** 0.16.0 (alpha)
+**Current version:** 0.16.1 (alpha)
 
 **Pre-release notice:** The B.Widgets toolkit is currently being developed 
 and still not officially released (alpha). Thus, there's no stable API yet.
