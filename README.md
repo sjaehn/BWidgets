@@ -2,6 +2,11 @@
 
 Rewrite of the widget toolkit of the B.Music project.
 
+B.Widgets is the Graphical User Interface (GUI) toolkit for the B.Music 
+project. This toolkit includes widgets, styles, event handling, device support,
+and internationalization. B.Widgets also takes care about the special needs for
+user interaction elements in music production.
+
 **Current version:** 0.16.0 (alpha)
 
 **Pre-release notice:** The B.Widgets toolkit is currently being developed 
