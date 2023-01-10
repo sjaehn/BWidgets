@@ -826,7 +826,7 @@ Widget* Widget::getWidgetAt	(const BUtilities::Point<>& abspos,
 				{
 					if (finalw)
 					{
-						if (nextw->getLayer() <= getLayer()) finalw = nextw;
+						if (w->getLayer() <= getLayer()) finalw = nextw;
 					}
 					else finalw = nextw;
 				}
