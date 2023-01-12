@@ -295,8 +295,8 @@ public:
 	 *  @brief  Access to the main Window of this %Widget.
 	 *  @return  Pointer to the main window. 
 	 *
-	 *  Returns @c nullptr if the widget isn't connected to a main window or
-	 *  if this %Widget is the main window itself.
+	 *  Returns @c nullptr if the widget isn't connected to a main window.
+	 *  Returns a pointer to itself if the widget is the main window itself.
 	 */
 	Window* getMainWindow () const;
 
