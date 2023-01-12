@@ -805,11 +805,11 @@ Widget* Widget::getWidgetAt	(const BUtilities::Point<>& abspos,
 		(
 			((thisArea != BUtilities::Area<> ()) && thisArea.contains (abspos)) ? 
 			(
-				func (this) ?
-				this : 
+				passfunc (this) ?
+				nullptr : 
 				(
-					passfunc (this) ?
-					nullptr :
+					func (this) ?
+					this :
 					getMainWindow() // "Sink" to block passing events
 				)
 			) :

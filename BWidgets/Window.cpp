@@ -425,10 +425,8 @@ void Window::handleEvents ()
 						Widget* w = getWidgetAt 
 						(
 							p, 
-							[] (const Widget* f) 
-							{
-								return dynamic_cast<const PointerFocusable*>(f) && dynamic_cast<const PointerFocusable*>(f)->isFocusable();
-							}
+							[] (const Widget* f) {return dynamic_cast<const PointerFocusable*>(f) && dynamic_cast<const PointerFocusable*>(f)->isFocusable();},
+							[] (const Widget* f) {return f->isEventPassable(BEvents::Event::POINTER_FOCUS_IN_EVENT);}
 						);
 						if (w) w->grabDevice(BDevices::MouseButton (BDevices::MouseButton::MOUSE_NO_BUTTON, p - w->getAbsolutePosition()));
 						if (widget->is<Pointable>()) dynamic_cast<Pointable*> (widget)->onPointerMotion (be);

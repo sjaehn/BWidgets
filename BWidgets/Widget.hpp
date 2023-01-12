@@ -760,13 +760,20 @@ protected:
 	 *  @brief  Gets the top %Widget at a given position.
 	 *  @param position  Position. 
 	 *  @param func  Optional, filter function.
-	 *  @param passfunc  Optional, function to check whether to check the next
-	 *  lower level result if @a func returned false.
-	 *  @return  Pointer to the %Widget. 
+	 *  @param passfunc  Optional, function to skip this widget and continue
+	 *  with the widget below.
+	 *  @return  Pointer to the %Widget.
+	 *
+	 *  Order of checks:
+	 *  1. Checks if @a position is inside the widget area, then
+	 *  2. checks the @a passfunc if this widget will be passed and the checks
+	 *     are continued with the widgets below (true) or if not passed
+	 *     (false), then
+	 *  3. checks if the filter function @a func returns true.
 	 */
 	Widget* getWidgetAt	(const BUtilities::Point<>& position, 
 						 std::function<bool (Widget* widget)> func = [] (Widget* widget) {return true;},
-						 std::function<bool (Widget* widget)> passfunc = [] (Widget* widget) {return true;});
+						 std::function<bool (Widget* widget)> passfunc = [] (Widget* widget) {return false;});
 
 	/**
 	 *  @brief  Draws %Widget surface and children surfaces to the provided
