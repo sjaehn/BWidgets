@@ -41,7 +41,7 @@ class EventPassable
 {
 protected:
 
-    std::map<uint8_t, bool> eventPassable_;
+    uint32_t eventPassable_;
 
 public:
 
@@ -54,13 +54,12 @@ public:
      *
      *  Makes an object transparent or intransparent for the respective 
      *  @a eventType.
+     *
+     *  @note @setEventPassable(NO_EVENT) doesn't have any effect. 
      */
     virtual void setEventPassable (const uint32_t eventType, bool status = true) 
     {
-        for (uint32_t i = 0; i < 32; ++i)
-        {
-            if ((1 << i) & eventType) eventPassable_[i] = status;
-        }
+        eventPassable_ = (eventPassable_ & (~eventType)) | (eventType * static_cast<uint32_t>(status));
     }
 
     /**
@@ -71,22 +70,14 @@ public:
      *  Information about the transparency of an object for the respective
      *  @a eventType.
      *
-     *  If multiple event types are passed, then only the callback function
-     *  for the first match is returned.
+     *  If multiple event types are passed, then true is returned if all
+     *  event types are set to be transparent. Otherwise false. 
+     *
+     *  @note The @a eventType NO_EVENT always returns true.
      */
     bool isEventPassable (const uint32_t eventType) const
     {
-        for (uint32_t i = 0; i < 32; ++i)
-        {
-            if ((1 << i) & eventType)
-            {
-                std::map<uint8_t, bool>::const_iterator it = eventPassable_.find (i);
-                if (it == eventPassable_.end()) return false;
-                return it->second;
-            }
-        }
-
-        return false;
+        return (eventPassable_ & eventType) == eventType;
     }
 
 };

@@ -350,6 +350,7 @@ int main ()
 
     // HSlider
     HSlider hSlider (1000, 390, 100, 20, 0.3, 0.0, 1.0, 0.0);
+    hSlider.setTitle("HSlider");
     hSlider.setClickable (false);
     Label hSliderLabel (1010, 440, 80, 20, "HSlider");
     hSliderLabel.setFont (labelFont);
