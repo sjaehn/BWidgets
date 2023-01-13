@@ -46,13 +46,13 @@ A MouseButton device object is responsible the mouse interaction. They
 additionally store information where a mouse button action (press / release)
 has taken place (`setPosition()`, `getPosition()`). 
 
-Mouse objects with the parameter types MOUSE_LEFT_BUTTON, MOUSE_MIDDLE_BUTTON, 
-and MOUSE_RIGHT_BUTTON are responsible for the respective mouse buttons.
+Mouse objects with the parameter types ButtonType::LEFT_BUTTON, ButtonType::MIDDLE_BUTTON, 
+and ButtonType::RIGHT_BUTTON are responsible for the respective mouse buttons.
 They are automatically grabbed by the respective widgets upon pressing the 
 button until the button is released. These objects are used to store the
 button information for dragging and clicking (= press + release). 
 
-In addition, there are Mouse objects with the parameter type MOUSE_NO_BUTTON.
+In addition, there are Mouse objects with the parameter type ButtonType::NO_BUTTON.
 These objects are automatically grabbed by the respective widget upon
 moving or resting a mouse pointer over it. These mouse objects enable pointer
 focusing and hover widgets.

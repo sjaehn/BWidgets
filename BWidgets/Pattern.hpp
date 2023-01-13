@@ -851,7 +851,7 @@ inline void Pattern<T>::onButtonPressed (BEvents::Event* event)
 	const BUtilities::Point<size_t> p = getPadIndex (pev->getPosition().x, pev->getPosition().y);
 
 	// Pick mode:
-	if (editMode_ == MODE_PICK || (pev->getButton() == BDevices::MouseButton::MOUSE_RIGHT_BUTTON)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
+	if (editMode_ == MODE_PICK || (pev->getButton() == BDevices::MouseButton::ButtonType::RIGHT_BUTTON)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
 
 	// Paste mode:
 	else if (editMode_ == MODE_PASTE) pasteValues (p);
@@ -877,7 +877,7 @@ inline void Pattern<T>::onButtonReleased (BEvents::Event* event)
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*>(event);
 	if (!pev) return;
 
-	if (selected_ && isSelectMode() && (pev->getButton() == BDevices::MouseButton::MOUSE_LEFT_BUTTON)) action (getEditMode(), selection_);
+	if (selected_ && isSelectMode() && (pev->getButton() == BDevices::MouseButton::ButtonType::LEFT_BUTTON)) action (getEditMode(), selection_);
 	selected_ = false;
 	update();
 	Clickable::onButtonReleased (event);
@@ -894,7 +894,7 @@ inline void Pattern<T>::onPointerDragged (BEvents::Event* event)
 	const BUtilities::Point<size_t> p = getPadIndex (pev->getPosition().x, pev->getPosition().y);
 		
 	// Selection mode: Drag selection
-	if (isSelectMode() && (pev->getButton() == BDevices::MouseButton::MOUSE_LEFT_BUTTON)) select (p0, p);
+	if (isSelectMode() && (pev->getButton() == BDevices::MouseButton::ButtonType::LEFT_BUTTON)) select (p0, p);
 
 	// Default:
 	else 
@@ -906,7 +906,7 @@ inline void Pattern<T>::onPointerDragged (BEvents::Event* event)
 		if (p != p2)
 		{
 			// Pick mode:
-			if (editMode_ == MODE_PICK || (pev->getButton() == BDevices::MouseButton::MOUSE_RIGHT_BUTTON)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
+			if (editMode_ == MODE_PICK || (pev->getButton() == BDevices::MouseButton::ButtonType::RIGHT_BUTTON)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
 
 			// Paste mode:
 			else if (editMode_ == MODE_PASTE) pasteValues (p);

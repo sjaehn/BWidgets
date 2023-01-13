@@ -33,15 +33,16 @@ namespace BDevices
 class MouseButton : public Device
 {
 public:
-    enum ButtonType
+    enum class ButtonType
     {
-        MOUSE_NO_BUTTON,
-		MOUSE_LEFT_BUTTON,
-		MOUSE_MIDDLE_BUTTON,
-		MOUSE_RIGHT_BUTTON
+        NO_BUTTON,
+		LEFT_BUTTON,
+		MIDDLE_BUTTON,
+		RIGHT_BUTTON
     };
 
 protected:
+    ButtonType button_;
     BUtilities::Point<> position_;
 
 public:
@@ -66,7 +67,30 @@ public:
      * 
      * @return  Pointer to the clone.
      */
-    virtual Device* clone() const;
+    virtual Device* clone() const override;
+
+    /**
+	 * @brief  Get the button code for this object.
+	 * 
+	 * @return ButtonType  Button code.
+	 */
+    ButtonType getButton() const;
+
+    /**
+     * @brief Compares this and another device object.
+     * 
+     * @param rhs  Other object. 
+     * @return  True if the device type of this object is less than the
+     *          device type of the other object.
+     *
+     * The virtual method @a less() compares this and another object primarily
+     * on the base of their device types. This method can be overridden in 
+     * inherriting classes to compare additional parameters. However,
+     * comparing additional parameters is only allowed if (i) both objects
+     * are from the type (class), and (ii) both objects have got the same
+     * device type. 
+     */
+    virtual bool less (const Device& rhs) const override; 
 
     /**
      * @brief  Set the position of the mouse button device and the action time 
@@ -92,13 +116,44 @@ public:
     BUtilities::Point<> getPosition () const;
 };
 
-inline MouseButton::MouseButton(const ButtonType but) : MouseButton (but, BUtilities::Point<>(0, 0)) {}
+inline MouseButton::MouseButton(const ButtonType but) : 
+    MouseButton (but, BUtilities::Point<>(0, 0)) 
+{
 
-inline MouseButton::MouseButton(const ButtonType but, const BUtilities::Point<>& pos) : Device(Device::DEVICE_MOUSE, but), position_(pos) {}
+}
+
+inline MouseButton::MouseButton(const ButtonType but, const BUtilities::Point<>& pos) : 
+    Device(DeviceType::MOUSE),
+    button_(but),
+    position_(pos) 
+{
+
+}
 
 inline Device* MouseButton::clone() const
 {
     return new MouseButton(*this);
+}
+
+inline MouseButton::ButtonType MouseButton::getButton() const 
+{
+    return button_;
+}
+
+inline bool MouseButton::less (const Device& rhs) const
+{
+    // lhs.type_ != rhs.type_ ?
+    if ((Device::less(rhs) || rhs.Device::less(*this))) return Device::less(rhs);
+
+    // lhs.type_ == rhs.type_ ?
+    {
+        const MouseButton* r = dynamic_cast<const MouseButton*>(&rhs);
+
+        // Same object type : Compare button_
+        if (r) return getButton() < r->getButton();
+        // Else
+        return false;
+    }
 }
 
 inline void MouseButton::setPosition (const BUtilities::Point<>& pos) 

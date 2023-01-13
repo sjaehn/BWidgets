@@ -36,16 +36,15 @@ public:
 	/**
 	 * Enumeration of mouse buttons as input device for event handling
 	 */
-	enum DeviceType
+	enum class DeviceType
 	{
-        DEVICE_KEYS,
-        DEVICE_MOUSE
-        // TODO DEVICE_SCROLL
+        KEYS,
+        MOUSE
+        // TODO WHEEL
 	};
 
 protected:
     const DeviceType type_;
-    const int param_;
 	std::chrono::steady_clock::time_point actionTime_;
 
 public:
@@ -55,18 +54,7 @@ public:
      * @param dev  Device type code
      * classes.
      */
-	explicit Device (const DeviceType dev) : Device (dev, 0) {}
-
-protected:
-    /**
-     * @brief  Construct a new Device object with additional parameter. This
-     * constructor can only be called from inheriting classes.
-     * 
-     * @param dev  Device type code
-     * @param param  Device parameter type code, to be used for inheriting
-     * classes.
-     */
-	Device (const DeviceType dev, int param) : type_(dev), param_(param), actionTime_ (std::chrono::steady_clock::now()) {}
+	explicit Device (const DeviceType dev) : type_(dev), actionTime_ (std::chrono::steady_clock::now()) {}
 
 public:
     virtual ~Device() {}
@@ -101,11 +89,23 @@ public:
      */
 	std::chrono::steady_clock::time_point getActionTime () const {return actionTime_;}
 
-    friend inline bool operator< (const Device& lhs, const Device& rhs) 
-    {
-        return (lhs.type_ == rhs.type_ ? lhs.param_ < rhs.param_ : lhs.type_ < rhs.type_);
-    }
+    /**
+     * @brief Compares this and another device object.
+     * 
+     * @param rhs  Other object. 
+     * @return  True if the device type of this object is less than the
+     *          device type of the other object.
+     *
+     * The virtual method @a less() compares this and another object primarily
+     * on the base of their device types. This method can be overridden in 
+     * inherriting classes to compare additional parameters. However,
+     * comparing additional parameters is only allowed if (i) both objects
+     * are from the type (class), and (ii) both objects have got the same
+     * device type. 
+     */
+    virtual bool less (const Device& rhs) const {return type_ < rhs.type_;}
 
+    friend inline bool operator< (const Device& lhs, const Device& rhs) {return lhs.less (rhs);}
 	friend inline bool operator== (const Device& lhs, const Device& rhs) {return !((lhs < rhs) || (rhs < lhs));}
 	friend inline bool operator> (const Device& lhs, const Device& rhs) {return rhs < lhs;}
 	friend inline bool operator<=(const Device& lhs, const Device& rhs) {return !(lhs > rhs);}
