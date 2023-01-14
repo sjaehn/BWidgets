@@ -104,7 +104,7 @@ int main ()
 {
     // Window
     Window window (1500, 820, 0, BUTILITIES_URID_UNKNOWN_URID, "Window", true);
-    window.setCallbackFunction(BEvents::Event::CONFIGURE_REQUEST_EVENT, configureCallback);
+    window.setCallbackFunction(BEvents::Event::EventType::ConfigureRequestEvent, configureCallback);
 
     // Widget
     Widget widget (10, 10, 80, 60, BUTILITIES_URID_UNKNOWN_URID, "Widget");
@@ -122,10 +122,10 @@ int main ()
     frame.setBorder (lightgreyBorder1pt);
     Label frameDragLabel ("Drag me");
     frameDragLabel.setFocusable(false);
-    frameDragLabel.setEventPassable(BEvents::Event::BUTTON_PRESS_EVENT, true);
-    frameDragLabel.setEventPassable(BEvents::Event::POINTER_DRAG_EVENT, true);
-    frameDragLabel.setEventPassable(BEvents::Event::POINTER_FOCUS_IN_EVENT, true);
-    frameDragLabel.setEventPassable(BEvents::Event::POINTER_FOCUS_OUT_EVENT, true);
+    frameDragLabel.setEventPassable(BEvents::Event::EventType::ButtonPressEvent, true);
+    frameDragLabel.setEventPassable(BEvents::Event::EventType::PointerDragEvent, true);
+    frameDragLabel.setEventPassable(BEvents::Event::EventType::PointerFocusInEvent, true);
+    frameDragLabel.setEventPassable(BEvents::Event::EventType::PointerFocusOutEvent, true);
     frame.add (&frameDragLabel);
     frameDragLabel.moveTo(frameDragLabel.center(), frameDragLabel.middle());
     Label frameLabel (110, 80, 80, 20, "Frame");

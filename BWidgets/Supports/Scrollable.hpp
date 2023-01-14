@@ -34,10 +34,10 @@ public:
      *  @brief  Switch (mouse) wheel support on/off.
      *  @param status  True if on, otherwise false.
      *
-     *  Defines whether the widget may emit a WHEEL_SCROLL_EVENT if the main 
+     *  Defines whether the widget may emit a WheelScrollEvent if the main 
      *  window event handler received a (mouse) wheel scroll event from the 
      *  host system. In this case, a WheelEvent with the type 
-     *  WHEEL_SCROLL_EVENT will be scheduled and send to the widget.
+     *  WheelScrollEvent will be scheduled and send to the widget.
      */
     virtual void setScrollable (const bool status) {setSupport (status);}
 
@@ -46,7 +46,7 @@ public:
      *  @return  True if on, otherwise false.
      *
      *  If a widget is scrollable, the main window event handler let the widget
-     *  emit a WheelEvent of the type WHEEL_SCROLL_EVENT if the main window
+     *  emit a WheelEvent of the type WheelScrollEvent if the main window
      *  event handler received a (mouse) wheel event from the host system.
      */
     bool isScrollable () const {return getSupport();}
@@ -61,7 +61,7 @@ public:
      */
     virtual void onWheelScrolled (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::WHEEL_SCROLL_EVENT) (event);
+        callback (BEvents::Event::EventType::WheelScrollEvent) (event);
     }
 
 };

@@ -36,10 +36,10 @@ public:
      *  @param status  True if on, otherwise false.
      *
      *  Defines whether a widget may emit a PointerEvent with 
-     *  POINTER_MOTION_EVENT if the main window event handler received a 
+     *  PointerMotionEvent if the main window event handler received a 
      *  pointer move event from the host and the pointer moves over the 
      *  widget. In this case, a PointerEvent with the type 
-     *  POINTER_MOTION_EVENT will be scheduled and send to the widget.
+     *  PointerMotionEvent will be scheduled and send to the widget.
      */
     virtual void setPointable (const bool status) {setSupport (status);}
 
@@ -48,13 +48,13 @@ public:
      *  @return  True if on, otherwise false.
      *
      *  If a widget is pointable, the main window event handler let the widget
-     *  emit a PointerEvent with the type POINTER_MOTION_EVENT if the pointer
+     *  emit a PointerEvent with the type PointerMotionEvent if the pointer
      *  is moved over the widget.
      */
     bool isPointable () const {return getSupport();}
 
     /**
-     *  @brief  Method when a PointerEvent with the type POINTER_MOTION_EVENT
+     *  @brief  Method when a PointerEvent with the type PointerMotionEvent
      *  is received.
      *  @param event  Passed Event.
      *
@@ -64,7 +64,7 @@ public:
      */
     virtual void onPointerMotion (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::VALUE_CHANGED_EVENT) (event);
+        callback (BEvents::Event::EventType::ValueChangedEvent) (event);
     }
 
 };

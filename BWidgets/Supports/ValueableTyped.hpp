@@ -77,7 +77,7 @@ public:
     /**
 	 *  @brief  Lets a %Widget emit a ValueChangeTypedEvent.
 	 *
-	 *  Emits a ValueChangeTypedEvent of the type VALUE_CHANGED_EVENT to the 
+	 *  Emits a ValueChangeTypedEvent of the type ValueChangedEvent to the 
      *  main Window event queue. 
 	 */
     virtual void emitValueChanged ();

@@ -279,13 +279,13 @@ inline SpinBox::SpinBox	(const double x, const double y, const double width, con
 	itemHeight_ (std::max (height - 2.0, 0.0)),
 	buttonWidth_ (BWIDGETS_DEFAULT_SPINBOX_BUTTON_WIDTH)
 {
-	items_.front()->setEventPassable(BEvents::Event::WHEEL_SCROLL_EVENT + BEvents::Event::BUTTON_PRESS_EVENT);
+	items_.front()->setEventPassable(BEvents::Event::EventType::WheelScrollEvent | BEvents::Event::EventType::ButtonPressEvent);
 	add (items_.front());
 	addItem (items);
 	if (getValue() >= items_.size()) setValue (0);
 	else setValue (value_);
 	top_ = value_;
-	button_->setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, valueChangedCallback);
+	button_->setCallbackFunction(BEvents::Event::EventType::ValueChangedEvent, valueChangedCallback);
 	add (button_);
 	setBackground(BStyles::blackFill);
 	setBorder (BStyles::Border (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL], 1.0), 0.0, 0.0, 0.0));
@@ -363,7 +363,7 @@ inline void SpinBox::addItem (const std::string item, size_t pos)
 	else if (pos <= 1) items_.insert(std::next (items_.begin(), 1), l);
 	else items_.insert(std::next (items_.begin(), pos), l);
 	l->setBorder(BStyles::Border (BStyles::noLine, 3.0));
-	l->setEventPassable(BEvents::Event::WHEEL_SCROLL_EVENT + BEvents::Event::BUTTON_PRESS_EVENT);
+	l->setEventPassable(BEvents::Event::EventType::WheelScrollEvent | BEvents::Event::EventType::ButtonPressEvent);
 	add (l);
 	if (getValue() >= pos) setValue (getValue() + 1);
 	if (top_ >= pos) ++top_;

@@ -47,7 +47,7 @@ public:
      *  @brief  Creates an empty %WheelEvent.
      */
 	WheelEvent () :
-		WheelEvent (nullptr, NO_EVENT, 0, 0, 0, 0) 
+		WheelEvent (nullptr, EventType::None, 0, 0, 0, 0) 
     {
 
     }

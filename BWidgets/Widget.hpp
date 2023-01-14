@@ -707,7 +707,7 @@ public:
 	/**
 	 *  @brief  Requests a redisplay of the %Widget area.
 	 *
-	 *  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT to the main
+	 *  Emits an ExposeEvent of the type ExposeRequestEvent to the main
 	 *  Window event queue. 
 	 */
 	virtual void emitExposeEvent () override;
@@ -716,7 +716,7 @@ public:
 	 *  @brief  Requests a redisplay of a part of the %Widget area.
 	 *  @param area  Area to redisplay.
 	 *
-	 *  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT to the main
+	 *  Emits an ExposeEvent of the type ExposeRequestEvent to the main
 	 *  Window event queue. 
 	 */
 	virtual void emitExposeEvent (const BUtilities::Area<>& area) override;
@@ -784,7 +784,7 @@ protected:
 	 *  @param area  Clipping area.
 	 *
 	 *  This method is called by the main Window system event handler upon an
-	 *  ExposeEvent of the type EXPOSE_REQUEST_EVENT. Thus, this method draws
+	 *  ExposeEvent of the type ExposeRequestEvent. Thus, this method draws
 	 *  the visual content of this %Widget and all its children %Widgets stored
 	 *  in their respective RGBA surfaces to the system provided RGBA surface
 	 *  of the main %Window.  

@@ -41,7 +41,7 @@ class EventPassable
 {
 protected:
 
-    uint32_t eventPassable_;
+    BEvents::Event::EventType eventPassable_;
 
 public:
 
@@ -55,11 +55,11 @@ public:
      *  Makes an object transparent or intransparent for the respective 
      *  @a eventType.
      *
-     *  @note @setEventPassable(NO_EVENT) doesn't have any effect. 
+     *  @note @a setEventPassable(EventType::NoEvent) doesn't have any effect. 
      */
-    virtual void setEventPassable (const uint32_t eventType, bool status = true) 
+    virtual void setEventPassable (const BEvents::Event::EventType eventType, bool status = true) 
     {
-        eventPassable_ = (eventPassable_ & (~eventType)) | (eventType * static_cast<uint32_t>(status));
+        eventPassable_ = (eventPassable_ & (~eventType)) | (status ? eventType : BEvents::Event::EventType::None);
     }
 
     /**
@@ -73,9 +73,9 @@ public:
      *  If multiple event types are passed, then true is returned if all
      *  event types are set to be transparent. Otherwise false. 
      *
-     *  @note The @a eventType NO_EVENT always returns true.
+     *  @note The @a eventType NoEvent always returns true.
      */
-    bool isEventPassable (const uint32_t eventType) const
+    bool isEventPassable (const BEvents::Event::EventType eventType) const
     {
         return (eventPassable_ & eventType) == eventType;
     }

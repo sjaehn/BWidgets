@@ -230,12 +230,12 @@ void Window::addEventToQueue (BEvents::Event* event)
 		(
 			(event->getWidget()->isEventMergeable(eventType)) &&
 			(
-				(eventType & BEvents::Event::CONFIGURE_REQUEST_EVENT) ||
-				(eventType & BEvents::Event::EXPOSE_REQUEST_EVENT) ||
-				(eventType & BEvents::Event::POINTER_MOTION_EVENT) ||
-				(eventType & BEvents::Event::POINTER_DRAG_EVENT) ||
-				(eventType & BEvents::Event::WHEEL_SCROLL_EVENT) ||
-				(eventType & BEvents::Event::VALUE_CHANGED_EVENT)
+				(static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::ConfigureRequestEvent)) ||
+				(static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::ExposeRequestEvent)) ||
+				(static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::PointerMotionEvent)) ||
+				(static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::PointerDragEvent)) ||
+				(static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::WheelScrollEvent)) ||
+				(static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::ValueChangedEvent))
 			)
 		)
 		{
@@ -244,10 +244,10 @@ void Window::addEventToQueue (BEvents::Event* event)
 			{
 				BEvents::Event* precursor = *rit;
 
-				if ((precursor->getEventType() & eventType) && (event->getWidget () == precursor->getWidget ()))
+				if ((static_cast<uint32_t>(precursor->getEventType()) & static_cast<uint32_t>(eventType)) && (event->getWidget () == precursor->getWidget ()))
 				{
 					// CONFIGURE_EVENT
-					if (eventType & BEvents::Event::CONFIGURE_REQUEST_EVENT)
+					if (static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::ConfigureRequestEvent))
 					{
 						BEvents::ExposeEvent* firstEvent = (BEvents::ExposeEvent*) precursor;
 						BEvents::ExposeEvent* nextEvent = (BEvents::ExposeEvent*) event;
@@ -260,7 +260,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 					}
 
 					// EXPOSE_EVENT
-					if (eventType & BEvents::Event::EXPOSE_REQUEST_EVENT)
+					if (static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::ExposeRequestEvent))
 					{
 						BEvents::ExposeEvent* firstEvent = (BEvents::ExposeEvent*) precursor;
 						BEvents::ExposeEvent* nextEvent = (BEvents::ExposeEvent*) event;
@@ -274,8 +274,8 @@ void Window::addEventToQueue (BEvents::Event* event)
 					}
 
 
-					// POINTER_MOTION_EVENT
-					else if (eventType & BEvents::Event::POINTER_MOTION_EVENT)
+					// PointerMotionEvent
+					else if (static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::PointerMotionEvent))
 					{
 						BEvents::PointerEvent* firstEvent = (BEvents::PointerEvent*) precursor;
 						BEvents::PointerEvent* nextEvent = (BEvents::PointerEvent*) event;
@@ -287,8 +287,8 @@ void Window::addEventToQueue (BEvents::Event* event)
 						return;
 					}
 
-					// POINTER_DRAG_EVENT
-					else if (eventType & BEvents::Event::POINTER_DRAG_EVENT)
+					// PointerDragEvent
+					else if (static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::PointerDragEvent))
 					{
 						BEvents::PointerEvent* firstEvent = (BEvents::PointerEvent*) precursor;
 						BEvents::PointerEvent* nextEvent = (BEvents::PointerEvent*) event;
@@ -308,8 +308,8 @@ void Window::addEventToQueue (BEvents::Event* event)
 					}
 
 
-					// WHEEL_SCROLL_EVENT
-					else if (eventType & BEvents::Event::WHEEL_SCROLL_EVENT)
+					// WheelScrollEvent
+					else if (static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::WheelScrollEvent))
 					{
 						BEvents::WheelEvent* firstEvent = (BEvents::WheelEvent*) precursor;
 						BEvents::WheelEvent* nextEvent = (BEvents::WheelEvent*) event;
@@ -323,8 +323,8 @@ void Window::addEventToQueue (BEvents::Event* event)
 						}
 					}
 
-					// VALUE_CHANGED_EVENT
-					else if (eventType & BEvents::Event::VALUE_CHANGED_EVENT)
+					// ValueChangedEvent
+					else if (static_cast<uint32_t>(eventType) & static_cast<uint32_t>(BEvents::Event::EventType::ValueChangedEvent))
 					{
 						if (dynamic_cast<BEvents::ValueChangedEvent*>(precursor))
 						{
@@ -361,32 +361,32 @@ void Window::handleEvents ()
 
 				switch (eventType)
 				{
-				case BEvents::Event::CONFIGURE_REQUEST_EVENT:
+				case BEvents::Event::EventType::ConfigureRequestEvent:
 					widget->onConfigureRequest (event);
 					break;
 
 				// Expose events: Forward to pugl!
-				case BEvents::Event::EXPOSE_REQUEST_EVENT:
+				case BEvents::Event::EventType::ExposeRequestEvent:
 					widget->onExposeRequest (event);
 					break;
 
-				case BEvents::Event::CLOSE_REQUEST_EVENT:
+				case BEvents::Event::EventType::CloseRequestEvent:
 					if (widget->is<Closeable>()) dynamic_cast<Closeable*> (widget)->onCloseRequest (event);
 					break;
 
-				case BEvents::Event::KEY_PRESS_EVENT:
+				case BEvents::Event::EventType::KeyPressEvent:
 					unfocus();
 					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
 					if (widget->is<KeyPressable>()) dynamic_cast<KeyPressable*> (widget)->onKeyPressed (event);
 					break;
 
-				case BEvents::Event::KEY_RELEASE_EVENT:
+				case BEvents::Event::EventType::KeyReleaseEvent:
 					unfocus();
 					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
 					if (widget->is<KeyPressable>()) dynamic_cast<KeyPressable*> (widget)->onKeyReleased (event);
 					break;
 
-				case BEvents::Event::BUTTON_PRESS_EVENT:
+				case BEvents::Event::EventType::ButtonPressEvent:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus();
@@ -396,7 +396,7 @@ void Window::handleEvents ()
 					}
 					break;
 
-				case BEvents::Event::BUTTON_RELEASE_EVENT:
+				case BEvents::Event::EventType::ButtonReleaseEvent:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus ();
@@ -406,7 +406,7 @@ void Window::handleEvents ()
 					}
 					break;
 
-				case BEvents::Event::BUTTON_CLICK_EVENT:
+				case BEvents::Event::EventType::ButtonClickEvent:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus ();
@@ -416,7 +416,7 @@ void Window::handleEvents ()
 					}
 					break;
 
-				case BEvents::Event::POINTER_MOTION_EVENT:
+				case BEvents::Event::EventType::PointerMotionEvent:
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus ();
@@ -426,38 +426,38 @@ void Window::handleEvents ()
 						(
 							p, 
 							[] (const Widget* f) {return dynamic_cast<const PointerFocusable*>(f) && dynamic_cast<const PointerFocusable*>(f)->isFocusable();},
-							[] (const Widget* f) {return f->isEventPassable(BEvents::Event::POINTER_FOCUS_IN_EVENT);}
+							[] (const Widget* f) {return f->isEventPassable(BEvents::Event::EventType::PointerFocusInEvent);}
 						);
 						if (w) w->grabDevice(BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON, p - w->getAbsolutePosition()));
 						if (widget->is<Pointable>()) dynamic_cast<Pointable*> (widget)->onPointerMotion (be);
 					}
 					break;
 
-				case BEvents::Event::POINTER_DRAG_EVENT:
+				case BEvents::Event::EventType::PointerDragEvent:
 					unfocus ();
 					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
 					if (widget->is<Draggable>()) dynamic_cast<Draggable*> (widget)->onPointerDragged(event);
 					break;
 
-				case BEvents::Event::WHEEL_SCROLL_EVENT:
+				case BEvents::Event::EventType::WheelScrollEvent:
 					unfocus ();
 					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
 					if (widget->is<Scrollable>()) dynamic_cast<Scrollable*> (widget)->onWheelScrolled(event);
 					break;
 
-				case BEvents::Event::VALUE_CHANGED_EVENT:
+				case BEvents::Event::EventType::ValueChangedEvent:
 					if (widget->is<Valueable>()) dynamic_cast<Valueable*>(widget)->onValueChanged(event);
 					break;
 
-				case BEvents::Event::POINTER_FOCUS_IN_EVENT:
+				case BEvents::Event::EventType::PointerFocusInEvent:
 					if (widget->is<PointerFocusable>()) dynamic_cast<PointerFocusable*> (widget)->onFocusIn(event);
 					break;
 
-				case BEvents::Event::POINTER_FOCUS_OUT_EVENT:
+				case BEvents::Event::EventType::PointerFocusOutEvent:
 					if (widget->is<PointerFocusable>()) dynamic_cast<PointerFocusable*> (widget)->onFocusOut(event);
 					break;
 
-				case BEvents::Event::MESSAGE_EVENT:
+				case BEvents::Event::EventType::MessageEvent:
 					if (widget->is<Messagable>()) dynamic_cast<Messagable*> (widget)->onMessage (event);
 					break;
 
@@ -488,7 +488,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 				{
 					if (gw && gw->is<KeyPressable>())
 					{
-						w->addEventToQueue(new BEvents::KeyEvent (gw, BEvents::Event::KEY_PRESS_EVENT, puglEvent->key.x, puglEvent->key.y, key));
+						w->addEventToQueue(new BEvents::KeyEvent (gw, BEvents::Event::EventType::KeyPressEvent, puglEvent->key.x, puglEvent->key.y, key));
 					}
 				}
 			}
@@ -505,7 +505,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 				{
 					if (gw && gw->is<KeyPressable>())
 					{
-						w->addEventToQueue(new BEvents::KeyEvent (gw, BEvents::Event::KEY_RELEASE_EVENT, puglEvent->key.x, puglEvent->key.y, key));
+						w->addEventToQueue(new BEvents::KeyEvent (gw, BEvents::Event::EventType::KeyReleaseEvent, puglEvent->key.x, puglEvent->key.y, key));
 					}
 				}
 			}
@@ -520,7 +520,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 				{
 					if (gw && gw->is<KeyPressable>())
 					{
-						w->addEventToQueue(new BEvents::KeyEvent (gw, BEvents::Event::KEY_PRESS_EVENT, puglEvent->key.x, puglEvent->key.y, key));
+						w->addEventToQueue(new BEvents::KeyEvent (gw, BEvents::Event::EventType::KeyPressEvent, puglEvent->key.x, puglEvent->key.y, key));
 					}
 				}
 			}
@@ -531,7 +531,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->button.x, puglEvent->button.y) / w->getZoom();
 			Widget* widget = w->getWidgetAt	(position, 
 											 [] (Widget* w) {return w->is<Clickable>() || w->is<Draggable>();},
-											 [] (Widget* w) {return w->isEventPassable(BEvents::Event::BUTTON_PRESS_EVENT);});
+											 [] (Widget* w) {return w->isEventPassable(BEvents::Event::EventType::ButtonPressEvent);});
 			if (widget && (widget != w))
 			{
 				w->addEventToQueue
@@ -539,7 +539,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 					new BEvents::PointerEvent
 					(
 						widget,
-						BEvents::Event::BUTTON_PRESS_EVENT,
+						BEvents::Event::EventType::ButtonPressEvent,
 						position - widget->getAbsolutePosition (),
 						position - widget->getAbsolutePosition (),
 						BUtilities::Point<> (),
@@ -568,7 +568,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 					new BEvents::PointerEvent
 					(
 						widget,
-						BEvents::Event::BUTTON_RELEASE_EVENT,
+						BEvents::Event::EventType::ButtonReleaseEvent,
 						position - widget->getAbsolutePosition (),
 						origin,
 						BUtilities::Point<> (),
@@ -576,10 +576,10 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 					)
 				);
 
-				// Also emit BUTTON_CLICK_EVENT ?
+				// Also emit ButtonClickEvent ?
 				Widget* widget2 = w->getWidgetAt	(position, 
 														[] (Widget* w) {return w->is<Clickable>() || w->is<Draggable>();},
-														[] (Widget* w) {return w->isEventPassable (BEvents::Event::BUTTON_CLICK_EVENT);});
+														[] (Widget* w) {return w->isEventPassable (BEvents::Event::EventType::ButtonClickEvent);});
 				if (widget == widget2)
 				{
 					w->addEventToQueue
@@ -587,7 +587,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 						new BEvents::PointerEvent
 						(
 							widget,
-							BEvents::Event::BUTTON_CLICK_EVENT,
+							BEvents::Event::EventType::ButtonClickEvent,
 							position - widget->getAbsolutePosition (),
 							origin,
 							BUtilities::Point<> (),
@@ -624,7 +624,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 						new BEvents::PointerEvent
 						(
 							widget,
-							BEvents::Event::POINTER_DRAG_EVENT,
+							BEvents::Event::EventType::PointerDragEvent,
 							position - widget->getAbsolutePosition (),
 							origin,
 							position - w->pointer_,
@@ -634,13 +634,13 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 				}
 			}
 
-			// No button associated with a widget? Only POINTER_MOTION_EVENT or FOCUS_EVENT
+			// No button associated with a widget? Only PointerMotionEvent or FOCUS_EVENT
 			if (button == BDevices::MouseButton::ButtonType::NO_BUTTON)
 			{
-				// POINTER_MOTION_EVENT
+				// PointerMotionEvent
 				Widget* widget = w->getWidgetAt	(position, 
 												 [] (Widget* widget) {return widget->is<Pointable>();},
-												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::POINTER_MOTION_EVENT);});
+												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::EventType::PointerMotionEvent);});
 				if (widget && (widget != w))
 				{
 					w->addEventToQueue
@@ -648,7 +648,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 						new BEvents::PointerEvent
 						(
 							widget,
-							BEvents::Event::POINTER_MOTION_EVENT,
+							BEvents::Event::EventType::PointerMotionEvent,
 							position - widget->getAbsolutePosition (),
 							BUtilities::Point<> (),
 							position - w->pointer_,
@@ -658,7 +658,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 				// FOCUS_EVENT
 				widget = w->getWidgetAt	(position, 
 												 [] (Widget* widget) {return widget->is<PointerFocusable>();},
-												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::POINTER_FOCUS_IN_EVENT);});
+												 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::EventType::PointerFocusInEvent);});
 				if (widget && (widget != w))
 				{
 					w->addEventToQueue
@@ -666,7 +666,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 						new BEvents::PointerEvent
 						(
 							widget,
-							BEvents::Event::POINTER_MOTION_EVENT,
+							BEvents::Event::EventType::PointerMotionEvent,
 							position - widget->getAbsolutePosition (),
 							BUtilities::Point<> (),
 							position - w->pointer_,
@@ -685,7 +685,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 			BUtilities::Point<> scroll = BUtilities::Point<> (puglEvent->scroll.dx, puglEvent->scroll.dy) / w->getZoom();
 			Widget* widget = w->getWidgetAt	(position, 
 											 [] (Widget* widget) {return widget->is<Scrollable>();},
-											 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::WHEEL_SCROLL_EVENT);});
+											 [] (Widget* widget) {return widget->isEventPassable (BEvents::Event::EventType::WheelScrollEvent);});
 			if (widget && (widget != w))
 			{
 				w->addEventToQueue
@@ -693,7 +693,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 					new BEvents::WheelEvent
 					(
 						widget,
-						BEvents::Event::WHEEL_SCROLL_EVENT,
+						BEvents::Event::EventType::WheelScrollEvent,
 						position - widget->getAbsolutePosition (),
 						scroll
 					)
@@ -711,7 +711,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 				new BEvents::ExposeEvent
 				(
 					w, w,
-					BEvents::Event::CONFIGURE_REQUEST_EVENT,
+					BEvents::Event::EventType::ConfigureRequestEvent,
 					puglEvent->configure.x,
 					puglEvent->configure.y,
 					puglEvent->configure.width,
@@ -776,7 +776,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 		break;
 
 	case PUGL_CLOSE:
-		if (w->is<Closeable>()) w->addEventToQueue (new BEvents::WidgetEvent (w, w, BEvents::Event::CLOSE_REQUEST_EVENT));
+		if (w->is<Closeable>()) w->addEventToQueue (new BEvents::WidgetEvent (w, w, BEvents::Event::EventType::CloseRequestEvent));
 		break;
 
 	default:
@@ -806,13 +806,13 @@ void Window::translateTimeEvent ()
 
 				if ((!focused_) && focus->isFocusActive (diffMs))
 				{
-					addEventToQueue (new BEvents::PointerFocusEvent (widget, BEvents::Event::POINTER_FOCUS_IN_EVENT, position));
+					addEventToQueue (new BEvents::PointerFocusEvent (widget, BEvents::Event::EventType::PointerFocusInEvent, position));
 					focused_ = true;
 				}
 
 				else if (focused_ && (!focus->isFocusActive (diffMs)))
 				{
-					addEventToQueue (new BEvents::PointerFocusEvent (widget, BEvents::Event::POINTER_FOCUS_OUT_EVENT, position));
+					addEventToQueue (new BEvents::PointerFocusEvent (widget, BEvents::Event::EventType::PointerFocusOutEvent, position));
 					focused_ = false;
 				}
 			}
@@ -836,7 +836,7 @@ void Window::unfocus ()
 				if (focus)
 				{
 					BUtilities::Point<> position = (mdev ? mdev->getPosition() : BUtilities::Point<> ());
-					addEventToQueue (new BEvents::PointerFocusEvent (widget, BEvents::Event::POINTER_FOCUS_OUT_EVENT, position));
+					addEventToQueue (new BEvents::PointerFocusEvent (widget, BEvents::Event::EventType::PointerFocusOutEvent, position));
 				}
 			}
 		}
@@ -860,9 +860,9 @@ void Window::purgeEventQueue (Widget* widget)
 				(
 					// Hit in request widgets
 					(
-						(event->getEventType () & BEvents::Event::CONFIGURE_REQUEST_EVENT) ||
-						(event->getEventType () & BEvents::Event::EXPOSE_REQUEST_EVENT) ||
-						(event->getEventType () & BEvents::Event::CLOSE_REQUEST_EVENT)
+						(static_cast<uint32_t>(event->getEventType ()) & static_cast<uint32_t>(BEvents::Event::EventType::ConfigureRequestEvent)) ||
+						(static_cast<uint32_t>(event->getEventType ()) & static_cast<uint32_t>(BEvents::Event::EventType::ExposeRequestEvent)) ||
+						(static_cast<uint32_t>(event->getEventType ()) & static_cast<uint32_t>(BEvents::Event::EventType::CloseRequestEvent))
 					) &&
 					(widget == ((BEvents::WidgetEvent*)event)->getRequestWidget ())
 				)

@@ -38,7 +38,7 @@ public:
      *  Defines whether the widget may emit a POINER_DRAG_EVENT if the main 
      *  window event handler received a pointer move event with pressed
      *  buttons from the host system. In this case, a PointerEvent with the 
-     *  type POINTER_DRAG_EVENT will be scheduled and send to the widget.
+     *  type PointerDragEvent will be scheduled and send to the widget.
      */
     virtual void setDraggable (const bool status) {setSupport (status);}
 
@@ -62,7 +62,7 @@ public:
      */
     virtual void onPointerDragged (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::POINTER_DRAG_EVENT) (event);
+        callback (BEvents::Event::EventType::PointerDragEvent) (event);
     }
 };
 

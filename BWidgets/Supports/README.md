@@ -52,8 +52,8 @@ Supports pointer tracking by pointer motion events.
 
 ## PointerFocusable
 
-PointerFocusable supports FocusEvents of the type POINTER_FOCUS_IN_EVENT or 
-POINTER_FOCUS_OUT_EVENT. FocusEvents are typically emitted if the (mouse) 
+PointerFocusable supports FocusEvents of the type PointerFocusInEvent or 
+PointerFocusOutEvent. FocusEvents are typically emitted if the (mouse) 
 pointer rests over a widget.
 
 
@@ -125,7 +125,7 @@ Visualizable makes objects visible. Visualizable supports:
 
 Principle: Each widget is drawn to its own (Cairo) RGBA surface. If the visual
 content of a widget is changed, the widget should emit an ExposeEvent of the
-type EXPOSE_REQUEST_EVENT by calling @c postRedisplay() to inform the main
+type ExposeRequestEvent by calling @c postRedisplay() to inform the main
 window event handler about the changed content. Then the main window event
 handler will request a host system expose event.
 

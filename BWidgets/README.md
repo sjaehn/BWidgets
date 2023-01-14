@@ -80,7 +80,7 @@ widgets which are (or will be) added to the main window).
 
    Then link this callback function.
    ```
-   button.setCallbackFunction (Event::VALUE_CHANGED_EVENT, 
+   button.setCallbackFunction (Event::EventType::ValueChangedEvent, 
                                valueChangedCallback);
    ```
 

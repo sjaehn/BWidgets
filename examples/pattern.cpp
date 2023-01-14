@@ -94,7 +94,7 @@ int main ()
     for (int i = 0; i < NR_EDIT_BUTTONS; ++i)
     {
         buttons[i] = std::unique_ptr<SymbolButton> (new SymbolButton (10, 10 + i * 40, 40, 30, buttonSymbols[i], true, (i == 0)));
-        buttons[i]->setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, buttonChangedCallback);
+        buttons[i]->setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, buttonChangedCallback);
         window.add (buttons[i].get());
     }
 

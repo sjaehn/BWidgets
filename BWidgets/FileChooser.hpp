@@ -322,13 +322,13 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (-0.75)));
 	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
 
-	fileListBox.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, fileListBoxChangedCallback);
-	filterComboBox.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, filterComboBoxChangedCallback);
-	cancelButton.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, cancelButtonClickedCallback);
-	okButton.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, okButtonClickedCallback);
-	confirmBox.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, confirmClickedCallback);
-	newFolderButton.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, newFolderButtonClickedCallback);
-	createBox.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, createClickedCallback);
+	fileListBox.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, fileListBoxChangedCallback);
+	filterComboBox.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, filterComboBoxChangedCallback);
+	cancelButton.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, cancelButtonClickedCallback);
+	okButton.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, okButtonClickedCallback);
+	confirmBox.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, confirmClickedCallback);
+	newFolderButton.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, newFolderButtonClickedCallback);
+	createBox.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, createClickedCallback);
 
 	for (const Filter& f : filters) 
 	{

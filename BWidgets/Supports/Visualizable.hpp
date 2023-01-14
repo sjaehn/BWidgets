@@ -43,7 +43,7 @@ namespace BWidgets
  *  Thus, ALL visualizable widgets MUST support %Visualizable. Each widget is
  *  drawn to its own (Cairo) RGBA surface. If the visual content of a widget is
  *  changed, the widget should emit an ExposeEvent of the type 
- *  EXPOSE_REQUEST_EVENT by calling @c postRedisplay() to inform the main 
+ *  ExposeRequestEvent by calling @c postRedisplay() to inform the main 
  *  window event handler about the changed content. Then the main window event
  *  handler will request a host system expose event.
  *
@@ -228,12 +228,12 @@ public:
     virtual void update ();
 
     /**
-	 *  @brief  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT.
+	 *  @brief  Emits an ExposeEvent of the type ExposeRequestEvent.
 	 */
 	virtual void emitExposeEvent () = 0;
 
     /**
-	 *  @brief  Emits an ExposeEvent of the type EXPOSE_REQUEST_EVENT.
+	 *  @brief  Emits an ExposeEvent of the type ExposeRequestEvent.
      *  @param area  Area to be re-displayed.
 	 */
     virtual void emitExposeEvent (const BUtilities::Area<>& area) = 0;
@@ -249,7 +249,7 @@ public:
      *  @param event  Passed Event.
      *
      *  Overridable method called from the main window event scheduler upon
-     *  an ExposeEvent of the type CONFIGURE_REQUEST_EVENT emited by a widget
+     *  an ExposeEvent of the type CofigureRequest emited by a widget
      *  or the host system. By default, it calls its static callback function.
      */
     virtual void onConfigureRequest (BEvents::Event* event);
@@ -259,7 +259,7 @@ public:
      *  @param event  Passed Event.
      *
      *  Overridable method called from the main window event scheduler upon
-     *  an ExposeEvent of the type EXPOSE_REQUEST_EVENT emited by a widget. By
+     *  an ExposeEvent of the type ExposeRequestEvent emited by a widget. By
      *  default, it calls its static callback function.
      */
     virtual void onExposeRequest (BEvents::Event* event);
@@ -469,12 +469,12 @@ inline cairo_surface_t* Visualizable::cairoSurface() const
 
 inline void Visualizable::onConfigureRequest (BEvents::Event* event)
 {
-    callback (BEvents::Event::EventType::CONFIGURE_REQUEST_EVENT) (event);
+    callback (BEvents::Event::EventType::ConfigureRequestEvent) (event);
 }
 
 inline void Visualizable::onExposeRequest (BEvents::Event* event)
 {
-    callback (BEvents::Event::EventType::EXPOSE_REQUEST_EVENT) (event);
+    callback (BEvents::Event::EventType::ExposeRequestEvent) (event);
 }
 
 inline void Visualizable::draw ()

@@ -32,8 +32,8 @@ namespace BWidgets
 /**
  *  @brief  Widget focus support.
  *
- *  PointerFocusable widgets may emit FocusEvents with the type POINTER_FOCUS_IN_EVENT or
- *  POINTER_FOCUS_OUT_EVENT if the pointer rests over a widget.
+ *  PointerFocusable widgets may emit FocusEvents with the type PointerFocusInEvent or
+ *  PointerFocusOutEvent if the pointer rests over a widget.
  */
 class PointerFocusable : virtual public Callback, public Support
 {
@@ -46,10 +46,10 @@ public:
 	/**
 	 *  @brief  Constructs a PointerFocusable object with default parameters.
 	 *
-	 *  PointerFocusable objects may emit FocusEvents with the type POINTER_FOCUS_IN_EVENT
-	 *  or POINTER_FOCUS_OUT_EVENT if the pointer rests over a widget. The default
-	 *  time to emit POINTER_FOCUS_IN_EVENT is BWIDGETS_DEFAULT_POINTERFOCUS_IN_MS, and
-	 *  the default time to emit POINTER_FOCUS_OUT_EVENT is 
+	 *  PointerFocusable objects may emit FocusEvents with the type PointerFocusInEvent
+	 *  or PointerFocusOutEvent if the pointer rests over a widget. The default
+	 *  time to emit PointerFocusInEvent is BWIDGETS_DEFAULT_POINTERFOCUS_IN_MS, and
+	 *  the default time to emit PointerFocusOutEvent is 
 	 *  BWIDGETS_DEFAULT_POINTERFOCUS_OUT_MS.
 	 */
 	PointerFocusable () : 
@@ -64,8 +64,8 @@ public:
 	 *  @param focusInMs  Focus in time as std::chrono:ms.
 	 *  @param focusOutMs  Focus out time as std::chrono:ms.
 	 *
-	 *  PointerFocusable objects may emit FocusEvents with the type POINTER_FOCUS_IN_EVENT
-	 *  or POINTER_FOCUS_OUT_EVENT if the pointer rests over a widget.
+	 *  PointerFocusable objects may emit FocusEvents with the type PointerFocusInEvent
+	 *  or PointerFocusOutEvent if the pointer rests over a widget.
 	 */
 	PointerFocusable (const std::chrono::milliseconds focusInMs, const std::chrono::milliseconds focusOutMs) :
 		focusInMs_ (focusInMs), focusOutMs_ (focusOutMs) 
@@ -74,7 +74,7 @@ public:
 	}
 
 	/**
-	 *  @brief  (Re-)defines the time to wait to emit a POINTER_FOCUS_IN_EVENT.
+	 *  @brief  (Re-)defines the time to wait to emit a PointerFocusInEvent.
 	 *  @param ms  Focus in time as std::chrono:ms.
 	 */
 	virtual void setFocusInMilliseconds (const std::chrono::milliseconds ms) 
@@ -83,7 +83,7 @@ public:
 	}
 
 	/**
-	 *  @brief  Gets the time to wait to emit a POINTER_FOCUS_IN_EVENT.
+	 *  @brief  Gets the time to wait to emit a PointerFocusInEvent.
 	 *  @return  Focus in time as std::chrono:ms.
 	 */
 	std::chrono::milliseconds getFocusInMilliseconds () const 
@@ -92,7 +92,7 @@ public:
 	}
 
 	/**
-	 *  @brief  (Re-)defines the time to wait to emit a POINTER_FOCUS_OUT_EVENT.
+	 *  @brief  (Re-)defines the time to wait to emit a PointerFocusOutEvent.
 	 *  @param ms  Focus out time as std::chrono:ms.
 	 */
 	virtual void setFocusOutMilliseconds (const std::chrono::milliseconds ms) 
@@ -101,7 +101,7 @@ public:
 	}
 
 	/**
-	 *  @brief  Gets the time to wait to emit a POINTER_FOCUS_OUT_EVENT.
+	 *  @brief  Gets the time to wait to emit a PointerFocusOutEvent.
 	 *  @return  Focus out time as std::chrono:ms.
 	 */
 	std::chrono::milliseconds getFocusOutMilliseconds () const 
@@ -149,7 +149,7 @@ public:
      */
     virtual void onFocusIn (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::POINTER_FOCUS_IN_EVENT) (event);
+        callback (BEvents::Event::EventType::PointerFocusInEvent) (event);
     }
 
 	/**
@@ -162,7 +162,7 @@ public:
      */
     virtual void onFocusOut (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::POINTER_FOCUS_OUT_EVENT) (event);
+        callback (BEvents::Event::EventType::PointerFocusOutEvent) (event);
     }
 };
 

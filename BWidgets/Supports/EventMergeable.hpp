@@ -32,7 +32,7 @@ class EventMergeable
 {
 protected:
 
-    std::map<uint8_t, bool> eventMergeable_;
+    BEvents::Event::EventType eventMergeable_;
 
 public:
 
@@ -48,14 +48,11 @@ public:
      *  be merged in the main window event queue or not.
      *
      *  Note: %EventMergeable is only a hint. It will be ignored if it doesn't
-     *  make any sense (e. g., CLOSE_REQUEST_EVENT).
+     *  make any sense (e. g., CloseRequestEvent).
      */
-    virtual void setEventMergeable (const uint32_t eventType, const bool status) 
+    virtual void setEventMergeable (const BEvents::Event::EventType eventType, const bool status) 
     {
-        for (uint32_t i = 0; i < 32; ++i)
-        {
-            if ((1 << i) & eventType) eventMergeable_[i] = status;
-        }
+        eventMergeable_ = (eventMergeable_ & (~eventType)) | (status ? eventType : BEvents::Event::EventType::None);
     }
 
     /**
@@ -69,19 +66,9 @@ public:
      *  If multiple event types are passed, then only the callback function
      *  for the first match is returned.
      */
-    bool isEventMergeable (const uint32_t eventType) const
+    bool isEventMergeable (const BEvents::Event::EventType eventType) const
     {
-        for (uint32_t i = 0; i < 32; ++i)
-        {
-            if ((1 << i) & eventType)
-            {
-                std::map<uint8_t, bool>::const_iterator it = eventMergeable_.find (i);
-                if (it == eventMergeable_.end()) return false;
-                return it->second;
-            }
-        }
-
-        return false;
+        return (eventMergeable_ & eventType) == eventType;
     }
 
 };

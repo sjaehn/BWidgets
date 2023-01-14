@@ -261,7 +261,7 @@ inline ComboBox::ComboBox	(const double x, const double y, const double width, c
 	if (button_) delete button_;
 	button_ = new SymbolButton	(x + width - buttonWidth_, y, buttonWidth_, height, Symbol::DOWN_SYMBOL, false, false,
 								 BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"), "");
-	button_->setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, ComboBox::buttonChangedCallback);
+	button_->setCallbackFunction(BEvents::Event::EventType::ValueChangedEvent, ComboBox::buttonChangedCallback);
 	add (button_);
 	for (Widget* w : items_) w->setHeight (itemHeight_);
 }
@@ -366,7 +366,7 @@ inline void ComboBox::showListbox()
 				}
 			}
 		}
-		l->setCallbackFunction(BEvents::Event::VALUE_CHANGED_EVENT, ComboBox::listBoxChangedCallback);
+		l->setCallbackFunction(BEvents::Event::EventType::ValueChangedEvent, ComboBox::listBoxChangedCallback);
 		l->setStacking (STACKING_ESCAPE);
 		l->setValue (getValue());
 		l->setTop(getValue() == 0 ? 0 : 1);

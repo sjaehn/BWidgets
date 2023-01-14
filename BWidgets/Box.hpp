@@ -233,7 +233,7 @@ inline Box::Box	(const double x, const double y, const double width, const doubl
 	// Fallback default OK button
 	if (buttons_.empty())
 	{
-		okButton_.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, Box::buttonClickCallback);
+		okButton_.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, Box::buttonClickCallback);
 		buttons_.push_back (&okButton_);
 		add (&okButton_);
 	}
@@ -377,7 +377,7 @@ inline void Box::resize (const BUtilities::Point<> extends)
 inline void Box::addButton (const std::string& label)
 {
 	TextButton* b = new TextButton (label, false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (getUrid()) + "/button"));
-	b->setCallbackFunction (BEvents::Event::BUTTON_CLICK_EVENT, Box::buttonClickCallback);
+	b->setCallbackFunction (BEvents::Event::EventType::ButtonClickEvent, Box::buttonClickCallback);
 	buttons_.push_back (b);
 	add (b);
 }
@@ -487,7 +487,7 @@ inline void Box::update ()
 
 inline void Box::buttonClickCallback (BEvents::Event* event)
 {
-	if (event && (event->getEventType () & BEvents::Event::BUTTON_CLICK_EVENT))
+	if (event && ((event->getEventType () & BEvents::Event::EventType::ButtonClickEvent) != BEvents::Event::EventType::None))
 	{
 		BEvents::PointerEvent* ev = dynamic_cast<BEvents::PointerEvent*> (event);
 		if (!ev) return;

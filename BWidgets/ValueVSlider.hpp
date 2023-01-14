@@ -230,10 +230,10 @@ inline ValueVSlider::ValueVSlider	(const double  x, const double y, const double
 	label (BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
 {
 	add (&label);
-	label.setCallbackFunction (BEvents::Event::VALUE_CHANGED_EVENT, labelChangedCallback);
-	label.setEventPassable(BEvents::Event::WHEEL_SCROLL_EVENT);
-	label.setEventPassable(BEvents::Event::POINTER_DRAG_EVENT);
-	label.setEventPassable(BEvents::Event::POINTER_FOCUS_EVENTS);
+	label.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, labelChangedCallback);
+	label.setEventPassable(BEvents::Event::EventType::WheelScrollEvent);
+	label.setEventPassable(BEvents::Event::EventType::PointerDragEvent);
+	label.setEventPassable(BEvents::Event::EventType::PointerFocusEvents);
 }
 
 inline Widget* ValueVSlider::clone () const 

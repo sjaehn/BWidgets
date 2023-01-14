@@ -37,7 +37,7 @@ public:
      *
      *  Defines whether a widget may emit a ValueChangedEvent if its internal
      *  value is changed via its setValue() method. In this case, a 
-     *  ValueChangedEvent with the type VALUE_CHANGED_EVENT will be scheduled 
+     *  ValueChangedEvent with the type ValueChangedEvent will be scheduled 
      *  and send to the widget.
      */
     virtual void setValueable (const bool status);
@@ -47,7 +47,7 @@ public:
      *  @return  True if on, otherwise false.
      *
      *  If a widget is valueable, the main window event handler allows 
-     *  the widget to emit a ValueChangedEvent of the type VALUE_CHANGED_EVENT 
+     *  the widget to emit a ValueChangedEvent of the type ValueChangedEvent 
      *  upon changing its value via setValue.
      */
     bool isValueable () const;
@@ -76,7 +76,7 @@ inline bool Valueable::isValueable () const
 
 inline void Valueable::onValueChanged (BEvents::Event* event)
 {
-    callback (BEvents::Event::EventType::VALUE_CHANGED_EVENT) (event);
+    callback (BEvents::Event::EventType::ValueChangedEvent) (event);
 }
 
 }

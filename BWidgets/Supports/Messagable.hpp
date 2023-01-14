@@ -37,7 +37,7 @@ public:
      *  @param status  True if on, otherwise false.
      *
      *  Defines whether the widget may emit a MessagEvent. In this case, 
-     *  a MessageEvent with the type MESSAGE_EVENT will be scheduled and 
+     *  a MessageEvent with the type MessageEvent will be scheduled and 
      *  send to the widget.
      */
     virtual void setMessagable (const bool status);
@@ -47,7 +47,7 @@ public:
      *  @return  True if on, otherwise false.
      *
      *  If a widget is messagable, the main window event handler let the widget
-     *  emit a MessageEvent of the type MESSAGE_EVENT.
+     *  emit a MessageEvent of the type MessageEvent.
      */
     bool isMessagable () const;
 

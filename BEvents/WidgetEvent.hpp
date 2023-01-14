@@ -41,7 +41,7 @@ namespace BEvents
      *  @brief  Creates an empty %WidgetEvent.
      */
  	WidgetEvent () :
- 		WidgetEvent (nullptr, nullptr, NO_EVENT) 
+ 		WidgetEvent (nullptr, nullptr, EventType::None) 
     {
 
     }

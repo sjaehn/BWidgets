@@ -47,7 +47,7 @@ void Closeable::postCloseRequest (Widget* handle)
     Widget* thisWidget = dynamic_cast<Widget*> (this);
 	if (thisWidget && handle)
 	{
-		BEvents::WidgetEvent* event = new BEvents::WidgetEvent (handle, thisWidget, BEvents::Event::CLOSE_REQUEST_EVENT);
+		BEvents::WidgetEvent* event = new BEvents::WidgetEvent (handle, thisWidget, BEvents::Event::EventType::CloseRequestEvent);
         Window* main = thisWidget->getMainWindow();
 		if (main && event) main->addEventToQueue (event);
 	}
@@ -55,7 +55,7 @@ void Closeable::postCloseRequest (Widget* handle)
 
 void Closeable::onCloseRequest (BEvents::Event* event)
 {
-    callback (BEvents::Event::EventType::CLOSE_REQUEST_EVENT) (event);
+    callback (BEvents::Event::EventType::CloseRequestEvent) (event);
 
     Widget* thisWidget = dynamic_cast<Widget*> (this);
     BEvents::WidgetEvent* widgetEvent = dynamic_cast<BEvents::WidgetEvent*> (event);

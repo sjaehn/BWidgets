@@ -57,11 +57,11 @@ public:
      *  Callback functions fascilitate to handle events without changing the 
      *  widget onXXX method and thus changing the class definition.
 	 */
-	void setCallbackFunction (const uint32_t eventType, const std::function<void (BEvents::Event*)>& callbackFunction)
+	void setCallbackFunction (const BEvents::Event::EventType eventType, const std::function<void (BEvents::Event*)>& callbackFunction)
     {
         for (uint32_t i = 0; i < 32; ++i)
         {
-            if ((1 << i) & eventType) operator[] (i) = callbackFunction;
+            if ((1 << i) & static_cast<uint32_t>(eventType)) operator[] (i) = callbackFunction;
         }
     }
 
@@ -69,11 +69,11 @@ public:
 	 *  @brief  Removes the callback function for an event type. 
      *  @param eventType  EventType.
 	 */
-    void removeCallbackFunction (const uint32_t eventType)
+    void removeCallbackFunction (const BEvents::Event::EventType eventType)
     {
         for (uint32_t i = 0; i < 32; ++i)
         {
-            if ((1 << i) & eventType)
+            if ((1 << i) & static_cast<uint32_t>(eventType))
             {
                 const_iterator cit = find (i);
                 if (cit != end()) erase (cit);
@@ -92,7 +92,7 @@ public:
     {
         for (uint32_t i = 0; i < 32; ++i)
         {
-            if ((1 << i) & eventType)
+            if ((1 << i) & static_cast<uint32_t>(eventType))
             {
                 if (find(i) != end()) return operator[] (i);
             } 

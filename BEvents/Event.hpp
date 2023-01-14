@@ -18,6 +18,8 @@
 #ifndef BEVENTS_EVENT_HPP_
 #define BEVENTS_EVENT_HPP_
 
+#include <cstdint>
+
 namespace BWidgets
 {
 class Widget;	// Forward declaration
@@ -38,32 +40,35 @@ public:
 
     /**
      *  @brief  Enumeration of %Event types
+     *
+     *  Type safe enumration supporting the bitwise operators | & ^ and ~.
      */
-    enum EventType
+    enum class EventType : uint32_t
     {
-        NO_EVENT                = 0x0000,
-        CONFIGURE_REQUEST_EVENT = 0x0001,
-        EXPOSE_REQUEST_EVENT    = 0x0002,
-        CLOSE_REQUEST_EVENT     = 0x0004,
-        WIDGET_EVENTS           = CONFIGURE_REQUEST_EVENT + EXPOSE_REQUEST_EVENT + CLOSE_REQUEST_EVENT,
-        KEY_PRESS_EVENT         = 0x0008,
-        KEY_RELEASE_EVENT       = 0x0010,
-        KEY_EVENTS              = KEY_PRESS_EVENT + KEY_RELEASE_EVENT,
-        BUTTON_PRESS_EVENT      = 0x0020,
-        BUTTON_RELEASE_EVENT    = 0x0040,
-        BUTTON_CLICK_EVENT      = 0x0080,
-        BUTTON_EVENTS           = BUTTON_PRESS_EVENT + BUTTON_RELEASE_EVENT + BUTTON_CLICK_EVENT,
-        POINTER_DRAG_EVENT      = 0x0100,
-        POINTER_MOTION_EVENT    = 0x0200,
-        POINTER_EVENTS          = POINTER_DRAG_EVENT + POINTER_MOTION_EVENT,
-        WHEEL_SCROLL_EVENT      = 0x0400,
-        MOUSE_EVENTS            = BUTTON_EVENTS + POINTER_EVENTS + WHEEL_SCROLL_EVENT,
-        VALUE_CHANGED_EVENT     = 0x0800,
-        MESSAGE_EVENT           = 0x1000,
-        CONTENT_EVENTS          = VALUE_CHANGED_EVENT + MESSAGE_EVENT,
-        POINTER_FOCUS_IN_EVENT  = 0x2000,
-        POINTER_FOCUS_OUT_EVENT = 0x4000,
-        POINTER_FOCUS_EVENTS    = POINTER_FOCUS_IN_EVENT + POINTER_FOCUS_OUT_EVENT
+        None                    = 0x0000,
+        ConfigureRequestEvent   = 0x0001,
+        ExposeRequestEvent      = 0x0002,
+        CloseRequestEvent       = 0x0004,
+        WidgetEvents            = ConfigureRequestEvent + ExposeRequestEvent + CloseRequestEvent,
+        KeyPressEvent           = 0x0008,
+        KeyReleaseEvent         = 0x0010,
+        KeyEvents               = KeyPressEvent + KeyReleaseEvent,
+        ButtonPressEvent        = 0x0020,
+        ButtonReleaseEvent      = 0x0040,
+        ButtonClickEvent        = 0x0080,
+        ButtonEvents            = ButtonPressEvent + ButtonReleaseEvent + ButtonClickEvent,
+        PointerDragEvent        = 0x0100,
+        PointerMotionEvent      = 0x0200,
+        PointerEvents           = PointerDragEvent + PointerMotionEvent,
+        WheelScrollEvent        = 0x0400,
+        WheelEvents             = WheelScrollEvent,
+        MouseEvents             = ButtonEvents + PointerEvents + WheelEvents,
+        ValueChangedEvent       = 0x0800,
+        MessageEvent            = 0x1000,
+        ContentEvents           = ValueChangedEvent + MessageEvent,
+        PointerFocusInEvent     = 0x2000,
+        PointerFocusOutEvent    = 0x4000,
+        PointerFocusEvents      = PointerFocusInEvent + PointerFocusOutEvent
     };
 
 protected:
@@ -77,7 +82,7 @@ public:
 	 * @brief  Creates an empty %Event.
 	 */
 	Event () :
-		Event (nullptr, NO_EVENT) 
+		Event (nullptr, EventType::None) 
     {
 
     }
@@ -126,6 +131,26 @@ public:
     }
 
 };
+
+inline Event::EventType operator& (const Event::EventType lhs, const Event::EventType rhs)
+{
+    return static_cast<Event::EventType>(static_cast<uint32_t>(lhs) & static_cast<uint32_t>(rhs));
+}
+
+inline Event::EventType operator| (const Event::EventType lhs, const Event::EventType rhs)
+{
+    return static_cast<Event::EventType>(static_cast<uint32_t>(lhs) | static_cast<uint32_t>(rhs));
+}
+
+inline Event::EventType operator~ (const Event::EventType lhs)
+{
+    return static_cast<Event::EventType>(~static_cast<uint32_t>(lhs));
+}
+
+inline Event::EventType operator^ (const Event::EventType lhs, const Event::EventType rhs)
+{
+    return static_cast<Event::EventType>(static_cast<uint32_t>(lhs) ^ static_cast<uint32_t>(rhs));
+}
 
 }
 
