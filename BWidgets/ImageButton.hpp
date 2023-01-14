@@ -323,7 +323,7 @@ inline void ImageButton::resize (const BUtilities::Point<> extends)
 
 inline void ImageButton::update ()
 {
-	image.setStatus (getValue() ? BStyles::Status::STATUS_ACTIVE : BStyles::Status::STATUS_NORMAL);
+	image.setStatus (getValue() ? BStyles::Status::active : BStyles::Status::normal);
 	image.resize (getEffectiveWidth(), getEffectiveHeight());
 	image.moveTo (image.center(), image.middle());
 	Button::update ();

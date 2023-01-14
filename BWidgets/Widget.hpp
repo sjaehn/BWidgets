@@ -47,7 +47,7 @@
 #endif
 
 #ifndef BWIDGETS_DEFAULT_STATUS
-#define BWIDGETS_DEFAULT_STATUS BStyles::STATUS_NORMAL
+#define BWIDGETS_DEFAULT_STATUS BStyles::Status::normal
 #endif
 
 #ifndef BWIDGETS_DEFAULT_FOCUS_LAYER
@@ -70,7 +70,7 @@ class Window;
  *
  *  A %Widget (and all derived widgets) is Drawable and may have got (at 
  *  least) a border and a background. The widget is displayed embedded in its
- *  parent widget area on default STACKING_NORMAL, see Stacking). 
+ *  parent widget area on default StackingType::normal, see Stacking). 
  *
  *  A %Widget is Linkable and thus it can be linked to another parent widget.
  *  And it can take up other widgets as childs. The last added child is 
@@ -104,21 +104,21 @@ protected:
 	 *
 	 *  Way of positioning / displaying the widget in relation to its parent 
 	 *  widget. On default, the widget is displayed embedded into its parent 
-	 *  widget (STACKING_NORMAL). This means it is placed relative to its 
+	 *  widget (StackingType::normal). This means it is placed relative to its 
 	 *  parent widget origin and any overhang is cut.
 	 */
-	enum Stacking
+	enum class StackingType
 	{
-		STACKING_NORMAL,					// Embedded in parent, overhang cut
+		normal,					// Embedded in parent, overhang cut
 		//STACKING_FIT,
 		//STACKING_RESIZE_TO_FIT,
 		//STACKING_RESIZE_PARENT_TO_FIT,
-		STACKING_ESCAPE						// May exceed the parent widget area
+		escape						// May exceed the parent widget area
 	};
 
 	const uint32_t urid_;
 	BUtilities::Point<> position_;
-	Stacking stacking_;
+	StackingType stacking_;
 	BStyles::Status status_;
 	std::string title_;
 	BStyles::Style style_;
@@ -552,15 +552,15 @@ public:
 	 *
 	 *  Stacking is a behaviour of a %Widget relative to its parent %Widget.
 	 *  Widgets are clipped on default if they exceed the limits of their
-	 *  respective parent %Widget (STACKING_NORMAL).
+	 *  respective parent %Widget (StackingType::normal).
 	 */
-	virtual void setStacking (const Stacking stacking);
+	virtual void setStacking (const StackingType stacking);
 
 	/**
 	 *  @brief  Gets the type of stacking this %Widget.
 	 *  @return  Stacking type. 
 	 */
-	Stacking getStacking () const;
+	StackingType getStacking () const;
 
 	/**
 	 *  @brief  Copies the style from another object.

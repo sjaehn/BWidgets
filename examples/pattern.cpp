@@ -27,26 +27,26 @@ using namespace BWidgets;
 
 constexpr std::array<Symbol::SymbolType, NR_EDIT_BUTTONS> buttonSymbols =
 {{
-    Symbol::EDIT_SYMBOL,
-    Symbol::PICK_SYMBOL,
-    Symbol::CUT_SYMBOL,
-    Symbol::COPY_SYMBOL,
-    Symbol::PASTE_SYMBOL,
-    Symbol::DELETE_SYMBOL,
-    Symbol::XFLIP_SYMBOL,
-    Symbol::YFLIP_SYMBOL
+    Symbol::SymbolType::edit,
+    Symbol::SymbolType::pick,
+    Symbol::SymbolType::cut,
+    Symbol::SymbolType::copy,
+    Symbol::SymbolType::paste,
+    Symbol::SymbolType::del,
+    Symbol::SymbolType::xflip,
+    Symbol::SymbolType::yflip
 }};
 
 constexpr std::array<Pattern<>::EditMode, NR_EDIT_BUTTONS> editModes =
 {{
-    Pattern<>::MODE_EDIT,
-    Pattern<>::MODE_PICK,
-    Pattern<>::MODE_CUT,
-    Pattern<>::MODE_COPY,
-    Pattern<>::MODE_PASTE,
-    Pattern<>::MODE_DELETE,
-    Pattern<>::MODE_XFLIP,
-    Pattern<>::MODE_YFLIP
+    Pattern<>::EditMode::edit,
+    Pattern<>::EditMode::pick,
+    Pattern<>::EditMode::cut,
+    Pattern<>::EditMode::copy,
+    Pattern<>::EditMode::paste,
+    Pattern<>::EditMode::del,
+    Pattern<>::EditMode::xflip,
+    Pattern<>::EditMode::yflip
 }};
 
 std::array<std::unique_ptr<SymbolButton>, NR_EDIT_BUTTONS> buttons;

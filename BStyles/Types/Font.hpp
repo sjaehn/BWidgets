@@ -29,18 +29,18 @@ namespace BStyles
  */
 struct Font
 {
-    enum  TextAlign
+    enum class TextAlign
     {
-        TEXT_ALIGN_LEFT,
-        TEXT_ALIGN_CENTER,
-        TEXT_ALIGN_RIGHT,
+        left,
+        center,
+        right,
     };
 
-    enum TextVAlign
+    enum class TextVAlign
     {
-        TEXT_VALIGN_TOP,
-        TEXT_VALIGN_MIDDLE,
-        TEXT_VALIGN_BOTTOM
+        top,
+        middle,
+        bottom
     };
 
 	std::string family;
@@ -70,8 +70,8 @@ struct Font
            cairo_font_slant_t slant = CAIRO_FONT_SLANT_NORMAL, 
            cairo_font_weight_t weight = CAIRO_FONT_WEIGHT_NORMAL, 
            double size = 12.0,
-           TextAlign align = TEXT_ALIGN_LEFT, 
-           TextVAlign valign = TEXT_VALIGN_TOP, 
+           TextAlign align = TextAlign::left, 
+           TextVAlign valign = TextVAlign::top, 
            double lineSpacing = 1.25) :
 
         family (family), slant (slant), weight (weight), size (size), align (align), valign (valign), lineSpacing(lineSpacing) {}

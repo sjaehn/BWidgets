@@ -175,17 +175,17 @@ public:
 	 */
 	PadsTemplType pads;
 
-	enum EditMode
+	enum class EditMode
 	{
-		MODE_EDIT = 0,
-		MODE_PICK,
-		MODE_SELECT,
-		MODE_CUT,
-		MODE_COPY,
-		MODE_PASTE,
-		MODE_DELETE,
-		MODE_XFLIP,
-		MODE_YFLIP
+		edit = 0,
+		pick,
+		select,
+		cut,
+		copy,
+		paste,
+		del,
+		xflip,
+		yflip
 	};
 
 protected:
@@ -535,7 +535,7 @@ inline Pattern<T>::Pattern	(const double x, const double y, const double width, 
 	pads_ (),
 	selection_(),
 	selected_ (false),
-	editMode_ (MODE_EDIT),
+	editMode_ (EditMode::edit),
 	allowYMerge_ (false),
 	clipBoard_(),
 	padOn__ (false)
@@ -661,29 +661,29 @@ void Pattern<T>::action (const EditMode mode, const BUtilities::Area<size_t> sel
 {
 	switch (mode)
 	{
-		case MODE_EDIT:		break;
+		case EditMode::edit:	break;
 
-		case MODE_PICK:		break;
+		case EditMode::pick:	break;
 
-		case MODE_CUT:		cutValues (selection);
-							break;
+		case EditMode::cut:		cutValues (selection);
+								break;
 
-		case MODE_COPY:		copyValues (selection);
-							break;
+		case EditMode::copy:	copyValues (selection);
+								break;
 
-		case MODE_PASTE:	pasteValues (selection.getPosition());
-							break;
+		case EditMode::paste:	pasteValues (selection.getPosition());
+								break;
 
-		case MODE_DELETE:	deleteValues (selection);
-							break;
+		case EditMode::del:	deleteValues (selection);
+								break;
 
-		case MODE_XFLIP:	xflipValues (selection);
-							break;
+		case EditMode::xflip:	xflipValues (selection);
+								break;
 
-		case MODE_YFLIP:	yflipValues (selection);
-							break;
+		case EditMode::yflip:	yflipValues (selection);
+								break;
 
-		default:			break;
+		default:				break;
 	}
 }
 
@@ -851,10 +851,10 @@ inline void Pattern<T>::onButtonPressed (BEvents::Event* event)
 	const BUtilities::Point<size_t> p = getPadIndex (pev->getPosition().x, pev->getPosition().y);
 
 	// Pick mode:
-	if (editMode_ == MODE_PICK || (pev->getButton() == BDevices::MouseButton::ButtonType::right)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
+	if (editMode_ == EditMode::pick || (pev->getButton() == BDevices::MouseButton::ButtonType::right)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
 
 	// Paste mode:
-	else if (editMode_ == MODE_PASTE) pasteValues (p);
+	else if (editMode_ == EditMode::paste) pasteValues (p);
 
 	// Selection mode:
 	else if (isSelectMode()) select (p, p);
@@ -906,10 +906,10 @@ inline void Pattern<T>::onPointerDragged (BEvents::Event* event)
 		if (p != p2)
 		{
 			// Pick mode:
-			if (editMode_ == MODE_PICK || (pev->getButton() == BDevices::MouseButton::ButtonType::right)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
+			if (editMode_ == EditMode::pick || (pev->getButton() == BDevices::MouseButton::ButtonType::right)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
 
 			// Paste mode:
-			else if (editMode_ == MODE_PASTE) pasteValues (p);
+			else if (editMode_ == EditMode::paste) pasteValues (p);
 
 			// Default: Set or unset pad
 			else w->setValue (padOn__ ? pads.getValue() : w->getMin());
@@ -950,11 +950,11 @@ inline void Pattern<T>::padChangedCallback (BEvents::Event* event)
 template <class T>
 inline bool Pattern<T>::isSelectMode () const
 {
-	return	(editMode_ == MODE_CUT) || 
-			(editMode_ == MODE_COPY) ||
-			(editMode_ == MODE_DELETE) ||
-			(editMode_ == MODE_XFLIP) ||
-			(editMode_ == MODE_YFLIP);
+	return	(editMode_ == EditMode::cut) || 
+			(editMode_ == EditMode::copy) ||
+			(editMode_ == EditMode::del) ||
+			(editMode_ == EditMode::xflip) ||
+			(editMode_ == EditMode::yflip);
 }
 
 template <class T>

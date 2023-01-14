@@ -131,10 +131,10 @@ public:
 };
 
 inline SymbolButton::SymbolButton () : 
-	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH, BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT, Symbol::NO_SYMBOL, false, false, BUTILITIES_URID_UNKNOWN_URID, "") {}
+	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH, BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT, Symbol::SymbolType::none, false, false, BUTILITIES_URID_UNKNOWN_URID, "") {}
 
 inline SymbolButton::SymbolButton	(const uint32_t urid, const std::string& title) :
-	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH, BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT, Symbol::NO_SYMBOL, false, false, urid, title) {}
+	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH, BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT, Symbol::SymbolType::none, false, false, urid, title) {}
 
 inline SymbolButton::SymbolButton	(const Symbol::SymbolType symbolIdx, bool toggleable, bool clicked, uint32_t urid, std::string title) :
 	SymbolButton (0.0, 0.0, BWIDGETS_DEFAULT_SYMBOLBUTTON_WIDTH, BWIDGETS_DEFAULT_SYMBOLBUTTON_HEIGHT, symbolIdx, toggleable, clicked, urid, title) {}
@@ -185,7 +185,7 @@ inline void SymbolButton::resize (const BUtilities::Point<> extends)
 
 inline void SymbolButton::update ()
 {
-	symbol.setStatus (getValue() ? BStyles::Status::STATUS_ACTIVE : BStyles::Status::STATUS_NORMAL);
+	symbol.setStatus (getValue() ? BStyles::Status::active : BStyles::Status::normal);
 	symbol.resize (0.667 * getEffectiveWidth(), 0.667 * getEffectiveHeight());
 	symbol.moveTo (symbol.center(), symbol.middle());
 	Button::update ();

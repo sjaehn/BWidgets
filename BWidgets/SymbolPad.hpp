@@ -149,7 +149,7 @@ public:
 template <class T>
 inline SymbolPad<T>::SymbolPad () : 
 	SymbolPad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT,
-				 Symbol::NO_SYMBOL, T(), T(), T() + 1.0, T(), 
+				 Symbol::SymbolType::none, T(), T(), T() + 1.0, T(), 
 				 ValueTransferable<T>::noTransfer, ValueTransferable<T>::noTransfer,  
 				 BUTILITIES_URID_UNKNOWN_URID, "") 
 {
@@ -159,7 +159,7 @@ inline SymbolPad<T>::SymbolPad () :
 template <class T>
 inline SymbolPad<T>::SymbolPad	(const uint32_t urid, const std::string& title) :
 	SymbolPad	(0.0, 0.0, BWIDGETS_DEFAULT_PAD_WIDTH, BWIDGETS_DEFAULT_PAD_HEIGHT,
-				 Symbol::NO_SYMBOL, T(), T(), T() + 1.0, T(), 
+				 Symbol::SymbolType::none, T(), T(), T() + 1.0, T(), 
 				 ValueTransferable<T>::noTransfer, ValueTransferable<T>::noTransfer,  
 				 urid, title) 
 {
@@ -193,7 +193,7 @@ inline SymbolPad<T>::SymbolPad	(const double x, const double y, const double wid
 							 BEvents::Event::EventType::WheelScrollEvent | 
 							 BEvents::Event::EventType::PointerFocusEvents);
 	symbol.setTxColors (symbol.getBgColors());
-	symbol.setStatus (BStyles::STATUS_INACTIVE);
+	symbol.setStatus (BStyles::Status::inactive);
 	this->add (&symbol);
 	symbol.resize (BUtilities::Point<> (0.5 * this->extends_.x, 0.5 * this->extends_.y));
 	symbol.moveTo (symbol.center(), symbol.middle());

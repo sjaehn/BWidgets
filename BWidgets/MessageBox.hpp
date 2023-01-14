@@ -138,13 +138,13 @@ public:
 };
 
 inline MessageBox::MessageBox () : 
-	MessageBox (0.0, 0.0, BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH, BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT, Symbol::NO_SYMBOL, "", "", {}, BUTILITIES_URID_UNKNOWN_URID, "") 
+	MessageBox (0.0, 0.0, BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH, BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT, Symbol::SymbolType::none, "", "", {}, BUTILITIES_URID_UNKNOWN_URID, "") 
 {
 
 }
 
 inline MessageBox::MessageBox	(const uint32_t urid, const std::string& title) :
-	MessageBox (0, 0, BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH, BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT, Symbol::NO_SYMBOL, "", "", {}, urid, title) 
+	MessageBox (0, 0, BWIDGETS_DEFAULT_MESSAGEBOX_WIDTH, BWIDGETS_DEFAULT_MESSAGEBOX_HEIGHT, Symbol::SymbolType::none, "", "", {}, urid, title) 
 {
 
 }
@@ -189,7 +189,7 @@ inline void MessageBox::copy (const MessageBox* that)
 inline void MessageBox::resize ()
 {
 	// Symbol
-	if (symbol.getSymbol() == Symbol::NO_SYMBOL)
+	if (symbol.getSymbol() == Symbol::SymbolType::none)
 	{
 		symbol.moveTo (getXOffset(), getYOffset());
 		symbol.resize (0, 0);
@@ -236,7 +236,7 @@ inline void MessageBox::resize (const BUtilities::Point<> extends)
 inline void MessageBox::update ()
 {
 	// Symbol
-	if (symbol.getSymbol() == Symbol::NO_SYMBOL)
+	if (symbol.getSymbol() == Symbol::SymbolType::none)
 	{
 		symbol.moveTo (getXOffset(), getYOffset());
 		symbol.resize (0, 0);

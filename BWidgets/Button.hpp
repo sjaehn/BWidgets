@@ -182,9 +182,9 @@ inline Button::Button	(const double x, const double y, const double width, const
 	Toggleable ()
 {
 	setToggleable (toggleable);
-	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::STATUS_NORMAL]));
+	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::normal]));
 	setBorder	(BStyles::Border 
-				 (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (clicked ? BStyles::Color::highLighted : BStyles::Color::darkened), 1.0), 
+				 (BStyles::Line (getBgColors()[BStyles::Status::normal].illuminate (clicked ? BStyles::Color::highLighted : BStyles::Color::darkened), 1.0), 
 				 0.0, 0.0, 0.15 * std::min (width, height)));
 }
 

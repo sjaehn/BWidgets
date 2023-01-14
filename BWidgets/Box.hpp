@@ -239,8 +239,8 @@ inline Box::Box	(const double x, const double y, const double width, const doubl
 	}
 
 	// Default decoration
-	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (-0.75)));
-	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
+	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::normal].illuminate (-0.75)));
+	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[BStyles::Status::normal].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
 }
 
 inline Box::~Box ()

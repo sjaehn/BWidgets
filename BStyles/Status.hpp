@@ -23,13 +23,13 @@ namespace BStyles
 /**
  *  @brief  Enumeration of object states.
  */
-enum Status
+enum class Status
 {
-    STATUS_NORMAL,
-    STATUS_ACTIVE,
-    STATUS_INACTIVE,
-    STATUS_OFF,
-    STATUS_USER_DEFINED
+    normal,
+    active,
+    inactive,
+    off,
+    userDefined
 };
 
 }

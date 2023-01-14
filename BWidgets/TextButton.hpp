@@ -144,8 +144,8 @@ inline TextButton::TextButton	(const double x, const double y, const double widt
 	label (0, 0, width, height, text, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"))
 {
 	BStyles::Font font = label.getFont();
-	font.align = BStyles::Font::TextAlign::TEXT_ALIGN_CENTER;
-	font.valign = BStyles::Font::TextVAlign::TEXT_VALIGN_MIDDLE;
+	font.align = BStyles::Font::TextAlign::center;
+	font.valign = BStyles::Font::TextVAlign::middle;
 	label.setFont (font);
 	label.setFocusable(false);
 	label.setEventPassable (BEvents::Event::EventType::ButtonPressEvent | 
@@ -186,7 +186,7 @@ inline void TextButton::resize (const BUtilities::Point<> extends)
 
 inline void TextButton::update ()
 {
-	label.setStatus (getValue() ? BStyles::Status::STATUS_ACTIVE : BStyles::Status::STATUS_NORMAL);
+	label.setStatus (getValue() ? BStyles::Status::active : BStyles::Status::normal);
 	label.resize ();
 	label.moveTo (label.center(), label.middle());
 	Button::update ();

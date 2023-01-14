@@ -240,12 +240,12 @@ inline void ListBox::update ()
 
 			if (getValue() == count) 
 			{
-				w->setStatus (BStyles::STATUS_ACTIVE);
-				w->setBackground (BStyles::Fill (getBgColors()[BStyles::STATUS_NORMAL].illuminate (BStyles::Color::darkened)));
+				w->setStatus (BStyles::Status::active);
+				w->setBackground (BStyles::Fill (getBgColors()[BStyles::Status::normal].illuminate (BStyles::Color::darkened)));
 			}
 			else 
 			{
-				w->setStatus (BStyles::STATUS_NORMAL);
+				w->setStatus (BStyles::Status::normal);
 				w->setBackground (BStyles::noFill);
 			}
 		}

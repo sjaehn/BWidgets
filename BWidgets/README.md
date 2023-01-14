@@ -968,7 +968,7 @@ The order (level) within the same layer can be changed using `raise()`,
 `raiseToFront()`, `drop()`, and `dropToBack()`.
 
 By default, child widgets are located within their parents and oversized child 
-widgets will be clipped to fit (`STACKING_NORMAL`). `STACKING_ESCAPE` breaks
+widgets will be clipped to fit (`StackingType::normal`). `StackingType::escape` breaks
 this limitation. Stacking behaviour can be changed using `setStacking()` and
 is returned by `getStacking()`
 
@@ -1119,7 +1119,7 @@ Theme theme2 = Theme
                 (
                     Style
                     {
-                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TextAlign::center, Font::TextVAlign::middle))},
                         {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
                     }
                 )
@@ -1138,7 +1138,7 @@ Theme theme2 = Theme
                 (
                     Style
                     {
-                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE))},
+                        {Urid::urid (BSTYLES_STYLEPROPERTY_FONT_URI), makeAny<Font>(Font ("cursive", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TextAlign::center, Font::TextVAlign::middle))},
                         {Urid::urid (BSTYLES_STYLEPROPERTY_TXCOLORS_URI), makeAny<ColorMap>(yellows)},
                     }
                 )
@@ -1174,7 +1174,7 @@ And there's an example for using Draws in
 
 ### Status
 
-A widget can take the states `STATUS_NORMAL`, `STATUS_ACTIVE`, 
+A widget can take the states `Status::normal`, `STATUS_ACTIVE`, 
 `STATUS_INACTIVE`, `STATUS_OFF`, and `STATUS_USER_DEFINED` as defined in
 `BStyles::Status`. The widget status is relevant for status-dependent
 decorations (like FgColors, BgColors, and TxColors) and widgets (like `Image`). 

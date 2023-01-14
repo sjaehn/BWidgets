@@ -367,8 +367,8 @@ inline VRangeScrollBar::VRangeScrollBar	(const double  x, const double y, const 
 	scrollbar (urid, title),
 	button1 (urid, title),
 	button2 (urid, title),
-	symbol1 (Symbol::MINUS_SYMBOL, urid, title),
-	symbol2 (Symbol::ADD_SYMBOL, urid, title)
+	symbol1 (Symbol::SymbolType::minus, urid, title),
+	symbol2 (Symbol::SymbolType::add, urid, title)
 {
 	scrollbar.setTransferFunction(transferFunc);
 	scrollbar.setReTransferFunction(reTransferFunc);

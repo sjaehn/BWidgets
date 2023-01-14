@@ -40,14 +40,14 @@ struct Node
 	/**
 	 *  @brief  Type of the node.  
 	 */
-	enum NodeType
+	enum class NodeType
 	{
-		END_NODE,				// End positions, only point data are used
-		POINT_NODE,				// Only point data are used
-		AUTO_SMOOTH_NODE,		// Uses two handles, both are calculated automatically
-		SYMMETRIC_SMOOTH_NODE, 	// Uses two handles, the second handle is set to be symmetric to the first one
-		SMOOTH_NODE,			// Uses two handles, the second handle points to the opposite direction of the first one
-		CORNER_NODE				// Uses two independent handles
+		end,				// End positions, only point data are used
+		point,				// Only point data are used
+		autosmooth,			// Uses two handles, both are calculated automatically
+		symmetric,		 	// Uses two handles, the second handle is set to be symmetric to the first one
+		smooth,				// Uses two handles, the second handle points to the opposite direction of the first one
+		corner				// Uses two independent handles
 	};
 
 	NodeType nodeType;
@@ -58,7 +58,7 @@ struct Node
 	/**
 	 *  @brief Constructs a default Node object.
 	 */
-	Node () : Node (END_NODE, {T(), T()}, {T(), T()}, {T(),T()}) {}
+	Node () : Node (NodeType::end, {T(), T()}, {T(), T()}, {T(),T()}) {}
 
 	/**
 	 *  @brief  Constructs a Node object.

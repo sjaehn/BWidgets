@@ -319,13 +319,13 @@ inline void Text::draw (const BUtilities::Area<>& area)
 		double y0 = 0;
 		switch (font.valign)
 		{
-			case BStyles::Font::TEXT_VALIGN_TOP:	y0 = 0;
+			case BStyles::Font::TextVAlign::top:	y0 = 0;
 													break;
 
-			case BStyles::Font::TEXT_VALIGN_MIDDLE:	y0 = h / 2 - blockheight / 2;
+			case BStyles::Font::TextVAlign::middle:	y0 = h / 2 - blockheight / 2;
 													break;
 
-			case BStyles::Font::TEXT_VALIGN_BOTTOM:	y0 = h - blockheight;
+			case BStyles::Font::TextVAlign::bottom:	y0 = h - blockheight;
 													break;
 
 			default:								y0 = 0;
@@ -346,13 +346,13 @@ inline void Text::draw (const BUtilities::Area<>& area)
 			double x0;
 			switch (font.align)
 			{
-				case BStyles::Font::TEXT_ALIGN_LEFT:	x0 = - ext.x_bearing;
+				case BStyles::Font::TextAlign::left:	x0 = - ext.x_bearing;
 														break;
 
-				case BStyles::Font::TEXT_ALIGN_CENTER:	x0 = w / 2 - ext.width / 2 - ext.x_bearing;
+				case BStyles::Font::TextAlign::center:	x0 = w / 2 - ext.width / 2 - ext.x_bearing;
 														break;
 
-				case BStyles::Font::TEXT_ALIGN_RIGHT:	x0 = w - ext.width - ext.x_bearing;
+				case BStyles::Font::TextAlign::right:	x0 = w - ext.width - ext.x_bearing;
 														break;
 														
 				default:								x0 = 0;

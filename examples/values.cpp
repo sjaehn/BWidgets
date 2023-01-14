@@ -23,7 +23,7 @@
 using namespace BWidgets;
 using namespace BStyles;
 
-Font labelFont ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE);
+Font labelFont ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TextAlign::center, Font::TextVAlign::middle);
 
 int main ()
 {

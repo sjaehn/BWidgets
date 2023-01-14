@@ -542,13 +542,13 @@ inline size_t EditLabel::getCursorFromCoords (const BUtilities::Point<>& positio
 
 		switch (font.align)
 		{
-			case BStyles::Font::TEXT_ALIGN_LEFT:	x0 = - ext.x_bearing;
+			case BStyles::Font::TextAlign::left:	x0 = - ext.x_bearing;
 													break;
 													
-			case BStyles::Font::TEXT_ALIGN_CENTER:	x0 = w / 2 - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing) / 2;
+			case BStyles::Font::TextAlign::center:	x0 = w / 2 - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing) / 2;
 													break;
 
-			case BStyles::Font::TEXT_ALIGN_RIGHT:	x0 = w - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing);
+			case BStyles::Font::TextAlign::right:	x0 = w - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing);
 													break;
 
 			default:								x0 = 0;
@@ -614,13 +614,13 @@ inline void EditLabel::draw (const BUtilities::Area<>& area)
 
 		switch (font.align)
 		{
-			case BStyles::Font::TEXT_ALIGN_LEFT:	x0 = 0;
+			case BStyles::Font::TextAlign::left:	x0 = 0;
 													break;
 
-			case BStyles::Font::TEXT_ALIGN_CENTER:	x0 = w / 2 - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing) / 2;
+			case BStyles::Font::TextAlign::center:	x0 = w / 2 - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing) / 2;
 													break;
 
-			case BStyles::Font::TEXT_ALIGN_RIGHT:	x0 = w - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing);
+			case BStyles::Font::TextAlign::right:	x0 = w - (ext.width - 2 * ext0.width - 2 * ext0.x_bearing);
 													break;
 
 			default:								x0 = 0;
@@ -628,13 +628,13 @@ inline void EditLabel::draw (const BUtilities::Area<>& area)
 
 		switch (font.valign)
 		{
-			case BStyles::Font::TEXT_VALIGN_TOP:	y0 = - ext.y_bearing;
+			case BStyles::Font::TextVAlign::top:	y0 = - ext.y_bearing;
 													break;
 
-			case BStyles::Font::TEXT_VALIGN_MIDDLE:	y0 = h / 2 - ext.height / 2 - ext.y_bearing;
+			case BStyles::Font::TextVAlign::middle:	y0 = h / 2 - ext.height / 2 - ext.y_bearing;
 													break;
 
-			case BStyles::Font::TEXT_VALIGN_BOTTOM:	y0 = h - ext.height - ext.y_bearing;
+			case BStyles::Font::TextVAlign::bottom:	y0 = h - ext.height - ext.y_bearing;
 													break;
 
 			default:								y0 = 0;

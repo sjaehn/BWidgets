@@ -287,7 +287,7 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 		files_ (),
 
 		pathNameBox ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/textbox"), ""),
-		newFolderButton (Symbol::NEW_FOLDER_SYMBOL, false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"), ""),
+		newFolderButton (Symbol::SymbolType::newFolder, false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"), ""),
 		fileListBox ({}, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/listbox"), ""),
 		fileNameLabel (BUtilities::Dictionary::get ("File") + ":", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), ""),
 		fileNameBox ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/textbox"), ""),
@@ -298,7 +298,7 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 		fileListBoxDirLabel ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/listbox/item/dir"), ""),
 		filterComboBoxFilterLabel ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "combobox/listbox/item"), ""),
 
-		confirmBox	(Symbol::WARN_SYMBOL, "", "", 
+		confirmBox	(Symbol::SymbolType::warn, "", "", 
 					 {BUtilities::Dictionary::get ("Cancel"), BUtilities::Dictionary::get ("OK")}, 
 					 BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/box"), ""),
 		
@@ -316,11 +316,11 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 	createInput.setBorder (BStyles::Border (BStyles::greyLine1pt, 0.0, 3.0));
 	fileNameLabel.setBorder(BStyles::Border (BStyles::noLine, 0.0, 4.0));
 
-	createBox.setStacking (STACKING_ESCAPE);
-	confirmBox.setStacking (STACKING_ESCAPE);
+	createBox.setStacking (StackingType::escape);
+	confirmBox.setStacking (StackingType::escape);
 
-	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (-0.75)));
-	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
+	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::normal].illuminate (-0.75)));
+	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[BStyles::Status::normal].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
 
 	fileListBox.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, fileListBoxChangedCallback);
 	filterComboBox.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, filterComboBoxChangedCallback);

@@ -34,10 +34,10 @@ namespace BStyles
 class Fill
 {
 protected:
-    enum FillType
+    enum class FillType
     {
-        FILL_COLOR,
-        FILL_IMAGE
+        color,
+        image
     };
 
     Color color_;
@@ -52,7 +52,7 @@ public:
 	Fill () : 
         color_ (), 
         surface_ (nullptr),
-        type_ (FILL_COLOR)
+        type_ (FillType::color)
     {
 
     }
@@ -64,7 +64,7 @@ public:
 	explicit Fill (const Color& color) : 
         color_ (color), 
         surface_ (nullptr),
-        type_ (FILL_COLOR)
+        type_ (FillType::color)
     {
 
     }
@@ -80,7 +80,7 @@ public:
         surface_    (surface && (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS) ? 
                      cairoplus_image_surface_clone_from_image_surface (surface) : 
                      nullptr),
-        type_ (FILL_IMAGE)
+        type_ (FillType::image)
     {
     
     }
@@ -92,7 +92,7 @@ public:
 	explicit Fill (const std::string& filename) :
         color_ (),
         surface_ (cairo_image_surface_create_from_png (filename.c_str())),
-        type_ (FILL_IMAGE)
+        type_ (FillType::image)
     {
     
     }
@@ -140,7 +140,7 @@ public:
 
     bool operator== (const Fill& that) const 
     {
-        return (type_ == that.type_) && (type_ == FILL_COLOR ? color_ == that.color_ : surface_ == that.surface_);
+        return (type_ == that.type_) && (type_ == FillType::color ? color_ == that.color_ : surface_ == that.surface_);
     }
 
 	bool operator!= (const Fill& that) const {return !operator== (that);}
@@ -149,7 +149,7 @@ public:
      *  @brief  Sets the %Fill to a Color.
      *  @param color  Color.
      *
-     *  Sets the %Fill to a Color and sets the fill type to FILL_COLOR. Frees
+     *  Sets the %Fill to a Color and sets the fill type to FillType::color. Frees
      *  a previously stored image surface first.
      */
     void set (const Color& color)
@@ -157,7 +157,7 @@ public:
         if (surface_ && (cairo_surface_status (surface_) == CAIRO_STATUS_SUCCESS)) cairo_surface_destroy (surface_);
         surface_ = nullptr;
         color_ = color;
-        type_ = FILL_COLOR;
+        type_ = FillType::color;
     }
 
     /**
@@ -166,7 +166,7 @@ public:
      *  @param surface  Pointer to a Cairo surface.
      *
      *  Sets the %Fill by copying an image @a surface from a Cairo surface
-     *  and sets the fill type to FILL_IMAGE. Frees the previously stored 
+     *  and sets the fill type to FillType::image. Frees the previously stored 
      *  image surface first.
      */
     void set (cairo_surface_t* surface)
@@ -178,14 +178,14 @@ public:
             else surface_ = nullptr;
         }
 
-        type_ = FILL_IMAGE;
+        type_ = FillType::image;
     }
 
     /**
      *  @brief  Sets the %Fill to an image by loading png file.
      *  @param filename  Name / path to a png file.
      *
-     *  Loads the %Fill from a png fileand sets the fill type to FILL_IMAGE. 
+     *  Loads the %Fill from a png fileand sets the fill type to FillType::image. 
      *  Frees the previously stored image surface first.
      */
     void set (const std::string& filename)
@@ -194,7 +194,7 @@ public:
         if (filename != "") surface_ = cairo_image_surface_create_from_png (filename.c_str());
         else surface_ = nullptr;
 
-        type_ = FILL_IMAGE;
+        type_ = FillType::image;
     }
 
     /**
@@ -205,10 +205,10 @@ public:
     {
         switch (type_)
         {
-            case FILL_COLOR:    cairo_set_source_rgba (cr, CAIRO_RGBA (color_));
+            case FillType::color:    cairo_set_source_rgba (cr, CAIRO_RGBA (color_));
                                 break;
 
-            case FILL_IMAGE:    if (surface_) cairo_set_source_surface (cr, surface_, 0.0, 0.0);
+            case FillType::image:    if (surface_) cairo_set_source_surface (cr, surface_, 0.0, 0.0);
                                 break;
         };
     }

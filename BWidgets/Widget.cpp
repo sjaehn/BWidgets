@@ -47,8 +47,8 @@ Widget::Widget (const double x, const double y, const double width, const double
 	PointerFocusable(),
 	urid_ (urid),
 	position_ (x, y),
-	stacking_ (STACKING_NORMAL),
-	status_(BStyles::Status::STATUS_NORMAL),
+	stacking_ (StackingType::normal),
+	status_(BStyles::Status::normal),
 	title_ (title),
 	style_ (),
 	focus_ (title == "" ? nullptr : new (std::nothrow) Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/focus"), "")),
@@ -60,7 +60,7 @@ Widget::Widget (const double x, const double y, const double width, const double
 		focus_->setLayer (BWIDGETS_DEFAULT_FOCUS_LAYER);
 		focus_->setBorder (BStyles::shadow80Border2pt);
 		focus_->setBackground (BStyles::shadow80Fill);
-		focus_->setStacking (STACKING_ESCAPE);
+		focus_->setStacking (StackingType::escape);
 		focus_->resize();
 	}
 }
@@ -137,7 +137,7 @@ void Widget::setTitle (const std::string& title)
 				focus_->setLayer (BWIDGETS_DEFAULT_FOCUS_LAYER);
 				focus_->setBorder (BStyles::shadow80Border2pt);
 				focus_->setBackground (BStyles::shadow80Fill);
-				focus_->setStacking (STACKING_ESCAPE);
+				focus_->setStacking (StackingType::escape);
 				focus_->resize();
 			}
 		}
@@ -576,12 +576,12 @@ BStyles::Status Widget::getStatus () const
 	return status_;
 }
 
-void Widget::setStacking (const Widget::Stacking stacking) 
+void Widget::setStacking (const Widget::StackingType stacking) 
 {
 	stacking_ = stacking;
 }
 
-Widget::Stacking Widget::getStacking () const 
+Widget::StackingType Widget::getStacking () const 
 {
 	return stacking_;
 }
@@ -795,7 +795,7 @@ Widget* Widget::getWidgetAt	(const BUtilities::Point<>& abspos,
 {
 	if (! isVisible()) return nullptr; // Pass invisible widgets
 	
-	BUtilities::Area<> a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
+	BUtilities::Area<> a = (getStacking() == StackingType::escape ? outerArea : area);
 	BUtilities::Area<> thisArea = getArea();
 	thisArea.moveTo (getAbsolutePosition());
 	thisArea.intersect (a);
@@ -856,7 +856,7 @@ BUtilities::Area<> Widget::getAbsoluteFamilyArea (std::function<bool (const Widg
 			if (w)
 			{
 				bool check = func (w);
-				if (check && (w->getStacking() == STACKING_ESCAPE )) a.extend (w->getAbsoluteArea());
+				if (check && (w->getStacking() == StackingType::escape )) a.extend (w->getAbsoluteArea());
 				return check;
 			}
 			return false;
@@ -879,7 +879,7 @@ void Widget::display (std::map<int, cairo_surface_t*>& surfaces, const BUtilitie
 
 void Widget::display (std::map<int, cairo_surface_t*>& surfaces, const BUtilities::Point<> surfaceExtends, const BUtilities::Area<>& outerArea, const BUtilities::Area<>& area)
 {
-	BUtilities::Area<> a = (getStacking() == STACKING_ESCAPE ? outerArea : area);
+	BUtilities::Area<> a = (getStacking() == StackingType::escape ? outerArea : area);
 	BUtilities::Area<> thisArea = getArea(); 
 	thisArea.moveTo (getAbsolutePosition());
 	a.intersect (thisArea);

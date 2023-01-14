@@ -116,11 +116,11 @@ public:
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  Creates an %Image with visual contents for each Widget Status as
-	 *  defined by @a surfaces in the order STATUS_NORMAL, STATUS_ACTIVE,
+	 *  defined by @a surfaces in the order Status::normal, STATUS_ACTIVE,
      *  STATUS_INACTIVE, STATUS_OFF, STATUS_USER_DEFINED. The %Image behaves
 	 *  like an empty %Image if an empty initializer list of @a surfaces is 
 	 *  provided. And it behaves like a single status %Image if an initializer
-	 *  list with only one element is passed. STATUS_NORMAL also acts for 
+	 *  list with only one element is passed. Status::normal also acts for 
 	 *  missing states.
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
@@ -139,9 +139,9 @@ public:
 	 *
 	 *  Creates an %Image with visual contents for each Widget Status as
 	 *  defined by @a surfaces. The %Image behaves like an empty %Image if an
-	 *  empty map is provided. Otherwise at least an image for STATUS_NORMAL
+	 *  empty map is provided. Otherwise at least an image for Status::normal
 	 *  should be provided to behave at least like a single status %Image.
-	 *  STATUS_NORMAL also acts for missing states.
+	 *  Status::normal also acts for missing states.
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
 			 const std::map<BStyles::Status, cairo_surface_t*>& surfaces, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
@@ -159,11 +159,11 @@ public:
 	 *  @param title  Optional, %Widget title (default = "").
 	 *
 	 *  Creates an %Image with visual contents for each Widget Status as
-	 *  defined by @a filenames in the order STATUS_NORMAL, STATUS_ACTIVE,
+	 *  defined by @a filenames in the order Status::normal, STATUS_ACTIVE,
      *  STATUS_INACTIVE, STATUS_OFF, STATUS_USER_DEFINED. The %Image behaves
 	 *  like an empty %Image if an empty initializer list of @a filenames is 
 	 *  provided. And it behaves like a single status %Image if an initializer
-	 *  list with only one element is passed. STATUS_NORMAL also acts for 
+	 *  list with only one element is passed. Status::normal also acts for 
 	 *  missing states.
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
@@ -183,9 +183,9 @@ public:
 	 *
 	 *  Creates an %Image with visual contents for each Widget Status as
 	 *  defined by @a filenames. The %Image behaves like an empty %Image if an
-	 *  empty map is provided. Otherwise at least an image for STATUS_NORMAL
+	 *  empty map is provided. Otherwise at least an image for Status::normal
 	 *  should be provided to behave at least like a single status %Image.
-	 *  STATUS_NORMAL also acts for missing states.
+	 *  Status::normal also acts for missing states.
 	 */
 	Image	(const double x, const double y, const double width, const double height, 
 			 const std::map<BStyles::Status, std::string>& filenames, uint32_t urid = BUTILITIES_URID_UNKNOWN_URID, std::string title = "");
@@ -227,10 +227,10 @@ public:
      *  @brief  Optimizes the object extends.
      *
      *  Resizes the %Image to fit to the visual content for the present
-	 *  Status. Resizes to the visual content extends of STATUS_NORMAL if no
+	 *  Status. Resizes to the visual content extends of Status::normal if no
 	 *  visual content for the present status is defined. Resizes to (0, 0) if
 	 *  neither the visual content for the present status nor the visual
-	 *  content for STATUS_NORMAL is defined.
+	 *  content for Status::normal is defined.
 	 */
 	virtual void resize () override;
 
@@ -322,14 +322,14 @@ inline Image::Image (const double x, const double y, const double width, const d
 		Widget (x, y, width, height, urid, title),
 		imageSurfaces_()
 {
-	loadImage (BStyles::Status::STATUS_NORMAL, surface);
+	loadImage (BStyles::Status::normal, surface);
 }
 
 inline Image::Image (const double x, const double y, const double width, const double height,
 		      const std::string& filename, uint32_t urid, std::string title) :
 		Image (x, y, width, height, urid, title)
 {
-	loadImage (BStyles::Status::STATUS_NORMAL, filename);
+	loadImage (BStyles::Status::normal, filename);
 }
 
 inline Image::Image (const double x, const double y, const double width, const double height,
@@ -413,7 +413,7 @@ inline void Image::resize ()
 	if (!imageSurfaces_.empty())
 	{
 		std::map<BStyles::Status, cairo_surface_t*>::iterator it = imageSurfaces_.find (getStatus());
-		if (it == imageSurfaces_.end()) it = imageSurfaces_.find (BStyles::Status::STATUS_NORMAL);	// Fallback
+		if (it == imageSurfaces_.end()) it = imageSurfaces_.find (BStyles::Status::normal);	// Fallback
 
 		if (it != imageSurfaces_.end())
 		{
@@ -511,7 +511,7 @@ inline void Image::draw (const BUtilities::Area<>& area)
 		if (!imageSurfaces_.empty())
 		{
 			std::map<BStyles::Status, cairo_surface_t*>::iterator it = imageSurfaces_.find (getStatus());
-			if (it == imageSurfaces_.end()) it = imageSurfaces_.find (BStyles::Status::STATUS_NORMAL);	// Fallback
+			if (it == imageSurfaces_.end()) it = imageSurfaces_.find (BStyles::Status::normal);	// Fallback
 
 			if (it != imageSurfaces_.end())
 			{

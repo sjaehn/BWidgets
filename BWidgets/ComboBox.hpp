@@ -259,7 +259,7 @@ inline ComboBox::ComboBox	(const double x, const double y, const double width, c
 	listBoxArea_(listBoxX, listBoxY, listBoxWidth, listBoxHeight)
 {
 	if (button_) delete button_;
-	button_ = new SymbolButton	(x + width - buttonWidth_, y, buttonWidth_, height, Symbol::DOWN_SYMBOL, false, false,
+	button_ = new SymbolButton	(x + width - buttonWidth_, y, buttonWidth_, height, Symbol::SymbolType::down, false, false,
 								 BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"), "");
 	button_->setCallbackFunction(BEvents::Event::EventType::ValueChangedEvent, ComboBox::buttonChangedCallback);
 	add (button_);
@@ -367,7 +367,7 @@ inline void ComboBox::showListbox()
 			}
 		}
 		l->setCallbackFunction(BEvents::Event::EventType::ValueChangedEvent, ComboBox::listBoxChangedCallback);
-		l->setStacking (STACKING_ESCAPE);
+		l->setStacking (StackingType::escape);
 		l->setValue (getValue());
 		l->setTop(getValue() == 0 ? 0 : 1);
 		raiseToFront();

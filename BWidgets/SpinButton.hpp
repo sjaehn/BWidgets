@@ -151,8 +151,8 @@ inline SpinButton::SpinButton	(const double x, const double y, const double widt
 			 	 				 const int value, uint32_t urid, std::string title) :
 	Widget (x, y, width, height, urid, title),
 	ValueableTyped<int> (value < 0 ? -1 : (value > 0 ? 1 : 0)),
-	upButton (x, y, width, 0.5 * height, Symbol::UP_SYMBOL, false, value < 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button")),
-	downButton (x, y + 0.5 * height, width, 0.5 * height, Symbol::DOWN_SYMBOL, false, value > 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"))
+	upButton (x, y, width, 0.5 * height, Symbol::SymbolType::up, false, value < 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button")),
+	downButton (x, y + 0.5 * height, width, 0.5 * height, Symbol::SymbolType::down, false, value > 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"))
 {
 	upButton.setFocusable(false);
 	upButton.setEventPassable(BEvents::Event::EventType::PointerFocusEvents);
@@ -162,7 +162,7 @@ inline SpinButton::SpinButton	(const double x, const double y, const double widt
 	downButton.setCallbackFunction(BEvents::Event::EventType::ValueChangedEvent, valueChangedCallback);
 	add (&upButton);
 	add (&downButton);
-	setBorder (BStyles::Border (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL], 1.0), 0.0, 0.0, 0.0));
+	setBorder (BStyles::Border (BStyles::Line (getBgColors()[BStyles::Status::normal], 1.0), 0.0, 0.0, 0.0));
 }
 
 inline Widget* SpinButton::clone () const 

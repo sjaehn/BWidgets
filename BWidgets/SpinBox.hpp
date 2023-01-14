@@ -288,7 +288,7 @@ inline SpinBox::SpinBox	(const double x, const double y, const double width, con
 	button_->setCallbackFunction(BEvents::Event::EventType::ValueChangedEvent, valueChangedCallback);
 	add (button_);
 	setBackground(BStyles::blackFill);
-	setBorder (BStyles::Border (BStyles::Line (getBgColors()[BStyles::Status::STATUS_NORMAL], 1.0), 0.0, 0.0, 0.0));
+	setBorder (BStyles::Border (BStyles::Line (getBgColors()[BStyles::Status::normal], 1.0), 0.0, 0.0, 0.0));
 }
 
 inline SpinBox::~SpinBox()

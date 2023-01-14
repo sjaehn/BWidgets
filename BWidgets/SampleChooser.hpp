@@ -827,7 +827,7 @@ inline void SampleChooser::drawWaveform()
 		}
 		cairo_destroy (cr);
 	}
-	waveform.loadImage (BStyles::STATUS_NORMAL, surface);
+	waveform.loadImage (BStyles::Status::normal, surface);
 	cairo_surface_destroy (surface);
 }
 
@@ -845,8 +845,8 @@ inline void SampleChooser::drawMarkers ()
 	cairo_set_source_rgba (cr1, CAIRO_RGBA(fgColor));
 	cairo_stroke (cr1);
 	cairo_destroy (cr1);
-	startMarkerLine.loadImage (BStyles::STATUS_NORMAL, s1);
-	endMarkerLine.loadImage (BStyles::STATUS_NORMAL, s1);
+	startMarkerLine.loadImage (BStyles::Status::normal, s1);
+	endMarkerLine.loadImage (BStyles::Status::normal, s1);
 	cairo_surface_destroy (s1);
 }
 

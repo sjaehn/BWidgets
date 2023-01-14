@@ -86,7 +86,7 @@
 using namespace BWidgets;
 using namespace BStyles;
 
-Font labelFont ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TEXT_ALIGN_CENTER, Font::TEXT_VALIGN_MIDDLE);
+Font labelFont ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0, Font::TextAlign::center, Font::TextVAlign::middle);
 const std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
 static void configureCallback (BEvents::Event* event)
@@ -136,7 +136,7 @@ int main ()
     // Label
     Label label (10, 130, 80, 60, "Text");
     label.setTitle ("Label");
-    label.setFont(Font ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD, 18.0, BStyles::Font::TEXT_ALIGN_CENTER, BStyles::Font::TEXT_VALIGN_MIDDLE));
+    label.setFont(Font ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD, 18.0, BStyles::Font::TextAlign::center, BStyles::Font::TextVAlign::middle));
     Label labelLabel (10, 200, 80, 20, "Label");
     labelLabel.setFont (labelFont);
     window.add (&label);
@@ -145,7 +145,7 @@ int main ()
     // EditLabel
     EditLabel labelEdit (110, 130, 80, 60, "Edit me");
     labelEdit.setTitle("EditLabel");
-    labelEdit.setFont(Font ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD, 18.0, BStyles::Font::TEXT_ALIGN_CENTER, BStyles::Font::TEXT_VALIGN_MIDDLE));
+    labelEdit.setFont(Font ("sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD, 18.0, BStyles::Font::TextAlign::center, BStyles::Font::TextVAlign::middle));
     Label labelEditLabel (110, 200, 80, 20, "EditLabel");
     labelEditLabel.setFont (labelFont);
     window.add (&labelEdit);
@@ -160,8 +160,8 @@ int main ()
     window.add (&textLabel);
 
     // Symbols
-    std::array<std::unique_ptr<Symbol>, Symbol::NEW_FOLDER_SYMBOL + 1> symbols;
-    for (int i = 0; i <= Symbol::NEW_FOLDER_SYMBOL; ++i)
+    std::array<std::unique_ptr<Symbol>, static_cast<int>(Symbol::SymbolType::newFolder) + 1> symbols;
+    for (int i = 0; i <= static_cast<int>(Symbol::SymbolType::newFolder); ++i)
     {
         symbols[i] = std::unique_ptr<Symbol> (new Symbol (410 + 18 * (i % 16), 10 + 18 * int (i / 16), 12, 12, Symbol::SymbolType(i)));
         symbols[i]->setTitle ("Symbol " + std::to_string(i));
@@ -188,7 +188,7 @@ int main ()
     window.add (&textButtonLabel);
 
     // SymbolButton
-    SymbolButton symbolButton (910, 30, 80, 20, Symbol::ADD_SYMBOL, false, false, BUTILITIES_URID_UNKNOWN_URID, "SymbolButton");
+    SymbolButton symbolButton (910, 30, 80, 20, Symbol::SymbolType::add, false, false, BUTILITIES_URID_UNKNOWN_URID, "SymbolButton");
     symbolButton.setTitle("SymbolButton");
     Label symbolButtonLabel (900, 80, 100, 20, "SymbolButton");
     symbolButtonLabel.setFont (labelFont);
@@ -205,7 +205,7 @@ int main ()
     window.add (&padLabel);
 
     // SymbolPad
-    SymbolPad<> symbolPad (1110, 20, 80, 40, Symbol::PLAY_SYMBOL, 0.7, 0.0, 1.0, 0.0);
+    SymbolPad<> symbolPad (1110, 20, 80, 40, Symbol::SymbolType::play, 0.7, 0.0, 1.0, 0.0);
     symbolPad.setTitle ("Symbolpad");
     symbolPad.setFgColors(BStyles::blues);
     Label symbolPadLabel (1100, 80, 100, 20, "SymbolPad");
@@ -479,7 +479,7 @@ int main ()
     window.add (&textBoxLabel);
 
     // MessageBox
-    MessageBox messageBox   (410, 130, 280, 180, Symbol::INFO_SYMBOL, 
+    MessageBox messageBox   (410, 130, 280, 180, Symbol::SymbolType::info, 
                              "Hello world is sooo easy:", "Window window;\nLabel label (\"Hello World\");\nwindow.add (&label);\nwindow.run ();", 
                              {BUtilities::Dictionary::get("Close")});
     messageBox.setTitle("MessageBox");
