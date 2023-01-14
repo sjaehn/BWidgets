@@ -33,11 +33,11 @@ public:
 	/**
 	 * @brief Enumeration of commonly used keys
 	 *
-	 * Also see pugl @PuglKey
+	 * Also see pugl @a PuglKey. Named keys are capitalized, like ESCAPE.
 	 */
 	enum class KeyType
 	{
-		ANY 		= 0,
+		any 		= 0,
 		BACKSPACE	= 0x08,
 		ESCAPE		= 0x1B,
 		DELETE		= 0x7F,
@@ -89,14 +89,14 @@ public:
     /**
      * @brief  Construct a new Keys device object.
      */
-	Keys () : Keys (KeyType::ANY) {}
+	Keys () : Keys (KeyType::any) {}
 
 	/**s
      * @brief  Construct a new Keys device object for a specified key.
 	 *
 	 * @param key  Key type (code)
      */
-	explicit Keys (const KeyType key) : Device(DeviceType::KEYS), key_(key) {}
+	explicit Keys (const KeyType key) : Device(DeviceType::keys), key_(key) {}
 
 	/**
      * @brief  Creates a clone of this object.

@@ -376,13 +376,13 @@ void Window::handleEvents ()
 
 				case BEvents::Event::EventType::KeyPressEvent:
 					unfocus();
-					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 					if (widget->is<KeyPressable>()) dynamic_cast<KeyPressable*> (widget)->onKeyPressed (event);
 					break;
 
 				case BEvents::Event::EventType::KeyReleaseEvent:
 					unfocus();
-					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 					if (widget->is<KeyPressable>()) dynamic_cast<KeyPressable*> (widget)->onKeyReleased (event);
 					break;
 
@@ -390,7 +390,7 @@ void Window::handleEvents ()
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus();
-						freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+						freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 						widget->grabDevice(BDevices::MouseButton (be->getButton(), be->getPosition()));
 						if (widget->is<Clickable>()) dynamic_cast<Clickable*> (widget)->onButtonPressed (be);
 					}
@@ -400,7 +400,7 @@ void Window::handleEvents ()
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus ();
-						freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+						freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 						widget->freeDevice (BDevices::MouseButton (be->getButton ()));
 						if (widget->is<Clickable>()) dynamic_cast<Clickable*> (widget)->onButtonReleased (be);
 					}
@@ -410,7 +410,7 @@ void Window::handleEvents ()
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus ();
-						freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+						freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 						widget->freeDevice (BDevices::MouseButton (be->getButton ()));
 						if (widget->is<Clickable>()) dynamic_cast<Clickable*> (widget)->onButtonClicked (be);
 					}
@@ -420,7 +420,7 @@ void Window::handleEvents ()
 					{
 						BEvents::PointerEvent* be = (BEvents::PointerEvent*) event;
 						unfocus ();
-						freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+						freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 						BUtilities::Point<> p = widget->getAbsolutePosition() + be->getPosition();
 						Widget* w = getWidgetAt 
 						(
@@ -428,20 +428,20 @@ void Window::handleEvents ()
 							[] (const Widget* f) {return dynamic_cast<const PointerFocusable*>(f) && dynamic_cast<const PointerFocusable*>(f)->isFocusable();},
 							[] (const Widget* f) {return f->isEventPassable(BEvents::Event::EventType::PointerFocusInEvent);}
 						);
-						if (w) w->grabDevice(BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON, p - w->getAbsolutePosition()));
+						if (w) w->grabDevice(BDevices::MouseButton (BDevices::MouseButton::ButtonType::none, p - w->getAbsolutePosition()));
 						if (widget->is<Pointable>()) dynamic_cast<Pointable*> (widget)->onPointerMotion (be);
 					}
 					break;
 
 				case BEvents::Event::EventType::PointerDragEvent:
 					unfocus ();
-					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 					if (widget->is<Draggable>()) dynamic_cast<Draggable*> (widget)->onPointerDragged(event);
 					break;
 
 				case BEvents::Event::EventType::WheelScrollEvent:
 					unfocus ();
-					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+					freeDevice (BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 					if (widget->is<Scrollable>()) dynamic_cast<Scrollable*> (widget)->onWheelScrolled(event);
 					break;
 
@@ -603,11 +603,11 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 	case PUGL_MOTION:
 		{
 			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->motion.x, puglEvent->motion.y) / w->getZoom();
-			BDevices::MouseButton::ButtonType button = BDevices::MouseButton::ButtonType::NO_BUTTON;
+			BDevices::MouseButton::ButtonType button = BDevices::MouseButton::ButtonType::none;
 
 			// Scan for pressed buttons associated with a widget => Drag event
-			for (int i = static_cast<int>(BDevices::MouseButton::ButtonType::LEFT_BUTTON); 
-				 i <= static_cast<int>(BDevices::MouseButton::ButtonType::RIGHT_BUTTON); 
+			for (int i = static_cast<int>(BDevices::MouseButton::ButtonType::left); 
+				 i <= static_cast<int>(BDevices::MouseButton::ButtonType::right); 
 				 ++i)
 			{
 				BDevices::MouseButton::ButtonType b = static_cast<BDevices::MouseButton::ButtonType>(i);
@@ -635,7 +635,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 			}
 
 			// No button associated with a widget? Only PointerMotionEvent or FOCUS_EVENT
-			if (button == BDevices::MouseButton::ButtonType::NO_BUTTON)
+			if (button == BDevices::MouseButton::ButtonType::none)
 			{
 				// PointerMotionEvent
 				Widget* widget = w->getWidgetAt	(position, 
@@ -788,7 +788,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 void Window::translateTimeEvent ()
 {
-	std::list<Widget*> gwidgets = listDeviceGrabbed (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+	std::list<Widget*> gwidgets = listDeviceGrabbed (BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 	if (gwidgets.empty()) focused_ = false;
 	else
 	{
@@ -797,7 +797,7 @@ void Window::translateTimeEvent ()
 			PointerFocusable* focus = dynamic_cast<PointerFocusable*> (widget);
 			if (focus)
 			{
-				BDevices::Device* dev = widget->getDevice(BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+				BDevices::Device* dev = widget->getDevice(BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 				BDevices::MouseButton* mdev = (dev ? dynamic_cast<BDevices::MouseButton*> (dev) : nullptr);
 				BUtilities::Point<> position = (mdev ? mdev->getPosition() : BUtilities::Point<>());
 				std::chrono::steady_clock::time_point nowTime = std::chrono::steady_clock::now();
@@ -825,10 +825,10 @@ void Window::unfocus ()
 {
 	if (focused_)
 	{
-		std::list<Widget*> gwidgets = listDeviceGrabbed (BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+		std::list<Widget*> gwidgets = listDeviceGrabbed (BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 		for (Widget* widget : gwidgets)
 		{
-			BDevices::Device* dev = widget->getDevice(BDevices::MouseButton (BDevices::MouseButton::ButtonType::NO_BUTTON));
+			BDevices::Device* dev = widget->getDevice(BDevices::MouseButton (BDevices::MouseButton::ButtonType::none));
 			BDevices::MouseButton* mdev = (dev ? dynamic_cast<BDevices::MouseButton*> (dev) : nullptr);
 			if (mdev)
 			{

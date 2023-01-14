@@ -38,8 +38,8 @@ public:
 	 */
 	enum class DeviceType
 	{
-        KEYS,
-        MOUSE
+        keys,
+        mouse
         // TODO WHEEL
 	};
 

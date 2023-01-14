@@ -35,10 +35,10 @@ class MouseButton : public Device
 public:
     enum class ButtonType
     {
-        NO_BUTTON,
-		LEFT_BUTTON,
-		MIDDLE_BUTTON,
-		RIGHT_BUTTON
+        none    = 0,
+		left,
+		middle,
+		right
     };
 
 protected:
@@ -123,7 +123,7 @@ inline MouseButton::MouseButton(const ButtonType but) :
 }
 
 inline MouseButton::MouseButton(const ButtonType but, const BUtilities::Point<>& pos) : 
-    Device(DeviceType::MOUSE),
+    Device(DeviceType::mouse),
     button_(but),
     position_(pos) 
 {
