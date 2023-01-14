@@ -209,7 +209,7 @@ public:
 	virtual void onPointerDragged (BEvents::Event* event) override;
 
 	/**
-     *  @brief  Method when a KeyEvent with the type KeyPressEvent is 
+     *  @brief  Method when a KeyEvent with the type keyPressEvent is 
      *  received.
      *  @param event  Passed Event.
      *

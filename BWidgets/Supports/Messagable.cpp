@@ -40,7 +40,7 @@ void Messagable::postMessage (const std::string& name, const BUtilities::Any con
 
 void Messagable::onMessage (BEvents::Event* event)
 {
-    callback (BEvents::Event::EventType::MessageEvent) (event);
+    callback (BEvents::Event::EventType::messageEvent) (event);
 }
 
 

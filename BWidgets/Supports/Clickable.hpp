@@ -63,7 +63,7 @@ public:
      */
     virtual void onButtonPressed (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::ButtonPressEvent) (event);
+        callback (BEvents::Event::EventType::buttonPressEvent) (event);
     }
 
     /**
@@ -76,7 +76,7 @@ public:
      */
     virtual void onButtonReleased (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::ButtonReleaseEvent) (event);
+        callback (BEvents::Event::EventType::buttonReleaseEvent) (event);
     }
 
     /**
@@ -90,7 +90,7 @@ public:
      */
     virtual void onButtonClicked (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::ButtonClickEvent) (event);
+        callback (BEvents::Event::EventType::buttonClickEvent) (event);
     }
 
 };

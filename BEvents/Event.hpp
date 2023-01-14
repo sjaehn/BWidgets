@@ -45,30 +45,30 @@ public:
      */
     enum class EventType : uint32_t
     {
-        None                    = 0x0000,
-        ConfigureRequestEvent   = 0x0001,
-        ExposeRequestEvent      = 0x0002,
-        CloseRequestEvent       = 0x0004,
-        WidgetEvents            = ConfigureRequestEvent + ExposeRequestEvent + CloseRequestEvent,
-        KeyPressEvent           = 0x0008,
-        KeyReleaseEvent         = 0x0010,
-        KeyEvents               = KeyPressEvent + KeyReleaseEvent,
-        ButtonPressEvent        = 0x0020,
-        ButtonReleaseEvent      = 0x0040,
-        ButtonClickEvent        = 0x0080,
-        ButtonEvents            = ButtonPressEvent + ButtonReleaseEvent + ButtonClickEvent,
-        PointerDragEvent        = 0x0100,
-        PointerMotionEvent      = 0x0200,
-        PointerEvents           = PointerDragEvent + PointerMotionEvent,
-        WheelScrollEvent        = 0x0400,
-        WheelEvents             = WheelScrollEvent,
-        MouseEvents             = ButtonEvents + PointerEvents + WheelEvents,
-        ValueChangedEvent       = 0x0800,
-        MessageEvent            = 0x1000,
-        ContentEvents           = ValueChangedEvent + MessageEvent,
-        PointerFocusInEvent     = 0x2000,
-        PointerFocusOutEvent    = 0x4000,
-        PointerFocusEvents      = PointerFocusInEvent + PointerFocusOutEvent
+        none                    = 0x0000,
+        configureRequestEvent   = 0x0001,
+        exposeRequestEvent      = 0x0002,
+        closeRequestEvent       = 0x0004,
+        widgetEvents            = configureRequestEvent + exposeRequestEvent + closeRequestEvent,
+        keyPressEvent           = 0x0008,
+        keyReleaseEvent         = 0x0010,
+        keyEvents               = keyPressEvent + keyReleaseEvent,
+        buttonPressEvent        = 0x0020,
+        buttonReleaseEvent      = 0x0040,
+        buttonClickEvent        = 0x0080,
+        buttonEvents            = buttonPressEvent + buttonReleaseEvent + buttonClickEvent,
+        pointerDragEvent        = 0x0100,
+        pointerMotionEvent      = 0x0200,
+        pointerEvents           = pointerDragEvent + pointerMotionEvent,
+        wheelScrollEvent        = 0x0400,
+        wheelEvents             = wheelScrollEvent,
+        mouseEvents             = buttonEvents + pointerEvents + wheelEvents,
+        valueChangedEvent       = 0x0800,
+        messageEvent            = 0x1000,
+        contentEvents           = valueChangedEvent + messageEvent,
+        pointerFocusInEvent     = 0x2000,
+        pointerFocusOutEvent    = 0x4000,
+        pointerFocusEvents      = pointerFocusInEvent + pointerFocusOutEvent
     };
 
 protected:
@@ -82,7 +82,7 @@ public:
 	 * @brief  Creates an empty %Event.
 	 */
 	Event () :
-		Event (nullptr, EventType::None) 
+		Event (nullptr, EventType::none) 
     {
 
     }

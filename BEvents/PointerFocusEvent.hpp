@@ -39,7 +39,7 @@ public:
      *  @brief  Creates an empty %PointerFocusEvent.
      */
 	PointerFocusEvent () :
-		PointerFocusEvent (nullptr, EventType::None, 0, 0) 
+		PointerFocusEvent (nullptr, EventType::none, 0, 0) 
     {
 
     }

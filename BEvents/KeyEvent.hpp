@@ -42,7 +42,7 @@ namespace BEvents
      *  @brief  Creates an empty %KeyEvent.
      */
 	KeyEvent () :
-	 	KeyEvent (nullptr, EventType::None, 0, 0, 0) 
+	 	KeyEvent (nullptr, EventType::none, 0, 0, 0) 
     {
 
     }

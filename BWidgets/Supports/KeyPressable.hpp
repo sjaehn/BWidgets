@@ -37,7 +37,7 @@ public:
      *
      *  Defines whether a widget may emit a KeyEvent if the main window event 
      *  handler received a key event from the host. In this case, a KeyEvent 
-     *  with the type KeyPressEvent or KeyReleaseEvent will be scheduled 
+     *  with the type keyPressEvent or keyReleaseEvent will be scheduled 
      *  and send to the widget.
      */
     virtual void setKeyPressable (const bool status) {setSupport (status);}
@@ -52,7 +52,7 @@ public:
     bool isKeyPressable () const {return getSupport();}
 
     /**
-     *  @brief  Method when a KeyEvent with the type KeyPressEvent is 
+     *  @brief  Method when a KeyEvent with the type keyPressEvent is 
      *  received.
      *  @param event  Passed Event.
      *
@@ -61,11 +61,11 @@ public:
      */
     virtual void onKeyPressed (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::ValueChangedEvent) (event);
+        callback (BEvents::Event::EventType::valueChangedEvent) (event);
     }
 
     /**
-     *  @brief  Method when a KeyEvent with the type KeyReleaseEvent is 
+     *  @brief  Method when a KeyEvent with the type keyReleaseEvent is 
      *  received.
      *  @param event  Passed Event.
      *
@@ -74,7 +74,7 @@ public:
      */
     virtual void onKeyReleased (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::ValueChangedEvent) (event);
+        callback (BEvents::Event::EventType::valueChangedEvent) (event);
     }
 
 };

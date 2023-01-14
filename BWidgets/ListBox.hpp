@@ -169,7 +169,7 @@ inline ListBox::ListBox	(const double x, const double y, const double width, con
 								 0.3, 0.0, 1.0, 0.0, 0.0,
 								 ValueTransferable<double>::noTransfer, ValueTransferable<double>::noTransfer,
 								 BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"));
-	button_->setCallbackFunction(BEvents::Event::EventType::ValueChangedEvent, ListBox::valueChangedCallback);
+	button_->setCallbackFunction(BEvents::Event::EventType::valueChangedEvent, ListBox::valueChangedCallback);
 	add (button_);
 	itemHeight_ = BWIDGETS_DEFAULT_SPINBOX_ITEM_HEIGHT;
 	for (Widget* w : items_) w->setHeight (itemHeight_);

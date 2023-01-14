@@ -59,7 +59,7 @@ public:
      */
     virtual void setEventPassable (const BEvents::Event::EventType eventType, bool status = true) 
     {
-        eventPassable_ = (eventPassable_ & (~eventType)) | (status ? eventType : BEvents::Event::EventType::None);
+        eventPassable_ = (eventPassable_ & (~eventType)) | (status ? eventType : BEvents::Event::EventType::none);
     }
 
     /**

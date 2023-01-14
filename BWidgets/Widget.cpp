@@ -749,7 +749,7 @@ void Widget::emitExposeEvent (const BUtilities::Area<>& area)
 	Window* main = getMainWindow();
 	if (main)
 	{
-		BEvents::ExposeEvent* event = new BEvents::ExposeEvent (main, this, BEvents::Event::EventType::ExposeRequestEvent, area);
+		BEvents::ExposeEvent* event = new BEvents::ExposeEvent (main, this, BEvents::Event::EventType::exposeRequestEvent, area);
 		main->addEventToQueue (event);
 	}
 }

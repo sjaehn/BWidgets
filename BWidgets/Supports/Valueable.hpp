@@ -76,7 +76,7 @@ inline bool Valueable::isValueable () const
 
 inline void Valueable::onValueChanged (BEvents::Event* event)
 {
-    callback (BEvents::Event::EventType::ValueChangedEvent) (event);
+    callback (BEvents::Event::EventType::valueChangedEvent) (event);
 }
 
 }

@@ -249,9 +249,9 @@ int main ()
     window.add (&b3);
 
     // Set callbacks for the buttons 
-    b1.setCallbackFunction (Event::EventType::ValueChangedEvent, valueChangedCallback); 
-    b2.setCallbackFunction (Event::EventType::ValueChangedEvent, valueChangedCallback); 
-    b3.setCallbackFunction (Event::EventType::ValueChangedEvent, valueChangedCallback); 
+    b1.setCallbackFunction (Event::EventType::valueChangedEvent, valueChangedCallback); 
+    b2.setCallbackFunction (Event::EventType::valueChangedEvent, valueChangedCallback); 
+    b3.setCallbackFunction (Event::EventType::valueChangedEvent, valueChangedCallback); 
 
     window.run();
 }

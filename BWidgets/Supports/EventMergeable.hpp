@@ -48,11 +48,11 @@ public:
      *  be merged in the main window event queue or not.
      *
      *  Note: %EventMergeable is only a hint. It will be ignored if it doesn't
-     *  make any sense (e. g., CloseRequestEvent).
+     *  make any sense (e. g., closeRequestEvent).
      */
     virtual void setEventMergeable (const BEvents::Event::EventType eventType, const bool status) 
     {
-        eventMergeable_ = (eventMergeable_ & (~eventType)) | (status ? eventType : BEvents::Event::EventType::None);
+        eventMergeable_ = (eventMergeable_ & (~eventType)) | (status ? eventType : BEvents::Event::EventType::none);
     }
 
     /**

@@ -549,9 +549,9 @@ inline Pattern<T>::Pattern	(const double x, const double y, const double width, 
 		for (size_t c = 0; c < columns_; ++c)
 		{
 			T* w = new T(BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/pad"), "(" + std::to_string(c) + ", " + std::to_string(r) + ")");
-			w->setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, padChangedCallback);
+			w->setCallbackFunction (BEvents::Event::EventType::valueChangedEvent, padChangedCallback);
 			w->setClickable (false);
-			w->setEventPassable(BEvents::Event::EventType::ButtonEvents | BEvents::Event::EventType::PointerDragEvent);
+			w->setEventPassable(BEvents::Event::EventType::buttonEvents | BEvents::Event::EventType::pointerDragEvent);
 			add (w);
 			ws.push_back (w);
 

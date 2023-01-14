@@ -784,7 +784,7 @@ protected:
 	 *  @param area  Clipping area.
 	 *
 	 *  This method is called by the main Window system event handler upon an
-	 *  ExposeEvent of the type ExposeRequestEvent. Thus, this method draws
+	 *  ExposeEvent of the type exposeRequestEvent. Thus, this method draws
 	 *  the visual content of this %Widget and all its children %Widgets stored
 	 *  in their respective RGBA surfaces to the system provided RGBA surface
 	 *  of the main %Window.  

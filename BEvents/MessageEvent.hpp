@@ -51,7 +51,7 @@ public:
      *  @param content  Message content.
      */
 	MessageEvent (BWidgets::Widget* widget, const std::string& name, const BUtilities::Any& content) :
-		Event (widget, EventType::MessageEvent), 
+		Event (widget, EventType::messageEvent), 
         messageName_ (name), 
         messageContent_ (content) 
     {

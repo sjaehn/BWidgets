@@ -45,7 +45,7 @@ public:
      *  @brief  Creates an empty %PointerEvent.
      */
 	PointerEvent () :
-		PointerEvent (nullptr, EventType::None, 0, 0, 0, 0, 0, 0, BDevices::MouseButton::ButtonType::none) 
+		PointerEvent (nullptr, EventType::none, 0, 0, 0, 0, 0, 0, BDevices::MouseButton::ButtonType::none) 
     {
 
     }

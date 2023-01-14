@@ -166,8 +166,8 @@ inline MessageBox::MessageBox	(const double x, const double y, const double widt
 	BStyles::Font hFont = this->headline.getFont();
 	hFont.weight = CAIRO_FONT_WEIGHT_BOLD;
 	this->headline.setFont (hFont);
-	this->symbol.setEventPassable(BEvents::Event::EventType::ButtonPressEvent | BEvents::Event::EventType::PointerDragEvent);
-	this->headline.setEventPassable(BEvents::Event::EventType::ButtonPressEvent | BEvents::Event::EventType::PointerDragEvent);
+	this->symbol.setEventPassable(BEvents::Event::EventType::buttonPressEvent | BEvents::Event::EventType::pointerDragEvent);
+	this->headline.setEventPassable(BEvents::Event::EventType::buttonPressEvent | BEvents::Event::EventType::pointerDragEvent);
 	add (&this->symbol);
 	add (&this->headline);
 }

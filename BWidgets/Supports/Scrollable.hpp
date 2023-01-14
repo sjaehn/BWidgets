@@ -46,7 +46,7 @@ public:
      *  @return  True if on, otherwise false.
      *
      *  If a widget is scrollable, the main window event handler let the widget
-     *  emit a WheelEvent of the type WheelScrollEvent if the main window
+     *  emit a WheelEvent of the type wheelScrollEvent if the main window
      *  event handler received a (mouse) wheel event from the host system.
      */
     bool isScrollable () const {return getSupport();}
@@ -61,7 +61,7 @@ public:
      */
     virtual void onWheelScrolled (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::WheelScrollEvent) (event);
+        callback (BEvents::Event::EventType::wheelScrollEvent) (event);
     }
 
 };

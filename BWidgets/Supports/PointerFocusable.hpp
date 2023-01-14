@@ -149,7 +149,7 @@ public:
      */
     virtual void onFocusIn (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::PointerFocusInEvent) (event);
+        callback (BEvents::Event::EventType::pointerFocusInEvent) (event);
     }
 
 	/**
@@ -162,7 +162,7 @@ public:
      */
     virtual void onFocusOut (BEvents::Event* event)
     {
-        callback (BEvents::Event::EventType::PointerFocusOutEvent) (event);
+        callback (BEvents::Event::EventType::pointerFocusOutEvent) (event);
     }
 };
 

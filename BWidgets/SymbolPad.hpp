@@ -187,11 +187,11 @@ inline SymbolPad<T>::SymbolPad	(const double x, const double y, const double wid
 	symbol (0, 0, width, height, symbolIdx, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/symbol"))
 {
 	symbol.setFocusable(false);
-	symbol.setEventPassable	(BEvents::Event::EventType::ButtonPressEvent | 
-							 BEvents::Event::EventType::ButtonClickEvent | 
-							 BEvents::Event::EventType::PointerDragEvent |
-							 BEvents::Event::EventType::WheelScrollEvent | 
-							 BEvents::Event::EventType::PointerFocusEvents);
+	symbol.setEventPassable	(BEvents::Event::EventType::buttonPressEvent | 
+							 BEvents::Event::EventType::buttonClickEvent | 
+							 BEvents::Event::EventType::pointerDragEvent |
+							 BEvents::Event::EventType::wheelScrollEvent | 
+							 BEvents::Event::EventType::pointerFocusEvents);
 	symbol.setTxColors (symbol.getBgColors());
 	symbol.setStatus (BStyles::Status::inactive);
 	this->add (&symbol);

@@ -208,10 +208,10 @@ inline ValueDial::ValueDial	(const double  x, const double y, const double width
 	label (BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
 {
 	add (&label);
-	label.setCallbackFunction (BEvents::Event::EventType::ValueChangedEvent, labelChangedCallback);
-	label.setEventPassable(BEvents::Event::EventType::WheelScrollEvent);
-	label.setEventPassable(BEvents::Event::EventType::PointerDragEvent);
-	label.setEventPassable(BEvents::Event::EventType::PointerFocusEvents);
+	label.setCallbackFunction (BEvents::Event::EventType::valueChangedEvent, labelChangedCallback);
+	label.setEventPassable(BEvents::Event::EventType::wheelScrollEvent);
+	label.setEventPassable(BEvents::Event::EventType::pointerDragEvent);
+	label.setEventPassable(BEvents::Event::EventType::pointerFocusEvents);
 }
 
 inline Widget* ValueDial::clone () const 

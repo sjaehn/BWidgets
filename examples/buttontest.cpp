@@ -55,7 +55,7 @@ int main ()
     label.moveTo (label.center(), label.bottom ()); // Move label to bottom
                                                     // center.
 
-    button.setCallbackFunction  (Event::EventType::ValueChangedEvent,   // Set callback
+    button.setCallbackFunction  (Event::EventType::valueChangedEvent,   // Set callback
                                  valueChangedCallback);                 // function
 
     window.run();

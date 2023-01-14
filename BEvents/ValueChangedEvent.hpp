@@ -54,7 +54,7 @@ public:
      *  @param widget  Pointer to the widget which caused the %Event.
      */
 	ValueChangedEvent (BWidgets::Widget* widget) :
-		Event (widget, EventType::ValueChangedEvent)
+		Event (widget, EventType::valueChangedEvent)
     {
     
     }

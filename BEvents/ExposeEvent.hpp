@@ -43,7 +43,7 @@ public:
      *  @brief  Creates an empty %ExposeEvent.
      */
 	ExposeEvent () :
-		ExposeEvent (nullptr, nullptr, EventType::None, 0, 0, 0, 0) 
+		ExposeEvent (nullptr, nullptr, EventType::none, 0, 0, 0, 0) 
     {
 
     }

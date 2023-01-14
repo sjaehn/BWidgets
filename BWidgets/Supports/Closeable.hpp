@@ -36,8 +36,8 @@ public:
      *  @brief  Switch the widget close request support on/off.
      *  @param status  True if on, otherwise false.
      *
-     *  Defines whether a widget may emit a CloseRequestEvent. In this case,
-     *  a WidgetEvent with the type CloseRequestEvent will be scheduled and 
+     *  Defines whether a widget may emit a closeRequestEvent. In this case,
+     *  a WidgetEvent with the type closeRequestEvent will be scheduled and 
      *  send to the widget.
      */
     virtual void setCloseable (const bool status);
@@ -47,7 +47,7 @@ public:
      *  @return  True if on, otherwise false.
      *
      *  If a widget is closeable, the main window event handler let the 
-     *  widget emit a WidgetEvent of the type CloseRequestEvent.
+     *  widget emit a WidgetEvent of the type closeRequestEvent.
      */
     bool isCloseable () const;
 
