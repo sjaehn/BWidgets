@@ -1,7 +1,7 @@
 /* Sample.hpp
  * Pattern-controlled audio stream / sample re-sequencer LV2 plugin
  *
- * Copyright (C) 2020 - 2022 by Sven Jähnichen
+ * Copyright (C) 2020 - 2023 by Sven Jähnichen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

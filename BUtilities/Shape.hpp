@@ -1,6 +1,6 @@
 /* Shape.hpp
  *
- * Copyright (C) 2019 - 2022 by Sven Jähnichen
+ * Copyright (C) 2019 - 2023 by Sven Jähnichen
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
