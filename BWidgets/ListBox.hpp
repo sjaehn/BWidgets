@@ -23,7 +23,9 @@
 #include "../BEvents/PointerEvent.hpp"
 #include "VScrollBar.hpp"
 #include "Widget.hpp"
+#include <cstddef>
 #include <iterator>
+#include <limits>
 
 #ifndef BWIDGETS_DEFAULT_LISTBOX_WIDTH
 #define BWIDGETS_DEFAULT_LISTBOX_WIDTH 80.0
@@ -117,9 +119,16 @@ public:
 
 	/**
 	 *  @brief  Scrolls the list and sets the visualized list top index.
-	 *  @param pos  Index of the item to be on list top position.
+	 *  @param pos  Index of the item to be on %Listbox top position.
 	 */
 	virtual void setTop (const size_t pos);
+
+	/**
+	 *  @brief  Gets the index of the item actually displayed on top of the 
+	 *  %Listbox. 
+	 *  @return  Index of the item on %Listbox top position. 
+	 */
+	size_t getTop () const;
 
 	/**
      *  @brief  Method called when pointer button pressed.
@@ -142,6 +151,16 @@ public:
     virtual void onWheelScrolled (BEvents::Event* event) override;
 
 protected:
+
+	/**
+	 *  @brief  Gets the sum of the heights of all items within the index
+	 *  range [start, start + count).
+	 * 
+	 *  @param start  Index of the first item.
+	 *  @param count  Number of items to be included.
+	 *  @return  Sum of heights. 
+	 */
+	double getItemsHeight (size_t start = 0, size_t count = std::numeric_limits<size_t>::max());
 
 	/**
 	 *  @brief  Callback function which handles and forwards 
@@ -195,6 +214,8 @@ inline void ListBox::setTop (const size_t pos)
 		update();
 	}
 }
+
+inline size_t ListBox::getTop() const {return top_;}
 
 inline void ListBox::update ()
 {
@@ -299,13 +320,29 @@ inline void ListBox::onWheelScrolled (BEvents::Event* event)
 	if (!wev) return;
 	if (wev->getWidget() != this) return;
 
-	if	(((top_ > 1) || (wev->getDelta().y < 0)) &&
-		 ((top_ + 1 < items_.size()) || (wev->getDelta().y > 0)))
+	if (((wev->getDelta().y > 0) && (top_ > 1)) ||
+		((wev->getDelta().y < 0) && (top_ + 1 < items_.size()) && (getItemsHeight(top_) > getEffectiveHeight())))
+
 	{
-		setTop (top_ - (wev->getDelta().y < 0 ? -1 : (wev->getDelta().y > 0 ? 1 : 0)));
+		setTop (top_ - (wev->getDelta().y < 0 ? -1 : 1));
 	}
 
 	Scrollable::onWheelScrolled(event);
+}
+
+inline double ListBox::getItemsHeight (size_t start, size_t count)
+{
+	if (start >= items_.size()) return 0.0;
+	
+	double h = 0.0;
+	for (std::list<Widget*>::iterator it = std::next (items_.begin(), top_); (it != items_.end()) && count; ++it)
+	{
+		Widget* w = *it;
+		if (w) h += w->getHeight();
+		--count;
+	}
+
+	return h;
 }
 
 inline void ListBox::valueChangedCallback (BEvents::Event* event)
@@ -331,9 +368,12 @@ inline void ListBox::valueChangedCallback (BEvents::Event* event)
 				Widget* w2 = (*it);
 				if (y <= w2->getPosition().y + w2->getHeight())
 				{
-					w->setValueable (false);
-					p->setTop (count);
-					w->setValueable (true);
+					if ((count < p->getTop()) || (p->getItemsHeight() > p->getEffectiveHeight()))
+					{
+						w->setValueable (false);
+						p->setTop (count);
+						w->setValueable (true);
+					}
 					break;
 				} 
 				++count;
