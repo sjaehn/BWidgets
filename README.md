@@ -118,9 +118,9 @@ mkdir tmp
 
 cd tmp
 
-gcc -DPIC -DPUGL_HAVE_CAIRO -std=c99 -fPIC `pkg-config --cflags x11 cairo` $(cat ../cfiles_x11.txt | sed -e 's#^#../#') -c
+gcc -DPIC -DPUGL_HAVE_CAIRO -std=c99 -fPIC `pkg-config --cflags x11 cairo` $(cat ../cfiles_x11.txt | sed -e 's#^#../BWidgets/#') -c
 
-g++ -DPIC -DPUGL_HAVE_CAIRO -std=c++11 -fPIC `pkg-config --cflags x11 cairo` ../helloworld.cpp $(cat ../cppfiles.txt | sed -e 's#^#../#') -c
+g++ -DPIC -DPUGL_HAVE_CAIRO -std=c++11 -fPIC `pkg-config --cflags x11 cairo` ../helloworld.cpp $(cat ../cppfiles.txt | sed -e 's#^#../BWidgets/#') -c
 
 cd ..
 
