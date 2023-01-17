@@ -211,12 +211,15 @@ Widget
 Each widget class Xxx has got at least four* different constructors
 (demonstrated on the example of `ComboBox`):
 * `Xxx ()` - The parameter free default constructor. It creates a 
-  default default-sized empty (or default content) widget. 
+  default default-sized empty (or default content) widget. The widget urid is
+  BUTILITIES_URID_UNKNOWN_URID and can't be changed anymore as the widget
+  urid is immutable. 
   ```
   ComboBox ();
   ```
 * `Xxx (urid, title)` - Creates a default default-sized empty (or default 
-  content) widget and defines its urid and title.
+  content) widget and defines its urid and title. Keep in mind: urid is
+  immutable.
   ```
   ComboBox (0, "ComboBox");
   ```
@@ -374,8 +377,8 @@ a TxColor in addtion to the StyleProperty settings supported by Widget.
 ![button](../suppl/Button.png)
 
 `Button` draws a simple button. It supports `Clickable`, `KeyPressable`, 
-`Toggleable` and `Valueable`. The value has two conditions: on (true) or off 
-(false). A `Button` changes its border color upon changing the condition.
+and `Toggleable`. The value has two conditions: on (true) or off (false). 
+A `Button` changes its border color upon changing the condition.
 
 
 ### TextButton
@@ -1311,14 +1314,20 @@ Neither B.Wigets nor the Pugl library used by B.Widgets is header only. This
 means that you have to compile the respective .c and .cpp files you directly 
 or indirectly need as well and link them. 
 
-To compile for a X11-based system, you need the Pugl .c files \
+To compile for a X11-based system, you need the Pugl .c files:
+
   path/to/BWidgets/BWidgets/pugl/implementation.c, \
   path/to/BWidgets/BWidgets/pugl/x11_stub.c, \
   path/to/BWidgets/BWidgets/pugl/x11_cairo.c, and \
-  path/to/BWidgets/BWidgets/pugl/x11.c. \
-To compile for Mac or Windows, please use the respective mac*.c or win*.c files.
+  path/to/BWidgets/BWidgets/pugl/x11.c \
 
-And from B.Widgets itself, you need at least \
+(to compile for Mac or Windows, please use the respective mac*.m or win*.c 
+files). Also compile:
+
+  path/to/BWidgets/BUtilities/cairoplus.c.
+
+And from B.Widgets itself, you need at least:
+
   path/to/BWidgets/BUtilities/Urid.cpp, \
   path/to/BWidgets/BUtilities/Dictionary.cpp \
 	path/to/BWidgets/BWidgets/Supports/Closeable.cpp, \
@@ -1326,6 +1335,8 @@ And from B.Widgets itself, you need at least \
 	path/to/BWidgets/BWidgets/Window.cpp, and \
 	path/to/BWidgets/BWidgets/Widget.cpp.
 
+The essential .c and .cpp files are also listed in cfiles_xxx.txt (with xxx 
+can be x11, win (TODO) or mac (TODO)) and cppfiles.txt, respectively.
 
 If you want to build B.Widgets-based plugins, get sure that symbols are not
 exposed. Tell Pugl to hide symbols by setting `PUGL_API` to "hidden", e. g.

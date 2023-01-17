@@ -18,20 +18,8 @@ LDFLAGS +=
 
 BUNDLE = widgetgallery helloworld buttontest symbols pattern styles themes draws values
 
-CXX_INCL = \
-BUtilities/Urid.cpp \
-BUtilities/Dictionary.cpp \
-BWidgets/Supports/Closeable.cpp \
-BWidgets/Supports/Messagable.cpp \
-BWidgets/Window.cpp \
-BWidgets/Widget.cpp 
-
-C_INCL = \
-BUtilities/cairoplus.c \
-BWidgets/pugl/implementation.c \
-BWidgets/pugl/x11_stub.c \
-BWidgets/pugl/x11_cairo.c \
-BWidgets/pugl/x11.c
+CXX_INCL = $(shell cat cppfiles.txt) 
+C_INCL = $(shell cat cfiles_x11.txt)
 
 all: $(BUNDLE)
 

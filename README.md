@@ -80,6 +80,9 @@ subdirectory into your project.
 
 ### Getting started ("Hello world!")
 
+Create a new project directory and install B.Widgets as a subirectory called
+BWidgets as described above. You don't need to build the example binaries.
+
 Once B.Widgets is installed, you can create a helloworld.cpp file and start 
 coding. You have to
 * include the widgets (or events, or ...) you need into your project,
@@ -105,29 +108,24 @@ int main ()
 
 This is all of the magic.
 
-To build this example, you have compile and link the .c and .cpp of B.Widgets 
-and its Pugl graphics library. For the GNU C++ compiler for X11-based systems
-you may call:
+To build this example, you also have compile and link the .c and .cpp of 
+B.Widgets and its Pugl graphics library. The path to these files is stored
+in cfiles_xxx.txt (with xxx = x11 for X11) and cppfiles.txt, respectively. 
+For the GNU C and C++ compiler for X11-based systems you may call starting 
+from your project directory:
 ```
 mkdir tmp
+
 cd tmp
-gcc -DPIC -DPUGL_HAVE_CAIRO -std=c99 -fPIC `pkg-config --cflags x11 cairo` \
-../BWidgets/BUtilities/cairoplus.c \
-../BWidgets/BWidgets/pugl/implementation.c \ 
-../BWidgets/BWidgets/pugl/x11_stub.c \
-../BWidgets/BWidgets/pugl/x11_cairo.c \
-../BWidgets/BWidgets/pugl/x11.c -c
-g++ -DPIC -DPUGL_HAVE_CAIRO -std=c++11 -fPIC `pkg-config --cflags x11 cairo` \
-../helloworld.cpp \
-../BWidgets/BUtilities/Urid.cpp \
-../BWidgets/BUtilities/Dictionary.cpp \
-../BWidgets/BWidgets/Supports/Closeable.cpp \
-../BWidgets/BWidgets/Supports/Messagable.cpp \
-../BWidgets/BWidgets/Window.cpp \
-../BWidgets/BWidgets/Widget.cpp -c
+
+gcc -DPIC -DPUGL_HAVE_CAIRO -std=c99 -fPIC `pkg-config --cflags x11 cairo` $(cat ../cfiles_x11.txt | sed -e 's#^#../#') -c
+
+g++ -DPIC -DPUGL_HAVE_CAIRO -std=c++11 -fPIC `pkg-config --cflags x11 cairo` ../helloworld.cpp $(cat ../cppfiles.txt | sed -e 's#^#../#') -c
+
 cd ..
-g++ -DPIC -DPUGL_HAVE_CAIRO -iquote -std=c++11 -fPIC -Wl,--start-group \ 
-`pkg-config --libs x11 cairo` tmp/*.o -Wl,--end-group -o helloworld
+
+g++ -DPIC -DPUGL_HAVE_CAIRO -iquote -std=c++11 -fPIC -Wl,--start-group `pkg-config --libs x11 cairo` tmp/*.o -Wl,--end-group -o helloworld
+
 rm -rf tmp
 ```
 
