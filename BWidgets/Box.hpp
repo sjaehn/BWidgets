@@ -19,6 +19,7 @@
 #define BWIDGETS_BOX_HPP_
 
 #include "Frame.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "TextButton.hpp"
 #include "Supports/Closeable.hpp"
@@ -46,12 +47,12 @@ namespace BWidgets
  *  @brief  Composite widget with buttons.
  *
  *  %Box is a composite Widget based on Frame and contains TextButtons. It 
- *  also supports Valueable and Closeable. The default value of the Box is 0
- *  and changes upon pressing one of the containing text buttons. On pressing
- *  one of the buttons, the widget value is set to the button index (starting)
- *  with 1 and a CloseRequestEvent is emitted.
+ *  also supports Valueable, KeyPressable and Closeable. The default value of
+ *  the Box is 0 and changes upon pressing one of the containing text buttons.
+ *  On pressing one of the buttons, the widget value is set to the button
+ *  index (starting) with 1 and a CloseRequestEvent is emitted.
  */
-class Box : public Frame, public ValueableTyped<size_t>, public Closeable
+class Box : public Frame, public ValueableTyped<size_t>, public KeyPressable, public Closeable
 {
 protected:
 	TextButton okButton_;
@@ -224,10 +225,12 @@ inline Box::Box	(const double x, const double y, const double width, const doubl
 				 const std::initializer_list<std::string>& buttonlabels, uint32_t urid, std::string title) :
 	Frame (x, y, width, height, urid, title),
 	ValueableTyped<size_t> (0),
+	KeyPressable(),
 	Closeable(),
 	okButton_ ("OK", false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button")),
 	buttons_()
 {
+	setKeyPressable(false);	// Not implemented yet
 	if (buttonlabels.begin() != buttonlabels.end()) addButton (buttonlabels);
 
 	// Fallback default OK button
@@ -297,6 +300,7 @@ inline void Box::copy (const Box* that)
 	}
 
 	Closeable::operator= (*that);
+	KeyPressable::operator=(*that);
 	ValueableTyped<size_t>::operator= (*that);
     Frame::copy (that);
 }

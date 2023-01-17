@@ -21,6 +21,7 @@
 #include "SpinButton.hpp"
 #include "Label.hpp"
 #include "Supports/Clickable.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Scrollable.hpp"
 #include "../BEvents/WheelEvent.hpp"
@@ -51,7 +52,8 @@ namespace BWidgets
 /**
  *  @brief  Widget showing a content and a SpinButton. 
  *
- *  %SpinBox is a Valueable composite widget. It is a container widget. It has
+ *  %SpinBox is a Valueable composite widget also supporting Clickable, 
+ *  Scrollable, and Keypressable. It is a container widget. It has
  *  got a list of content widgets representing the items. And it has got a
  *  SpinButton to move between the items.
  *
@@ -64,7 +66,7 @@ namespace BWidgets
  *  @todo  Resize()
  *  @todo  Import item widgets.
  */
-class SpinBox : public Widget, public ValueableTyped<size_t>, public Clickable, public Scrollable
+class SpinBox : public Widget, public ValueableTyped<size_t>, public Clickable, public Scrollable, public KeyPressable
 {
 protected:
 	Widget* button_;
@@ -273,12 +275,14 @@ inline SpinBox::SpinBox	(const double x, const double y, const double width, con
 	ValueableTyped<size_t> (value),
 	Clickable(),
 	Scrollable(),
+	KeyPressable(),
 	button_ (new SpinButton (x + width - height, y, height, height, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"))),
 	items_ ({new Label (0, 0, getWidth() - getHeight(), getHeight(), "")}),	// Init with Null item
 	top_ (0),
 	itemHeight_ (std::max (height - 2.0, 0.0)),
 	buttonWidth_ (BWIDGETS_DEFAULT_SPINBOX_BUTTON_WIDTH)
 {
+	setKeyPressable(false);	// Not supported yet
 	items_.front()->setEventPassable(BEvents::Event::EventType::wheelScrollEvent | BEvents::Event::EventType::buttonPressEvent);
 	add (items_.front());
 	addItem (items);
@@ -332,6 +336,7 @@ inline void SpinBox::copy (const SpinBox* that)
 	itemHeight_ = that->itemHeight_;
 	buttonWidth_ = that->buttonWidth_;
 
+	KeyPressable::operator=(*that);
 	Scrollable::operator= (*that);
 	Clickable::operator= (*that);
 	ValueableTyped<size_t>::operator= (*that);

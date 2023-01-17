@@ -7,7 +7,7 @@ project. This toolkit includes widgets, styles, event handling, device support,
 and internationalization. B.Widgets also takes care about the special needs for
 user interaction elements in music production.
 
-**Current version:** 0.24.0 (alpha)
+**Current version:** 0.25.0 (alpha)
 
 **Pre-release notice:** The B.Widgets toolkit is currently being developed 
 and still not officially released (alpha). Thus, there's no stable API yet.
@@ -204,16 +204,16 @@ Further reading: [BWidgets/README.md](BWidgets/README.md)
 - [x] Define shortcut macros
 - [x] Make at least the setters virtual (where possible)
 - [x] Header files only (where possible)
+- [x] Prepare relevant widget classes for additional keyboard device control
 - [x] Remove redundant methods, members and parameters before release of version 1.0
 - [x] Documentation
 
 
 ### Until 1.2
 
-- [x] Class Shape
+- [ ] Class Shape
 - [ ] Shape widget
 - [ ] Range widgets
-- [ ] Functional focus label text
 - [ ] Update pugl
 
 
@@ -238,4 +238,7 @@ Further reading: [BWidgets/README.md](BWidgets/README.md)
 - [ ] Import dictionary from TTL
 - [ ] Import dictionary from JSON(-LD)
 - [ ] Support fine adjustment for dials and sliders
+- [ ] Support keyboard-controlled buttons and sliders
 - [ ] Support keyboard shortcuts in menus
+- [ ] Functional focus label text
+- [ ] Functional widget drawing

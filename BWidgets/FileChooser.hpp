@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 #include "Box.hpp"
 #include "Frame.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Closeable.hpp"
 #include "Symbol.hpp"
@@ -74,7 +75,7 @@ namespace BWidgets
  *  Clicking on "OK" / "Open" will set the widget value to path + filename 
  *  and a CloseRequestEvent is emitted.
  */
-class FileChooser : public Frame, public ValueableTyped<std::string>, public Closeable
+class FileChooser : public Frame, public ValueableTyped<std::string>, public KeyPressable, public Closeable
 {
 public:
 
@@ -281,6 +282,7 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 				 				 std::string path, std::initializer_list<Filter> filters, uint32_t urid, std::string title) :
 		Frame (x, y, width, height, urid, title),
 		ValueableTyped<std::string> (path),
+		KeyPressable(),
 		Closeable (),
 		filters_ (),
 		dirs_ (),
@@ -308,6 +310,7 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 		createInput ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/textbox"), ""),
 		createError ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
 {
+	setKeyPressable(false);	// Not implemented yet
 	setPath (path);
 	enterDir();
 
@@ -388,6 +391,7 @@ inline void FileChooser::copy (const FileChooser* that)
 	createError.copy (&that->createError);
 
 	Closeable::operator= (*that);
+	KeyPressable::operator=(*that);
 	ValueableTyped<std::string>::operator= (*that);
 	Frame::copy (that);
 }

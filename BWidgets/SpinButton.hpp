@@ -21,6 +21,7 @@
 #include "Symbol.hpp"
 #include "SymbolButton.hpp"
 #include "Supports/ValueableTyped.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "../BEvents/Event.hpp"
 
 #ifndef BWIDGETS_DEFAULT_SPINBUTTON_WIDTH
@@ -37,12 +38,13 @@ namespace BWidgets
 /**
  *  @brief  Widget containing an up and a down button. 
  *
- *  %SpinButton is a Valueable composite widget. It contains an up and a down
+ *  %SpinButton is a Valueable composite widget also supporting KeyPressable. 
+ *  It contains an up and a down
  *  button. Its value can either be 0 (no button pressed) or -1 (up button
  *  pressed) or 1 (down button pressed). The visualble content of
  *  the %SpinButton is represented by its background and its border.
  */
-class SpinButton : public Widget, public ValueableTyped<int>
+class SpinButton : public Widget, public KeyPressable, public ValueableTyped<int>
 {
 public:
 	SymbolButton upButton;
@@ -150,10 +152,12 @@ inline SpinButton::SpinButton	(const int value, uint32_t urid, std::string title
 inline SpinButton::SpinButton	(const double x, const double y, const double width, const double height, 
 			 	 				 const int value, uint32_t urid, std::string title) :
 	Widget (x, y, width, height, urid, title),
+	KeyPressable(),
 	ValueableTyped<int> (value < 0 ? -1 : (value > 0 ? 1 : 0)),
 	upButton (x, y, width, 0.5 * height, Symbol::SymbolType::up, false, value < 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button")),
 	downButton (x, y + 0.5 * height, width, 0.5 * height, Symbol::SymbolType::down, false, value > 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"))
 {
+	setKeyPressable(false);	// Not supported yet
 	upButton.setFocusable(false);
 	upButton.setEventPassable(BEvents::Event::EventType::pointerFocusEvents);
 	downButton.setFocusable(false);
@@ -176,6 +180,7 @@ inline void SpinButton::copy (const SpinButton* that)
 {
 	upButton.copy (&that->upButton);
 	downButton.copy (&that->downButton);
+	KeyPressable::operator=(*that);
 	ValueableTyped<int>::operator= (*that);
     Widget::copy (that);
 }

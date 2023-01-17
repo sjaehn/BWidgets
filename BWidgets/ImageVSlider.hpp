@@ -22,6 +22,7 @@
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
 #include "Supports/Scrollable.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
 
 #ifndef BWIDGETS_DEFAULT_IMAGEVSLIDER_WIDTH
@@ -40,13 +41,14 @@ namespace BWidgets
  *
  *  %ImageVSlider is a Valueable widget derived from ImageVMeter. It displays 
  *  a value as a vertical scale in the same way as ImageVMeter and 
- *  additionally supports user interaction via Clickable, Draggable, and 
- *  Scrollable.
+ *  additionally supports user interaction via Clickable, Draggable,
+ *  Scrollable, and KeyPressable.
  */
 class ImageVSlider :	public ImageVMeter, 
 						public Clickable, 
 						public Draggable, 
-						public Scrollable
+						public Scrollable,
+						public KeyPressable
 {
 public:
 
@@ -242,9 +244,10 @@ inline ImageVSlider::ImageVSlider	(const double  x, const double y, const double
 					 urid, title),
 		Clickable(),
 		Draggable(),
-		Scrollable()
+		Scrollable(),
+		KeyPressable()
 {
-
+	setKeyPressable(false);	// Not supported yet
 }
 
 inline Widget* ImageVSlider::clone () const 
@@ -256,6 +259,7 @@ inline Widget* ImageVSlider::clone () const
 
 inline void ImageVSlider::copy (const ImageVSlider* that)
 {
+	KeyPressable::operator=(*that);
 	Scrollable::operator= (*that);
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);

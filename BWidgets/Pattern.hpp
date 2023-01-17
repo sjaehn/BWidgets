@@ -23,6 +23,7 @@
 #include "Supports/Draggable.hpp"
 #include "Supports/ValidatableRange.hpp"
 #include "Supports/ValueTransferable.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "../BEvents/PointerEvent.hpp"
 #include <cairo/cairo.h>
@@ -57,7 +58,7 @@ namespace BWidgets
  *  %Pattern allows to draw a pattern by left-clicking on the pads or dragging
  *  over the pads via support of Draggable and setting the pad values to 
  *  their @c getMin() or defined default drawing value (defined with
- *  @c pads.setValue() ), respectively.
+ *  @c pads.setValue() ), respectively. %Pattern also supports KeyPressable.
  *
  *  Right-clicking picks the respective pad value and re-defines the default 
  *  drawing value. This action is equivalent to left-clicking in the
@@ -80,7 +81,8 @@ template <class T = Pad<>>
 class Pattern : public Widget, 
 				public ValueableTyped<std::vector<std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>>>>,
 				public Clickable, 
-				public Draggable
+				public Draggable,
+				public KeyPressable
 {
 
 public:
@@ -529,6 +531,7 @@ inline Pattern<T>::Pattern	(const double x, const double y, const double width, 
 	ValueableTyped<std::vector<std::vector<std::pair<BUtilities::Point<size_t>, typename T::value_type>>>> (),
 	Clickable (),
 	Draggable (),
+	KeyPressable(),
 	pads (this),
 	columns_(columns),
 	rows_(rows),
@@ -540,6 +543,7 @@ inline Pattern<T>::Pattern	(const double x, const double y, const double width, 
 	clipBoard_(),
 	padOn__ (false)
 {
+	setKeyPressable(false);	// Not supported yet
 	pads.setValue (1.0);
 	for (size_t r = 0; r < rows_; ++r)
 	{
@@ -627,6 +631,7 @@ inline void Pattern<T>::copy (const Pattern<T>* that)
 	clipBoard_ = that->clipBoard_;
 	padOn__ = that->padOn;
 
+	KeyPressable::operator=(*that);
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);
 	ValueableTyped<value_type>::operator= (*that);

@@ -26,6 +26,7 @@
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
 #include "Supports/Scrollable.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
 #include BWIDGETS_DEFAULT_DRAWHBAR_PATH
 
@@ -44,14 +45,15 @@ namespace BWidgets
  *  @brief  %HScale widget.
  *
  *  %HScale is a Valueable Widget derived from HMeter. It displays a value as 
- *  a horizontal scale and supports user interaction via Clickable, Draggable, 
- *  and Scrollable. Its appearance is defined by the BgColors parameter (static
- *  elements) and by the FgColors parameter (value).
+ *  a horizontal scale and supports user interaction via Clickable, Draggable,
+ *  Scrollable, and KeyPressable. Its appearance is defined by the BgColors 
+ *  parameter (static elements) and by the FgColors parameter (value).
  */
 class HScale :	public HMeter, 
 				public Clickable, 
 				public Draggable, 
-				public Scrollable
+				public Scrollable,
+				public KeyPressable
 {
 public:
 
@@ -209,9 +211,10 @@ inline HScale::HScale	(const double  x, const double y, const double width, cons
 		HMeter	(x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
 		Clickable(),
 		Draggable(),
-		Scrollable()
+		Scrollable(),
+		KeyPressable()
 {
-
+	setKeyPressable(false);	// Not supported yet
 }
 
 inline Widget* HScale::clone () const 
@@ -224,6 +227,7 @@ inline Widget* HScale::clone () const
 inline void HScale::copy (const HScale* that)
 {
 	scale_ = that->scale_;
+	KeyPressable::operator=(*that);
 	Scrollable::operator= (*that);
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);

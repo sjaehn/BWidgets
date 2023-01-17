@@ -25,6 +25,7 @@
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/ValidatableRange.hpp"
 #include "Supports/ValueTransferable.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
 #include "../BEvents/PointerEvent.hpp"
 #include "Draws/drawPad.hpp"
@@ -46,7 +47,8 @@ namespace BWidgets
  *
  *  %Pad is a Valueable widget imitating an LED pad. Its value is represented
  *  by its color from dark to bright. It supports user interaction via
- *  Clickable (switch on / off) and Scrollable (increase / decrease value). 
+ *  Clickable (switch on / off), Scrollable (increase / decrease value), and
+ *  KeyPressable (to be implemented). 
  *  The visualble content of the %Pad is represented by FgColors.
  *
  *  The value type @a T can be used to specialize %Pad (e. g., by writing
@@ -61,7 +63,8 @@ class Pad : public Widget,
 			public ValidatableRange<T>, 
 			public ValueTransferable<T>, 
 			public Clickable, 
-			public Scrollable
+			public Scrollable,
+			public KeyPressable
 {
 
 protected:
@@ -247,9 +250,10 @@ inline Pad<T>::Pad	(const double x, const double y, const double width, const do
 	ValueTransferable<T> (transferFunc, reTransferFunc),
 	Clickable(),
 	Scrollable(),
+	KeyPressable(),
 	storedValue_ (value == min ? max : min)
 {
-	
+	setKeyPressable(false);	// Not supported yet
 }
 
 template <class T>
@@ -269,6 +273,7 @@ inline void Pad<T>::copy (const Pad* that)
 	ValueTransferable<T>::operator= (*that);
 	ValidatableRange<T>::operator= (*that);
 	ValueableTyped<T>::operator= (*that);
+	KeyPressable::operator=(*that);
 	Widget::copy (that);
 }
 

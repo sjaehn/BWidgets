@@ -40,7 +40,8 @@ namespace BWidgets
 /**
  *  @brief  Base Widget for drawing a %button. 
  *
- *  %Button is a Clickable Valueable Widget. The value represents its two
+ *  %Button is a Clickable Valueable Widget. It also supports Toggleable. 
+ *  The value represents its two
  *  possible conditions: on (true) or off (false). The visualble content of
  *  the %Button is represented by its background and its border. The border
  *  color itself is represented by the BgColor and is changed upon changing
@@ -199,6 +200,7 @@ inline void Button::copy (const Button* that)
 {
 	Clickable::operator= (*that);
 	ValueableTyped<bool>::operator= (*that);
+	Toggleable::operator= (*that);
     Widget::copy (that);
 }
 

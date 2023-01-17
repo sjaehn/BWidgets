@@ -22,6 +22,7 @@
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
 #include "Supports/Scrollable.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
 
 #ifndef BWIDGETS_DEFAULT_IMAGEHSLIDER_WIDTH
@@ -40,13 +41,14 @@ namespace BWidgets
  *
  *  %ImageHSlider is a Valueable widget derived from ImageHMeter. It displays 
  *  a value as a horizontal scale in the same way as ImageHMeter and 
- *  additionally supports user interaction via Clickable, Draggable, and 
- *  Scrollable.
+ *  additionally supports user interaction via Clickable, Draggable,
+ *  Scrollable, and KeyPressable.
  */
 class ImageHSlider :	public ImageHMeter, 
 						public Clickable, 
 						public Draggable, 
-						public Scrollable
+						public Scrollable,
+						public KeyPressable
 {
 public:
 
@@ -242,9 +244,10 @@ inline ImageHSlider::ImageHSlider	(const double  x, const double y, const double
 					 urid, title),
 		Clickable(),
 		Draggable(),
-		Scrollable()
+		Scrollable(),
+		KeyPressable()
 {
-
+	setKeyPressable(false);	// Not supported yet
 }
 
 inline Widget* ImageHSlider::clone () const 
@@ -256,6 +259,7 @@ inline Widget* ImageHSlider::clone () const
 
 inline void ImageHSlider::copy (const ImageHSlider* that)
 {
+	KeyPressable::operator=(*that);
 	Scrollable::operator= (*that);
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);

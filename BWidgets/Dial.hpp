@@ -34,6 +34,7 @@
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
 #include "Supports/Scrollable.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
 #include BWIDGETS_DEFAULT_DRAWARC_PATH
 #include BWIDGETS_DEFAULT_DRAWKNOB_PATH
@@ -56,14 +57,15 @@ namespace BWidgets
  *
  *  %Dial is a Valueable Widget derived from RadialMeter. It displays a pseudo
  *  3D dial consisting of a knob and an arc scale. It supports user
- *  interaction via Clickable, Draggable, and Scrollable. Its appearance is 
- *  defined by the BgColors parameter (static elements) and by the FgColors 
- *  parameter (value).
+ *  interaction via Clickable, Draggable, Scrollable, and KeyPressable. Its 
+ *  appearance is defined by the BgColors parameter (static elements) and by 
+ *  the FgColors parameter (value).
  */
 class Dial :	public RadialMeter,
 				public Clickable, 
 				public Draggable, 
-				public Scrollable
+				public Scrollable,
+				public KeyPressable
 {
 public:
 
@@ -226,9 +228,10 @@ inline Dial::Dial	(const double  x, const double y, const double width, const do
 		RadialMeter	(x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
 		Clickable(),
 		Draggable(),
-		Scrollable()
+		Scrollable(),
+		KeyPressable()
 {
-
+	setKeyPressable(false);	// Not supported yet
 }
 
 inline Widget* Dial::clone () const 
@@ -241,6 +244,7 @@ inline Widget* Dial::clone () const
 inline void Dial::copy (const Dial* that)
 {
 	scale_ = that->scale_;
+	KeyPressable::operator=(*that);
 	Scrollable::operator= (*that);
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);

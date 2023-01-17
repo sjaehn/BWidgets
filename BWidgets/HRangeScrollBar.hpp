@@ -30,6 +30,7 @@
 #include "Supports/ValidatableRange.hpp"
 #include "Supports/ValueTransferable.hpp"
 #include "Supports/Scrollable.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
 #include BWIDGETS_DEFAULT_DRAWKNOB_PATH
 #include <cairo/cairo.h>
@@ -61,7 +62,8 @@ class HRangeScrollBar :	public Widget,
 						public ValueableTyped<std::pair<double, double>>, 
 						public ValidatableRange<std::pair<double, double>>, 
 						public ValueTransferable<std::pair<double, double>>,
-						public Scrollable
+						public Scrollable,
+						public KeyPressable
 {
 protected:
 
@@ -364,12 +366,14 @@ inline HRangeScrollBar::HRangeScrollBar	(const double  x, const double y, const 
 	ValueTransferable<value_type> ([transferFunc] (const value_type& x) {return value_type (transferFunc (x.first), transferFunc (x.second));},
 	 							   [reTransferFunc] (const value_type& x) {return value_type (reTransferFunc (x.first), reTransferFunc (x.second));}),
 	Scrollable (),
+	KeyPressable(),
 	scrollbar (urid, title),
 	button1 (urid, title),
 	button2 (urid, title),
 	symbol1 (Symbol::SymbolType::minus, urid, title),
 	symbol2 (Symbol::SymbolType::add, urid, title)
 {
+	setKeyPressable(false);	// Not supported yet
 	scrollbar.setTransferFunction(transferFunc);
 	scrollbar.setReTransferFunction(reTransferFunc);
 	scrollbar.setFocusable(false);
@@ -407,6 +411,7 @@ inline void HRangeScrollBar::copy (const HRangeScrollBar* that)
 	button2.copy (&that->button2);
 	symbol1.copy (&that->symbol1);
 	symbol2.copy (&that->symbol2);
+	KeyPressable::operator=(*that);
 	Scrollable::operator= (*that);
 	ValueTransferable<value_type>::operator= (*that);
 	ValidatableRange<value_type>::operator= (*that);

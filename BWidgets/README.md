@@ -373,9 +373,9 @@ a TxColor in addtion to the StyleProperty settings supported by Widget.
 
 ![button](../suppl/Button.png)
 
-`Button` draws a simple button. It supports `Clickable` and `Valueable`. The
-value has two conditions: on (true) or off (false). A `Button` changes its 
-border color upon changing the condition.
+`Button` draws a simple button. It supports `Clickable`, `KeyPressable`, 
+`Toggleable` and `Valueable`. The value has two conditions: on (true) or off 
+(false). A `Button` changes its border color upon changing the condition.
 
 
 ### TextButton
@@ -457,10 +457,11 @@ BgColors parameter (static elements, false) and by the FgColors parameter
 
 ![spinbutton](../suppl/SpinButton.png)
 
-`SpinButton` is a `Valueable` composite widget. It contains an up and a down
-`SymbolButton`. Its value can either be 0 (no button pressed) or -1 (up button
-pressed) or 1 (down button pressed). The visualble content of the SpinButton 
-is represented by its background and its border.
+`SpinButton` is a `Valueable` composite widget and supports `KeyPressable`. 
+It contains an up and a down `SymbolButton`. Its value can either be 0 
+(no button pressed) or -1 (up button pressed) or 1 (down button pressed). 
+The visualble content of the SpinButton is represented by its background 
+and its border.
 
 
 ### Pad\<T\>
@@ -469,8 +470,9 @@ is represented by its background and its border.
 
 `Pad` is a `Valueable` widget imitating an LED pad. Its value is represented
 by its color from dark to bright. It supports user interaction via
-`Clickable` (switch on / off) and `Scrollable` (increase / decrease value). 
-The visualble content of the Pad is represented by FgColors.
+`Clickable` (switch on / off), `Scrollable` (increase / decrease value) and
+`KeyPressable` (to be implemented). The visualble content of the Pad is 
+represented by FgColors.
 
 
 ### SymbolPad\<T\>
@@ -499,7 +501,7 @@ other Valueable widget. The pad widgets value type
 Pattern allows to draw a pattern by left-clicking on the pads or dragging
 over the pads via support of `Draggable` and setting the pad values to 
 their `getMin()` or defined default drawing value (defined with
-`pads.setValue()`), respectively.
+`pads.setValue()`), respectively. In addition, it supports `KeyPressable`.
  
 Right-clicking picks the respective pad value and re-defines the default 
 drawing value. This action is equivalent to left-clicking in the
@@ -520,8 +522,8 @@ the respective pad value as the second type.
 ![hpianoroll](../suppl/HPianoRoll.png)
 
 `HPianoRoll` is a `Valueable` Widget displaying a horizontal piano roll.
-It supports user interaction via `Clickable`, `Draggable`, and 
-`Toggleable`. Its appearance is defined by the BgColors parameter 
+It supports user interaction via `Clickable`, `Draggable`, `Toggleable`, and
+`KeyPressable`. Its appearance is defined by the BgColors parameter 
 (inactive keys) and by the FgColors parameter (active keys).
 
 
@@ -554,8 +556,8 @@ displaying its value.
 
 `HScale` is a `Valueable` Widget derived from `HMeter`. It displays a value as a 
 horizontal scale and supports user interaction via `Clickable`, `Draggable`, 
-and `Scrollable`. Its appearance is defined by the BgColors parameter (static 
-elements) and by the FgColors parameter (value).
+`Scrollable`, and `KeyPressable`. Its appearance is defined by the BgColors 
+parameter (static elements) and by the FgColors parameter (value).
 
 
 ### HScrollBar
@@ -596,8 +598,8 @@ displaying its value.
 a value constisting of a `std::pair` with its min and its max value as a 
 horizontal scrollbar and supports user interaction via `Scrollable` to resize
 the value range. In addition, it supports dragging to move the value range
-or to move the ends (min, max). Its appearance is defined by the BgColors 
-parameter.
+or to move the ends (min, max). It also supports `KeyPressable`. Its appearance 
+is defined by the BgColors parameter.
 
 
 ### VMeter
@@ -628,10 +630,9 @@ displaying its value.
 ![vscale](../suppl/VScale.png)
 
 `VScale` is a `Valueable` Widget derived from `VMeter`. It displays a value as a
-vertical scale and supports user interaction via `Clickable`, `Draggable`, and 
-`Scrollable`. Its appearance is defined by the BgColors parameter (static 
-elements) and by the FgColors parameter (value).
-
+vertical scale and supports user interaction via `Clickable`, `Draggable`, 
+`Scrollable`, and `KeyPressable`. Its appearance is defined by the BgColors 
+parameter (static elements) and by the FgColors parameter (value).
 
 ### VScrollBar
 
@@ -671,8 +672,8 @@ displaying its value.
 a value constisting of a `std::pair` with its min and its max value as a 
 vertical scrollbar and supports user interaction via `Scrollable` to resize
 the value range. In addition, it supports dragging to move the value range
-or to move the ends (min, max). Its appearance is defined by the BgColors 
-parameter.
+or to move the ends (min, max). It also supports `KeyPressable`. Its appearance
+is defined by the BgColors parameter.
 
 
 ### RadialMeter
@@ -704,8 +705,9 @@ displaying its value.
 
 `Dial` is a `Valueable` Widget derived from `RadialMeter`. It displays a pseudo 
 3D dial consisting of a knob and an arc scale. It supports user interaction 
-via `Clickable`, `Draggable`, and `Scrollable`. Its appearance is defined by 
-the BgColors parameter (static elements) and by the FgColors parameter (value).
+via `Clickable`, `Draggable`, `Scrollable`, and `KeyPressable`. Its appearance 
+is defined by the BgColors parameter (static elements) and by the FgColors 
+parameter (value).
 
 
 ### ValueDial
@@ -752,8 +754,8 @@ cropped active image and by the position of the dynamic image.
 
 `ImageHSlider` is a `Valueable` widget derived from `ImageHMeter`. It displays 
 a value as a horizontal scale in the same way as ImageHMeter and 
-additionally supports user interaction via `Clickable`, `Draggable`, and 
-`Scrollable`.
+additionally supports user interaction via `Clickable`, `Draggable`, 
+`Scrollable`, and `KeyPressable`.
 
 
 ### ImageVMeter
@@ -779,8 +781,8 @@ cropped active image and by the position of the dynamic image.
 
 `ImageVSlider` is a `Valueable` widget derived from `ImageVMeter`. It displays 
 a value as a vertical scale in the same way as ImageVMeter and 
-additionally supports user interaction via `Clickable`, `Draggable`, and 
-`Scrollable`.
+additionally supports user interaction via `Clickable`, `Draggable`, 
+`Scrollable`, and `KeyPressable`.
 
 
 ### ImageRadialMeter
@@ -808,8 +810,8 @@ cropped active image (pie sliced) and by the position of the dynamic image
 
 `ImageDial` is a `Valueable` widget derived from `ImageRadialMeter`. It displays 
 a value in a radial representation in the same way as ImageRadialMeter and 
-additionally supports user interaction via `Clickable`, `Draggable`, and 
-`Scrollable`.
+additionally supports user interaction via `Clickable`, `Draggable`, 
+`Scrollable`, and `KeyPressable`.
 
 
 ### Box
@@ -843,7 +845,8 @@ contains a symbol and a headline.
 
 ![spinbox](../suppl/SpinBox.png)
 
-`SpinBox` is a `Valueable` composite widget. It is a container widget. It has
+`SpinBox` is a `Valueable` composite widget also supporting Clickable, 
+Scrollable, and Keypressable. It is a container widget. It has
 got a list of content widgets representing the items. And it has got a
 `SpinButton` to move between the items.
 

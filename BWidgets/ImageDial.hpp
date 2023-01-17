@@ -22,6 +22,7 @@
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
 #include "Supports/Scrollable.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
 
 #ifndef BWIDGETS_DEFAULT_IMAGEDIAL_WIDTH
@@ -40,13 +41,14 @@ namespace BWidgets
  *
  *  %ImageDial is a Valueable widget derived from ImageRadialMeter. It displays 
  *  a value in a radial representation in the same way as ImageRadialMeter and 
- *  additionally supports user interaction via Clickable, Draggable, and 
- *  Scrollable.
+ *  additionally supports user interaction via Clickable, Draggable,
+ *  Scrollable, and KeyPressable.
  */
 class ImageDial :	public ImageRadialMeter, 
 					public Clickable, 
 					public Draggable, 
-					public Scrollable
+					public Scrollable,
+					public KeyPressable
 {
 public:
 
@@ -247,8 +249,10 @@ inline ImageDial::ImageDial	(const double  x, const double y, const double width
 					 urid, title),
 		Clickable(),
 		Draggable(),
-		Scrollable()
+		Scrollable(),
+		KeyPressable()
 {
+	setKeyPressable(false);	// Not supported yet
 }
 
 inline Widget* ImageDial::clone () const 
@@ -260,6 +264,7 @@ inline Widget* ImageDial::clone () const
 
 inline void ImageDial::copy (const ImageDial* that)
 {
+	KeyPressable::operator=(*that);
 	Scrollable::operator= (*that);
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);

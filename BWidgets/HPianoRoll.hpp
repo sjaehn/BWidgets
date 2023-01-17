@@ -23,6 +23,7 @@
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
 #include "Supports/Toggleable.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
 #include <cmath>
 #include <cstdint>
@@ -44,15 +45,16 @@ namespace BWidgets
  *  @brief  Horizontal piano roll widget.
  *
  *  %HPianoRoll is a Valueable Widget displaying a horizontal piano roll.
- *  It supports user interaction via Clickable, Draggable, and Toggleable. Its
- *  appearance is defined by the BgColors parameter (inactive keys) and by the 
- *  FgColors parameter (active keys).
+ *  It supports user interaction via Clickable, Draggable, Toggleable, and
+ *  KeyPressable. Its appearance is defined by the BgColors parameter 
+ *  (inactive keys) and by the FgColors parameter (active keys).
  */
 class HPianoRoll : 	public Widget, 
 					public ValueableTyped<std::map<uint8_t, uint8_t>>,
 					public Clickable,
 					public Draggable,
-					public Toggleable
+					public Toggleable,
+					public KeyPressable
 {
 protected:
 	uint8_t startMidiKey_;
@@ -394,6 +396,7 @@ inline HPianoRoll::HPianoRoll	(const double x, const double y, const double widt
 	Clickable(),
 	Draggable(),
 	Toggleable(),
+	KeyPressable(),
 	startMidiKey_(startMidiKey),
 	endMidiKey_ (endMidiKey),
 	defaultVelocity_ (64)
@@ -410,10 +413,12 @@ inline HPianoRoll::HPianoRoll	(const double x, const double y, const double widt
 	Clickable(),
 	Draggable(),
 	Toggleable(),
+	KeyPressable(),
 	startMidiKey_(startMidiKey),
 	endMidiKey_ (endMidiKey),
 	defaultVelocity_ (64)
 {
+	setKeyPressable(false);	// Not supported yet
 	setToggleable (false);
 }
 
@@ -429,6 +434,7 @@ inline void HPianoRoll::copy (const HPianoRoll* that)
 	startMidiKey_ = that->startMidiKey_;
 	endMidiKey_ = that->endMidiKey_;
 	defaultVelocity_ = that->defaultVelocity_;
+	KeyPressable::operator=(*that);
 	Toggleable::operator= (*that);
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);
