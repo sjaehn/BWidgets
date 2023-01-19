@@ -867,8 +867,8 @@ its border and by styles of the embedded widgets.
 `ListBox` is `Valueable` widget derived from `SpinBox`. This widget shows a 
 scrollable list content and allows to select an item. In contrast to `SpinBox`:
 * it shows its content in multiple lines and allow selection by clicking on
-  an item by the support of Clickable. The selected item is turned in its
-  active state.
+  an item by the support of Clickable. The selected item is turned into
+  `Status::active`.
 * it supports navigation via a scroll bar instead of `SpinButton`s.
 
 

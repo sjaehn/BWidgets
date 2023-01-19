@@ -20,6 +20,7 @@
 
 #include "Widget.hpp"
 #include "Label.hpp"
+#include "Supports/KeyPressable.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Toggleable.hpp"
@@ -40,14 +41,14 @@ namespace BWidgets
 /**
  *  @brief  Base Widget for drawing a %button. 
  *
- *  %Button is a Clickable Valueable Widget. It also supports Toggleable. 
- *  The value represents its two
+ *  %Button is a Clickable Valueable Widget. It also supports Toggleable and 
+ *  KeyPressable. The value represents its two
  *  possible conditions: on (true) or off (false). The visualble content of
  *  the %Button is represented by its background and its border. The border
  *  color itself is represented by the BgColor and is changed upon changing
  *  the %Button condition (on: highLighted, off: darkened).
  */
-class Button : public Widget, public Clickable, public ValueableTyped<bool>, public Toggleable
+class Button : public Widget, public Clickable, public KeyPressable, public ValueableTyped<bool>, public Toggleable
 {
 public:
 
@@ -179,9 +180,11 @@ inline Button::Button	(const double x, const double y, const double width, const
 			 	 bool toggleable, bool clicked, uint32_t urid, std::string title) :
 	Widget (x, y, width, height, urid, title),
 	Clickable (),
+	KeyPressable(),
 	ValueableTyped<bool> (clicked),
 	Toggleable ()
 {
+	setKeyPressable (false),	// not implemented yet
 	setToggleable (toggleable);
 	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::normal]));
 	setBorder	(BStyles::Border 
@@ -198,6 +201,7 @@ inline Widget* Button::clone () const
 
 inline void Button::copy (const Button* that)
 {
+	KeyPressable::operator=(*that);
 	Clickable::operator= (*that);
 	ValueableTyped<bool>::operator= (*that);
 	Toggleable::operator= (*that);
