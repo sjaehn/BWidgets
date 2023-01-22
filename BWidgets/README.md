@@ -17,6 +17,68 @@ extensible dictionary for internationalization.
 Widgets can be decorated using styles.
 
 ## Quickstart
+### Code: Hello world
+
+Create a new project directory and copy B.Widgets as a subirectory called
+BWidgets. Create a helloworld.cpp file and start coding. You have to
+1. include the widgets (or events, or ...) you need into your project,
+2. create a main window,
+3. create widgets (like a label),
+4. add the widgets to the main window,
+5. and call the main loop:
+
+```
+#include "path_to_BWidgets/BWidgets/Window.hpp"
+#include "path_to_BWidgets/BWidgets/Label.hpp"
+
+using namespace BWidgets;
+
+int main ()
+{
+    Window w;
+    Label l ("Hello World!");
+    w.add (&l);
+    w.run();
+}
+```
+
+This is all of the magic. Now you have to build the helloworld executable.
+
+
+### Build: Hello world
+
+To build this example, you also have compile and link the .c and .cpp of 
+B.Widgets and its Pugl graphics library. The path to these files is stored
+in cfiles_xxx.txt (with xxx = x11 for X11) and cppfiles.txt, respectively. 
+For the GNU C and C++ compiler for X11-based systems you may call starting 
+from your project directory:
+```
+mkdir tmp
+
+cd tmp
+
+gcc -DPIC -DPUGL_HAVE_CAIRO -std=c99 -fPIC `pkg-config --cflags x11 cairo` $(cat ../cfiles_x11.txt | sed -e 's#^#../BWidgets/#') -c
+
+g++ -DPIC -DPUGL_HAVE_CAIRO -std=c++11 -fPIC `pkg-config --cflags x11 cairo` ../helloworld.cpp $(cat ../cppfiles.txt | sed -e 's#^#../BWidgets/#') -c
+
+cd ..
+
+g++ -DPIC -DPUGL_HAVE_CAIRO -iquote -std=c++11 -fPIC -Wl,--start-group `pkg-config --libs x11 cairo` tmp/*.o -Wl,--end-group -o helloworld
+
+rm -rf tmp
+```
+
+To see the result, call
+```
+./helloworld
+```
+
+Further reading: [Build](#build)
+
+
+### Code: Button test
+
+This is another example
 
 1. Include the header files of the widgets you need.
    ```
@@ -89,7 +151,8 @@ widgets which are (or will be) added to the main window).
    window.run ();
    ```
 
-Build and run. You can also find this source code at [../examples/buttontest.cpp](../examples/buttontest.cpp).
+Build and run as described above. You can also find this source code at 
+[../examples/buttontest.cpp](../examples/buttontest.cpp).
 
 ![buttontest](../suppl/buttontest.png)
 
@@ -197,15 +260,12 @@ Widget
  ├── SpinBox
  |    ├── ListBox
  |    ╰── ComboBox
- ├── Frame
- |    ├── Box
- |    |    ╰── TextBox
- |    |         ╰── MessageBox
- |    ╰── FileChooser
- |         ╰── SampleChooser
- .   
- .    
- .    
+ ╰── Frame
+      ├── Box
+      |    ╰── TextBox
+      |         ╰── MessageBox
+      ╰── FileChooser
+           ╰── SampleChooser    
 ```
 
 Each widget class Xxx has got at least four* different constructors
@@ -236,10 +296,10 @@ Each widget class Xxx has got at least four* different constructors
   ComboBox (0, 0, 120, 20, {"Berlin", "London", "Madrid", "Paris"});
   ```
 
-  \*Widgets without any additional data to pass (Widget, Frame) have only got
+\*Widgets without any additional data to pass (Widget, Frame) have only got
   three constructors.
 
-  \*\*Window also has got additional optional parameters after title.
+\*\*Window also has got additional optional parameters after title.
 
 You can re-define the widget default size used for `Xxx ()`, 
 `Xxx (urid, title)` and `Xxx (data, urid, title)` by defining the macros 
@@ -822,7 +882,7 @@ additionally supports user interaction via `Clickable`, `Draggable`,
 ![box](../suppl/Box.png)
 
 `Box` is a composite Widget based on `Frame` and contains `TextButton`s. It 
-also supports `Valueable` and Closeable. The default value of the Box is 0
+also supports `Valueable`, `KeyPressable` (to be implemented) and Closeable. The default value of the Box is 0
 and changes upon pressing one of the containing text buttons. On pressing
 one of the buttons, the widget value is set to the button index (starting)
 with 1 and a `CloseRequestEvent` is emitted.

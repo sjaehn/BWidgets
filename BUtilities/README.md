@@ -12,10 +12,8 @@ Contains a collection of different useful C and C++ tools.
  |    ├── cairoplus_rgba
  |    ╰── cairoplus_text_decorations
  ├── Dictionary
- ├── Node
  ├── Point
  ├── Property
- ├── Shape
  ╰── URID
 ```
 
@@ -82,11 +80,6 @@ Dictionary. Or add translations at runtime using `add()`. Or include a GNU
 gettext message catalogue (.mo) as fallback using `alsoUseCatalogue()`.
 
 
-### Node \<T\>
-
-Template class describing a node as a point with up to two handles.
-
-
 ### Point \<T\>
 
 2D Point coordinates.
@@ -96,12 +89,6 @@ Template class describing a node as a point with up to two handles.
 
 A Property is a data pair and consists of a constant @a ID and the assigned
 @a data. It can only be set upon construction. No change, no assignment.
-
-
-### Shape \<T, res\>
-
-A Shape is a container of transferred nodes to interpolate any point between 
-the nodes and thus to create a 2D graph.
 
 
 ### URID
