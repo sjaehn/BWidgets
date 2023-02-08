@@ -19,13 +19,14 @@
 #include "Supports/Linkable.hpp"
 #include "Widget.hpp"
 #include <cairo/cairo.h>
+#include "pugl/cairo.h"
+#include <cstdio>
 #include <list>
 #ifdef PKG_HAVE_FONTCONFIG
 #include <fontconfig/fontconfig.h>
 #endif /*PKG_HAVE_FONTCONFIG*/
 
 #include "Window.hpp"
-#include "pugl/pugl/cairo.h"
 #include "../BDevices/MouseButton.hpp"
 #include "../BDevices/Keys.hpp"
 #include "../BEvents/ExposeEvent.hpp"
@@ -71,12 +72,12 @@ Window::Window (const double width, const double height, PuglNativeView nativeWi
 	layer_ = BWIDGETS_DEFAULT_WINDOW_LAYER;
 
 	world_ = puglNewWorld (worldType, worldFlag);
-	puglSetClassName (world_, "BWidgets");
+	puglSetWorldString (world_, PUGL_CLASS_NAME, "BWidgets");
 
 	view_ = puglNewView (world_);
 	if (nativeWindow_ != 0) puglSetParentWindow(view_, nativeWindow_);
-	puglSetWindowTitle(view_, title.c_str());
-	puglSetDefaultSize (view_, getWidth (), getHeight ());
+	puglSetViewString(view_, PUGL_WINDOW_TITLE, title.c_str());
+	puglSetSizeHint (view_, PUGL_DEFAULT_SIZE, getWidth (), getHeight ());
 	puglSetViewHint(view_, PUGL_RESIZABLE, resizable ? PUGL_TRUE : PUGL_FALSE);
 	puglSetViewHint(view_, PUGL_IGNORE_KEY_REPEAT, PUGL_TRUE);
 	puglSetWorldHandle(world_, this);
@@ -84,7 +85,7 @@ Window::Window (const double width, const double height, PuglNativeView nativeWi
 	puglSetBackend(view_, puglCairoBackend());
 	puglSetEventFunc (view_, Window::translatePuglEvent);
 	puglRealize (view_);
-	puglShow (view_);
+	puglShow (view_, PUGL_SHOW_RAISE);
 
 	emitExposeEvent();
 }
@@ -207,10 +208,10 @@ void Window::onCloseRequest (BEvents::Event* event)
 void Window::onExposeRequest (BEvents::Event* event)
 {
 	BEvents::ExposeEvent* ev = dynamic_cast<BEvents::ExposeEvent*>(event);
-	if (ev) puglPostRedisplayRect (view_,	{ev->getArea().getX() * getZoom(), 
-											 ev->getArea().getY() * getZoom(), 
-											 ev->getArea().getWidth() * getZoom(), 
-											 ev->getArea().getHeight() * getZoom()});
+	if (ev) puglPostRedisplayRect (view_,	{static_cast<PuglCoord>(ev->getArea().getX() * getZoom()), 
+											 static_cast<PuglCoord>(ev->getArea().getY() * getZoom()), 
+											 static_cast<PuglSpan>((ev->getArea().getX() + ev->getArea().getWidth()) * getZoom()), 
+											 static_cast<PuglSpan>((ev->getArea().getX() + ev->getArea().getHeight()) * getZoom())});
 }
 
 void Window::addEventToQueue (BEvents::Event* event)
@@ -543,7 +544,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 						position - widget->getAbsolutePosition (),
 						position - widget->getAbsolutePosition (),
 						BUtilities::Point<> (),
-						static_cast<BDevices::MouseButton::ButtonType>(puglEvent->button.button)
+						static_cast<BDevices::MouseButton::ButtonType>(puglEvent->button.button + 1)
 					)
 				);
 			}
@@ -554,7 +555,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 	case PUGL_BUTTON_RELEASE:
 		{
 			BUtilities::Point<> position = BUtilities::Point<> (puglEvent->button.x, puglEvent->button.y) / w->getZoom();
-			BDevices::MouseButton::ButtonType button = static_cast<BDevices::MouseButton::ButtonType>(puglEvent->button.button);
+			BDevices::MouseButton::ButtonType button = static_cast<BDevices::MouseButton::ButtonType>(puglEvent->button.button + 1);
 			std::list<Widget*> gwidgets = w->listDeviceGrabbed (BDevices::MouseButton (button));
 
 			for (Widget* widget : gwidgets)

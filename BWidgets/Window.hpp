@@ -23,7 +23,7 @@
 
 #include <chrono>
 #include "Widget.hpp"
-#include "pugl/pugl/pugl.h"
+#include "pugl/pugl.h"
 #include "Supports/Closeable.hpp"
 
 #ifndef BWIDGETS_DEFAULT_WINDOW_WIDTH
