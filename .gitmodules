@@ -1,0 +1,3 @@
+[submodule "pugl"]
+	path = pugl
+	url = https://github.com/lv2/pugl.git
