@@ -210,8 +210,8 @@ void Window::onExposeRequest (BEvents::Event* event)
 	BEvents::ExposeEvent* ev = dynamic_cast<BEvents::ExposeEvent*>(event);
 	if (ev) puglPostRedisplayRect (view_,	{static_cast<PuglCoord>(ev->getArea().getX() * getZoom()), 
 											 static_cast<PuglCoord>(ev->getArea().getY() * getZoom()), 
-											 static_cast<PuglSpan>((ev->getArea().getX() + ev->getArea().getWidth()) * getZoom()), 
-											 static_cast<PuglSpan>((ev->getArea().getX() + ev->getArea().getHeight()) * getZoom())});
+											 static_cast<PuglSpan>((ev->getArea().getWidth()) * getZoom()), 
+											 static_cast<PuglSpan>((ev->getArea().getHeight()) * getZoom())});
 }
 
 void Window::addEventToQueue (BEvents::Event* event)
