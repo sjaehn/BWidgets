@@ -29,41 +29,70 @@ the parameter in the makefile.
 
 
 ## Installation
+### Get B.Widgets
 
-Clone or copy this repository.
+Clone or copy this repository including its submodules.
 
 ```
-git clone https://github.com/sjaehn/BWidgets
+git clone --recurse-submodules https://github.com/sjaehn/BWidgets
 ```
 
 will create a folder called `BWidgets` which contains all the files including
-the examples.
+the pugl submodule and the examples.
 
-To build all the example binaries, simply call
 
+### Build B.Widgets
+
+From the repository you copied or clones you can build three libraries 
+(cairoplus, pugl, and bwidgetscore) and optionally the provided examples.
+
+To build all, simply call
 ```
 cd BWidgets
 make
 ```
 
-If you only want to install selected examples, call instead
-
+Optional: All the built binaries (libraries and examples) are now located in 
+the just created build subdirectory. You can choose an alternative directory 
+by passing the `BUILDDIR` variable to make. Simply call `make` instead:
 ```
-cd BWidgets
-make [examples]
-```
-
-with optional parameter `[examples]` which can be `widgetgallery`, 
-`helloworld`, `buttontest`, `symbols`, `pattern`, `styles`, `themes`, `draws`, 
-and/or `values`. 
-
-Then execute the respective example, e. g.:
-```
-./widgetgallery
+make BUILDDIR=your_build_directory
 ```
 
-Note: If you want to use BWidgets within your project, copy or clone it as a
-subdirectory into your project.
+Optional: In addition, an include subdirectory is created where all the library 
+header files are stored. Again, you can choose an alternative directory by 
+passing the `INCLUDEDIR` variable to make. Simply call `make` instead:
+```
+make INCLUDEDIR=your_include_directory
+```
+
+To execute the respective example, call it form its location, e. g.:
+```
+build/widgetgallery
+```
+
+If you only want to install selected examples, add the name of the example
+behind the `make` command separated by a white space, e.g.:
+```
+make widgetgallery
+```
+
+Allowed example names are `widgetgallery`, `helloworld`, `buttontest`, 
+`symbols`, `pattern`, `styles`, `themes`, `draws` and `values`. Building an 
+example will also build the libraries.
+
+If you only want to install selected libraries, add the name of the library
+behind the `make` command separated by a white space, e.g.:
+```
+make bwidgets
+```
+
+Allowed library names are `cairoplus`, `pugl`, and `bwidgets`. Building 
+bwidgets will also build the other two libraries.
+
+Note: If you want to use B.Widgets within your project, simply copy or clone 
+it as a subdirectory into your project. The header file/directory structure is
+the same as in the include subdirectory. 
 
 
 ## Documentation

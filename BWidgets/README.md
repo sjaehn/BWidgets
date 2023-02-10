@@ -42,30 +42,19 @@ int main ()
 }
 ```
 
-This is all of the magic. Now you have to build the helloworld executable.
+This is all of the magic. Now you can save it build the helloworld executable.
 
 
 ### Build: Hello world
 
-To build this example, you also have compile and link the .c and .cpp of 
-B.Widgets and its Pugl graphics library. The path to these files is stored
-in cfiles_xxx.txt (with xxx = x11 for X11) and cppfiles.txt, respectively. 
-For the GNU C and C++ compiler for X11-based systems you may call starting 
-from your project directory:
+To build this example, you should first build the provided libraries from the 
+BWidgets subdirectory. Call starting from your project directory:
 ```
-mkdir tmp
-
-cd tmp
-
-gcc -DPIC -DPUGL_HAVE_CAIRO -std=c99 -fPIC `pkg-config --cflags x11 cairo` $(cat ../cfiles_x11.txt | sed -e 's#^#../BWidgets/#') -c
-
-g++ -DPIC -DPUGL_HAVE_CAIRO -std=c++11 -fPIC `pkg-config --cflags x11 cairo` ../helloworld.cpp $(cat ../cppfiles.txt | sed -e 's#^#../BWidgets/#') -c
-
+cd BWidgets
+make bwidgets
 cd ..
-
-g++ -DPIC -DPUGL_HAVE_CAIRO -iquote -std=c++11 -fPIC -Wl,--start-group `pkg-config --libs x11 cairo` tmp/*.o -Wl,--end-group -o helloworld
-
-rm -rf tmp
+g++ -fPIC -DPIC `pkg-config --cflags x11 cairo` -IBWidgets/include helloworld.cpp -c -o helloworld.o
+g++ BWidgets/build/libbwidgetscore.a.tmp/*.o BWidgets/build/libpugl.a.tmp/*.o BWidgets/build/libcairoplus.a.tmp/*.o helloworld.o `pkg-config --libs x11 cairo` -o helloworld
 ```
 
 To see the result, call
@@ -1365,16 +1354,38 @@ the POSIX locale (language[_territory][.codeset][@modifier], e. g.
 BUtilities::Dictionary::setLanguage ("de_DE.utf8");
 ```
 
+
 ## Build
 
 You can build B.Widgets-based binaries with the C and C++ compilers of your
 choice.
 
-Neither B.Wigets nor the Pugl library used by B.Widgets is header only. This 
-means that you have to compile the respective .c and .cpp files you directly 
-or indirectly need as well and link them. 
+There are two ways to build your own projects with B.Widgets. The easy way is
+to build the libraries first, compile your project, and link it against the
+libraries. The hard way is to compile all C and C++ files of the libraries and
+your project and link them. Both approaches are compatible as the built 
+include dir structure reflects the structure of the B.Widgets repository and
+thus lead to the same result.
 
-To compile for a X11-based system, you need the Pugl .c files:
+
+### Libraries-based build
+
+First build the three required libraries cairoplus, pugl, and bwidgetscore 
+with a single call from your B.Widgets folder (in this example: BWidgets):
+```
+make bwidgets
+```
+
+Then compile your project and link it against the libraries:
+```
+g++ -fPIC -DPIC `pkg-config --cflags x11 cairo` -IBWidgets/include your_project.cpp -c -o your_project.o
+g++ BWidgets/build/libbwidgetscore.a.tmp/*.o BWidgets/build/libpugl.a.tmp/*.o BWidgets/build/libcairoplus.a.tmp/*.o your_project.o `pkg-config --libs x11 cairo` -o your_executable
+```
+
+
+### Compile from scratch
+
+To compile for a X11-based system, you need the pugl .c files:
 
   path/to/BWidgets/BWidgets/pugl/implementation.c, \
   path/to/BWidgets/BWidgets/pugl/x11_stub.c, \
@@ -1397,6 +1408,9 @@ And from B.Widgets itself, you need at least:
 
 The essential .c and .cpp files are also listed in cfiles_xxx.txt (with xxx 
 can be x11, win (TODO) or mac (TODO)) and cppfiles.txt, respectively.
+
+
+### Build plugins
 
 If you want to build B.Widgets-based plugins, get sure that symbols are not
 exposed. Tell Pugl to hide symbols by setting `PUGL_API` to "hidden", e. g.
