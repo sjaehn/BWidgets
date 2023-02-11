@@ -55,7 +55,7 @@ $(BUILDDIR)/libcairoplus.a: BUtilities/cairoplus.h BUtilities/cairoplus.c
 	cd $@.tmp ; $(CC) $(CPPFLAGS) $(CFLAGS) $(PKGCFLAGS) -I$(CURDIR)/include $(addprefix $(CURDIR)/, BUtilities/cairoplus.c) -c
 	echo $@
 	$(AR) $(ARFLAGS) $@ $@.tmp/*.o
-#	rm -rf $@.tmp
+	rm -rf $@.tmp
 
 $(BUILDDIR)/libpugl.a: $(shell find pugl/)
 	mkdir -p $(INCLUDEDIR)
@@ -64,7 +64,7 @@ $(BUILDDIR)/libpugl.a: $(shell find pugl/)
 	mkdir -p $@.tmp
 	cd $@.tmp ; $(CC) $(CPPFLAGS) $(CFLAGS) $(PKGCFLAGS) -I$(CURDIR)/include $(addprefix $(CURDIR)/, $(PUGL_C_FILES)) -c
 	$(AR) $(ARFLAGS) $@ $@.tmp/*.o
-#	rm -rf $@.tmp
+	rm -rf $@.tmp
 
 $(BUILDDIR)/libbwidgetscore: $(BUILDDIR)/libcairoplus.a $(BUILDDIR)/libpugl.a $(shell find BDevices/) $(shell find BEvents/) $(shell find BMusic/) $(shell find BStyles/) $(shell find BUtilities/) $(shell find BWidgets/)
 	mkdir -p $(INCLUDEDIR)
@@ -98,8 +98,8 @@ $(BUNDLE):
 
 
 clean:
-	rm -r $(BUILDDIR)
-	rm -r $(INCLUDEDIR)
+	rm -rf $(BUILDDIR)
+	rm -rf $(INCLUDEDIR)
 
 .PHONY: cairoplus pugl bwidgets all clean
 
