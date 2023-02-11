@@ -54,7 +54,7 @@ cd BWidgets
 make bwidgets
 cd ..
 g++ -fPIC -DPIC `pkg-config --cflags x11 cairo` -IBWidgets/include helloworld.cpp -c -o helloworld.o
-g++ BWidgets/build/libbwidgetscore.a.tmp/*.o BWidgets/build/libpugl.a.tmp/*.o BWidgets/build/libcairoplus.a.tmp/*.o helloworld.o `pkg-config --libs x11 cairo` -o helloworld
+g++ -LBWidgets/build BWidgets/build/libbwidgetscore/*.o -lpugl -lcairoplus helloworld.o `pkg-config --libs x11 cairo` -o helloworld
 ```
 
 To see the result, call
@@ -1379,7 +1379,7 @@ make bwidgets
 Then compile your project and link it against the libraries:
 ```
 g++ -fPIC -DPIC `pkg-config --cflags x11 cairo` -IBWidgets/include your_project.cpp -c -o your_project.o
-g++ BWidgets/build/libbwidgetscore.a.tmp/*.o BWidgets/build/libpugl.a.tmp/*.o BWidgets/build/libcairoplus.a.tmp/*.o your_project.o `pkg-config --libs x11 cairo` -o your_executable
+g++ -LBWidgets/Lbuild BWidgets/build/libbwidgetscore/*.o -lpugl -lcairoplus your_project.o `pkg-config --libs x11 cairo` -o your_executable
 ```
 
 
