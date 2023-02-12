@@ -1,12 +1,22 @@
 SHELL = /bin/sh
 
+# destination
+BUILDDIR ?= build
+INCLUDEDIR ?= include
+
+# resources
+PUGL_C_FILES = pugl/src/common.c pugl/src/internal.c
+CORE_CPP_FILES = BUtilities/Urid.cpp BUtilities/Dictionary.cpp BWidgets/Supports/Closeable.cpp BWidgets/Supports/Messagable.cpp BWidgets/Window.cpp BWidgets/Widget.cpp
+
 # pgk-config
 PKG_CONFIG ?= pkg-config
 PKG_LIBS += sndfile x11 cairo
 ifneq ($(shell $(PKG_CONFIG) --exists fontconfig || echo no), no)
-	PKG_LIBS += fontconfig
-	CPPFLAGS += -DPKG_HAVE_FONTCONFIG
+	override PKG_LIBS += fontconfig
+	override CPPFLAGS += -DPKG_HAVE_FONTCONFIG
 endif
+PKGCFLAGS = `$(PKG_CONFIG) --cflags $(PKG_LIBS)`
+PKGLIBS = `$(PKG_CONFIG) --libs --static $(PKG_LIBS)`
 
 # archive
 AR ?= ar
@@ -15,20 +25,10 @@ ARFLAGS = rcs
 # compiler
 CC ?= gcc
 CXX ?= g++
-CPPFLAGS += -DPIC -DPUGL_HAVE_CAIRO
-CXXFLAGS += -std=c++11 -g -Wall -fPIC
-CFLAGS += -Wall -fPIC -g
-PKGCFLAGS = `$(PKG_CONFIG) --cflags $(PKG_LIBS)`
-PKGLFLAGS = `$(PKG_CONFIG) --libs --static $(PKG_LIBS)`
-LDFLAGS +=
-
-# destination
-BUILDDIR ?= build
-INCLUDEDIR ?= include
-
-# resources
-PUGL_C_FILES = pugl/src/common.c pugl/src/internal.c
-CORE_CPP_FILES = BUtilities/Urid.cpp BUtilities/Dictionary.cpp BWidgets/Supports/Closeable.cpp BWidgets/Supports/Messagable.cpp BWidgets/Window.cpp BWidgets/Widget.cpp
+override CPPFLAGS += -DPIC -I$(CURDIR)/$(INCLUDEDIR) $(PKGCFLAGS)
+override CXXFLAGS += -std=c++11 -fPIC
+override CFLAGS += -fPIC
+override LDFLAGS += -L$(CURDIR)/$(BUILDDIR)
 
 # os
 ifeq ($(OS), Windows_NT)
@@ -52,8 +52,7 @@ $(BUILDDIR)/libcairoplus.a: BUtilities/cairoplus.h BUtilities/cairoplus.c
 	cp BUtilities/cairoplus.h $(INCLUDEDIR)/BUtilities
 	mkdir -p $(@D)
 	mkdir -p $@.tmp
-	cd $@.tmp ; $(CC) $(CPPFLAGS) $(CFLAGS) $(PKGCFLAGS) -I$(CURDIR)/include $(addprefix $(CURDIR)/, BUtilities/cairoplus.c) -c
-	echo $@
+	cd $@.tmp ; $(CC) $(CPPFLAGS) $(CFLAGS) $(addprefix $(CURDIR)/, BUtilities/cairoplus.c) -c
 	$(AR) $(ARFLAGS) $@ $@.tmp/*.o
 	rm -rf $@.tmp
 
@@ -62,7 +61,7 @@ $(BUILDDIR)/libpugl.a: $(shell find pugl/)
 	cp -r pugl/include/pugl $(INCLUDEDIR)
 	mkdir -p $(@D)
 	mkdir -p $@.tmp
-	cd $@.tmp ; $(CC) $(CPPFLAGS) $(CFLAGS) $(PKGCFLAGS) -I$(CURDIR)/include $(addprefix $(CURDIR)/, $(PUGL_C_FILES)) -c
+	cd $@.tmp ; $(CC) $(CPPFLAGS) $(CFLAGS) $(addprefix $(CURDIR)/, $(PUGL_C_FILES)) -c
 	$(AR) $(ARFLAGS) $@ $@.tmp/*.o
 	rm -rf $@.tmp
 
@@ -76,26 +75,22 @@ $(BUILDDIR)/libbwidgetscore: $(BUILDDIR)/libcairoplus.a $(BUILDDIR)/libpugl.a $(
 	find BWidgets/ -iname '*.hpp' | cpio -pdm include/
 	mkdir -p $(@D)
 	mkdir -p $@
-	cd $@ ; $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(PKGCFLAGS) -I$(CURDIR)/include $(addprefix $(CURDIR)/, $(CORE_CPP_FILES)) -c
+	cd $@ ; $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(addprefix $(CURDIR)/, $(CORE_CPP_FILES)) -c
 #	$(AR) $(ARFLAGS) $@ $@/*.o
+
+$(addprefix $(BUILDDIR)/, $(BUNDLE)): $(BUILDDIR)/libbwidgetscore
+	mkdir -p $(@D)
+	cd $(@D); $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(PKGCFLAGS) -I$(CURDIR)/include $(CURDIR)/examples/$(@F).cpp -c -o $(@F).o
+	cd $(@D); $(CXX) $(LDFLAGS) libbwidgetscore/*.o -lpugl -lcairoplus $(@F).o $(PKGLIBS) -o $(@F)
+
+$(BUNDLE):
+	$(MAKE) $(BUILDDIR)/$@
 
 cairoplus: $(BUILDDIR)/libcairoplus.a
 	
 pugl: $(BUILDDIR)/libpugl.a
 
 bwidgets: $(BUILDDIR)/libbwidgetscore
-
-$(addprefix $(BUILDDIR)/, $(BUNDLE)): $(BUILDDIR)/libbwidgetscore
-	mkdir -p $(@D)
-	cd $(@D); $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(PKGCFLAGS) -I$(CURDIR)/include $(CURDIR)/examples/$(@F).cpp -c -o $(@F).o
-	cd $(@D); $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -L$(CURDIR)/$(BUILDDIR) libbwidgetscore/*.o -lpugl -lcairoplus $(@F).o $(PKGLFLAGS) -o $(@F)
-#	cd $(@D); $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -L$(CURDIR)/$(BUILDDIR) -lbwidgetscore -lpugl -lcairoplus $(@F).o $(PKGLFLAGS) -o $(@F)
-#	cd $(@D); $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(PKGCFLAGS) -I$(CURDIR)/include -o $(@F) $(CURDIR)/examples/$(@F).cpp $(LDFLAGS) -L$(CURDIR)/$(BUILDDIR) -Wl,--start-group $(PKGLFLAGS) -lcairoplus -lpugl -lbwidgetscore -Wl,--end-group
-
-
-$(BUNDLE):
-	$(MAKE) $(BUILDDIR)/$@
-
 
 clean:
 	rm -rf $(BUILDDIR)
