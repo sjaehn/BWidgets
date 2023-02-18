@@ -20,6 +20,7 @@
 #include "Widget.hpp"
 #include <cairo/cairo.h>
 #include "pugl/cairo.h"
+#include "pugl/pugl.h"
 #include <cstdio>
 #include <list>
 #ifdef PKG_HAVE_FONTCONFIG
@@ -77,6 +78,7 @@ Window::Window (const double width, const double height, PuglNativeView nativeWi
 	view_ = puglNewView (world_);
 	if (nativeWindow_ != 0) puglSetParentWindow(view_, nativeWindow_);
 	puglSetViewString(view_, PUGL_WINDOW_TITLE, title.c_str());
+	puglSetPosition(view_, 0, 0);
 	puglSetSizeHint (view_, PUGL_DEFAULT_SIZE, getWidth (), getHeight ());
 	puglSetViewHint(view_, PUGL_RESIZABLE, resizable ? PUGL_TRUE : PUGL_FALSE);
 	puglSetViewHint(view_, PUGL_IGNORE_KEY_REPEAT, PUGL_TRUE);
