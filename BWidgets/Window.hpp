@@ -142,16 +142,22 @@ public:
 	double getZoom () const;
 
 	/**
-	 *  @brief  Get in contact to the host system via Pugl.
+	 *  @brief  Get access to the host system-provided native view via Pugl.
 	 *  @return  Pointer to the PuglView.
 	 */
-	PuglView* getPuglView ();
+	PuglNativeView getNativeView ();
 
 	/**
-	 *  @brief  Gets the (Cairo) context provided by the host system via Pugl.
-	 *  @return  Pointer to the (Cairo) context.
+	 *  @brief  Get access to the Pugl-provided view.
+	 *  @return  Pointer to the PuglView.
 	 */
-	cairo_t* getPuglContext ();
+	PuglView* getView ();
+
+	/**
+	 *  @brief  Gets the Cairo context provided by the host system via Pugl.
+	 *  @return  Pointer to the Cairo context.
+	 */
+	cairo_t* getCairoContext ();
 
 	/**
 	 *  @brief  Runs the %Window until it get closed.

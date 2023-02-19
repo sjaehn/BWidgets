@@ -20,6 +20,7 @@
 #include "Widget.hpp"
 #include <cairo/cairo.h>
 #include "pugl/cairo.h"
+#include "pugl/pugl.h"
 #include <cstdio>
 #include <list>
 #ifdef PKG_HAVE_FONTCONFIG
@@ -177,12 +178,16 @@ double Window::getZoom () const
 	return zoom_;
 }
 
-PuglView* Window::getPuglView () {return view_;}
-
-cairo_t* Window::getPuglContext ()
+PuglNativeView Window::getNativeView ()
 {
-	if (view_) return (cairo_t*) puglGetContext (view_);
-	else return NULL;
+	return (view_ ? puglGetNativeView(view_) : 0);
+}
+
+PuglView* Window::getView () {return view_;}
+
+cairo_t* Window::getCairoContext ()
+{
+	return (view_ ? static_cast<cairo_t*>(puglGetContext(view_)): nullptr);
 }
 
 void Window::run ()
@@ -732,7 +737,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 															 puglEvent->expose.height / w->getZoom());
 
 			// Get access to the host provided surface
-			cairo_t* crw = w->getPuglContext ();
+			cairo_t* crw = w->getCairoContext ();
 			if (crw && (cairo_status (crw) == CAIRO_STATUS_SUCCESS))
 			{
 				// Create a temporary window surface
