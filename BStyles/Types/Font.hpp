@@ -98,7 +98,7 @@ struct Font
 	bool operator!= (const Font& that) const {return !operator== (that);}
 };
 
-const Font sans12pt = Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0);
+inline Font sans12pt = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0);
 
 inline cairo_text_extents_t Font::getCairoTextExtents (cairo_t* cr, const std::string& text) const
 {

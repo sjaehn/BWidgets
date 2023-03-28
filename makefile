@@ -26,8 +26,8 @@ ARFLAGS = rcs
 CC ?= gcc
 CXX ?= g++
 override CPPFLAGS += -DPIC -I$(CURDIR)/$(INCLUDEDIR) $(PKGCFLAGS)
-override CXXFLAGS += -std=c++11 -fPIC
-override CFLAGS += -fPIC
+override CXXFLAGS += -std=c++17 -fPIC -g
+override CFLAGS += -fPIC -g
 override LDFLAGS += -L$(CURDIR)/$(BUILDDIR)
 
 # os
@@ -76,12 +76,12 @@ $(BUILDDIR)/libbwidgetscore: $(BUILDDIR)/libcairoplus.a $(BUILDDIR)/libpugl.a $(
 	mkdir -p $(@D)
 	mkdir -p $@
 	cd $@ ; $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(addprefix $(CURDIR)/, $(CORE_CPP_FILES)) -c
-#	$(AR) $(ARFLAGS) $@ $@/*.o
+	$(AR) $(ARFLAGS) $@.a $@/*.o
 
 $(addprefix $(BUILDDIR)/, $(BUNDLE)): $(BUILDDIR)/libbwidgetscore
 	mkdir -p $(@D)
 	cd $(@D); $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(PKGCFLAGS) -I$(CURDIR)/include $(CURDIR)/examples/$(@F).cpp -c -o $(@F).o
-	cd $(@D); $(CXX) $(LDFLAGS) libbwidgetscore/*.o -lpugl -lcairoplus $(@F).o $(PKGLIBS) -o $(@F)
+	cd $(@D); $(CXX) $(LDFLAGS) $(@F).o -lbwidgetscore -lpugl -lcairoplus $(PKGLIBS) -o $(@F)
 
 $(BUNDLE):
 	$(MAKE) $(BUILDDIR)/$@

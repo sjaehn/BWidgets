@@ -60,14 +60,14 @@ public:
     }
 };
 
-const ColorMap reds = ColorMap ({red, lightred, darkred, black});
-const ColorMap yellows = ColorMap ({yellow, lightyellow, darkyellow, black});
-const ColorMap greens = ColorMap ({green, lightgreen, darkgreen, black});
-const ColorMap blues = ColorMap ({blue, lightblue, darkblue, black});
-const ColorMap greys = ColorMap ({grey, lightgrey, darkgrey, black});
-const ColorMap whites = ColorMap ({lightlightgrey, white, lightgrey, black});
-const ColorMap darks = ColorMap ({darkgrey, grey, darkdarkgrey, black});
-const ColorMap lights = ColorMap ({lightgrey, lightlightgrey, grey, darkgrey});
+inline const ColorMap reds = ColorMap ({red, lightred, darkred, black});
+inline const ColorMap yellows = ColorMap ({yellow, lightyellow, darkyellow, black});
+inline const ColorMap greens = ColorMap ({green, lightgreen, darkgreen, black});
+inline const ColorMap blues = ColorMap ({blue, lightblue, darkblue, black});
+inline const ColorMap greys = ColorMap ({grey, lightgrey, darkgrey, black});
+inline const ColorMap whites = ColorMap ({lightlightgrey, white, lightgrey, black});
+inline const ColorMap darks = ColorMap ({darkgrey, grey, darkdarkgrey, black});
+inline const ColorMap lights = ColorMap ({lightgrey, lightlightgrey, grey, darkgrey});
 
 }
 

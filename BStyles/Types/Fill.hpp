@@ -214,18 +214,18 @@ public:
     }
 };
 
-const Fill blackFill = Fill (black);
-const Fill whiteFill = Fill (white);
-const Fill redFill = Fill (red);
-const Fill greenFill = Fill (green);
-const Fill blueFill = Fill (blue);
-const Fill greyFill = Fill (grey);
-const Fill darkgreyFill = Fill (darkgrey);
-const Fill grey20Fill = Fill (grey20);
-const Fill noFill = Fill (invisible);
-const Fill shadow80Fill = Fill (Color (0.0, 0.0, 0.0, 0.8));
-const Fill shadow50Fill = Fill (Color (0.0, 0.0, 0.0, 0.5));
-const Fill shadow20Fill = Fill (Color (0.0, 0.0, 0.0, 0.2));
+inline const Fill blackFill = Fill (black);
+inline const Fill whiteFill = Fill (white);
+inline const Fill redFill = Fill (red);
+inline const Fill greenFill = Fill (green);
+inline const Fill blueFill = Fill (blue);
+inline const Fill greyFill = Fill (grey);
+inline const Fill darkgreyFill = Fill (darkgrey);
+inline const Fill grey20Fill = Fill (grey20);
+inline const Fill noFill = Fill (invisible);
+inline const Fill shadow80Fill = Fill (Color (0.0, 0.0, 0.0, 0.8));
+inline const Fill shadow50Fill = Fill (Color (0.0, 0.0, 0.0, 0.5));
+inline const Fill shadow20Fill = Fill (Color (0.0, 0.0, 0.0, 0.2));
 
 }
 
