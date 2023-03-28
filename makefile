@@ -26,8 +26,8 @@ ARFLAGS = rcs
 CC ?= gcc
 CXX ?= g++
 override CPPFLAGS += -DPIC -I$(CURDIR)/$(INCLUDEDIR) $(PKGCFLAGS)
-override CXXFLAGS += -std=c++17 -fPIC -g
-override CFLAGS += -fPIC -g
+override CXXFLAGS += -std=c++17 -fPIC
+override CFLAGS += -fPIC
 override LDFLAGS += -L$(CURDIR)/$(BUILDDIR)
 
 # os
@@ -65,7 +65,7 @@ $(BUILDDIR)/libpugl.a: $(shell find pugl/)
 	$(AR) $(ARFLAGS) $@ $@.tmp/*.o
 	rm -rf $@.tmp
 
-$(BUILDDIR)/libbwidgetscore: $(BUILDDIR)/libcairoplus.a $(BUILDDIR)/libpugl.a $(shell find BDevices/) $(shell find BEvents/) $(shell find BMusic/) $(shell find BStyles/) $(shell find BUtilities/) $(shell find BWidgets/)
+$(BUILDDIR)/libbwidgetscore.a: $(BUILDDIR)/libcairoplus.a $(BUILDDIR)/libpugl.a $(shell find BDevices/) $(shell find BEvents/) $(shell find BMusic/) $(shell find BStyles/) $(shell find BUtilities/) $(shell find BWidgets/)
 	mkdir -p $(INCLUDEDIR)
 	find BDevices/ -iname '*.hpp' | cpio -pdm include/
 	find BEvents/ -iname '*.hpp' | cpio -pdm include/
@@ -74,11 +74,12 @@ $(BUILDDIR)/libbwidgetscore: $(BUILDDIR)/libcairoplus.a $(BUILDDIR)/libpugl.a $(
 	find BUtilities/ -iname '*.hpp' | cpio -pdm include/
 	find BWidgets/ -iname '*.hpp' | cpio -pdm include/
 	mkdir -p $(@D)
-	mkdir -p $@
-	cd $@ ; $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(addprefix $(CURDIR)/, $(CORE_CPP_FILES)) -c
-	$(AR) $(ARFLAGS) $@.a $@/*.o
+	mkdir -p $@.tmp
+	cd $@.tmp ; $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(addprefix $(CURDIR)/, $(CORE_CPP_FILES)) -c
+	$(AR) $(ARFLAGS) $@ $@.tmp/*.o
+	rm -rf $@.tmp
 
-$(addprefix $(BUILDDIR)/, $(BUNDLE)): $(BUILDDIR)/libbwidgetscore
+$(addprefix $(BUILDDIR)/, $(BUNDLE)): $(BUILDDIR)/libbwidgetscore.a
 	mkdir -p $(@D)
 	cd $(@D); $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(PKGCFLAGS) -I$(CURDIR)/include $(CURDIR)/examples/$(@F).cpp -c -o $(@F).o
 	cd $(@D); $(CXX) $(LDFLAGS) $(@F).o -lbwidgetscore -lpugl -lcairoplus $(PKGLIBS) -o $(@F)
@@ -90,7 +91,7 @@ cairoplus: $(BUILDDIR)/libcairoplus.a
 	
 pugl: $(BUILDDIR)/libpugl.a
 
-bwidgets: $(BUILDDIR)/libbwidgetscore
+bwidgets: $(BUILDDIR)/libbwidgetscore.a
 
 clean:
 	rm -rf $(BUILDDIR)
