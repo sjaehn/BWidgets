@@ -7,7 +7,7 @@ project. This toolkit includes widgets, styles, event handling, device support,
 and internationalization. B.Widgets also takes care about the special needs for
 user interaction elements in music production. B.Widgets uses the PlUgin Graphics Library ([pugl](https://github.com/lv2/pugl)) portability layer.
 
-**Current version:** 1.0.0-beta3
+**Current version:** 1.0.0-beta4
 
 **Pre-release notice:** The B.Widgets toolkit is currently being developed 
 and still not officially released. Thus, there's no stable API yet.
@@ -20,6 +20,7 @@ pre-release at your own risk.
 
 ## Dependencies
 
+* C++>=17
 * Cairo
 * X11 (for Linux systems, for MacOS X and Windows see description)
 

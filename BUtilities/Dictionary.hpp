@@ -76,10 +76,14 @@ namespace BUtilities
 class Dictionary
 {
 protected:
-    static std::map<std::string, std::map<std::string, std::string>> map_;
-    static std::string lang_;
-    static std::mutex mx_;
-    static std::string catalog_;
+    struct Dict
+    {
+        std::map<std::string, std::map<std::string, std::string>> map_;
+        std::string lang_;
+        std::string catalog_;
+    };
+    
+    //static std::mutex mx_;
     
 public:
 
@@ -146,6 +150,7 @@ public:
 
 private:
     static std::map<std::string, std::map<std::string, std::string>> makeMap ();
+    static Dict& getDict ();
 };
 
 }

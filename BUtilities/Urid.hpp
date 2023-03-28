@@ -38,6 +38,7 @@
 #define BUTILITIES_URID_ANONYMOUS_URI BUTILITIES_URID_URI "#Anonymous"
 #endif
 
+
 #ifndef BURI
 #define BURI(x) (BUtilities::Urid::uri (x))
 #endif
@@ -55,9 +56,13 @@ namespace BUtilities
 class Urid
 {
 protected:
-    static std::map<std::string, uint32_t> map_;
-    static uint32_t count_;
-    static std::mutex mx_;
+    struct UridMap
+    {
+        std::map<std::string, uint32_t> map_;
+        uint32_t count_;
+    };
+    
+    //static std::mutex mx_;
     
 public:
 
@@ -91,10 +96,13 @@ public:
 private:
 
     /**
-     *  @brief  Creates an URID map to start with.
-     *  @return  Default URID map.
+     *  @brief  Get the internal (static) URID map as a reference.
+     * 
+     *  @return  Reference to the internal static UridMap_ object.
+     *
+     *  Also initializes the internal static UridMap_ object.
      */
-    static std::map<std::string, uint32_t> makeMap (); 
+    static UridMap& getUridMap ();
 
 };
 
