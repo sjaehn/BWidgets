@@ -20,7 +20,7 @@
 
 #include <cairo/cairo.h>
 #include <cmath>
-#include "../../BStyles/Types/Color.hpp"
+#include "../../../BStyles/Types/Color.hpp"
 
 #ifndef BWIDGETS_DEFAULT_DRAWARC_START
 #define BWIDGETS_DEFAULT_DRAWARC_START (M_PI * 0.55)
@@ -35,7 +35,7 @@
 #endif
 
 /**
- *  @brief  Draws a pseudo 3d arc in a Cairo context. 
+ *  @brief  Draws an arc in a Cairo context. 
  *  @param cr  Cairo context.
  *  @param xc  X center position.
  *  @param y0  Y center position.
@@ -61,7 +61,7 @@ inline void drawArc     (cairo_t* cr, const double xc, const double yc, const do
     cairo_fill (cr);
 
     // Center
-    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor));
+    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor.illuminate(0.5 * BStyles::Color::illuminated)));
     cairo_arc (cr, xc, yc, 0.1 * radius, 0, 2 * M_PI);
     cairo_close_path (cr);
     cairo_fill (cr);

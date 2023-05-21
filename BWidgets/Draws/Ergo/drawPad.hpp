@@ -19,9 +19,9 @@
 #define BWIDGETS_DRAWPAD_HPP_
 
 #include <cairo/cairo.h>
-#include "../../BUtilities/cairoplus.h"
+#include "../../../BUtilities/cairoplus.h"
 #include <cmath>
-#include "../../BStyles/Types/Color.hpp"
+#include "../../../BStyles/Types/Color.hpp"
 
 /**
  *  @brief  Draws someting like an LED pad in a Cairo context. 

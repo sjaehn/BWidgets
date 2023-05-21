@@ -19,7 +19,7 @@
 #define BWIDGETS_VSLIDER_HPP_
 
 #ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
-#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/Ergo/drawKnob.hpp"
 #endif
 
 #include "VScale.hpp"
@@ -242,16 +242,16 @@ inline void VSlider::draw (const BUtilities::Area<>& area)
 			const double rval = getRatioFromValue (getValue());
 
 			if (step_ >= 0.0) drawKnob	(cr, 
-										 scale_.getX() + 0.5 * scale_.getWidth() + 0.5, 
+										 scale_.getX() + 0.5 * scale_.getWidth(), 
 										 scale_.getY() + (1.0 - rval) * scale_.getHeight(), 
-										 scale_.getWidth() - 1.0, 
+										 BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * (scale_.getWidth() - 1.0), 
 										 1.0, 
 										 bgColor, bgColor);
 
 			else drawKnob				(cr, 
-										 scale_.getX() + 0.5 * scale_.getWidth() + 0.5, 
+										 scale_.getX() + 0.5 * scale_.getWidth(), 
 										 scale_.getY() + rval * scale_.getHeight(), 
-										 scale_.getWidth() - 1.0, 
+										 BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * (scale_.getWidth() - 1.0), 
 										 1.0, 
 										 bgColor, bgColor);
 

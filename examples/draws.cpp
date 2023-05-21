@@ -17,35 +17,69 @@
 
 
 // Define path to alternative draws
-#define BWIDGETS_DEFAULT_DRAWARC_PATH "../examples/OopsDraws/drawArc.hpp"
-#define BWIDGETS_DEFAULT_DRAWARCHANDLE_PATH "../examples/OopsDraws/drawArcHandle.hpp"
-#define BWIDGETS_DEFAULT_DRAWHBAR_PATH "../examples/OopsDraws/drawHBar.hpp"
-#define BWIDGETS_DEFAULT_DRAWVBAR_PATH "../examples/OopsDraws/drawVBar.hpp"
-#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "../examples/OopsDraws/drawKnob.hpp"
+#include "../BWidgets/Draws/Oops/definitions.hpp"
 
 #include "../BWidgets/Window.hpp"
 #include "../BWidgets/ValueDial.hpp"
 #include "../BWidgets/ValueHSlider.hpp"
 #include "../BWidgets/ValueVSlider.hpp"
+#include "../BWidgets/ValueRadialMeter.hpp"
+#include "../BWidgets/ValueHMeter.hpp"
+#include "../BWidgets/ValueVMeter.hpp"
+#include "../BWidgets/Button.hpp"
+#include "../BWidgets/Pad.hpp"
 
 using namespace BWidgets;
 
 int main ()
 {
     // Window
-    Window window (300, 120, 0, BUTILITIES_URID_UNKNOWN_URID, "Draws", true);
+    Window window (420, 350, 0, BUTILITIES_URID_UNKNOWN_URID, "Draws", true);
 
-    // Label
-    Label label (10, 10, 280, 20, "Using B.Oops-like Draws");
+    // Title
+    Label label (10, 10, 280, 20, "Using Draws/Oops");
     window.add (&label);
 
-    // Dial and sliders
-    ValueDial valueDial (10, 30, 60, 75, 0.3, 0.0, 1.0, 0.0);
+    // Widgets
+    ValueDial valueDial (10, 60, 60, 75, 0.3, 0.0, 1.0, 0.0);
     window.add (&valueDial);
-    ValueHSlider valueHSlider (110, 40, 100, 60, 0.3, 0.0, 1.0, 0.0);
+    Label valueDialLabel(10, 160, 100, 20, "ValueDial");
+    window.add (&valueDialLabel);
+
+    ValueHSlider valueHSlider (100, 70, 100, 40, 0.3, 0.0, 1.0, 0.0);
     window.add (&valueHSlider);
-    ValueVSlider valueVSlider (220, 30, 60, 80, 0.3, 0.0, 1.0, 0.0);
+    Label valueHSliderLabel(110, 160, 100, 20, "ValueHSlider");
+    window.add (&valueHSliderLabel);
+
+    ValueVSlider valueVSlider (230, 50, 40, 100, 0.3, 0.0, 1.0, 0.0);
     window.add (&valueVSlider);
+    Label valueVSliderLabel(210, 160, 100, 20, "ValueVSlider");
+    window.add (&valueVSliderLabel);
+
+    Button button (320, 80, 60, 20);
+    window.add (&button);
+    Label buttonLabel(330, 160, 60, 20, "Button");
+    window.add (&buttonLabel);
+
+    ValueRadialMeter valueRadialMeter (10, 210, 60, 75, 0.7, 0.0, 1.0, 0.1);
+    window.add (&valueRadialMeter);
+    Label valueRadialMeterLabel(0, 310, 110, 20, "ValueRadialMeter");
+    window.add (&valueRadialMeterLabel);
+
+    ValueHMeter valueHMeter (110, 240, 100, 20, 0.7, 0.0, 1.0, 0.1);
+    window.add (&valueHMeter);
+    Label valueHMeterLabel(110, 310, 100, 20, "ValueHMeter");
+    window.add (&valueHMeterLabel);
+
+    ValueVMeter valueVMeter (230, 200, 40, 100, 0.7, 0.0, 1.0, 0.1);
+    window.add (&valueVMeter);
+    Label valueVMeterLabel(210, 310, 100, 20, "ValueVMeter");
+    window.add (&valueVMeterLabel);
+    
+    Pad pad (320, 230, 60, 40, 1.0, 0.0, 1.0, 0.1);
+    window.add (&pad);
+    Label padLabel(340, 310, 40, 20, "Pad");
+    window.add (&padLabel);
 
     window.run();
 }

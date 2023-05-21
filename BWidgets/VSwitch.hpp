@@ -19,11 +19,11 @@
 #define BWIDGETS_VSWITCH_HPP_
 
 #ifndef BWIDGETS_DEFAULT_DRAWVBAR_PATH
-#define BWIDGETS_DEFAULT_DRAWVBAR_PATH "Draws/drawVBar.hpp"
+#define BWIDGETS_DEFAULT_DRAWVBAR_PATH "Draws/Ergo/drawVBar.hpp"
 #endif
 
 #ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
-#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/Ergo/drawKnob.hpp"
 #endif
 
 #include "Button.hpp"
@@ -284,10 +284,10 @@ inline void VSwitch::draw (const BUtilities::Area<>& area)
 			cairo_clip (cr);
 
 			// Calculate aspect ratios first
-			const double radius = 0.5 * weff - 1.0;
+			const double radius = BWIDGETS_DEFAULT_SWITCH_KNOB_REL_SIZE * (0.5 * weff - 1.0);
 			const double max = (getValue() ? 1.0 : 0.0);
-			const double xc = x0 + 0.5 * weff + 1.0;
-			const double yc = y0 + heff - radius - max * (heff - 1.0 - 2.0 * radius);
+			const double xc = x0 + 0.5 * weff;
+			const double yc = y0 + heff - radius - max * (heff - 2.0 * radius);
 
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];

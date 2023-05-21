@@ -20,7 +20,7 @@
 
 #include <cairo/cairo.h>
 #include <cmath>
-#include "../../BStyles/Types/Color.hpp"
+#include "../../../BStyles/Types/Color.hpp"
 
 /**
  *  @brief  Draws a pseudo 3D knob in a Cairo context. 
@@ -48,7 +48,7 @@ inline void drawKnob (cairo_t* cr, const double xc, const double yc, const doubl
     cairo_pattern_t* pat = cairo_pattern_create_radial (xc - 0.5 * radius - height, yc - 0.5 * radius - height, 0.1 * radius, xc + height, yc + height, 1.5 * radius);
     if (pat && (cairo_pattern_status (pat) == CAIRO_STATUS_SUCCESS))
     {
-        cairo_arc (cr, xc - height, yc - height, radius, 0, 2 * M_PI);
+        cairo_arc (cr, xc - 0.5 * height, yc - 0.5 * height, radius, 0, 2 * M_PI);
         cairo_close_path (cr);
         cairo_pattern_add_color_stop_rgba (pat, 0.0, CAIRO_RGBA (fgHi));
         cairo_pattern_add_color_stop_rgba (pat, 1.0, CAIRO_RGBA (fgLo));
@@ -64,8 +64,8 @@ inline void drawKnob (cairo_t* cr, const double xc, const double yc, const doubl
         cairo_pattern_add_color_stop_rgba (pat, 1.00, CAIRO_RGBA (bgLo));
         cairo_pattern_add_color_stop_rgba (pat, 0.825, CAIRO_RGBA (bgSg));
         cairo_pattern_add_color_stop_rgba (pat, 0.0, CAIRO_RGBA (bgLo));
-        cairo_arc (cr,  xc - height, yc - height, radius, -0.25 * M_PI, 0.75 * M_PI);
-        cairo_arc_negative (cr, xc, yc, radius, 0.75 * M_PI, -0.25 * M_PI);
+        cairo_arc (cr,  xc - 0.5 * height, yc - 0.5 * height, radius, -0.25 * M_PI, 0.75 * M_PI);
+        cairo_arc_negative (cr, xc + 0.5 * height, yc + 0.5 * height, radius, 0.75 * M_PI, -0.25 * M_PI);
         cairo_close_path (cr);
         cairo_set_line_width (cr, 0.5);
         cairo_set_source (cr, pat);
@@ -86,7 +86,7 @@ inline void drawKnob (cairo_t* cr, const double xc, const double yc, const doubl
     {
         cairo_pattern_add_color_stop_rgba (pat, 1.0, CAIRO_RGBA (bgHi));
         cairo_pattern_add_color_stop_rgba (pat, 0.0, CAIRO_RGBA (bgSg));
-        cairo_arc (cr,  xc - height, yc - height, radius, 0, 2 * M_PI);
+        cairo_arc (cr,  xc - 0.5 * height, yc - 0.5 * height, radius, 0, 2 * M_PI);
         cairo_set_line_width (cr, 0.2 * height);
         cairo_set_source (cr, pat);
         cairo_stroke (cr);

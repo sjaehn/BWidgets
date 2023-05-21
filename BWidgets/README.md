@@ -1209,23 +1209,32 @@ You can find an example for using different Themes in
 ![themes](../suppl/Themes.png)
 
 
-### Draws
+### Drawing sets (Draws)
 
-Some widget classes (e. g., switches, sliders, scales, dials, pads) use Draws
-functions (locaded in Draws/) to draw widget elements like pseudo 3D bars, 
-pads, and arcs. Feel free to create your own drawing functions and implement
-them by pre-defining the respective symbol by
-```
-#define BWIDGETS_DEFAULT_XXX_PATH "path/to/xxx.cpp"
-``` 
-with XXX being DRAWKNOB,
-DRAWARC, DRAWHBAR, ...
+Some widget classes (e. g., switches, sliders, scales, dials, buttons, pads) 
+use drawing functions to draw widget elements like bars, pads, and arcs. And 
+some widgets use definitions for the layout of their widget elements. All 
+these data are stored in drawing sets located in Draws/ and defined in the 
+definititions.hpp file for the respective drawing set.
 
-And there's an example for using Draws in 
-[../examples/draws.cpp](../examples/draws.cpp) :
+To load a drawing set, simply include its definitions header
+(definitions.hpp) *prior* to the first include of Widgets.hpp. Thus, loading
+a drawing set is once for a whole compilation unit. And if no drawing set is
+actively loaded, then a default drawing set is used insted.
 
-![draws](../suppl/Draws.png)
+B.Widgets currently provides by two diffent drawing sets:
+* Ergo (default): Pseudo 3d widget elements
+  ![ergo](../suppl/Ergo.png)
+* Oops: Simple widget elements used in B.Oops
+  ![oops](../suppl/Oops.png)
 
+These examples are taken from 
+[../examples/draws.cpp](../examples/draws.cpp). Feel free to substitute the 
+include.
+
+Also feel free to create your own drawing sets. You don't need to define all
+drawing functions and layout parameters as there's a fallback to the default
+definitions.
 
 ### Status
 

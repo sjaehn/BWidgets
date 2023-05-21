@@ -18,10 +18,6 @@
 #ifndef BWIDGETS_HRANGESCROLLBAR_HPP_
 #define BWIDGETS_HRANGESCROLLBAR_HPP_
 
-#ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
-#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
-#endif
-
 #include "HScrollBar.hpp"
 #include "Frame.hpp"
 #include "Symbol.hpp"
@@ -483,10 +479,10 @@ inline void HRangeScrollBar::update ()
 
 		const BStyles::Color bgColor =getBgColors()[getStatus()];
 		cairo_t* cr1 = cairo_create (button1.cairoSurface());
-		drawKnob (cr1, 0.5 * h, 0.5 * h, 0.25 * h, 0.0, bgColor, bgColor);
+		drawKnob (cr1, 0.5 * h, 0.5 * h, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_REL_SIZE * h, 0.0, bgColor, bgColor);
 		cairo_destroy (cr1);
 		cairo_t* cr2 = cairo_create (button2.cairoSurface());
-		drawKnob (cr2, 0.5 * h, 0.5 * h, 0.25 * h, 0.0, bgColor, bgColor);
+		drawKnob (cr2, 0.5 * h, 0.5 * h, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_REL_SIZE * h, 0.0, bgColor, bgColor);
 		cairo_destroy (cr2);
 	}
 

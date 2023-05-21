@@ -19,7 +19,7 @@
 #define BWIDGETS_VRANGESCROLLBAR_HPP_
 
 #ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
-#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/Ergo/drawKnob.hpp"
 #endif
 
 #include "VScrollBar.hpp"
@@ -483,10 +483,10 @@ inline void VRangeScrollBar::update ()
 
 		const BStyles::Color bgColor =getBgColors()[getStatus()];
 		cairo_t* cr1 = cairo_create (button1.cairoSurface());
-		drawKnob (cr1, 0.5 * w, 0.5 * w, 0.25 * w, 0.0, bgColor, bgColor);
+		drawKnob (cr1, 0.5 * w, 0.5 * w, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_REL_SIZE * w, 0.0, bgColor, bgColor);
 		cairo_destroy (cr1);
 		cairo_t* cr2 = cairo_create (button2.cairoSurface());
-		drawKnob (cr2, 0.5 * w, 0.5 * w, 0.25 * w, 0.0, bgColor, bgColor);
+		drawKnob (cr2, 0.5 * w, 0.5 * w, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_REL_SIZE * w, 0.0, bgColor, bgColor);
 		cairo_destroy (cr2);
 	}
 

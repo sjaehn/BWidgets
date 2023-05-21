@@ -18,10 +18,6 @@
 #ifndef BWIDGETS_VSCALE_HPP_
 #define BWIDGETS_VSCALE_HPP_
 
-#ifndef BWIDGETS_DEFAULT_DRAWVBAR_PATH
-#define BWIDGETS_DEFAULT_DRAWVBAR_PATH "Draws/drawVBar.hpp"
-#endif
-
 #include "VMeter.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"

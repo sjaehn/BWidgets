@@ -1,4 +1,4 @@
-/* drawVMeter.hpp
+/* drawHMeter.hpp
  * Copyright (C) 2018 - 2023  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,16 +15,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BWIDGETS_DRAWVMETER_HPP_
-#define BWIDGETS_DRAWVMETER_HPP_
+#ifndef BWIDGETS_DRAWHMETER_HPP_
+#define BWIDGETS_DRAWHMETER_HPP_
 
-#include "../../BUtilities/cairoplus.h"
+#include "../../../BUtilities/cairoplus.h"
 #include <cmath>
 #include <functional>
-#include "../../BStyles/Types/Color.hpp"
+#include "../../../BStyles/Types/Color.hpp"
 
 /**
- *  @brief  Draws a segmented two colors horizontal pseudo 3d bar in a Cairo
+ *  @brief  Draws a segmented two colors horizontal meter bar in a Cairo 
  *  context. 
  *  @param cr  Cairo context.
  *  @param x0  X position.
@@ -41,13 +41,13 @@
  *  @param gradient  Color gradient function.
  *  @param bgColor  Bar RGBA color.
  */
-inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const double width, const double height, 
+inline void drawHMeter    (cairo_t* cr, const double x0, const double y0, const double width, const double height, 
                              const double min, const double max, const double step,
                              const BStyles::Color loColor, const BStyles::Color hiColor, std::function<double(const double &)> gradient, 
                              const BStyles::Color bgColor)
 {
 
-    const double dy = (height - 0.2 * width) * step;
+    const double dx = (width - 0.2 * height) * step;
     const BStyles::Color fgHi = loColor.illuminate (BStyles::Color::illuminated);
     const BStyles::Color fgLo = loColor;
     const BStyles::Color hiHi = hiColor.illuminate (BStyles::Color::illuminated);
@@ -55,25 +55,6 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
     const BStyles::Color bgLo = bgColor.illuminate (BStyles::Color::shadowed);
     const BStyles::Color bgHi = bgColor;
     const BStyles::Color bgDk = bgColor.illuminate (-0.75);
-
-    // Background fill
-    cairo_set_line_width (cr, 0.0);
-    cairo_set_source_rgba (cr, CAIRO_RGBA(bgDk));
-    cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.2 * width, 0b1111);
-    cairo_fill (cr);
-
-    // Border
-    cairo_pattern_t* pat = cairo_pattern_create_linear (x0, y0, x0 + width, y0 + height);
-    if (pat && (cairo_pattern_status (pat) == CAIRO_STATUS_SUCCESS))
-    {
-        cairo_pattern_add_color_stop_rgba (pat, 0, CAIRO_RGBA(bgLo));
-        cairo_pattern_add_color_stop_rgba (pat, 1, CAIRO_RGBA(bgHi));
-        cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.2 * width, 0b1111);
-        cairo_set_source (cr, pat);
-        cairo_set_line_width (cr, 1.0);
-        cairo_stroke (cr);
-        cairo_pattern_destroy (pat);
-    }
 
     // Fill
     cairo_set_line_width (cr, 0.0);
@@ -90,7 +71,7 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
 
         for (double v = 0; v < 1.0; v += step)
         {
-            if ((v >= min) && ( v <= max)) 
+            if ((v >= min) && (v <= max)) 
             {
                 if ((fgHi != hiHi) || (fgLo != hiLo))
                 {
@@ -111,6 +92,7 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
                         fgHi.value() * (1.0 - gradient (v)) + hiHi.value() * gradient (v),
                         fgHi.alpha * (1.0 - gradient (v)) + hiHi.alpha * gradient (v)
                     );
+
                     cairo_pattern_add_color_stop_rgba (fgPat, 0, CAIRO_RGBA(cLo));
                     cairo_pattern_add_color_stop_rgba (fgPat, 0.25, CAIRO_RGBA(cHi));
                     cairo_pattern_add_color_stop_rgba (fgPat, 1, CAIRO_RGBA(cLo));
@@ -120,10 +102,10 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
 
             else cairo_set_source (cr, bgPat);
 
-            const double y = v * (height - 0.2 * width);
+            const double x = v * (width - 0.2 * height);
 
-            if (dy < 3.0) cairo_rectangle (cr, x0 + 0.1 * width , y0 + height - 0.1 * width - y, width - 0.2 * width, dy);
-            else cairo_rectangle (cr, x0 + 0.1 * width, y0 + height - 0.1 * width - y - 1.0, width - 0.2 * width, dy - 2.0);
+            if (dx < 3.0) cairo_rectangle (cr, x0 + 0.1 * height + x, y0 + 0.1 * height, dx, height - 0.2 * height);
+            else cairo_rectangle (cr, x0 + 0.1 * height + x + 1.0, y0 + 0.1 * height, dx - 2.0, height - 0.2 * height);
             cairo_fill (cr);
         }
 
@@ -132,4 +114,4 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
     }
 }
 
-#endif /*  BWIDGETS_DRAWVMETER_HPP_ */
+#endif /*  BWIDGETS_DRAWHMETER_HPP_ */

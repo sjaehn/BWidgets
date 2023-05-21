@@ -19,16 +19,15 @@
 #define BWIDGETS_DRAWARCHANDLE_HPP_
 
 #include <cairo/cairo.h>
-#include "../../BUtilities/cairoplus.h"
 #include <cmath>
-#include "../../BStyles/Types/Color.hpp"
+#include "../../../BStyles/Types/Color.hpp"
 
 #ifndef BWIDGETS_DEFAULT_DRAWARC_START
-#define BWIDGETS_DEFAULT_DRAWARC_START (M_PI * 0.75)
+#define BWIDGETS_DEFAULT_DRAWARC_START (M_PI * 0.55)
 #endif
 
 #ifndef BWIDGETS_DEFAULT_DRAWARC_END
-#define BWIDGETS_DEFAULT_DRAWARC_END (M_PI * 2.25)
+#define BWIDGETS_DEFAULT_DRAWARC_END (M_PI * 2.45)
 #endif
 
 #ifndef BWIDGETS_DEFAULT_DRAWARC_SIZE
@@ -36,7 +35,7 @@
 #endif
 
 /**
- *  @brief  Draws a knob spot as a handle for pseudo 3d arc in a Cairo 
+ *  @brief  Draws a knob spot as a handle for an arc in a Cairo 
  *  context. 
  *  @param cr  Cairo context.
  *  @param xc  X center position.
@@ -53,18 +52,7 @@ inline void drawArcHandle   (cairo_t* cr, const double xc, const double yc, cons
                              const double rval, 
                              const BStyles::Color fgColor, const BStyles::Color bgColor)
 {
-    cairo_set_source_rgba(cr, CAIRO_RGBA(fgColor));
-    cairo_set_line_width(cr, 0.0);
-    cairo_arc
-    (
-        cr, 
-        xc + 0.4 * radius * cos (BWIDGETS_DEFAULT_DRAWARC_START + rval * BWIDGETS_DEFAULT_DRAWARC_SIZE), 
-        yc + 0.4 * radius * sin (BWIDGETS_DEFAULT_DRAWARC_START + rval * BWIDGETS_DEFAULT_DRAWARC_SIZE), 
-        0.075 * radius, 
-        0.0,
-        2.0 * M_PI
-    );
-    cairo_fill (cr);
+    
 }
 
 #endif /*  BWIDGETS_DRAWARCHANDLE_HPP_ */

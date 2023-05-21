@@ -18,10 +18,6 @@
 #ifndef BWIDGETS_HSCALE_HPP_
 #define BWIDGETS_HSCALE_HPP_
 
-#ifndef BWIDGETS_DEFAULT_DRAWHBAR_PATH
-#define BWIDGETS_DEFAULT_DRAWHBAR_PATH "Draws/drawHBar.hpp"
-#endif
-
 #include "HMeter.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"

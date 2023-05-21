@@ -1,4 +1,4 @@
-/* drawHBar.hpp
+/* drawVBar.hpp
  * Copyright (C) 2018 - 2023  Sven Jähnichen
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,16 +15,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef BWIDGETS_DRAWHBAR_HPP_
-#define BWIDGETS_DRAWHBAR_HPP_
+#ifndef BWIDGETS_DRAWVBAR_HPP_
+#define BWIDGETS_DRAWVBAR_HPP_
 
 #include <cairo/cairo.h>
-#include "../../BUtilities/cairoplus.h"
+#include "../../../BUtilities/cairoplus.h"
 #include <cmath>
-#include "../../BStyles/Types/Color.hpp"
+#include "../../../BStyles/Types/Color.hpp"
 
 /**
- *  @brief  Draws a horizontal pseudo 3d bar in a Cairo context. 
+ *  @brief  Draws a vertical pseudo 3d bar in a Cairo context. 
  *  @param cr  Cairo context.
  *  @param x0  X position.
  *  @param y0  Y position.
@@ -37,49 +37,49 @@
  *  @param fgColor  RGBA color for the activated part.
  *  @param bgColor  Bar RGBA color.
  */
-inline void drawHBar    (cairo_t* cr, const double x0, const double y0, const double width, const double height, 
+inline void drawVBar    (cairo_t* cr, const double x0, const double y0, const double width, const double height, 
                          const double min, const double max, 
                          const BStyles::Color fgColor, const BStyles::Color bgColor)
 {
-    const double x2 = x0 + min * width;
-    const double x3 = x0 + max * width;
-    //const double x4 = x0 + width;
-    const double y4 = y0 + height;
+    const double y2 = y0 + min * height;
+    const double y3 = y0 + max * height;
+    const double x4 = x0 + width;
+    //const double y4 = y0 + height;
 
     // Colors used
-    const BStyles::Color fgHi = fgColor.illuminate (BStyles::Color::illuminated);
-    const BStyles::Color fgLo = fgColor;
-    const BStyles::Color bgLo = bgColor;
-    const BStyles::Color bgHi = bgColor.illuminate (BStyles::Color::illuminated);
-    const BStyles::Color bgSh = bgColor.illuminate (BStyles::Color::shadowed);
+    BStyles::Color fgHi = fgColor.illuminate (BStyles::Color::illuminated);
+    BStyles::Color fgLo = fgColor;
+    BStyles::Color bgLo = bgColor;
+    BStyles::Color bgHi = bgColor.illuminate (BStyles::Color::illuminated);
+    BStyles::Color bgSh = bgColor.illuminate (BStyles::Color::shadowed);
 
     // Background
     cairo_set_line_width (cr, 0.0);
-    cairo_pattern_t* pat = cairo_pattern_create_linear (x0, y0, x0, y4);
+    cairo_pattern_t* pat = cairo_pattern_create_linear (x0, y0, x4, y0);
     if (pat && (cairo_pattern_status (pat) == CAIRO_STATUS_SUCCESS))
     {
         cairo_pattern_add_color_stop_rgba (pat, 0, CAIRO_RGBA(bgLo));
         cairo_pattern_add_color_stop_rgba (pat, 1, CAIRO_RGBA(bgHi));
-        cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.5 * height, 0b1111);
+        cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.5 * width, 0b1111);
         cairo_set_source (cr, pat);
         cairo_fill (cr);
         cairo_pattern_destroy (pat);
     }
-    cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.5 * height, 0b1111);
+    cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.5 * width, 0b1111);
     cairo_set_source_rgba (cr, CAIRO_RGBA(bgSh));
     cairo_fill (cr);
 
     // Foreground
-    pat = cairo_pattern_create_linear (x0, y0, x0, y4);
+    pat = cairo_pattern_create_linear (x0, y0, x4, y0);
     if (pat && (cairo_pattern_status (pat) == CAIRO_STATUS_SUCCESS))
     {
         cairo_pattern_add_color_stop_rgba (pat, 0, CAIRO_RGBA(fgLo));
         cairo_pattern_add_color_stop_rgba (pat, 0.25, CAIRO_RGBA(fgHi));
         cairo_pattern_add_color_stop_rgba (pat, 1.0, CAIRO_RGBA(fgLo));
         cairo_save (cr);
-        cairoplus_rectangle_rounded (cr, x0 + 0.1 * height, y0 + 0.1 * height, std::max (width - 0.2 * height, 0.0), 0.8 * height, 0.5 * 0.8 * height, 0b1111);
+        cairoplus_rectangle_rounded (cr, x0 + 0.1 * width, y0 + 0.1 * width, 0.8 * width, std::max (height - 0.2 * width, 0.0), 0.5 * 0.8 * width, 0b1111);
         cairo_clip (cr);
-        cairoplus_rectangle_rounded (cr, x2, y0 + 0.1 * height, x3 - x2, 0.8 * height, 0.5 * 0.8 * height, 0b1111);
+        cairoplus_rectangle_rounded (cr, x0 + 0.1 * width, y2, 0.8 * width, y3 - y2, 0.5 * 0.8 * width, 0b1111);
         cairo_set_source (cr, pat);
         cairo_fill (cr);
         cairo_restore (cr);
@@ -87,17 +87,17 @@ inline void drawHBar    (cairo_t* cr, const double x0, const double y0, const do
     }
 
     //Frame
-    pat = cairo_pattern_create_linear (x0, y0, x0, y4);
+    pat = cairo_pattern_create_linear (x0, y0, x4, y0);
     if (pat && (cairo_pattern_status (pat) == CAIRO_STATUS_SUCCESS))
     {
         cairo_pattern_add_color_stop_rgba (pat, 0, CAIRO_RGBA(bgLo));
         cairo_pattern_add_color_stop_rgba (pat, 1, CAIRO_RGBA(bgHi));
-        cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.5 * height, 0b1111);
+        cairoplus_rectangle_rounded (cr, x0, y0, width, height, 0.5 * width, 0b1111);
         cairo_set_source (cr, pat);
-        cairo_set_line_width (cr, 0.05 * height);
+        cairo_set_line_width (cr, 0.05 * width);
         cairo_stroke (cr);
         cairo_pattern_destroy (pat);
     }
 }
 
-#endif /*  BWIDGETS_DRAWHBAR_HPP_ */
+#endif /*  BWIDGETS_DRAWVBAR_HPP_ */

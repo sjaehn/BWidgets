@@ -18,11 +18,6 @@
 #ifndef BWIDGETS_VMETER_HPP_
 #define BWIDGETS_VMETER_HPP_
 
-#ifndef BWIDGETS_DEFAULT_DRAWVMETER_PATH
-#define BWIDGETS_DEFAULT_DRAWVMETER_PATH "Draws/drawVMeter.hpp"
-#endif
-
-#include BWIDGETS_DEFAULT_DRAWVMETER_PATH
 #include "Widget.hpp"
 #include "Label.hpp"
 #include "Supports/Validatable.hpp"
@@ -31,6 +26,7 @@
 #include "Supports/ValueTransferable.hpp"
 #include <cairo/cairo.h>
 #include <cmath>
+#include BWIDGETS_DEFAULT_DRAWVMETER_PATH
 
 #ifndef BWIDGETS_DEFAULT_VMETER_WIDTH
 #define BWIDGETS_DEFAULT_VMETER_WIDTH 20.0

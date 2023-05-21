@@ -19,9 +19,9 @@
 #define BWIDGETS_DRAWARC_HPP_
 
 #include <cairo/cairo.h>
-#include "../../BUtilities/cairoplus.h"
+#include "../../../BUtilities/cairoplus.h"
 #include <cmath>
-#include "../../BStyles/Types/Color.hpp"
+#include "../../../BStyles/Types/Color.hpp"
 
 #ifndef BWIDGETS_DEFAULT_DRAWARC_START
 #define BWIDGETS_DEFAULT_DRAWARC_START (M_PI * 0.75)

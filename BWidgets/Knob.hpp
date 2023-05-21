@@ -19,7 +19,7 @@
 #define BWIDGETS_KNOB_HPP_
 
 #ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
-#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/Ergo/drawKnob.hpp"
 #endif
 
 #include "Button.hpp"
@@ -249,8 +249,8 @@ inline void Knob::draw (const BUtilities::Area<>& area)
 
 			// Calculate aspect ratios first
 			const double radius = (heff < weff ? 0.5 * heff : 0.5 * weff) - depth_;
-			const double xc = x0 + 0.5 * weff + depth_;
-			const double yc = y0 + 0.5 * heff + depth_;
+			const double xc = x0 + 0.5 * weff ;
+			const double yc = y0 + 0.5 * heff;
 
 			const BStyles::Color color = (getValue() ? getFgColors() : getBgColors()) [getStatus()];
 			const double depth = (getValue() ? 0.5 * depth_ : depth_);

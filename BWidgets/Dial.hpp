@@ -18,18 +18,6 @@
 #ifndef BWIDGETS_DIAL_HPP_
 #define BWIDGETS_DIAL_HPP_
 
-#ifndef BWIDGETS_DEFAULT_DRAWARC_PATH
-#define BWIDGETS_DEFAULT_DRAWARC_PATH "Draws/drawArc.hpp"
-#endif
-
-#ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
-#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
-#endif
-
-#ifndef BWIDGETS_DEFAULT_DRAWARCHANDLE_PATH
-#define BWIDGETS_DEFAULT_DRAWARCHANDLE_PATH "Draws/drawArcHandle.hpp"
-#endif
-
 #include "RadialMeter.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/Draggable.hpp"
@@ -359,14 +347,14 @@ inline void Dial::draw (const BUtilities::Area<>& area)
 			if (step_ >= 0.0)
 			{
 				drawArc (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 0.0, rval, fgColor, bgColor);
-				drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth() + 0.5, scale_.getY() + 0.5 * scale_.getHeight() + 0.5, 0.6 * rad - 1.0, 1.0, bgColor, bgColor);
+				drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), BWIDGETS_DEFAULT_DIAL_KNOB_REL_SIZE * (rad - 1.0), 1.0, bgColor, bgColor);
 				drawArcHandle (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, rval, fgColor, bgColor);
 			}
 
 			else
 			{
 				drawArc (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 1.0 - rval, 1.0, fgColor, bgColor);
-				drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth() + 0.5, scale_.getY() + 0.5 * scale_.getHeight() + 0.5, 0.6 * rad - 1.0, 1.0, bgColor, bgColor);
+				drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), BWIDGETS_DEFAULT_DIAL_KNOB_REL_SIZE * (rad - 1.0), 1.0, bgColor, bgColor);
 				drawArcHandle (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 1.0 - rval, fgColor, bgColor);
 			}
 		}

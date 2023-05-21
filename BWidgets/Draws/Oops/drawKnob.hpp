@@ -20,10 +20,10 @@
 
 #include <cairo/cairo.h>
 #include <cmath>
-#include "../../BStyles/Types/Color.hpp"
+#include "../../../BStyles/Types/Color.hpp"
 
 /**
- *  @brief  Draws a pseudo 3D knob in a Cairo context. 
+ *  @brief  Draws a knob in a Cairo context. 
  *  @param cr  Cairo context.
  *  @param xc  X center position.
  *  @param yc  Y center position.
@@ -34,7 +34,16 @@
  */
 inline void drawKnob (cairo_t* cr, const double xc, const double yc, const double radius, const double height, const BStyles::Color fgColor, const BStyles::Color bgColor)
 {
-    
+    cairo_save (cr);
+
+    cairo_set_line_width (cr, 1.0);
+    cairo_rectangle (cr, xc - radius, yc - radius, 2.0 * radius, 2.0 * radius);
+    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor.illuminate(0.5 * BStyles::Color::illuminated)));
+    cairo_fill_preserve (cr);
+    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor.illuminate(BStyles::Color::darkened)));
+    cairo_stroke (cr);
+
+    cairo_restore (cr);  
 }
 
 #endif /*  BWIDGETS_DRAWKNOB_HPP_ */

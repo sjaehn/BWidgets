@@ -18,10 +18,10 @@
 #ifndef BWIDGETS_DRAWHMETER_HPP_
 #define BWIDGETS_DRAWHMETER_HPP_
 
-#include "../../BUtilities/cairoplus.h"
+#include "../../../BUtilities/cairoplus.h"
 #include <cmath>
 #include <functional>
-#include "../../BStyles/Types/Color.hpp"
+#include "../../../BStyles/Types/Color.hpp"
 
 /**
  *  @brief  Draws a segmented two colors horizontal pseudo 3d bar in a Cairo

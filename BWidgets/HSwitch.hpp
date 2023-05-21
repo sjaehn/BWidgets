@@ -19,11 +19,11 @@
 #define BWIDGETS_HSWITCH_HPP_
 
 #ifndef BWIDGETS_DEFAULT_DRAWHBAR_PATH
-#define BWIDGETS_DEFAULT_DRAWHBAR_PATH "Draws/drawHBar.hpp"
+#define BWIDGETS_DEFAULT_DRAWHBAR_PATH "Draws/Ergo/drawHBar.hpp"
 #endif
 
 #ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
-#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
+#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/Ergo/drawKnob.hpp"
 #endif
 
 #include "Button.hpp"
@@ -283,10 +283,10 @@ inline void HSwitch::draw (const BUtilities::Area<>& area)
 			cairo_clip (cr);
 
 			// Calculate aspect ratios first
-			const double radius = 0.5 * heff - 1.0;
+			const double radius = BWIDGETS_DEFAULT_SWITCH_KNOB_REL_SIZE * (0.5 * heff - 1.0);
 			const double max = (getValue() ? 1.0 : 0.0);
-			const double xc = x0 + 1.0 + radius + max * (weff - 1.0 - 2.0 * radius);
-			const double yc = y0 + 0.5 * heff + 1.0;
+			const double xc = x0 + 1.0 + radius + max * (weff - 2.0 * radius);
+			const double yc = y0 + 0.5 * heff;
 
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];

@@ -18,10 +18,6 @@
 #ifndef BWIDGETS_HSLIDER_HPP_
 #define BWIDGETS_HSLIDER_HPP_
 
-#ifndef BWIDGETS_DEFAULT_DRAWKNOB_PATH
-#define BWIDGETS_DEFAULT_DRAWKNOB_PATH "Draws/drawKnob.hpp"
-#endif
-
 #include "HScale.hpp"
 #include BWIDGETS_DEFAULT_DRAWKNOB_PATH
 
@@ -242,15 +238,15 @@ inline void HSlider::draw (const BUtilities::Area<>& area)
 
 			if (step_ >= 0.0) drawKnob	(cr, 
 										 scale_.getX() + rval * scale_.getWidth(), 
-										 scale_.getY() + 0.5 * scale_.getHeight() + 0.5, 
-										 scale_.getHeight() - 1.0, 
+										 scale_.getY() + 0.5 * scale_.getHeight(), 
+										 BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * (scale_.getHeight() - 1.0), 
 										 1.0, 
 										 bgColor, bgColor);
 
 			else drawKnob				(cr, 
 										 scale_.getX() + (1.0 - rval) * scale_.getWidth(), 
-										 scale_.getY() + 0.5 * scale_.getHeight() + 0.5, 
-										 scale_.getHeight() - 1.0, 
+										 scale_.getY() + 0.5 * scale_.getHeight(), 
+										 BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * (scale_.getHeight() - 1.0), 
 										 1.0, 
 										 bgColor, bgColor);
 		}

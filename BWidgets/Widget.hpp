@@ -21,7 +21,7 @@
 #include <cstdint>
 #include <functional>
 #include <set>
-
+#include "Draws/Ergo/definitions.hpp"
 #include "../BDevices/Device.hpp"
 #include "../BUtilities/Dictionary.hpp"
 #include "Supports/Linkable.hpp"
@@ -29,12 +29,9 @@
 #include "Supports/EventMergeable.hpp"
 #include "Supports/EventPassable.hpp"
 #include "Supports/PointerFocusable.hpp"
-
 #include "../BUtilities/Any.hpp"
-
 #include "../BStyles/Theme.hpp"
 #include "../BStyles/Status.hpp"
-
 #include "../BEvents/Event.hpp"
 
 // Default basic widget settings

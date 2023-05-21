@@ -18,10 +18,6 @@
 #ifndef BWIDGETS_RADIALMETER_HPP_
 #define BWIDGETS_RADIALMETER_HPP_
 
-#ifndef BWIDGETS_DEFAULT_DRAWRMETER_PATH
-#define BWIDGETS_DEFAULT_DRAWRMETER_PATH "Draws/drawRMeter.hpp"
-#endif
-
 #include "Widget.hpp"
 #include "Label.hpp"
 #include "Supports/Validatable.hpp"

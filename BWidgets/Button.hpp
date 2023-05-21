@@ -25,7 +25,9 @@
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Toggleable.hpp"
 #include "../BEvents/Event.hpp"
+#include <cairo/cairo.h>
 #include <iostream>
+#include BWIDGETS_DEFAULT_DRAWBUTTON_PATH
 
 #ifndef BWIDGETS_DEFAULT_BUTTON_WIDTH
 #define BWIDGETS_DEFAULT_BUTTON_WIDTH 20.0
@@ -166,6 +168,27 @@ public:
      *  @brief  Method to be called following an object state change.
      */
     virtual void update () override;
+
+protected:
+	/**
+     *  @brief  Unclipped draw a %Button to the surface.
+     */
+    virtual void draw () override;
+
+    /**
+     *  @brief  Clipped draw a %Button to the surface.
+     *  @param x0  X origin of the clipped area. 
+     *  @param y0  Y origin of the clipped area. 
+     *  @param width  Width of the clipped area.
+     *  @param height  Height of the clipped area. 
+     */
+    virtual void draw (const double x0, const double y0, const double width, const double height) override;
+
+    /**
+     *  @brief  Clipped draw a %Button to the surface.
+     *  @param area  Clipped area. 
+     */
+    virtual void draw (const BUtilities::Area<>& area) override;
 };
 
 inline Button::Button () : Button (0.0, 0.0, BWIDGETS_DEFAULT_BUTTON_WIDTH, BWIDGETS_DEFAULT_BUTTON_HEIGHT, false, false, BUTILITIES_URID_UNKNOWN_URID, "") {}
@@ -186,10 +209,6 @@ inline Button::Button	(const double x, const double y, const double width, const
 {
 	setKeyPressable (false),	// not implemented yet
 	setToggleable (toggleable);
-	setBackground (BStyles::Fill(getBgColors()[BStyles::Status::normal]));
-	setBorder	(BStyles::Border 
-				 (BStyles::Line (getBgColors()[BStyles::Status::normal].illuminate (clicked ? BStyles::Color::highLighted : BStyles::Color::darkened), 1.0), 
-				 0.0, 0.0, 0.15 * std::min (width, height)));
 }
 
 inline Widget* Button::clone () const 
@@ -250,9 +269,6 @@ inline void Button::onButtonClicked (BEvents::Event* event)
 
 inline void Button::update ()
 {
-	BStyles::Border border = getBorder();
-	border.line.color = getBgColors()[getStatus()].illuminate (getValue() ? BStyles::Color::highLighted : BStyles::Color::darkened);
-	setBorder (border);
 	Label* f = dynamic_cast<Label*>(focus_);
 	if (f)
 	{
@@ -260,6 +276,47 @@ inline void Button::update ()
 		f->resize();
 	}
 	Widget::update();
+}
+
+inline void Button::draw ()
+{
+	draw (0, 0, getWidth(), getHeight());
+}
+
+inline void Button::draw (const double x0, const double y0, const double width, const double height)
+{
+	draw (BUtilities::Area<> (x0, y0, width, height));
+}
+
+inline void Button::draw (const BUtilities::Area<>& area)
+{
+	if ((!cairoSurface()) || (cairo_surface_status (cairoSurface()) != CAIRO_STATUS_SUCCESS)) return;
+
+	// Draw super class widget elements first
+	Widget::draw (area);
+
+	const double x0 = getXOffset();
+	const double y0 = getYOffset();
+	const double heff = getEffectiveHeight ();
+	const double weff = getEffectiveWidth ();
+
+	// Draw Button
+	// only if minimum requirements satisfied
+	if ((heff >= 1) && (weff >= 1))
+	{
+		cairo_t* cr = cairo_create (cairoSurface());
+
+		if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
+		{
+			// Limit cairo-drawing area
+			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
+			cairo_clip (cr);
+
+			drawButton (cr, x0, y0, weff, heff, getValue(), getFgColors()[getStatus()], getBgColors()[getStatus()]);
+		}
+
+		cairo_destroy (cr);
+	}
 }
 
 }

@@ -28,7 +28,7 @@
 #include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
 #include "../BEvents/PointerEvent.hpp"
-#include "Draws/drawPad.hpp"
+#include BWIDGETS_DEFAULT_DRAWPAD_PATH
 #include <string>
 
 #ifndef BWIDGETS_DEFAULT_PAD_WIDTH

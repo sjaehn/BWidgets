@@ -19,10 +19,10 @@
 #define BWIDGETS_DRAWVBAR_HPP_
 
 #include <cairo/cairo.h>
-#include "../../BStyles/Types/Color.hpp"
+#include "../../../BStyles/Types/Color.hpp"
 
 /**
- *  @brief  Draws a vertical pseudo 3d bar in a Cairo context. 
+ *  @brief  Draws a vertical bar in a Cairo context. 
  *  @param cr  Cairo context.
  *  @param x0  X position.
  *  @param y0  Y position.
@@ -48,13 +48,13 @@ inline void drawVBar    (cairo_t* cr, const double x0, const double y0, const do
     cairo_set_line_width (cr, 1.0);
     cairo_rectangle (cr, x0, y0, width, height);
     cairo_set_source_rgba (cr, CAIRO_RGBA(bgColor));
-    cairo_stroke (cr);
+    cairo_fill (cr);
 
     // Foreground
     cairo_rectangle (cr, x0 + 1, y0 + 1, width - 2, height - 2);
     cairo_clip (cr);
     cairo_rectangle (cr, x0, y2, width, y3 - y2);
-    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor));
+    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor.illuminate(0.5 * BStyles::Color::illuminated)));
     cairo_fill (cr);
 
     cairo_restore (cr);
