@@ -7,13 +7,7 @@ project. This toolkit includes widgets, styles, event handling, device support,
 and internationalization. B.Widgets also takes care about the special needs for
 user interaction elements in music production. B.Widgets uses the PlUgin Graphics Library ([pugl](https://github.com/lv2/pugl)) portability layer.
 
-**Current version:** 1.0.0-beta6
-
-**Pre-release notice:** The B.Widgets toolkit is currently being developed 
-and still not officially released. Thus, there's no stable API yet.
-This means the API still may change until the final release of the version
-1.0.0. This may cause breaks. Keeping this in your mind, you may use this
-pre-release at your own risk.
+**Current version:** 1.0.0
 
 ![widgetgallery](suppl/widgetgallery.png)
 
@@ -108,6 +102,14 @@ The toolkit uses tools from six namespaces (further info there):
 * [`BWidgets`](BWidgets/README.md)
 
 For a detailed documentation and examples see [`BWidgets/README.md`](BWidgets/README.md).
+
+
+## Examples
+
+Software projects using this toolkit:
+* [B.Amp](https://github.com/sjaehn/BAmp) - A simple LV2 amplifier example audio plugin
+* [B.Angr](https://github.com/sjaehn/BAngr) - A dynamic audio distortion LV2 plugin
+* [B.Choppr](https://github.com/sjaehn/BChoppr) - An audio stream chopping LV2 plugin
 
 
 ## Features
