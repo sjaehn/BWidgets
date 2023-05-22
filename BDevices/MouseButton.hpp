@@ -37,8 +37,8 @@ public:
     {
         none    = 0,
 		left,
-		middle,
-		right
+		right,
+        middle
     };
 
 protected:
