@@ -24,16 +24,16 @@
 #include "../../../BStyles/Types/Color.hpp"
 
 /**
- *  @brief  Draws a segmented two colors vertical pseudo 3d bar in a Cairo
- *  context. 
+ *  @brief  Draws a segmented two colors vertical pseudo 3d meter bar in a
+ *  Cairo context. 
  *  @param cr  Cairo context.
  *  @param x0  X position.
  *  @param y0  Y position.
  *  @param width  Bar width.
  *  @param height  Bar height.
- *  @param min  Start of activated (highlighted) part of the arc. Relative
+ *  @param min  Start of activated (highlighted) part of the meter. Relative
  *  value [0..1].
- *  @param max  End of activated (highlighted) part of the arc. Relative
+ *  @param max  End of activated (highlighted) part of the meter. Relative
  *  value [0..1].
  *  @param step  Size of each segment.
  *  @param loColor  RGBA color for the low values of the activated part.
@@ -46,7 +46,7 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
                              const BStyles::Color loColor, const BStyles::Color hiColor, std::function<double(const double &)> gradient, 
                              const BStyles::Color bgColor)
 {
-
+    const int nrSteps = (step > 0 ? std::ceil (1.0 / step) : 10);
     const double dy = (height - 0.2 * width) * step;
     const BStyles::Color fgHi = loColor.illuminate (BStyles::Color::illuminated);
     const BStyles::Color fgLo = loColor;
@@ -88,9 +88,10 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
         cairo_pattern_add_color_stop_rgba (bgPat, 0.25, CAIRO_RGBA(bgHi));
         cairo_pattern_add_color_stop_rgba (bgPat, 1, CAIRO_RGBA(bgLo));
 
-        for (double v = 0; v < 1.0; v += step)
+        for (int i = 0; i < nrSteps; ++i)
         {
-            if ((v >= min) && ( v <= max)) 
+            const double v = static_cast<double>(i) / static_cast<double>(nrSteps);
+            if ((v >= min) && (v < max)) 
             {
                 if ((fgHi != hiHi) || (fgLo != hiLo))
                 {
@@ -122,8 +123,8 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
 
             const double y = v * (height - 0.2 * width);
 
-            if (dy < 3.0) cairo_rectangle (cr, x0 + 0.1 * width , y0 + height - 0.1 * width - y, width - 0.2 * width, dy);
-            else cairo_rectangle (cr, x0 + 0.1 * width, y0 + height - 0.1 * width - y - 1.0, width - 0.2 * width, dy - 2.0);
+            if (dy < 3.0) cairo_rectangle (cr, x0 + 0.1 * width , y0 + height - 0.1 * width - y - dy, width - 0.2 * width, dy);
+            else cairo_rectangle (cr, x0 + 0.1 * width, y0 + height - 0.1 * width - y - dy + 1.0, width - 0.2 * width, dy - 2.0);
             cairo_fill (cr);
         }
 

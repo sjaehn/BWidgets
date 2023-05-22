@@ -281,14 +281,14 @@ inline void ValueHMeter::update ()
 
 	label.setText (display_ (getValue()));
 	label.resize ();
-	label.moveTo (getXOffset() + getEffectiveWidth() - 2.0 * getEffectiveHeight(), label.middle());
+	label.moveTo (label.center(), getYOffset());
 
 	scale_ = BUtilities::Area<> 
 	(
 		getXOffset(), 
-		getYOffset(), 
-		getEffectiveWidth() - 2.5 * getEffectiveHeight(),
-		getEffectiveHeight()
+		getYOffset() + label.getHeight(), 
+		getEffectiveWidth(),
+		getEffectiveHeight() - label.getHeight()
 	);
 
 	Widget::update();

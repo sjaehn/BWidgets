@@ -1224,8 +1224,11 @@ actively loaded, then a default drawing set is used insted.
 
 B.Widgets currently provides by two diffent drawing sets:
 * Ergo (default): Pseudo 3d widget elements
+
   ![ergo](../suppl/Ergo.png)
+  
 * Oops: Simple widget elements used in B.Oops
+
   ![oops](../suppl/Oops.png)
 
 These examples are taken from 

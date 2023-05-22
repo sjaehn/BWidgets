@@ -66,7 +66,7 @@ int main ()
     Label valueRadialMeterLabel(0, 310, 110, 20, "ValueRadialMeter");
     window.add (&valueRadialMeterLabel);
 
-    ValueHMeter valueHMeter (110, 240, 100, 20, 0.7, 0.0, 1.0, 0.1);
+    ValueHMeter valueHMeter (100, 240, 100, 30, 0.7, 0.0, 1.0, 0.1);
     window.add (&valueHMeter);
     Label valueHMeterLabel(110, 310, 100, 20, "ValueHMeter");
     window.add (&valueHMeterLabel);

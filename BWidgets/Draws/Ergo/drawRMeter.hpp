@@ -58,6 +58,7 @@ inline void drawRMeter    (cairo_t* cr, const double xc, const double yc, const 
                              const BStyles::Color bgColor)
 {
     // Colors used
+    const int nrSteps = (step > 0 ? std::ceil (1.0 / step) : 10);
     const double da = (1.5 * M_PI) * step;
     const double sa = 1.0 / radius;
     const BStyles::Color fgHi = loColor.illuminate (BStyles::Color::illuminated);
@@ -102,9 +103,10 @@ inline void drawRMeter    (cairo_t* cr, const double xc, const double yc, const 
         cairo_pattern_add_color_stop_rgba (bgPat, 0.25, CAIRO_RGBA(bgHi));
         cairo_pattern_add_color_stop_rgba (bgPat, 1, CAIRO_RGBA(bgLo));
 
-        for (double v = 0; v < 1.0; v += step)
+        for (int i = 0; i < nrSteps; ++i)
         {
-            if ((v >= min) && (v <=max)) 
+            const double v = static_cast<double>(i) / static_cast<double>(nrSteps);
+            if ((v >= min) && (v < max)) 
             {
                 if ((fgHi != hiHi) || (fgLo != hiLo))
                 {
