@@ -53,7 +53,7 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
     const BStyles::Color hiLo = hiColor;
     const BStyles::Color bgLo = bgColor.illuminate (BStyles::Color::shadowed);
     const BStyles::Color bgHi = bgColor;
-    const BStyles::Color bgDk = bgColor.illuminate (-0.75);
+    //const BStyles::Color bgDk = bgColor.illuminate (-0.75);
 
     // Fill
     cairo_set_line_width (cr, 0.0);
