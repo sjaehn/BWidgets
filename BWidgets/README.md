@@ -1222,10 +1222,14 @@ To load a drawing set, simply include its definitions header
 a drawing set is once for a whole compilation unit. And if no drawing set is
 actively loaded, then a default drawing set is used insted.
 
-B.Widgets currently provides by two diffent drawing sets:
+B.Widgets currently provides the following drawing sets:
 * Ergo (default): Pseudo 3d widget elements
 
   ![ergo](../suppl/Ergo.png)
+
+* Lolly: Simple widget elements, lollipop style
+
+  ![lolly](../suppl/Lolly.png)
   
 * Oops: Simple widget elements used in B.Oops
 
