@@ -303,8 +303,8 @@ inline void VScale::draw (const BUtilities::Area<>& area)
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
 
-			if (step_ >= 0.0) drawVBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 1.0 - rval, 1.0, fgColor, bgColor);
-			else drawVBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 0.0, rval, fgColor, bgColor);
+			if (step_ >= 0.0) drawVBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 1.0 - rval, 1.0, BWIDGETS_DEFAULT_SLIDER_BAR_FGCOLOR, BWIDGETS_DEFAULT_SLIDER_BAR_BGCOLOR);
+			else drawVBar(cr, scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 0.0, rval, BWIDGETS_DEFAULT_SLIDER_BAR_FGCOLOR, BWIDGETS_DEFAULT_SLIDER_BAR_BGCOLOR);
 		}
 
 		cairo_destroy (cr);

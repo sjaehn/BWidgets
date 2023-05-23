@@ -239,6 +239,7 @@ inline void VSlider::draw (const BUtilities::Area<>& area)
 			cairo_clip (cr);
 
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
+			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const double rval = getRatioFromValue (getValue());
 
 			if (step_ >= 0.0) drawKnob	(cr, 
@@ -246,14 +247,14 @@ inline void VSlider::draw (const BUtilities::Area<>& area)
 										 scale_.getY() + (1.0 - rval) * scale_.getHeight(), 
 										 BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * (scale_.getWidth() - 1.0), 
 										 1.0, 
-										 bgColor, bgColor);
+										 BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR, BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR);
 
 			else drawKnob				(cr, 
 										 scale_.getX() + 0.5 * scale_.getWidth(), 
 										 scale_.getY() + rval * scale_.getHeight(), 
 										 BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * (scale_.getWidth() - 1.0), 
 										 1.0, 
-										 bgColor, bgColor);
+										 BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR, BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR);
 
 		}
 

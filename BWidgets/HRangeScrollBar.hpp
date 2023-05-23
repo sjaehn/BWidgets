@@ -477,12 +477,13 @@ inline void HRangeScrollBar::update ()
 		button2.moveTo (x + (w - h) * (step_.second >= 0.0 ? rv.second : 1.0 - rv.second), y);
 		button2.resize (h, h);
 
-		const BStyles::Color bgColor =getBgColors()[getStatus()];
+		const BStyles::Color bgColor = getBgColors()[getStatus()];
+		const BStyles::Color fgColor = getFgColors()[getStatus()];
 		cairo_t* cr1 = cairo_create (button1.cairoSurface());
-		drawKnob (cr1, 0.5 * h, 0.5 * h, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_REL_SIZE * h, 0.0, bgColor, bgColor);
+		drawKnob (cr1, 0.5 * h, 0.5 * h, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_REL_SIZE * h, 0.0, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_COLOR, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_COLOR);
 		cairo_destroy (cr1);
 		cairo_t* cr2 = cairo_create (button2.cairoSurface());
-		drawKnob (cr2, 0.5 * h, 0.5 * h, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_REL_SIZE * h, 0.0, bgColor, bgColor);
+		drawKnob (cr2, 0.5 * h, 0.5 * h, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_REL_SIZE * h, 0.0, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_COLOR, BWIDGETS_DEFAULT_SCROLLBAR_KNOB_COLOR);
 		cairo_destroy (cr2);
 	}
 

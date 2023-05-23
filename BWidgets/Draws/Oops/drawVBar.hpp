@@ -54,7 +54,7 @@ inline void drawVBar    (cairo_t* cr, const double x0, const double y0, const do
     cairo_rectangle (cr, x0 + 1, y0 + 1, width - 2, height - 2);
     cairo_clip (cr);
     cairo_rectangle (cr, x0, y2, width, y3 - y2);
-    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor.illuminate(0.5 * BStyles::Color::illuminated)));
+    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor));
     cairo_fill (cr);
 
     cairo_restore (cr);

@@ -276,7 +276,7 @@ inline void HScrollBar::draw (const BUtilities::Area<>& area)
 
 			const double rval1 = (step_ >= 0.0 ? getRatioFromValue (getValue()) : 1.0 - getRatioFromValue (getValue() + vsize_));
 			const double rval2 = (step_ >= 0.0 ? getRatioFromValue (getValue() + vsize_) : 1.0 - getRatioFromValue (getValue()));
-			const BStyles::Color fgColor = getBgColors()[getStatus()];
+			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
 			drawHBar
 			(
@@ -284,7 +284,7 @@ inline void HScrollBar::draw (const BUtilities::Area<>& area)
 				scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 
 				rval1 * (1.0 - scale_.getHeight() / scale_.getWidth()), 
 				rval2 * (1.0 - scale_.getHeight() / scale_.getWidth()) + scale_.getHeight() / scale_.getWidth(), 
-				fgColor, bgColor
+				BWIDGETS_DEFAULT_SCROLLBAR_BAR_FGCOLOR, BWIDGETS_DEFAULT_SCROLLBAR_BAR_BGCOLOR
 			);
 		}
 

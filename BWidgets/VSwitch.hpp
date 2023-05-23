@@ -291,8 +291,8 @@ inline void VSwitch::draw (const BUtilities::Area<>& area)
 
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
-			drawVBar(cr, x0, y0, weff, heff, 1.0, 1.0 - max, fgColor, bgColor);
-			drawKnob(cr, xc, yc, radius, 1.0, bgColor, bgColor);
+			drawVBar(cr, x0, y0, weff, heff, 1.0, 1.0 - max, BWIDGETS_DEFAULT_SWITCH_BAR_FGCOLOR, BWIDGETS_DEFAULT_SWITCH_BAR_BGCOLOR);
+			drawKnob(cr, xc, yc, radius, 1.0, BWIDGETS_DEFAULT_SWITCH_KNOB_COLOR, BWIDGETS_DEFAULT_SWITCH_KNOB_COLOR);
 		}
 
 		cairo_destroy (cr);

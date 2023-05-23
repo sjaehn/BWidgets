@@ -38,7 +38,7 @@ inline void drawKnob (cairo_t* cr, const double xc, const double yc, const doubl
 
     cairo_set_line_width (cr, 1.0);
     cairo_rectangle (cr, xc - radius, yc - radius, 2.0 * radius, 2.0 * radius);
-    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor.illuminate(0.5 * BStyles::Color::illuminated)));
+    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor));
     cairo_fill_preserve (cr);
     cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor.illuminate(BStyles::Color::darkened)));
     cairo_stroke (cr);

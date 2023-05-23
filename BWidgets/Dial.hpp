@@ -346,16 +346,16 @@ inline void Dial::draw (const BUtilities::Area<>& area)
 
 			if (step_ >= 0.0)
 			{
-				drawArc (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 0.0, rval, fgColor, bgColor);
-				drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), BWIDGETS_DEFAULT_DIAL_KNOB_REL_SIZE * (rad - 1.0), 1.0, bgColor, bgColor);
-				drawArcHandle (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, rval, fgColor, bgColor);
+				drawArc (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 0.0, rval, BWIDGETS_DEFAULT_DIAL_ARC_FGCOLOR, BWIDGETS_DEFAULT_DIAL_ARC_BGCOLOR);
+				drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), BWIDGETS_DEFAULT_DIAL_KNOB_REL_SIZE * (rad - 1.0), 1.0, BWIDGETS_DEFAULT_DIAL_KNOB_COLOR, BWIDGETS_DEFAULT_DIAL_KNOB_COLOR);
+				drawArcHandle (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, rval, BWIDGETS_DEFAULT_DIAL_ARC_FGCOLOR, BWIDGETS_DEFAULT_DIAL_ARC_BGCOLOR);
 			}
 
 			else
 			{
-				drawArc (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 1.0 - rval, 1.0, fgColor, bgColor);
-				drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), BWIDGETS_DEFAULT_DIAL_KNOB_REL_SIZE * (rad - 1.0), 1.0, bgColor, bgColor);
-				drawArcHandle (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 1.0 - rval, fgColor, bgColor);
+				drawArc (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 1.0 - rval, 1.0, BWIDGETS_DEFAULT_DIAL_ARC_FGCOLOR, BWIDGETS_DEFAULT_DIAL_ARC_BGCOLOR);
+				drawKnob(cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), BWIDGETS_DEFAULT_DIAL_KNOB_REL_SIZE * (rad - 1.0), 1.0, BWIDGETS_DEFAULT_DIAL_KNOB_COLOR, BWIDGETS_DEFAULT_DIAL_KNOB_COLOR);
+				drawArcHandle (cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad - 1.0, 1.0 - rval, BWIDGETS_DEFAULT_DIAL_ARC_FGCOLOR, BWIDGETS_DEFAULT_DIAL_ARC_BGCOLOR);
 			}
 		}
 

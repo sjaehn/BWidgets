@@ -61,7 +61,7 @@ inline void drawArc     (cairo_t* cr, const double xc, const double yc, const do
     cairo_fill (cr);
 
     // Center
-    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor.illuminate(0.5 * BStyles::Color::illuminated)));
+    cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor));
     cairo_arc (cr, xc, yc, 0.1 * radius, 0, 2 * M_PI);
     cairo_close_path (cr);
     cairo_fill (cr);
