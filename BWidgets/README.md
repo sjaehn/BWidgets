@@ -1281,7 +1281,7 @@ dial widget
 * `BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE` - Relative knob size of a slider widget
 * `BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR` - Color provided to `drawKnob()` from a 
 slider widget
- `BWIDGETS_DEFAULT_SWITCH_BAR_REL_SIZE` - Relative bar size of a switch widget
+* `BWIDGETS_DEFAULT_SWITCH_BAR_REL_SIZE` - Relative bar size of a switch widget
 * `BWIDGETS_DEFAULT_SWITCH_BAR_FGCOLOR` - fgColor provided to `drawHBar` and
 `drawVBar()` from a switch widget 
 * `BWIDGETS_DEFAULT_SWITCH_BAR_BGCOLOR` - bgColor provided to `drawHBar` and
