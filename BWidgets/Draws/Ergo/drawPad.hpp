@@ -32,7 +32,7 @@
  *  @param height  Pad height.
  *  @param fgColor  RGBA color.
  */
-inline void drawButton (cairo_t* cr, double x, double y, double width, double height, const BStyles::Color fgColor)
+inline void drawPad (cairo_t* cr, double x, double y, double width, double height, const BStyles::Color fgColor)
 {
 	if ((width <= 0) || (height <= 0)) return;
 

@@ -378,7 +378,7 @@ inline void Pad<T>::draw (const BUtilities::Area<>& area)
 
 				const double rval = this->getRatioFromValue (this->getValue());
 				const BStyles::Color butColor = getFgColors()[getStatus()].illuminate (-0.95 + 0.95 * rval);
-				drawButton (cr, x0, y0, w, h, butColor);
+				drawPad (cr, x0, y0, w, h, butColor);
 				cairo_destroy (cr);
 			}
 		}

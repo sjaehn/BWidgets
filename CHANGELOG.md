@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added drawing set Lolly
 * Added drawing set Flow
 * Added documentation for drawing set parameters in BWidgets/README.md
+* Fixed `drawPad()` call in `Pad<T>::draw()`
 
 
 ## [1.0.0] - 2023-05-22
