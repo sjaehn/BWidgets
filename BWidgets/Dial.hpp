@@ -341,8 +341,6 @@ inline void Dial::draw (const BUtilities::Area<>& area)
 
 			const double rval = getRatioFromValue (getValue());
 			const double rad = 0.5 * (scale_.getWidth() < scale_.getHeight() ? scale_.getWidth() : scale_.getHeight());
-			const BStyles::Color fgColor = getFgColors()[getStatus()];
-			const BStyles::Color bgColor = getBgColors()[getStatus()];
 
 			if (step_ >= 0.0)
 			{

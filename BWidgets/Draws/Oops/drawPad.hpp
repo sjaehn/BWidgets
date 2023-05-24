@@ -46,7 +46,6 @@ inline void drawPad (cairo_t* cr, double x, double y, double width, double heigh
 	cairo_pattern_add_color_stop_rgba (pat, 0.0, CAIRO_RGBA (illuminated));
 	cairo_pattern_add_color_stop_rgba (pat, 1.0, CAIRO_RGBA (darkened));
 
-	double rad = ((width < 20) || (height < 20) ?  (width < height ? width : height) / 4 : 5);
 	cairo_rectangle (cr, x, y, width, height);
 	cairo_set_source (cr, pat);
 	cairo_fill (cr);

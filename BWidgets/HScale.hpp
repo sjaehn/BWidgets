@@ -299,8 +299,6 @@ inline void HScale::draw (const BUtilities::Area<>& area)
 			cairo_clip (cr);
 
 			const double rval = getRatioFromValue (getValue());
-			const BStyles::Color fgColor = getFgColors()[getStatus()];
-			const BStyles::Color bgColor = getBgColors()[getStatus()];
 
 			if (step_ >= 0.0) 
 			{

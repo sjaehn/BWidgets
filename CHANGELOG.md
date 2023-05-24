@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Fixed implementation of `BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE` (now only
 applies on Sliders; now matches with `BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE`)
+* Fixed warnings unused variables fgColor and bgColor
 
 
 ## [1.1.0] - 2023-05-24
