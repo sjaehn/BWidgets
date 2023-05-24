@@ -1243,7 +1243,62 @@ These examples are taken from
 [../examples/draws.cpp](../examples/draws.cpp). Feel free to substitute the 
 include.
 
-Also feel free to create your own drawing sets. You don't need to define all
+Also feel free to create your own drawing sets. All parameters are realized as
+macro definitions in the definitions header file to be included. Definitions
+available are:
+* `BWIDGETS_DEFAULT_DRAWARC_PATH` - Path to the file containing the 
+`drawArc()` function
+* `BWIDGETS_DEFAULT_DRAWKNOB_PATH` - Path to the file containing the 
+`drawKnob()` function
+* `BWIDGETS_DEFAULT_DRAWARCHANDLE_PATH` - Path to the file containing the 
+`drawArcHandle()` function
+* `BWIDGETS_DEFAULT_DRAWHBAR_PATH` - Path to the file containing the 
+`drawHBar()` function
+* `BWIDGETS_DEFAULT_DRAWVBAR_PATH` - Path to the file containing the 
+`drawVBar()` function
+* `BWIDGETS_DEFAULT_DRAWBUTTON_PATH` - Path to the file containing the 
+`drawButton()` function
+* `BWIDGETS_DEFAULT_DRAWPAD_PATH` - Path to the file containing the 
+`drawPad()` function
+* `BWIDGETS_DEFAULT_DRAWRMETER_PATH` - Path to the file containing the 
+`drawRMeter()` function
+* `BWIDGETS_DEFAULT_DRAWHMETER_PATH` - Path to the file containing the 
+`drawHMeter()` function
+* `BWIDGETS_DEFAULT_DRAWVMETER_PATH` - Path to the file containing the 
+`drawVMeter()` function
+* `BWIDGETS_DEFAULT_DIAL_ARC_FGCOLOR` - fgColor provided to `drawArc()` and
+`drawArcHandle()`
+* `BWIDGETS_DEFAULT_DIAL_ARC_BGCOLOR` - bgColor provided to `drawArc()` and
+`drawArcHandle()`
+* `BWIDGETS_DEFAULT_DIAL_KNOB_REL_SIZE` - Relative knob size of a dial widget
+* `BWIDGETS_DEFAULT_DIAL_KNOB_COLOR` - Color provided to `drawKnob()` from a
+dial widget
+* `BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE` - Relative bar size of a slider widget
+* `BWIDGETS_DEFAULT_SLIDER_BAR_FGCOLOR` - fgColor provided to `drawHBar` and
+`drawVBar()` from a slider widget 
+* `BWIDGETS_DEFAULT_SLIDER_BAR_BGCOLOR` - bgColor provided to `drawHBar` and
+`drawVBar()` from a slider widget
+* `BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE` - Relative knob size of a slider widget
+* `BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR` - Color provided to `drawKnob()` from a 
+slider widget
+ `BWIDGETS_DEFAULT_SWITCH_BAR_REL_SIZE` - Relative bar size of a switch widget
+* `BWIDGETS_DEFAULT_SWITCH_BAR_FGCOLOR` - fgColor provided to `drawHBar` and
+`drawVBar()` from a switch widget 
+* `BWIDGETS_DEFAULT_SWITCH_BAR_BGCOLOR` - bgColor provided to `drawHBar` and
+`drawVBar()` from a switch widget
+* `BWIDGETS_DEFAULT_SWITCH_KNOB_REL_SIZE` - Relative knob size of a switch widget
+* `BWIDGETS_DEFAULT_SWITCH_KNOB_COLOR` - Color provided to `drawKnob()` from a 
+switch widget
+* `BWIDGETS_DEFAULT_SCROLLBAR_BAR_REL_SIZE` - Relative bar size of a scrollbar widget
+* `BWIDGETS_DEFAULT_SCROLLBAR_BAR_FGCOLOR` - fgColor provided to `drawHBar` and
+`drawVBar()` from a scrollbar widget 
+* `BWIDGETS_DEFAULT_SCROLLBAR_BAR_BGCOLOR` - bgColor provided to `drawHBar` and
+`drawVBar()` from a scrollbar widget
+* `BWIDGETS_DEFAULT_SCROLLBAR_KNOB_REL_SIZE` - Relative knob size of a scrollbar widget
+* `BWIDGETS_DEFAULT_SCROLLBAR_KNOB_COLOR` - Color provided to `drawKnob()` from a 
+scrollbar widget
+
+You don't need to define all
 drawing functions and layout parameters as there's a fallback to the default
 definitions.
 
