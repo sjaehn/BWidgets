@@ -44,18 +44,18 @@ inline void drawHBar    (cairo_t* cr, const double x0, const double y0, const do
 
     cairo_save (cr);
 
-    cairo_set_line_width (cr, 0.5 * height);
+    cairo_set_line_width (cr, height);
     cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
 
     // Frame
-    cairo_move_to (cr, x0 + 0.25 * height, y0 + 0.5 * height);
-    cairo_line_to (cr, x0 + 0.25 * height < x0 + width - 0.25 * height ? x0 + width - 0.25 * height : x0 + 0.25 * height, y0 + 0.5 * height);
+    cairo_move_to (cr, x0 + 0.5 * height, y0 + 0.5 * height);
+    cairo_line_to (cr, x0 + 0.5 * height < x0 + width - 0.5 * height ? x0 + width - 0.5 * height : x0 + 0.5 * height, y0 + 0.5 * height);
     cairo_set_source_rgba (cr, CAIRO_RGBA(bgColor));
     cairo_stroke (cr);
 
     // Foreground
-    cairo_move_to (cr, x2 + 0.25 * height, y0 + 0.5 * height);
-    cairo_line_to (cr, x2 + 0.25 * height < x3 - 0.25 * height ? x3 - 0.25 * height : x2 + 0.25 * height, y0 + 0.5 * height);
+    cairo_move_to (cr, x2 + 0.5 * height, y0 + 0.5 * height);
+    cairo_line_to (cr, x2 + 0.5 * height < x3 - 0.5 * height ? x3 - 0.5 * height : x2 + 0.5 * height, y0 + 0.5 * height);
     cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor));
     cairo_stroke (cr);
 

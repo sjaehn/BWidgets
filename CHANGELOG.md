@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2023-05-23
 
 * Added drawing sets color parameters
+* Added drawing sets bar size paramters
 * Added drawing set Lolly
 
 

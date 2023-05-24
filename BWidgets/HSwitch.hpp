@@ -290,7 +290,7 @@ inline void HSwitch::draw (const BUtilities::Area<>& area)
 
 			const BStyles::Color fgColor = getFgColors()[getStatus()];
 			const BStyles::Color bgColor = getBgColors()[getStatus()];
-			drawHBar(cr, x0, y0, weff, heff, 0.0, max, BWIDGETS_DEFAULT_SWITCH_BAR_FGCOLOR, BWIDGETS_DEFAULT_SWITCH_BAR_BGCOLOR);
+			drawHBar(cr, x0, y0 + 0.5 * (1.0 - BWIDGETS_DEFAULT_SWITCH_BAR_REL_SIZE) * heff, weff, BWIDGETS_DEFAULT_SWITCH_BAR_REL_SIZE * heff, 0.0, max, BWIDGETS_DEFAULT_SWITCH_BAR_FGCOLOR, BWIDGETS_DEFAULT_SWITCH_BAR_BGCOLOR);
 			drawKnob(cr, xc, yc, radius, 1.0, BWIDGETS_DEFAULT_SWITCH_KNOB_COLOR, BWIDGETS_DEFAULT_SWITCH_KNOB_COLOR);
 		}
 

@@ -281,7 +281,8 @@ inline void HScrollBar::draw (const BUtilities::Area<>& area)
 			drawHBar
 			(
 				cr, 
-				scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 
+				scale_.getX(), scale_.getY() + 0.5 * (1.0 - BWIDGETS_DEFAULT_SCROLLBAR_BAR_REL_SIZE) * scale_.getHeight(), 
+				scale_.getWidth(), BWIDGETS_DEFAULT_SCROLLBAR_BAR_REL_SIZE * scale_.getHeight(), 
 				rval1 * (1.0 - scale_.getHeight() / scale_.getWidth()), 
 				rval2 * (1.0 - scale_.getHeight() / scale_.getWidth()) + scale_.getHeight() / scale_.getWidth(), 
 				BWIDGETS_DEFAULT_SCROLLBAR_BAR_FGCOLOR, BWIDGETS_DEFAULT_SCROLLBAR_BAR_BGCOLOR

@@ -44,18 +44,18 @@ inline void drawVBar    (cairo_t* cr, const double x0, const double y0, const do
 
     cairo_save (cr);
 
-    cairo_set_line_width (cr, 0.5 * width);
+    cairo_set_line_width (cr, width);
     cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
 
     // Frame
-    cairo_move_to (cr, x0 + 0.5 * width, y0 + 0.25 * width);
-    cairo_line_to (cr, x0 + 0.5 * width, y0 + 0.25 * width < y0 + height - 0.25 * width ? y0 + height - 0.25 * width : y0 + 0.25 * width);
+    cairo_move_to (cr, x0 + 0.5 * width, y0 + 0.5 * width);
+    cairo_line_to (cr, x0 + 0.5 * width, y0 + 0.5 * width < y0 + height - 0.5 * width ? y0 + height - 0.5 * width : y0 + 0.5 * width);
     cairo_set_source_rgba (cr, CAIRO_RGBA(bgColor));
     cairo_stroke (cr);
 
     // Foreground
-    cairo_move_to (cr, x0 + 0.5 * width, y2 + 0.25 * width);
-    cairo_line_to (cr, x0 + 0.5 * width, y2 + 0.25 * width < y3 - 0.25 * width ? y3 - 0.25 * width : y2 + 0.25 * width);
+    cairo_move_to (cr, x0 + 0.5 * width, y2 + 0.5 * width);
+    cairo_line_to (cr, x0 + 0.5 * width, y2 + 0.5 * width < y3 - 0.5 * width ? y3 - 0.5 * width : y2 + 0.5 * width);
     cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor));
     cairo_stroke (cr);
 

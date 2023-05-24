@@ -282,7 +282,8 @@ inline void VScrollBar::draw (const BUtilities::Area<>& area)
 			drawVBar
 			(
 				cr, 
-				scale_.getX(), scale_.getY(), scale_.getWidth(), scale_.getHeight(), 
+				scale_.getX() + 0.5 * (1.0 - BWIDGETS_DEFAULT_SCROLLBAR_BAR_REL_SIZE) * scale_.getWidth(), scale_.getY(), 
+				BWIDGETS_DEFAULT_SCROLLBAR_BAR_REL_SIZE * scale_.getWidth(), scale_.getHeight(), 
 				rval1 * (1.0 - scale_.getWidth() / scale_.getHeight()), 
 				rval2 * (1.0 - scale_.getWidth() / scale_.getHeight()) + scale_.getWidth() / scale_.getHeight(), 
 				BWIDGETS_DEFAULT_SCROLLBAR_BAR_FGCOLOR, BWIDGETS_DEFAULT_SCROLLBAR_BAR_BGCOLOR
