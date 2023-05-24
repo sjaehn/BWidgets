@@ -1235,6 +1235,10 @@ B.Widgets currently provides the following drawing sets:
 
   ![oops](../suppl/Oops.png)
 
+* Flow: Pseudo 3d widget elements
+
+  ![flow](../suppl/Flow.png)
+
 These examples are taken from 
 [../examples/draws.cpp](../examples/draws.cpp). Feel free to substitute the 
 include.
