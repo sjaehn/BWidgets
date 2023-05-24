@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [1.1.1] - 2023-05-24
+
+* Fixed implementation of `BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE` (now only
+applies on Sliders; now matches with `BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE`)
+
+
 ## [1.1.0] - 2023-05-24
 
 * Added drawing sets color parameters

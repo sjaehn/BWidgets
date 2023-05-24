@@ -39,11 +39,11 @@
 #endif
 
 #ifndef BWIDGETS_DEFAULT_DIAL_ARC_FGCOLOR
-#define BWIDGETS_DEFAULT_DIAL_ARC_FGCOLOR fgColor
+#define BWIDGETS_DEFAULT_DIAL_ARC_FGCOLOR getFgColors()[getStatus()]
 #endif
 
 #ifndef BWIDGETS_DEFAULT_DIAL_ARC_BGCOLOR
-#define BWIDGETS_DEFAULT_DIAL_ARC_BGCOLOR bgColor
+#define BWIDGETS_DEFAULT_DIAL_ARC_BGCOLOR getBgColors()[getStatus()]
 #endif
 
 #ifndef BWIDGETS_DEFAULT_DIAL_KNOB_REL_SIZE 
@@ -51,19 +51,19 @@
 #endif
 
 #ifndef BWIDGETS_DEFAULT_DIAL_KNOB_COLOR
-#define BWIDGETS_DEFAULT_DIAL_KNOB_COLOR bgColor
+#define BWIDGETS_DEFAULT_DIAL_KNOB_COLOR getBgColors()[getStatus()]
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE 
-#define BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE 1.0
+#define BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE 0.5
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SLIDER_BAR_FGCOLOR
-#define BWIDGETS_DEFAULT_SLIDER_BAR_FGCOLOR fgColor
+#define BWIDGETS_DEFAULT_SLIDER_BAR_FGCOLOR getFgColors()[getStatus()]
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SLIDER_BAR_BGCOLOR
-#define BWIDGETS_DEFAULT_SLIDER_BAR_BGCOLOR bgColor
+#define BWIDGETS_DEFAULT_SLIDER_BAR_BGCOLOR getBgColors()[getStatus()]
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SWITCH_BAR_REL_SIZE 
@@ -75,15 +75,15 @@
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR
-#define BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR bgColor.illuminate(BStyles::Color::illuminated)
+#define BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR getBgColors()[getStatus()].illuminate(BStyles::Color::illuminated)
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SWITCH_BAR_FGCOLOR
-#define BWIDGETS_DEFAULT_SWITCH_BAR_FGCOLOR fgColor
+#define BWIDGETS_DEFAULT_SWITCH_BAR_FGCOLOR getFgColors()[getStatus()]
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SWITCH_BAR_BGCOLOR
-#define BWIDGETS_DEFAULT_SWITCH_BAR_BGCOLOR bgColor
+#define BWIDGETS_DEFAULT_SWITCH_BAR_BGCOLOR getBgColors()[getStatus()]
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SWITCH_KNOB_REL_SIZE 
@@ -91,7 +91,7 @@
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SWITCH_KNOB_COLOR
-#define BWIDGETS_DEFAULT_SWITCH_KNOB_COLOR bgColor.illuminate(BStyles::Color::illuminated)
+#define BWIDGETS_DEFAULT_SWITCH_KNOB_COLOR getBgColors()[getStatus()].illuminate(BStyles::Color::illuminated)
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SCROLLBAR_BAR_REL_SIZE 
@@ -99,11 +99,11 @@
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SCROLLBAR_BAR_FGCOLOR
-#define BWIDGETS_DEFAULT_SCROLLBAR_BAR_FGCOLOR bgColor.illuminate(BStyles::Color::illuminated)
+#define BWIDGETS_DEFAULT_SCROLLBAR_BAR_FGCOLOR getBgColors()[getStatus()].illuminate(BStyles::Color::illuminated)
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SCROLLBAR_BAR_BGCOLOR
-#define BWIDGETS_DEFAULT_SCROLLBAR_BAR_BGCOLOR bgColor
+#define BWIDGETS_DEFAULT_SCROLLBAR_BAR_BGCOLOR getBgColors()[getStatus()]
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SCROLLBAR_KNOB_REL_SIZE 
@@ -111,5 +111,5 @@
 #endif
 
 #ifndef BWIDGETS_DEFAULT_SCROLLBAR_KNOB_COLOR
-#define BWIDGETS_DEFAULT_SCROLLBAR_KNOB_COLOR bgColor.illuminate(BStyles::Color::illuminated)
+#define BWIDGETS_DEFAULT_SCROLLBAR_KNOB_COLOR getBgColors()[getStatus()].illuminate(BStyles::Color::illuminated)
 #endif

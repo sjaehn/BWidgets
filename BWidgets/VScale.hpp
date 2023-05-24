@@ -305,14 +305,14 @@ inline void VScale::draw (const BUtilities::Area<>& area)
 
 			if (step_ >= 0.0) 
 			{
-				drawVBar(cr, scale_.getX() + 0.5 * (1.0 - BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * scale_.getWidth(), scale_.getY(), 
-						 BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE * scale_.getWidth(), scale_.getHeight(), 
+				drawVBar(cr, scale_.getX(), scale_.getY(), 
+						 scale_.getWidth(), scale_.getHeight(), 
 						 1.0 - rval, 1.0, BWIDGETS_DEFAULT_SLIDER_BAR_FGCOLOR, BWIDGETS_DEFAULT_SLIDER_BAR_BGCOLOR);
 			}
 			else 
 			{
-				drawVBar(cr, scale_.getX() + 0.5 * (1.0 - BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * scale_.getWidth(), scale_.getY(), 
-						 BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE * scale_.getWidth(), scale_.getHeight(), 
+				drawVBar(cr, scale_.getX(), scale_.getY(), 
+						 scale_.getWidth(), scale_.getHeight(), 
 						 0.0, rval, BWIDGETS_DEFAULT_SLIDER_BAR_FGCOLOR, BWIDGETS_DEFAULT_SLIDER_BAR_BGCOLOR);
 			}
 		}

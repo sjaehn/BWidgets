@@ -285,9 +285,9 @@ inline void ValueHSlider::update ()
 	scale_ = BUtilities::Area<> 
 	(
 		getXOffset() + 0.25 * getEffectiveHeight(), 
-		getYOffset() + 0.625 * getEffectiveHeight(), 
+		getYOffset() + (0.75 - 0.25 * BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * getEffectiveHeight(), 
 		getEffectiveWidth() - 0.5 * getEffectiveHeight(), 
-		0.25 * getEffectiveHeight()
+		0.5 * BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE * getEffectiveHeight()
 	);
 
 	const bool lv = label.isValueable();

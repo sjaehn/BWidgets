@@ -291,9 +291,9 @@ inline void ValueVSlider::update ()
 
 	scale_ = BUtilities::Area<> 
 	(
-		getXOffset() + 0.375 * getEffectiveWidth(), 
+		getXOffset() + (0.5 - 0.25 * BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * getEffectiveWidth(), 
 		getYOffset() + label.getHeight() + 0.25 * getEffectiveWidth(), 
-		0.25 * getEffectiveWidth(),
+		0.5 * BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE * getEffectiveWidth(),
 		getEffectiveHeight() - label.getHeight() - 0.5 * getEffectiveWidth()
 	);
 

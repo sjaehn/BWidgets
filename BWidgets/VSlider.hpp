@@ -203,9 +203,9 @@ inline void VSlider::update ()
 
 	scale_ = BUtilities::Area<> 
 	(
-		getXOffset() + 0.25 * getEffectiveWidth(), 
+		getXOffset() + (0.5 - 0.5 * BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * getEffectiveWidth(), 
 		getYOffset() + 0.5 * getEffectiveWidth(), 
-		0.5 * getEffectiveWidth(),
+		BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE * getEffectiveWidth(),
 		getEffectiveHeight() - getEffectiveWidth()
 	);
 	Widget::update();
@@ -245,14 +245,14 @@ inline void VSlider::draw (const BUtilities::Area<>& area)
 			if (step_ >= 0.0) drawKnob	(cr, 
 										 scale_.getX() + 0.5 * scale_.getWidth(), 
 										 scale_.getY() + (1.0 - rval) * scale_.getHeight(), 
-										 BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * (scale_.getWidth() - 1.0), 
+										 0.5 * (BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE /BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * (scale_.getWidth() - 1.0), 
 										 1.0, 
 										 BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR, BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR);
 
 			else drawKnob				(cr, 
 										 scale_.getX() + 0.5 * scale_.getWidth(), 
 										 scale_.getY() + rval * scale_.getHeight(), 
-										 BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * (scale_.getWidth() - 1.0), 
+										 0.5 * (BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE / BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * (scale_.getWidth() - 1.0), 
 										 1.0, 
 										 BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR, BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR);
 

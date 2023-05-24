@@ -305,14 +305,14 @@ inline void HScale::draw (const BUtilities::Area<>& area)
 			if (step_ >= 0.0) 
 			{
 				drawHBar(cr, 
-						 scale_.getX(), scale_.getY() + 0.5 * (1.0 - BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * scale_.getHeight(), 
-						 scale_.getWidth(), BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE * scale_.getHeight(), 
+						 scale_.getX(), scale_.getY(), 
+						 scale_.getWidth(), scale_.getHeight(), 
 						 0.0, rval, BWIDGETS_DEFAULT_SLIDER_BAR_FGCOLOR, BWIDGETS_DEFAULT_SLIDER_BAR_BGCOLOR);
 			}
 			else 
 			{
-				drawHBar(cr, scale_.getX(), scale_.getY() + 0.5 * (1.0 - BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * scale_.getHeight(), 
-						 scale_.getWidth(), BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE * scale_.getHeight(),
+				drawHBar(cr, scale_.getX(), scale_.getY(), 
+						 scale_.getWidth(), scale_.getHeight(),
 						 1.0 - rval, 1.0, BWIDGETS_DEFAULT_SLIDER_BAR_FGCOLOR, BWIDGETS_DEFAULT_SLIDER_BAR_BGCOLOR);
 			}
 		}

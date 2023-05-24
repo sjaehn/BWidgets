@@ -199,9 +199,9 @@ inline void HSlider::update ()
 	scale_ = BUtilities::Area<> 
 	(
 		getXOffset() + 0.5 * getEffectiveHeight(), 
-		getYOffset() + 0.25 * getEffectiveHeight(), 
+		getYOffset() + (0.5 - 0.5 * BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * getEffectiveHeight(), 
 		getEffectiveWidth() - getEffectiveHeight(), 
-		0.5 * getEffectiveHeight()
+		BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE * getEffectiveHeight()
 	);
 	Widget::update();
 }
@@ -240,14 +240,14 @@ inline void HSlider::draw (const BUtilities::Area<>& area)
 			if (step_ >= 0.0) drawKnob	(cr, 
 										 scale_.getX() + rval * scale_.getWidth(), 
 										 scale_.getY() + 0.5 * scale_.getHeight(), 
-										 BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * (scale_.getHeight() - 1.0), 
+										 0.5 * (BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE / BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * (scale_.getHeight() - 1.0), 
 										 1.0, 
 										 BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR, BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR);
 
 			else drawKnob				(cr, 
 										 scale_.getX() + (1.0 - rval) * scale_.getWidth(), 
 										 scale_.getY() + 0.5 * scale_.getHeight(), 
-										 BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * (scale_.getHeight() - 1.0), 
+										 0.5 * (BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE / BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE) * (scale_.getHeight() - 1.0), 
 										 1.0, 
 										 BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR, BWIDGETS_DEFAULT_SLIDER_KNOB_COLOR);
 		}
