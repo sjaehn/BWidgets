@@ -51,6 +51,8 @@ inline void drawArc     (cairo_t* cr, const double xc, const double yc, const do
                          const double min, const double max, 
                          const BStyles::Color fgColor, const BStyles::Color bgColor)
 {
+    cairo_save(cr);
+
     cairo_set_line_width (cr, 0.1 * radius);
     cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
     
@@ -63,6 +65,8 @@ inline void drawArc     (cairo_t* cr, const double xc, const double yc, const do
     cairo_set_source_rgba (cr, CAIRO_RGBA(fgColor));
     cairo_arc (cr, xc, yc,  0.8 * radius, BWIDGETS_DEFAULT_DRAWARC_START + min * BWIDGETS_DEFAULT_DRAWARC_SIZE, BWIDGETS_DEFAULT_DRAWARC_START + max * BWIDGETS_DEFAULT_DRAWARC_SIZE);
     cairo_stroke (cr);
+
+    cairo_restore(cr);
 }
 
 #endif /*  BWIDGETS_DRAWARC_HPP_ */

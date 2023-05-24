@@ -42,6 +42,7 @@ inline void drawKnob (cairo_t* cr, const double xc, const double yc, const doubl
     const BStyles::Color bgHi = bgColor.illuminate (BStyles::Color::illuminated);
     const BStyles::Color bgSg = bgColor.illuminate (BStyles::Color::shadowed);
 
+    cairo_save (cr);
     cairo_set_line_width (cr, 0.0);
 
     // Knob top
@@ -92,6 +93,8 @@ inline void drawKnob (cairo_t* cr, const double xc, const double yc, const doubl
         cairo_stroke (cr);
         cairo_pattern_destroy (pat);
     }
+
+    cairo_restore (cr);
 }
 
 #endif /*  BWIDGETS_DRAWKNOB_HPP_ */

@@ -53,6 +53,7 @@ inline void drawArcHandle   (cairo_t* cr, const double xc, const double yc, cons
                              const double rval, 
                              const BStyles::Color fgColor, const BStyles::Color bgColor)
 {
+    cairo_save (cr);
     cairo_set_source_rgba(cr, CAIRO_RGBA(fgColor));
     cairo_set_line_width(cr, 0.0);
     cairo_arc
@@ -65,6 +66,7 @@ inline void drawArcHandle   (cairo_t* cr, const double xc, const double yc, cons
         2.0 * M_PI
     );
     cairo_fill (cr);
+    cairo_restore(cr);
 }
 
 #endif /*  BWIDGETS_DRAWARCHANDLE_HPP_ */

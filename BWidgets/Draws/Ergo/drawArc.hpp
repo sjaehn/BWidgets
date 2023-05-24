@@ -52,6 +52,7 @@ inline void drawArc     (cairo_t* cr, const double xc, const double yc, const do
                          const double min, const double max, 
                          const BStyles::Color fgColor, const BStyles::Color bgColor)
 {
+    cairo_save (cr);
     cairo_set_line_width (cr, 0.0);
     
     // Colors used
@@ -141,6 +142,8 @@ inline void drawArc     (cairo_t* cr, const double xc, const double yc, const do
         cairo_stroke (cr);
         cairo_pattern_destroy (pat);
     }
+
+    cairo_restore(cr);
 }
 
 #endif /*  BWIDGETS_DRAWARC_HPP_ */

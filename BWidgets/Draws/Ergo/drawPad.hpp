@@ -36,6 +36,8 @@ inline void drawButton (cairo_t* cr, double x, double y, double width, double he
 {
 	if ((width <= 0) || (height <= 0)) return;
 
+	cairo_save(cr);
+
 	// Draw button
 	BStyles::Color illuminated = fgColor.illuminate (0.05);
 	BStyles::Color darkened = fgColor.illuminate (-0.33);
@@ -49,6 +51,8 @@ inline void drawButton (cairo_t* cr, double x, double y, double width, double he
 	cairo_set_source (cr, pat);
 	cairo_fill (cr);
 	cairo_pattern_destroy (pat);
+
+	cairo_restore (cr);
 }
 
 #endif /* BWIDGETS_DRAWPAD_HPP_ */

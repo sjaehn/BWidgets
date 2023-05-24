@@ -55,6 +55,8 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
     const BStyles::Color bgHi = bgColor;
     //const BStyles::Color bgDk = bgColor.illuminate (-0.75);
 
+    cairo_save(cr);
+
     // Fill
     cairo_set_line_width (cr, 0.0);
     cairo_pattern_t* fgPat = cairo_pattern_create_linear (x0, y0, x0 + width, y0 + height);
@@ -110,6 +112,8 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
         cairo_pattern_destroy (bgPat);
         cairo_pattern_destroy (fgPat);
     }
+
+    cairo_restore(cr);
 }
 
 #endif /*  BWIDGETS_DRAWVMETER_HPP_ */

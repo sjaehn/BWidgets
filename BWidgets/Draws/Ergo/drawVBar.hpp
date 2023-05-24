@@ -46,6 +46,8 @@ inline void drawVBar    (cairo_t* cr, const double x0, const double y0, const do
     const double x4 = x0 + width;
     //const double y4 = y0 + height;
 
+    cairo_save(cr);
+
     // Colors used
     BStyles::Color fgHi = fgColor.illuminate (BStyles::Color::illuminated);
     BStyles::Color fgLo = fgColor;
@@ -98,6 +100,8 @@ inline void drawVBar    (cairo_t* cr, const double x0, const double y0, const do
         cairo_stroke (cr);
         cairo_pattern_destroy (pat);
     }
+
+    cairo_restore(cr);
 }
 
 #endif /*  BWIDGETS_DRAWVBAR_HPP_ */

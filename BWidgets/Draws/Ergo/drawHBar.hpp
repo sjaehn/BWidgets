@@ -53,6 +53,8 @@ inline void drawHBar    (cairo_t* cr, const double x0, const double y0, const do
     const BStyles::Color bgHi = bgColor.illuminate (BStyles::Color::illuminated);
     const BStyles::Color bgSh = bgColor.illuminate (BStyles::Color::shadowed);
 
+    cairo_save (cr);
+
     // Background
     cairo_set_line_width (cr, 0.0);
     cairo_pattern_t* pat = cairo_pattern_create_linear (x0, y0, x0, y4);
@@ -98,6 +100,8 @@ inline void drawHBar    (cairo_t* cr, const double x0, const double y0, const do
         cairo_stroke (cr);
         cairo_pattern_destroy (pat);
     }
+
+    cairo_restore (cr);
 }
 
 #endif /*  BWIDGETS_DRAWHBAR_HPP_ */

@@ -19,6 +19,7 @@
 #define BWIDGETS_DRAWHMETER_HPP_
 
 #include "../../../BUtilities/cairoplus.h"
+#include <cairo/cairo.h>
 #include <cmath>
 #include <functional>
 #include "../../../BStyles/Types/Color.hpp"
@@ -55,6 +56,8 @@ inline void drawHMeter    (cairo_t* cr, const double x0, const double y0, const 
     const BStyles::Color bgLo = bgColor.illuminate (BStyles::Color::shadowed);
     const BStyles::Color bgHi = bgColor;
     //const BStyles::Color bgDk = bgColor.illuminate (-0.75);
+
+    cairo_save(cr);
 
     // Fill
     cairo_set_line_width (cr, 0.0);
@@ -113,6 +116,8 @@ inline void drawHMeter    (cairo_t* cr, const double x0, const double y0, const 
         cairo_pattern_destroy (bgPat);
         cairo_pattern_destroy (fgPat);
     }
+
+    cairo_restore(cr);
 }
 
 #endif /*  BWIDGETS_DRAWHMETER_HPP_ */
