@@ -253,6 +253,11 @@ inline RadialMeter::RadialMeter	(const double  x, const double y, const double w
 	ValueTransferable<double> (transferFunc, reTransferFunc),
 	scale_ (0, 0, width, height)
 {
+	setFocusText([](const Widget* w) {return	w->getTitle() + 
+												": " + 
+												(dynamic_cast<const RadialMeter*>(w) ? 
+												 std::to_string (dynamic_cast<const RadialMeter*>(w)->getValue()) : 
+												 "");});
 }
 
 inline Widget* RadialMeter::clone () const 
@@ -296,13 +301,6 @@ inline void RadialMeter::resize (const BUtilities::Point<> extends)
 
 inline void RadialMeter::update ()
 {
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
-		f->resize();
-	}
-
 	scale_ = BUtilities::Area<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
 	Widget::update();
 }

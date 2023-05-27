@@ -252,7 +252,11 @@ inline HMeter::HMeter	(const double  x, const double y, const double width, cons
 	ValueTransferable<double> (transferFunc, reTransferFunc),
 	scale_ (0, 0, width, height)
 {
-
+	setFocusText([](const Widget* w) {return	w->getTitle() + 
+												": " + 
+												(dynamic_cast<const HMeter*>(w) ? 
+												 std::to_string (dynamic_cast<const HMeter*>(w)->getValue()) : 
+												 "");});
 }
 
 inline Widget* HMeter::clone () const 
@@ -296,13 +300,6 @@ inline void HMeter::resize (const BUtilities::Point<> extends)
 
 inline void HMeter::update ()
 {
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
-		f->resize();
-	}
-
 	scale_ = BUtilities::Area<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
 	Widget::update();
 }

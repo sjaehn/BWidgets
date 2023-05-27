@@ -115,11 +115,6 @@ public:
 	void copy (const HSwitch* that);
 
 	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
-
-	/**
      *  @brief  Method called when pointer button clicked (pressed and 
      *  released).
      *  @param event  Passed Event.
@@ -212,17 +207,6 @@ inline void HSwitch::copy (const HSwitch* that)
 	Scrollable::operator= (*that);
 	Draggable::operator= (*that);
 	Widget::copy (that);
-}
-
-inline void HSwitch::update()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
-		f->resize();
-	}
-	Widget::update();	// Bypass Button::update()
 }
 
 inline void HSwitch::onButtonClicked (BEvents::Event* event)

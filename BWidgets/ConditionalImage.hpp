@@ -203,11 +203,6 @@ public:
 	static bool isClosestToValue (ConditionalImage* widget, const double& value);
 
 	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
-
-	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -318,6 +313,12 @@ inline ConditionalImage::ConditionalImage	(const double x, const double y, const
 	{
 		imageSurfaces_[f.first] = cairo_image_surface_create_from_png (f.second.c_str());
 	}
+
+	setFocusText([](const Widget* w) {return	w->getTitle() + 
+												": " + 
+												(dynamic_cast<const ConditionalImage*>(w) ? 
+												 std::to_string (dynamic_cast<const ConditionalImage*>(w)->getValue()) : 
+												 "");});
 }
 
 inline ConditionalImage::~ConditionalImage ()
@@ -472,18 +473,6 @@ inline bool ConditionalImage::isClosestToValue (ConditionalImage* widget, const 
 		return (nrval - x > x - rval);
 
 	}
-}
-
-inline void ConditionalImage::update ()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
-		f->resize();
-	}
-
-	Widget::update();
 }
 
 inline void ConditionalImage::onButtonPressed (BEvents::Event* event)

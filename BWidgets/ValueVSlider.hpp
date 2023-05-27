@@ -275,13 +275,6 @@ inline void ValueVSlider::resize (const BUtilities::Point<> extends)
 
 inline void ValueVSlider::update ()
 {
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
-		f->resize();
-	}
-
 	const bool lv = label.isValueable();
 	label.setValueable (false);
 	label.setText (display_ (getValue()));

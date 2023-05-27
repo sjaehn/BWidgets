@@ -52,6 +52,7 @@ Widget::Widget (const double x, const double y, const double width, const double
 	title_ (title),
 	style_ (),
 	focus_ (title == "" ? nullptr : new (std::nothrow) Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/focus"), "")),
+	focusTextFunction_([](const Widget* widget) {return (widget ? widget->getTitle() : "");}),
 	pushStyle_ (true),
 	devices_()
 {
@@ -99,6 +100,7 @@ void Widget::copy (const Widget* that)
 	title_ = that->title_;
 	style_ = that->style_;
 	theme_ = that->theme_;
+	focusTextFunction_ = that->focusTextFunction_;
 
 	if (focus_) delete focus_;
 	focus_ = (that->focus_ ? that->focus_->clone() : nullptr);
@@ -131,7 +133,8 @@ void Widget::setTitle (const std::string& title)
 	{
 		if (!focus_) 
 		{
-			focus_ = new (std::nothrow) Label (title, BUtilities::Urid::urid (BUtilities::Urid::uri (getUrid()) + "/focus"));
+			focus_ = new (std::nothrow) Label	(focusTextFunction_ ? focusTextFunction_(this) : title, 
+												 BUtilities::Urid::urid (BUtilities::Urid::uri (getUrid()) + "/focus"));
 			if (focus_)
 			{
 				focus_->setLayer (BWIDGETS_DEFAULT_FOCUS_LAYER);
@@ -139,16 +142,6 @@ void Widget::setTitle (const std::string& title)
 				focus_->setBackground (BStyles::shadow80Fill);
 				focus_->setStacking (StackingType::escape);
 				focus_->resize();
-			}
-		}
-
-		else
-		{
-			Label* f = dynamic_cast<Label*>(focus_);
-			if (f) 
-			{
-				f->setText (title);
-				f->resize();
 			}
 		}
 	}
@@ -434,6 +427,19 @@ bool Widget::isVisible() const
 
 	// nullptr reached ? -> not connected to main -> invisible
 	return false;						
+}
+
+void Widget::update()
+{
+	if (focusTextFunction_)
+	{
+		Label* f = dynamic_cast<Label*>(focus_);
+		if (f)
+		{
+			f->setText(focusTextFunction_(this));
+			f->resize();		}
+	}
+	Visualizable::update();
 }
 
 void Widget::resize ()
@@ -735,6 +741,22 @@ int Widget::getLayer () const
 	}
 
 	return BWIDGETS_UNDEFINED_LAYER;
+}
+
+void Widget::setFocusText (std::function<std::string (const Widget* widget)> func)
+{
+	focusTextFunction_ = func;
+	update();
+}
+
+std::string Widget::getFocusText () const
+{
+	if (focusTextFunction_) return focusTextFunction_(this);
+
+	Label* f = dynamic_cast<Label*>(focus_);
+	if (f) return f->getText();
+
+	return "";
 }
 
 void Widget::emitExposeEvent ()

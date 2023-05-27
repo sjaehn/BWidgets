@@ -370,6 +370,12 @@ inline HRangeScrollBar::HRangeScrollBar	(const double  x, const double y, const 
 	symbol2 (Symbol::SymbolType::add, urid, title)
 {
 	setKeyPressable(false);	// Not supported yet
+	setFocusText([](const Widget* w) {return	w->getTitle() + 
+												": " + 
+												(dynamic_cast<const HRangeScrollBar*>(w) ? 
+												 std::to_string (dynamic_cast<const HRangeScrollBar*>(w)->getValue().first) + " - " +
+												 std::to_string (dynamic_cast<const HRangeScrollBar*>(w)->getValue().second): 
+												 "");});
 	scrollbar.setTransferFunction(transferFunc);
 	scrollbar.setReTransferFunction(reTransferFunc);
 	scrollbar.setFocusable(false);
@@ -443,13 +449,6 @@ inline void HRangeScrollBar::resize (const BUtilities::Point<> extends)
 
 inline void HRangeScrollBar::update ()
 {
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + std::to_string (this->getValue().first) + " - " + std::to_string (this->getValue().second));
-		f->resize();
-	}
-	
 	if ((getEffectiveWidth () > 0) && (getEffectiveHeight () > 0))
 	{
 		const double x = getXOffset ();

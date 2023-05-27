@@ -125,11 +125,6 @@ public:
 	void copy (const Dial* that);
 
 	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
-
-	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -237,19 +232,6 @@ inline void Dial::copy (const Dial* that)
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);
 	RadialMeter::copy (that);
-}
-
-inline void Dial::update ()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
-		f->resize();
-	}
-
-	scale_ = BUtilities::Area<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
-	Widget::update();
 }
 
 inline void Dial::onButtonPressed (BEvents::Event* event)

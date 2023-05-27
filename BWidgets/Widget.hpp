@@ -21,6 +21,7 @@
 #include <cstdint>
 #include <functional>
 #include <set>
+#include <string>
 #include "Draws/Ergo/definitions.hpp"
 #include "../BDevices/Device.hpp"
 #include "../BUtilities/Dictionary.hpp"
@@ -121,6 +122,7 @@ protected:
 	BStyles::Style style_;
 	BStyles::Theme theme_;
 	Widget* focus_;
+	std::function<std::string (const Widget* widget)> focusTextFunction_;
 	bool pushStyle_;
 	std::set<BDevices::Device*> devices_;
 
@@ -333,6 +335,14 @@ public:
 	 *  main window, and (iii) it draws to its RGBA surface.
      */
     bool isVisible () const override;
+	
+	/**
+     *  @brief  Method to be called following an object state change.
+     *
+     *  This method should be called
+     *  following a %Widgets object state change.
+     */
+    virtual void update () override;
 
     /**
 	 *  @brief  Generic setter method for Supports.
@@ -700,6 +710,28 @@ public:
      *  default layer, higher indexed layers behind.
      */
     virtual int getLayer () const override;
+
+	/**
+	 *  @brief  Sets the focus_ Widget text by providing a function.
+	 * 
+	 *  @param func  Function providing a text string.
+	 *
+	 *  Indirect way of setting the focus_ Label text. Sets the function to be
+	 *  used to set the text content of the %Widget focus_ label. Resets the 
+	 *  focusTextFunction_ to nullptr to be inactive if func is nullptr.
+	 */
+	virtual void setFocusText (std::function<std::string (const Widget* widget)> func);
+
+	/**
+	 *  @brief  Gets the focus text.
+	 * 
+	 *  @return  Focus text.
+	 *
+	 *  First looks for focusTextFunction_ and returns its result if 
+	 *  focusTextFunction_ is NOT nullptr. Otherwise it directly takes the
+	 *  focus_ Label text content if focus_ exists. Otherwise it takes "".
+	 */
+	std::string getFocusText () const;
 
 	/**
 	 *  @brief  Requests a redisplay of the %Widget area.

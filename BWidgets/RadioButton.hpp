@@ -101,11 +101,6 @@ public:
 	 */
 	void copy (const RadioButton* that);
 
-	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
-
 protected:
 	/**
      *  @brief  Unclipped draw a %RadioButton to the surface.
@@ -163,17 +158,6 @@ inline Widget* RadioButton::clone () const
 inline void RadioButton::copy (const RadioButton* that)
 {
 	Widget::copy (that);
-}
-
-inline void RadioButton::update()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
-		f->resize();
-	}
-	Widget::update();	// Bypass Button::update()
 }
 
 inline void RadioButton::draw ()

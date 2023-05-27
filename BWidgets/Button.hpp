@@ -164,11 +164,6 @@ public:
      */
     virtual void onButtonClicked (BEvents::Event* event) override;
 
-	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
-
 protected:
 	/**
      *  @brief  Unclipped draw a %Button to the surface.
@@ -209,6 +204,11 @@ inline Button::Button	(const double x, const double y, const double width, const
 {
 	setKeyPressable (false),	// not implemented yet
 	setToggleable (toggleable);
+	setFocusText([](const Widget* w) {return	w->getTitle() + 
+												": " + 
+												BUtilities::Dictionary::get	((dynamic_cast<const Button*>(w) && dynamic_cast<const Button*>(w)->getValue()) ? 
+																			 "on" : 
+																			 "off");});
 }
 
 inline Widget* Button::clone () const 
@@ -265,17 +265,6 @@ inline void Button::onButtonClicked (BEvents::Event* event)
 {
 	if (isToggleable()) setValue (!getValue());
 	Clickable::onButtonClicked (event);
-}
-
-inline void Button::update ()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
-		f->resize();
-	}
-	Widget::update();
 }
 
 inline void Button::draw ()

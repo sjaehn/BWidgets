@@ -272,13 +272,6 @@ inline void ValueRadialMeter::resize (const BUtilities::Point<> extends)
 
 inline void ValueRadialMeter::update ()
 {
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
-		f->resize();
-	}
-
 	const double rad = 0.5 *
 	(
 		getEffectiveWidth() * BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT <  getEffectiveHeight() * BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH ?

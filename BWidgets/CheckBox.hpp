@@ -100,11 +100,6 @@ public:
 	 */
 	void copy (const CheckBox* that);
 
-	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
-
 protected:
 	/**
      *  @brief  Unclipped draw a %CheckBox to the surface.
@@ -162,17 +157,6 @@ inline Widget* CheckBox::clone () const
 inline void CheckBox::copy (const CheckBox* that)
 {
 	Widget::copy (that);
-}
-
-inline void CheckBox::update()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
-		f->resize();
-	}
-	Widget::update();	// Bypass Button::update()
 }
 
 inline void CheckBox::draw ()

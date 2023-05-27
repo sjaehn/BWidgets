@@ -203,11 +203,6 @@ public:
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
 
-	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
-
 protected:
 	/**
      *  @brief  Unclipped draw a %ImageVMeter to the surface.
@@ -287,7 +282,11 @@ inline ImageVMeter::ImageVMeter	(const double  x, const double y, const double w
 	activeImageSurface_(staticImage != "" ? cairo_image_surface_create_from_png (activeImage.c_str()) : nullptr),
 	dynamicImageSurface_(staticImage != "" ? cairo_image_surface_create_from_png (dynamicImage.c_str()) : nullptr)
 {
-
+	setFocusText([](const Widget* w) {return	w->getTitle() + 
+												": " + 
+												(dynamic_cast<const ImageVMeter*>(w) ? 
+												 std::to_string (dynamic_cast<const ImageVMeter*>(w)->getValue()) : 
+												 "");});
 }
 
 inline ImageVMeter::~ImageVMeter()
@@ -346,18 +345,6 @@ inline void ImageVMeter::resize (const double width, const double height)
 inline void ImageVMeter::resize (const BUtilities::Point<> extends) 
 {
 	Widget::resize (extends);
-}
-
-inline void ImageVMeter::update ()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
-		f->resize();
-	}
-
-	Widget::update();
 }
 
 inline void ImageVMeter::draw ()

@@ -116,11 +116,6 @@ public:
 	void copy (const VSwitch* that);
 
 	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
-
-	/**
      *  @brief  Method called upon pointer drag.
      *  @param event  Passed Event.
      *
@@ -213,17 +208,6 @@ inline void VSwitch::copy (const VSwitch* that)
 	Scrollable::operator= (*that);
 	Draggable::operator= (*that);
 	Widget::copy (that);
-}
-
-inline void VSwitch::update()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
-		f->resize();
-	}
-	Widget::update();	// Bypass Button::update()
 }
 
 inline void VSwitch::onButtonClicked (BEvents::Event* event)

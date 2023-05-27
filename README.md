@@ -7,7 +7,7 @@ project. This toolkit includes widgets, styles, event handling, device support,
 and internationalization. B.Widgets also takes care about the special needs for
 user interaction elements in music production. B.Widgets uses the PlUgin Graphics Library ([pugl](https://github.com/lv2/pugl)) portability layer.
 
-**Current version:** 1.0.0
+**Current version:** 1.1.1
 
 ![widgetgallery](suppl/widgetgallery.png)
 
@@ -185,11 +185,11 @@ Software projects using this toolkit:
 
 ### Until 1.2
 
-- [ ] Additional drawing styles (draws)
-- [ ] Additional Widget elements layout parameters defined in draws
+- [x] Additional drawing styles (draws)
+- [ ] Additional Widget elements layout parameters ~~defined in draws~~
   - [ ] Label position and size in ValueMeters, ValueDials and ValueSliders
   - [ ] Label and Symbol position and size in TextButton and SymbolButton
-- [ ] Functional focus label text
+- [x] Functional focus label text
 
 
 ### Until 1.4

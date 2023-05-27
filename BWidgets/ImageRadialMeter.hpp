@@ -209,11 +209,6 @@ public:
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
 
-	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
-
 protected:
 	/**
      *  @brief  Unclipped draw a %ImageRadialMeter to the surface.
@@ -298,7 +293,11 @@ inline ImageRadialMeter::ImageRadialMeter	(const double  x, const double y, cons
 	activeImageSurface_(staticImage != "" ? cairo_image_surface_create_from_png (activeImage.c_str()) : nullptr),
 	dynamicImageSurface_(staticImage != "" ? cairo_image_surface_create_from_png (dynamicImage.c_str()) : nullptr)
 {
-
+	setFocusText([](const Widget* w) {return	w->getTitle() + 
+												": " + 
+												(dynamic_cast<const ImageRadialMeter*>(w) ? 
+												 std::to_string (dynamic_cast<const ImageRadialMeter*>(w)->getValue()) : 
+												 "");});
 }
 
 inline ImageRadialMeter::~ImageRadialMeter()
@@ -359,18 +358,6 @@ inline void ImageRadialMeter::resize (const double width, const double height)
 inline void ImageRadialMeter::resize (const BUtilities::Point<> extends) 
 {
 	Widget::resize (extends);
-}
-
-inline void ImageRadialMeter::update ()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
-		f->resize();
-	}
-
-	Widget::update();
 }
 
 inline void ImageRadialMeter::draw ()

@@ -111,11 +111,6 @@ public:
 	void copy (const Knob* that);
 
 	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
-
-	/**
 	 *  @brief  Sets the pseudo 3D depth of the knob.
 	 *  @param depth  Pseudo 3D depth.
 	 */
@@ -186,17 +181,6 @@ inline void Knob::copy (const Knob* that)
 {
 	depth_ = that->depth_;
     Widget::copy (that);
-}
-
-inline void Knob::update()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + BUtilities::Dictionary::get ((getValue() ? "on" : "off")));
-		f->resize();
-	}
-	Widget::update();	// Bypass Button::update()
 }
 
 inline void Knob::setDepth (const double depth)

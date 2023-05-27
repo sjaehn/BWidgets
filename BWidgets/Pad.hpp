@@ -170,11 +170,6 @@ public:
 	 *  @param extends  New widget extends.
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
-
-	/**
-     *  @brief  Method to be called following an object state change.
-     */
-    virtual void update () override;
 	
 	/**
      *  @brief  Method called upon (mouse) wheel scroll.
@@ -254,6 +249,11 @@ inline Pad<T>::Pad	(const double x, const double y, const double width, const do
 	storedValue_ (value == min ? max : min)
 {
 	setKeyPressable(false);	// Not supported yet
+	setFocusText([](const Widget* w) {return	w->getTitle() + 
+												": " + 
+												(dynamic_cast<const Pad<T>*> (w) ? 
+												 std::to_string (dynamic_cast<const Pad<T>*> (w)->getValue()) : 
+												 "");});
 }
 
 template <class T>
@@ -300,18 +300,6 @@ template <class T>
 inline void Pad<T>::resize (const BUtilities::Point<> extends) 
 {
 	Widget::resize (extends);
-}
-
-template <class T>
-inline void Pad<T>::update ()
-{
-	Label* f = dynamic_cast<Label*>(focus_);
-	if (f)
-	{
-		f->setText(getTitle() + ": " + std::to_string (this->getValue()));
-		f->resize();
-	}
-	Widget::update();
 }
 
 template <class T>
