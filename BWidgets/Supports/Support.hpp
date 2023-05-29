@@ -28,8 +28,20 @@ namespace BWidgets
 class Support
 {
 protected:
-    bool support_ = true; 
+    bool support_;
+
 public:
+
+    /**
+     *  @brief  Constructs a default %Support object with active support.
+     */
+    Support () : support_ (true) {}
+
+    /**
+     *  @brief  Constructs a %Support object with a provided support status.
+     *  @param status  Support status. 
+     */
+    Support (const bool status) : support_ (status) {}
 
     virtual ~Support() {};
 
