@@ -348,16 +348,17 @@ inline void RadialMeter::draw (const BUtilities::Area<>& area)
 			const double rad = 0.5 * (scale_.getWidth() < scale_.getHeight() ? scale_.getWidth() : scale_.getHeight());
 			const double rval = getRatioFromValue (getValue());
 			const double drv = (std::fabs (getStep()) > 1.0 / (1.5 * M_PI * rad) ? fabs (getStep() / (getMax() - getMin())) : 1.0 / (1.5 * M_PI * rad));
+			
 
 			if (step_ >= 0.0)
 			{
-				drawRMeter	(cr, 0.5 * scale_.getWidth(), 0.5 * scale_.getHeight(), rad, 0.0, rval, drv, 
+				drawRMeter	(cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad, 0.0, rval, drv, 
 								 getFgColors()[getStatus()], getHiColors()[getStatus()], gradient_, getBgColors()[getStatus()]);
 			}
 
 			else 
 			{
-				drawRMeter	(cr, 0.5 * scale_.getWidth(), 0.5 * scale_.getHeight(), rad, 1.0 - rval, 1.0, drv, 
+				drawRMeter	(cr, scale_.getX() + 0.5 * scale_.getWidth(), scale_.getY() + 0.5 * scale_.getHeight(), rad, 1.0 - rval, 1.0, drv, 
 								 getFgColors()[getStatus()], getHiColors()[getStatus()], gradient_, getBgColors()[getStatus()]);
 			}
 		}
