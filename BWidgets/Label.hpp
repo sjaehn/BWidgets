@@ -22,6 +22,7 @@
 
 
 
+#include "Supports/Visualizable.hpp"
 #include "Widget.hpp"
 
 #ifndef BWIDGETS_DEFAULT_LABEL_WIDTH
@@ -146,6 +147,45 @@ public:
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
 
+	/**
+     *  @brief  Gets the %Label width.
+     *  @return  %Label width.
+     */
+    virtual double getWidth () const override;
+
+	/**
+     *  @brief  Gets the optimized %Label width for a provided text.
+	 *  @param text  Text sting.
+     *  @return  %Label width.
+     */
+    virtual double getWidth (const std::string& text) const;
+
+	/**
+     *  @brief  Gets the %Label height.
+     *  @return  %Label height.
+     */
+    virtual double getHeight () const override;
+
+	/**
+     *  @brief  Gets the optimized %Label height for a provided text.
+	 *  @param text  Text sting.
+     *  @return  %Label height.
+     */
+    virtual double getHeight (const std::string& text) const;
+
+	/**
+	 *  @brief  Gets the %Label extends.
+	 *  @return  Point<> data containing width and height.
+	 */
+	virtual BUtilities::Point<> getExtends () const override;
+
+	/**
+     *  @brief  Gets the optimized %Label extends for a provided text.
+	 *  @param text  Text sting.
+     *  @return  Point<> data containing width and height.
+     */
+    virtual BUtilities::Point<> getExtends (const std::string& text) const;
+
 protected:
 	/**
      *  @brief  Unclipped draw to the surface (if is visualizable).
@@ -230,10 +270,50 @@ inline BUtilities::Point<> Label::getTextExtends (std::string& text) const
 
 inline void Label::resize ()
 {
+	resize (getExtends(text_));
+}
+
+inline void Label::resize (const double width, const double height) 
+{
+	resize (BUtilities::Point<> (width, height));
+}
+
+inline void Label::resize (const BUtilities::Point<> extends) 
+{
+	Widget::resize (extends);
+}
+
+inline double Label::getWidth () const
+{
+	return Visualizable::getWidth();
+}
+
+inline double Label::getWidth (const std::string& text) const
+{
+	return getExtends(text).y;
+}
+
+inline double Label::getHeight () const
+{
+	return Visualizable::getHeight();
+}
+
+inline double Label::getHeight (const std::string& text) const
+{
+	return getExtends(text).y;
+}
+
+inline BUtilities::Point<> Label::getExtends () const
+{
+	return Visualizable::getExtends();
+}
+
+inline BUtilities::Point<> Label::getExtends (const std::string& text) const
+{
 	// Get label text size
 	cairo_t* cr = cairo_create (cairoSurface());
 	BStyles::Font font = getFont();
-	cairo_text_extents_t ext = font.getCairoTextExtents(cr, text_.c_str ());
+	cairo_text_extents_t ext = font.getCairoTextExtents(cr, text.c_str ());
 	double w = ext.width;
 	double h = (ext.height > font.size ? ext.height : font.size);
 	BUtilities::Point<> contExt = BUtilities::Point<> (w + 2 * getXOffset () + 2, h + 2 * getYOffset () + 2);
@@ -248,17 +328,7 @@ inline void Label::resize ()
 		if (w->getPosition ().y + w->getHeight () > contExt.y) contExt.y = w->getPosition ().y + w->getHeight();
 	}
 
-	resize (contExt);
-}
-
-inline void Label::resize (const double width, const double height) 
-{
-	resize (BUtilities::Point<> (width, height));
-}
-
-inline void Label::resize (const BUtilities::Point<> extends) 
-{
-	Widget::resize (extends);
+	return contExt;
 }
 
 inline void Label::draw ()
