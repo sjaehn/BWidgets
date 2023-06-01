@@ -16,8 +16,9 @@ in `BWidgets::Label` to get Widget extends for a not yet applied text string
 ValueMeters, and ValueSliders (Note: Minor changes in widget element 
 positioning (esp. in `BWidgets::ValueHSlider`) to become more consistent)
 * Add definitions `BWIDGETS_DEFAULT_XXX_XSPACING` and 
-`BWIDGETS_DEFAULT_XXX_XSPACING` for spacing between label and 
+`BWIDGETS_DEFAULT_XXX_YSPACING` for spacing between label and 
 dial/meter/slider.
+* Add value position demo
 
 
 ## [1.1.2] - 2023-05-27

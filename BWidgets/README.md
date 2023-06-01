@@ -1384,6 +1384,10 @@ display their values in an editable label. The position of the label can be
 switched on and off by `setValueVisualizable()`. The position of the label is 
 set by `setValuePosition()` and returned by `getValuePosition()`.
 
+Some additional fine tuning can be performed at compile time by the definition
+of the macros `BWIDGETS_DEFAULT_XXX_XSPACING` and 
+`BWIDGETS_DEFAULT_XXX_YSPACING` (with XXX being the capitalized widget name).
+
 
 ### Other widget-specific attributes and decorations
 

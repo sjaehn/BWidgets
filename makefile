@@ -42,7 +42,7 @@ else
 	endif
 endif
 
-BUNDLE = widgetgallery helloworld buttontest symbols pattern styles themes draws values  
+BUNDLE = widgetgallery helloworld buttontest symbols pattern styles themes draws values valuepositions
 
 all: cairoplus pugl bwidgets $(BUNDLE)
 
