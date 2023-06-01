@@ -20,6 +20,7 @@
 
 #include "VMeter.hpp"
 #include "Label.hpp"
+#include "Supports/ValueVisualizable.hpp"
 #include <cmath>
 #include <exception>
 #include <functional>
@@ -30,6 +31,18 @@
 
 #ifndef BWIDGETS_DEFAULT_VALUEVMETER_HEIGHT
 #define BWIDGETS_DEFAULT_VALUEVMETER_HEIGHT 80.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUEVMETER_XSPACING
+#define BWIDGETS_DEFAULT_VALUEVMETER_XSPACING 2.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUEVMETER_YSPACING
+#define BWIDGETS_DEFAULT_VALUEVMETER_YSPACING 2.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUEVMETER_VALUE_POSITION
+#define BWIDGETS_DEFAULT_VALUEVMETER_VALUE_POSITION ValuePosition::top
 #endif
 
 #ifndef BDOUBLE_TO_STRING
@@ -49,7 +62,8 @@ namespace BWidgets
  *  %ValueVMeter is a VMeter Widget with an additional label for
  *  displaying its value. 
  */
-class ValueVMeter : public VMeter
+class ValueVMeter : public VMeter,
+					public ValueVisualizable
 {
 
 public:
@@ -226,6 +240,7 @@ inline ValueVMeter::ValueVMeter	(const double  x, const double y, const double w
 									 std::function<double (const std::string& s)> reDisplayFunc,
 									 uint32_t urid, std::string title) :
 	VMeter (x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
+	ValueVisualizable(true, BWIDGETS_DEFAULT_VALUEVMETER_VALUE_POSITION),
 	display_ (displayFunc),
 	reDisplay_ (reDisplayFunc),
 	label (BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
@@ -245,22 +260,58 @@ inline void ValueVMeter::copy (const ValueVMeter* that)
 	display_ = that->display_;
 	reDisplay_ = that->reDisplay_;
 	label.copy (&that->label);
+	ValueVisualizable::operator= (*that);
 	VMeter::copy (that);
 }
 
 inline void ValueVMeter::update ()
 {
-	label.setText (display_ (getValue()));
-	label.resize();
-	label.moveTo (label.center(), getYOffset());
+	if (!isValueVisualizable()) 
+	{
+		scale_ = BUtilities::Area<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
+		label.hide();
+	}
 
-	scale_ = BUtilities::Area<> 
-	(
-		getXOffset() + 0.25 * getEffectiveWidth(), 
-		getYOffset() + label.getHeight(), 
-		0.5 * getEffectiveWidth(),
-		getEffectiveHeight() - label.getHeight()
-	);
+	else
+	{
+		// Update value label text
+		label.setText (display_ (getValue()));
+		label.resize();
+
+		// Get the text extends for min and max value
+		std::string minText = display_(getMin());
+		const BUtilities::Point<> labelMinTextExtends = label.getExtends (minText);
+		std::string maxText = display_(getMax());
+		const BUtilities::Point<> labelMaxTextExtends = label.getExtends (maxText);
+
+		// Calculate the width / height to be allocated for the value
+		// depending on the ValuePosition and the max text extends
+		const ValuePosition pos = getValuePosition();
+		const double labelMaxWidth = std::max ({labelMinTextExtends.x, labelMaxTextExtends.x, label.getWidth()});
+		const double labelMaxHeight = std::max ({labelMinTextExtends.y, labelMaxTextExtends.y, label.getHeight()});
+		const double labelHeight = ((pos == ValuePosition::top) || (pos == ValuePosition::bottom)) * labelMaxHeight;
+		const double labelWidth = ((pos == ValuePosition::left) || (pos == ValuePosition::right)) * labelMaxWidth;
+		const double xspacing = ((pos == ValuePosition::left) || (pos == ValuePosition::right)) * BWIDGETS_DEFAULT_VALUEVMETER_XSPACING;
+		const double yspacing = ((pos == ValuePosition::top) || (pos == ValuePosition::bottom)) * BWIDGETS_DEFAULT_VALUEVMETER_YSPACING;
+		
+		// Calculate the scale position.
+		// Centered. And moved by the value text extends, if needed.
+		const double sw = getEffectiveWidth() - std::max (labelWidth + xspacing, 0.5 * getEffectiveWidth());
+		const double sh = getEffectiveHeight() - labelHeight - yspacing;
+		const double sx = getXOffset() + 0.5 * getEffectiveWidth() - 0.5 * (sw + labelWidth + xspacing) + (pos == ValuePosition::left) * (labelWidth + xspacing);
+		const double sy = getYOffset() + (pos == ValuePosition::top) * (labelHeight + yspacing);
+		scale_ = BUtilities::Area<> (sx, sy, sw, sh);
+
+		// Set value position
+		label.moveTo	((pos == ValuePosition::left) * getXOffset() +
+						 ((pos == ValuePosition::top) || (pos == ValuePosition::center) || (pos == ValuePosition::bottom)) * label.center() +
+						 (pos == ValuePosition::right) * (sx + sw + xspacing),
+
+						 (pos == ValuePosition::top) * getYOffset() +
+						 ((pos == ValuePosition::left) || (pos == ValuePosition::center) || (pos == ValuePosition::right)) * label.middle() +
+						 (pos == ValuePosition::bottom) * (sy + sh + yspacing));
+		label.show();
+	}
 
 	Widget::update();
 }

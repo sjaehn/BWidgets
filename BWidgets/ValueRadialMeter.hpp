@@ -20,6 +20,7 @@
 
 #include "RadialMeter.hpp"
 #include "Label.hpp"
+#include "Supports/ValueVisualizable.hpp"
 #include <cmath>
 #include <exception>
 #include <functional>
@@ -30,6 +31,18 @@
 
 #ifndef BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT
 #define BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT 50.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUERADIALMETER_XSPACING
+#define BWIDGETS_DEFAULT_VALUERADIALMETER_XSPACING 2.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUERADIALMETER_YSPACING
+#define BWIDGETS_DEFAULT_VALUERADIALMETER_YSPACING 2.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUERADIALMETER_VALUE_POSITION
+#define BWIDGETS_DEFAULT_VALUERADIALMETER_VALUE_POSITION ValuePosition::bottom
 #endif
 
 #ifndef BDOUBLE_TO_STRING
@@ -49,7 +62,8 @@ namespace BWidgets
  *  %ValueRadialMeter is a RadialMeter Widget with an additional label for
  *  displaying its value. 
  */
-class ValueRadialMeter : public RadialMeter
+class ValueRadialMeter : public RadialMeter,
+						 public ValueVisualizable
 {
 
 public:
@@ -226,6 +240,7 @@ inline ValueRadialMeter::ValueRadialMeter	(const double  x, const double y, cons
 									 std::function<double (const std::string& s)> reDisplayFunc,
 									 uint32_t urid, std::string title) :
 	RadialMeter (x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
+	ValueVisualizable(true, BWIDGETS_DEFAULT_VALUERADIALMETER_VALUE_POSITION),
 	display_ (displayFunc),
 	reDisplay_ (reDisplayFunc),
 	label (BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
@@ -245,6 +260,7 @@ inline void ValueRadialMeter::copy (const ValueRadialMeter* that)
 	display_ = that->display_;
 	reDisplay_ = that->reDisplay_;
 	label.copy (&that->label);
+	ValueVisualizable::operator= (*that);
 	RadialMeter::copy (that);
 }
 
@@ -272,26 +288,57 @@ inline void ValueRadialMeter::resize (const BUtilities::Point<> extends)
 
 inline void ValueRadialMeter::update ()
 {
-	const double rad = 0.5 *
-	(
-		getEffectiveWidth() * BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT <  getEffectiveHeight() * BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH ?
-		getEffectiveWidth() :
-		getEffectiveHeight() * BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH / BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT
-	);
+	if (!isValueVisualizable()) 
+	{
+		scale_ = BUtilities::Area<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
+		label.hide();
+	}
 
-	scale_ = BUtilities::Area<> 
-	(
-		getXOffset() + 0.5 * getEffectiveWidth() - rad , 
-		getYOffset() + 0.5 * getEffectiveHeight() - rad * BWIDGETS_DEFAULT_VALUERADIALMETER_HEIGHT / BWIDGETS_DEFAULT_VALUERADIALMETER_WIDTH, 
-		2.0 * rad, 
-		2.0 * rad
-	);
+	else
+	{
+		// Update value label text
+		label.setText (display_ (getValue()));
+		label.resize();
 
-	label.setText (display_ (getValue()));
-	label.resize();
-	label.moveTo (label.center(), scale_.getPosition().y + scale_.getHeight());
+		// Get the text extends for min and max value
+		std::string minText = display_(getMin());
+		const BUtilities::Point<> labelMinTextExtends = label.getExtends (minText);
+		std::string maxText = display_(getMax());
+		const BUtilities::Point<> labelMaxTextExtends = label.getExtends (maxText);
 
-	Widget::update();
+		// Calculate the width / height to be allocated for the value
+		// depending on the ValuePosition and the max text extends
+		const ValuePosition pos = getValuePosition();
+		const double labelMaxWidth = std::max ({labelMinTextExtends.x, labelMaxTextExtends.x, label.getWidth()});
+		const double labelMaxHeight = std::max ({labelMinTextExtends.y, labelMaxTextExtends.y, label.getHeight()});
+		const double labelHeight = ((pos == ValuePosition::top) || (pos == ValuePosition::bottom)) * labelMaxHeight;
+		const double labelWidth = ((pos == ValuePosition::left) || (pos == ValuePosition::right)) * labelMaxWidth;
+		const double xspacing = ((pos == ValuePosition::left) || (pos == ValuePosition::right)) * BWIDGETS_DEFAULT_VALUERADIALMETER_XSPACING;
+		const double yspacing = ((pos == ValuePosition::top) || (pos == ValuePosition::bottom)) * BWIDGETS_DEFAULT_VALUERADIALMETER_YSPACING;
+		
+		// Calculate the dial radius from the widget extends diminished by the extends allocaded for the value
+		const double rad = 0.5 * std::max (0.0, std::min (getEffectiveWidth() - labelWidth - xspacing, getEffectiveHeight() - labelHeight - yspacing));
+
+		// Calculate the scale position.
+		// Centered. And moved by the value text extends, if needed.  
+		const double sw = 2.0 * rad;
+		const double sh = sw;
+		const double sx = getXOffset() + 0.5 * (getEffectiveWidth() - labelWidth - xspacing) - rad + (pos == ValuePosition::left) * (labelWidth + xspacing);
+		const double sy = getYOffset() + 0.5 * (getEffectiveHeight() - labelHeight - yspacing) - rad  + (pos == ValuePosition::top) * (labelHeight + yspacing);
+		scale_ = BUtilities::Area<> (sx, sy, sw, sh);
+
+		// Set value position
+		label.moveTo	((pos == ValuePosition::left) * getXOffset() +
+						 ((pos == ValuePosition::top) || (pos == ValuePosition::center) || (pos == ValuePosition::bottom)) * label.center() +
+						 (pos == ValuePosition::right) * (sx + sw + xspacing),
+
+						 (pos == ValuePosition::top) * getYOffset() +
+						 ((pos == ValuePosition::left) || (pos == ValuePosition::center) || (pos == ValuePosition::right)) * label.middle() +
+						 (pos == ValuePosition::bottom) * (sy + sh + yspacing));
+		label.show();
+	}
+
+	Widget::update(); // Skip RadialMeter
 }
 
 inline std::string ValueRadialMeter::valueToString (const double& x)

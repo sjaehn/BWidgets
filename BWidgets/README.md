@@ -1375,6 +1375,16 @@ You can find an example for value transfer and range validation in
 [../examples/values.cpp](../examples/values.cpp)
 
 
+### Value display
+
+Some widgets (ValueDials, ValueSliders, and ValueMeters) can additionally
+display their values in an editable label. The position of the label can be
+`ValuePosition::top`, `ValuePosition::right`, `ValuePosition::bottom`,
+`ValuePosition::left`, or `ValuePosition::center`. This ability can be 
+switched on and off by `setValueVisualizable()`. The position of the label is 
+set by `setValuePosition()` and returned by `getValuePosition()`.
+
+
 ### Other widget-specific attributes and decorations
 
 Specifc widgets may have got additional / other specific attributes and 

@@ -73,8 +73,8 @@ make widgetgallery
 ```
 
 Allowed example names are `widgetgallery`, `helloworld`, `buttontest`, 
-`symbols`, `pattern`, `styles`, `themes`, `draws` and `values`. Building an 
-example will also build the libraries.
+`symbols`, `pattern`, `styles`, `themes`, `draws`, `values`, and 
+`valuepositions`. Building an example will also build the libraries.
 
 If you only want to install selected libraries, add the name of the library
 behind the `make` command separated by a white space, e.g.:

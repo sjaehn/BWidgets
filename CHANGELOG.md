@@ -6,12 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [1.1.3] - 2023-05-30
+## [1.1.3] - 2023-06-02
 * Added default and parametrized constructors to `BWidgets::Support`
 * Fix center `BWidgets::RadialMeter`
 * Add class `BWidgets::ValueVisualizable`
 * Add parametrized overrides of `getExtends()`, `getWidth()`, and `getHeight()` 
 in `BWidgets::Label` to get Widget extends for a not yet applied text string
+* Implement `BWidgets::ValueVisualizable::ValuePosition` in ValueDials,
+ValueMeters, and ValueSliders (Note: Minor changes in widget element 
+positioning (esp. in `BWidgets::ValueHSlider`) to become more consistent)
+* Add definitions `BWIDGETS_DEFAULT_XXX_XSPACING` and 
+`BWIDGETS_DEFAULT_XXX_XSPACING` for spacing between label and 
+dial/meter/slider.
 
 
 ## [1.1.2] - 2023-05-27

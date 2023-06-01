@@ -20,6 +20,7 @@
 
 #include "VSlider.hpp"
 #include "EditLabel.hpp"
+#include "Supports/ValueVisualizable.hpp"
 #include <exception>
 #include <functional>
 
@@ -29,6 +30,18 @@
 
 #ifndef BWIDGETS_DEFAULT_VALUEVSLIDER_HEIGHT
 #define BWIDGETS_DEFAULT_VALUEVSLIDER_HEIGHT 80.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUEVSLIDER_XSPACING
+#define BWIDGETS_DEFAULT_VALUEVSLIDER_XSPACING 2.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUEVSLIDER_YSPACING
+#define BWIDGETS_DEFAULT_VALUEVSLIDER_YSPACING 2.0
+#endif
+
+#ifndef BWIDGETS_DEFAULT_VALUEVSLIDER_VALUE_POSITION
+#define BWIDGETS_DEFAULT_VALUEVSLIDER_VALUE_POSITION ValuePosition::top
 #endif
 
 #ifndef BDOUBLE_TO_STRING
@@ -48,7 +61,8 @@ namespace BWidgets
  *  %ValueVSlider is a VSlider Widget with an additional editable label for
  *  displaying its value. 
  */
-class ValueVSlider : public VSlider
+class ValueVSlider : public VSlider,
+					 public ValueVisualizable
 {
 
 public:
@@ -225,6 +239,7 @@ inline ValueVSlider::ValueVSlider	(const double  x, const double y, const double
 									 std::function<double (const std::string& s)> reDisplayFunc,
 									 uint32_t urid, std::string title) :
 	VSlider (x, y, width, height, value, min, max, step, transferFunc, reTransferFunc, urid, title),
+	ValueVisualizable(true, BWIDGETS_DEFAULT_VALUEVSLIDER_VALUE_POSITION),
 	display_ (displayFunc),
 	reDisplay_ (reDisplayFunc),
 	label (BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
@@ -248,6 +263,7 @@ inline void ValueVSlider::copy (const ValueVSlider* that)
 	display_ = that->display_;
 	reDisplay_ = that->reDisplay_;
 	label.copy (&that->label);
+	ValueVisualizable::operator= (*that);
 	VSlider::copy (that);
 }
 
@@ -275,7 +291,7 @@ inline void ValueVSlider::resize (const BUtilities::Point<> extends)
 
 inline void ValueVSlider::update ()
 {
-	const bool lv = label.isValueable();
+	/*const bool lv = label.isValueable();
 	label.setValueable (false);
 	label.setText (display_ (getValue()));
 	label.setValueable (lv);
@@ -288,7 +304,58 @@ inline void ValueVSlider::update ()
 		getYOffset() + label.getHeight() + 0.25 * getEffectiveWidth(), 
 		0.5 * BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE * getEffectiveWidth(),
 		getEffectiveHeight() - label.getHeight() - 0.5 * getEffectiveWidth()
-	);
+	);*/
+
+	if (!isValueVisualizable()) 
+	{
+		scale_ = BUtilities::Area<> (getXOffset(), getYOffset(), getEffectiveWidth(), getEffectiveHeight());
+		label.hide();
+	}
+
+	else
+	{
+		// Update value label text
+		const bool lv = label.isValueable();
+		label.setValueable (false);
+		label.setText (display_ (getValue()));
+		label.setValueable (lv);
+		label.resize();
+
+		// Get the text extends for min and max value
+		std::string minText = display_(getMin());
+		const BUtilities::Point<> labelMinTextExtends = label.getExtends (minText);
+		std::string maxText = display_(getMax());
+		const BUtilities::Point<> labelMaxTextExtends = label.getExtends (maxText);
+
+		// Calculate the width / height to be allocated for the value
+		// depending on the ValuePosition and the max text extends
+		const ValuePosition pos = getValuePosition();
+		const double labelMaxWidth = std::max ({labelMinTextExtends.x, labelMaxTextExtends.x, label.getWidth()});
+		const double labelMaxHeight = std::max ({labelMinTextExtends.y, labelMaxTextExtends.y, label.getHeight()});
+		const double labelHeight = ((pos == ValuePosition::top) || (pos == ValuePosition::bottom)) * labelMaxHeight;
+		const double labelWidth = ((pos == ValuePosition::left) || (pos == ValuePosition::right)) * labelMaxWidth;
+		const double xspacing = ((pos == ValuePosition::left) || (pos == ValuePosition::right)) * BWIDGETS_DEFAULT_VALUEVSLIDER_XSPACING;
+		const double yspacing = ((pos == ValuePosition::top) || (pos == ValuePosition::bottom)) * BWIDGETS_DEFAULT_VALUEVSLIDER_YSPACING;
+		
+		// Calculate the scale position.
+		// Centered. And moved by the value text extends, if needed.
+		const double sw = BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE * (getEffectiveWidth() - std::max (labelWidth + xspacing, 0.5 * getEffectiveWidth()));
+		const double tip = 0.5 * BWIDGETS_DEFAULT_SLIDER_KNOB_REL_SIZE * sw / BWIDGETS_DEFAULT_SLIDER_BAR_REL_SIZE;
+		const double sh = getEffectiveHeight() - labelHeight - yspacing - 2.0 * tip;
+		const double sx = getXOffset() + 0.5 * getEffectiveWidth() - 0.5 * (sw + labelWidth + xspacing) + (pos == ValuePosition::left) * (labelWidth + xspacing);
+		const double sy = getYOffset() + tip + (pos == ValuePosition::top) * (labelHeight + yspacing);
+		scale_ = BUtilities::Area<> (sx, sy, sw, sh);
+
+		// Set value label position
+		label.moveTo	((pos == ValuePosition::left) * getXOffset() +
+						 ((pos == ValuePosition::top) || (pos == ValuePosition::center) || (pos == ValuePosition::bottom)) * label.center() +
+						 (pos == ValuePosition::right) * (sx + 0.5 * sw + tip + xspacing),
+
+						 (pos == ValuePosition::top) * getYOffset() +
+						 ((pos == ValuePosition::left) || (pos == ValuePosition::center) || (pos == ValuePosition::right)) * label.middle() +
+						 (pos == ValuePosition::bottom) * (sy + sh + tip + yspacing));
+		label.show();
+	}
 
 	Widget::update();
 }
