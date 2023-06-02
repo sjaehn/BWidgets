@@ -151,15 +151,19 @@ Software projects using this toolkit:
   - [x] Event handling in the main Window
   - [x] Control of event handling by supporting `EventMergeable` and 
         `EventPassable`
-  - [x] User interaction by supporting `Clickable`, `Draggable`, `PointerFocusable`,
+  - [x] User interaction by supporting `Clickable`, `Draggable`,
         `Toggleable`, `Scrollable` and `KeyPressable`
   - [x] Generic control over widget values using `Valueable`
   - [x] Additional messages by supporting `Messageable` 
   - [x] Widget visibility control by supporting `Closeable`
+  - [x] Display a (functional) hover text by supporting `PointerFocusable`
   - [x] Enable re-definition of widget default sizes at compile time
         (`BWIDGETS_DEFAULT_XXX_WIDTH` and `BWIDGETS_DEFAULT_XXX_HEIGHT`)
-  - [x] Define substitutable widget elemet draw functions at compile time
-        (draws)
+  - [x] Drawing sets (draws): Choose between different widget drawing styles 
+        at compile time
+  - [x] Define default widget display parameters for a drawing set
+  - [x] Define your own substitutable widget elemet drawing functions for
+        drawing sets
   - [x] Optimize widget size using `resize()`
   - [x] Show default hover text (widget title, if set) by supporting
         `PointerFocusable`
@@ -182,15 +186,6 @@ Software projects using this toolkit:
 
 
 ## TODO
-
-### Until 1.2
-
-- [x] Additional drawing styles (draws)
-- [ ] Additional Widget elements layout parameters ~~defined in draws~~
-  - [ ] Label position and size in ValueMeters, ValueDials and ValueSliders
-  - [ ] Label and Symbol position and size in TextButton and SymbolButton
-- [x] Functional focus label text
-
 
 ### Until 1.4
 
