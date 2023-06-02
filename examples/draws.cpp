@@ -17,7 +17,7 @@
 
 
 // Define path to alternative draws
-#include "../BWidgets/Draws/Oops/definitions.hpp"
+#include "../BWidgets/Draws/Flow/definitions.hpp"
 
 #include "../BWidgets/Window.hpp"
 #include "../BWidgets/ValueDial.hpp"
@@ -62,16 +62,19 @@ int main ()
     window.add (&buttonLabel);
 
     ValueRadialMeter valueRadialMeter (10, 210, 60, 75, 0.7, 0.0, 1.0, 0.1);
+    valueRadialMeter.setHiColors (BStyles::reds);
     window.add (&valueRadialMeter);
     Label valueRadialMeterLabel(0, 310, 110, 20, "ValueRadialMeter");
     window.add (&valueRadialMeterLabel);
 
-    ValueHMeter valueHMeter (100, 240, 100, 30, 0.7, 0.0, 1.0, 0.1);
+    ValueHMeter valueHMeter (100, 240, 100, 40, 0.7, 0.0, 1.0, 0.1);
+    valueHMeter.setHiColors (BStyles::reds);
     window.add (&valueHMeter);
     Label valueHMeterLabel(110, 310, 100, 20, "ValueHMeter");
     window.add (&valueHMeterLabel);
 
     ValueVMeter valueVMeter (230, 200, 40, 100, 0.7, 0.0, 1.0, 0.1);
+    valueVMeter.setHiColors (BStyles::reds);
     window.add (&valueVMeter);
     Label valueVMeterLabel(210, 310, 100, 20, "ValueVMeter");
     window.add (&valueVMeterLabel);
@@ -81,5 +84,15 @@ int main ()
     Label padLabel(340, 310, 40, 20, "Pad");
     window.add (&padLabel);
 
-    window.run();
+    const std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
+
+    while (!window.isQuit())
+    {
+        const std::chrono::steady_clock::time_point t = std::chrono::steady_clock::now();
+        const std::chrono::duration<double> dt = t - t0;
+        valueRadialMeter.setValue (0.5 + 0.5 * cos (0.5 * dt.count()));
+        valueHMeter.setValue (0.5 + 0.5 * sin (1.4 * dt.count()));
+        valueVMeter.setValue (0.5 + 0.5 * cos (0.7 * dt.count()));
+        window.handleEvents();
+    }
 }

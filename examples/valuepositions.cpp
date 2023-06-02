@@ -31,7 +31,14 @@ int main ()
     // Window
     Window window (620, 960, 0, BUTILITIES_URID_UNKNOWN_URID, "ValuePositions", true);
 
+    // Create dials, sliders, and meters for the six value positions (default and ValueVisualizable::ValuePosition)
     const std::array<const std::string, 5> positionStr= {{"top", "right", "bottom", "left", "center"}};
+    std::vector<ValueDial*> dials;
+    std::vector<ValueHSlider*> hSliders;
+    std::vector<ValueVSlider*> vSliders;
+    std::vector<ValueRadialMeter*> rMeters;
+    std::vector<ValueHMeter*> hMeters;
+    std::vector<ValueVMeter*> vMeters;
     std::vector<Widget*> widgets;
 
     for (int i = 0; i <= 5; ++i)
@@ -50,44 +57,66 @@ int main ()
         // Widgets
         ValueDial* valueDial = new ValueDial (10, 40 + i * 160, 80, 80, 0.3, 0.0, 1.0, 0.0);
         if (i) valueDial->setValuePosition(ValueVisualizable::ValuePosition(i - 1));
-        widgets.push_back (valueDial);
+        dials.push_back (valueDial);
         Label* valueDialLabel = new Label (20, 130 + i * 160, 100, 20, "ValueDial");
         widgets.push_back (valueDialLabel);
 
         ValueHSlider* valueHSlider = new ValueHSlider (110 - 0.5 * extraWidth, 65 + i * 160 - 0.5 * extraHeight, 80 + extraWidth, 20 + extraHeight, 0.3, 0.0, 1.0, 0.0);
         if (i) valueHSlider->setValuePosition(ValueVisualizable::ValuePosition(i - 1));
-        widgets.push_back (valueHSlider);
+        hSliders.push_back (valueHSlider);
         Label* valueHSliderLabel = new Label(110, 130 + i * 160, 100, 20, "ValueHSlider");
         widgets.push_back (valueHSliderLabel);
 
         ValueVSlider* valueVSlider = new ValueVSlider (220 - 0.5 * extraWidth, 40 + i * 160, 40 + extraWidth, 80, 0.3, 0.0, 1.0, 0.0);
         if (i) valueVSlider->setValuePosition(ValueVisualizable::ValuePosition(i - 1));
-        widgets.push_back (valueVSlider);
+        vSliders.push_back (valueVSlider);
         Label* valueVSliderLabel = new Label(210, 130 + i * 160, 100, 20, "ValueVSlider");
         widgets.push_back (valueVSliderLabel);
 
         ValueRadialMeter* valueRadialMeter = new ValueRadialMeter (310, 40 + i * 160, 80, 80, 0.7, 0.0, 1.0, 0.1);
         if (i) valueRadialMeter->setValuePosition(ValueVisualizable::ValuePosition(i - 1));
-        widgets.push_back (valueRadialMeter);
+        valueRadialMeter->setHiColors (BStyles::reds);
+        rMeters.push_back (valueRadialMeter);
         Label* valueRadialMeterLabel = new Label(295, 130 + i * 160, 120, 20, "ValueRadialMeter");
         widgets.push_back (valueRadialMeterLabel);
 
         ValueHMeter* valueHMeter = new ValueHMeter (410 - 0.5 * extraWidth, 60 + i * 160 - 0.5 * extraHeight, 80 + extraWidth, 20 + extraHeight, 0.7, 0.0, 1.0, 0.1);
         if (i) valueHMeter->setValuePosition(ValueVisualizable::ValuePosition(i - 1));
-        widgets.push_back (valueHMeter);
+        valueHMeter->setHiColors (BStyles::reds);
+        hMeters.push_back (valueHMeter);
         Label* valueHMeterLabel = new Label(415, 130 + i * 160, 100, 20, "ValueHMeter");
         widgets.push_back (valueHMeterLabel);
 
         ValueVMeter* valueVMeter = new ValueVMeter (530 - 0.5 * extraWidth, 40 + i * 160, 40 + extraWidth, 80, 0.7, 0.0, 1.0, 0.1);
         if (i) valueVMeter->setValuePosition(ValueVisualizable::ValuePosition(i - 1));
-        widgets.push_back (valueVMeter);
+        valueVMeter->setHiColors (BStyles::reds);
+        vMeters.push_back (valueVMeter);
         Label* valueVMeterLabel = new Label(515, 130 + i * 160, 100, 20, "ValueVMeter");
         widgets.push_back (valueVMeterLabel);
     }
 
+    // Add all dials, sliders, and meters to widgets
+    for (ValueDial* d : dials) widgets.push_back(d);
+    for (ValueHSlider* h : hSliders) widgets.push_back(h);
+    for (ValueVSlider* v : vSliders) widgets.push_back(v);
+    for (ValueRadialMeter* r : rMeters) widgets.push_back(r);
+    for (ValueHMeter* h : hMeters) widgets.push_back(h);
+    for (ValueVMeter* v : vMeters) widgets.push_back(v);
+
+    // ... and into the main window
     for (Widget* w : widgets) window.add (w);
-    for (Widget* w : widgets) w->update();
-    window.run();
+    
+    // Main loop
+    const std::chrono::steady_clock::time_point t0 = std::chrono::steady_clock::now();
+    while (!window.isQuit())
+    {
+        const std::chrono::steady_clock::time_point t = std::chrono::steady_clock::now();
+        const std::chrono::duration<double> dt = t - t0;
+        for (ValueRadialMeter* r : rMeters) r->setValue (0.5 + 0.5 * cos (0.5 * dt.count()));
+        for (ValueHMeter* h : hMeters) h->setValue (0.5 + 0.5 * sin (1.4 * dt.count()));
+        for (ValueVMeter* v : vMeters) v->setValue (0.5 + 0.5 * cos (0.7 * dt.count()));
+        window.handleEvents();
+    }
 
     // Cleanup
     while (!widgets.empty())

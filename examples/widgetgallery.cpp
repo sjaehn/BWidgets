@@ -443,7 +443,7 @@ int main ()
     window.add (&valueRadialMeterLabel);
 
     // ValueHMeter
-    ValueHMeter valueHMeter (1010, 740, 80, 32, 0.9, 0.0, 1.0, 0.05);
+    ValueHMeter valueHMeter (1010, 740, 80, 40, 0.9, 0.0, 1.0, 0.05);
     valueHMeter.setTitle("ValueHMeter");
     valueHMeter.setHiColors (reds);
     valueHMeter.setGradientFunction([] (const double& x) {return x * x;});
