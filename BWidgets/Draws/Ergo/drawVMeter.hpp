@@ -90,10 +90,11 @@ inline void drawVMeter    (cairo_t* cr, const double x0, const double y0, const 
         cairo_pattern_add_color_stop_rgba (bgPat, 0.25, CAIRO_RGBA(bgHi));
         cairo_pattern_add_color_stop_rgba (bgPat, 1, CAIRO_RGBA(bgLo));
 
+        const double dv = 0.5 / static_cast<double>(nrSteps);
         for (int i = 0; i < nrSteps; ++i)
         {
             const double v = static_cast<double>(i) / static_cast<double>(nrSteps);
-            if ((v >= min) && (v < max)) 
+            if ((v + dv >= min) && (v + dv < max)) 
             {
                 if ((fgHi != hiHi) || (fgLo != hiLo))
                 {
