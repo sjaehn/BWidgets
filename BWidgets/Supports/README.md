@@ -8,6 +8,7 @@ Support
  ├── Pointable          < Callback
  ├── PointerFocusable   < Callback
  ├── Clickable          < Callback
+ ├── Toggleable
  ├── Draggable          < Callback
  ├── Scrollable         < Callback
  ├── KeyPressable       < Callback
@@ -60,6 +61,11 @@ pointer rests over a widget.
 ## Clickable
 
 Pointer button click (incl. press and release) support.
+
+
+## Toggleable
+
+Support of button toggling.
 
 
 ## Draggable
