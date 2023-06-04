@@ -353,6 +353,8 @@ All widgets support the features:
 * Visualizable (may draw to RGBA surface layers and may become visible)
 * EventMergeable (may let the main `Window` merge its events)
 * EventPassable (may pass events to the subjacent widget)
+* Activatable (be able to get activated by an user interaction, inactive by
+  default)
 
 In addtion, widgets have got:
  * an *URID* to identify the widget,

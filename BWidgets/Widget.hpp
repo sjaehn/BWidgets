@@ -30,6 +30,7 @@
 #include "Supports/EventMergeable.hpp"
 #include "Supports/EventPassable.hpp"
 #include "Supports/PointerFocusable.hpp"
+#include "Supports/Activatable.hpp"
 #include "../BUtilities/Any.hpp"
 #include "../BStyles/Theme.hpp"
 #include "../BStyles/Status.hpp"
@@ -74,6 +75,9 @@ class Window;
  *  And it can take up other widgets as childs. The last added child is 
  *  displayed on the top.
  *
+ *  The %Widget class supports Activatable (default: false). Once switched on,
+ *  the widget can be activated by the user.
+ *
  *  Widgets also support EventMergeable and EventPassable. Thus, the main 
  *  Window event handler may merge events of the same type. And may pass events
  *  to the next (subjacent) widget if not actively supported by the widget.
@@ -92,7 +96,12 @@ class Window;
  *  Note: The class %Widget is devoid of any copy constructor or assignment
  *  operator. 
  */
-class Widget : public Linkable, public Visualizable, public EventMergeable, public EventPassable, public PointerFocusable
+class Widget :	public Linkable, 
+				public Visualizable, 
+				public EventMergeable, 
+				public EventPassable, 
+				public PointerFocusable,
+				public Activatable
 {
 
 protected:
@@ -552,6 +561,17 @@ public:
 	 *  @return  %Widget state
 	 */
 	BStyles::Status getStatus () const;
+
+	/**
+     *  @brief  Activates this object 
+     *  @param status  Optional, true for activation, false for de-activation
+	 *
+	 *  Sets the %Widget status to BStyles::Status::active upon activation and
+	 *  BStyles::Status::normal upon de-activation if the %Widget is 
+	 *  Activatable. Also de-activates all other Widgets at the same level 
+	 *  (same parent) if they are Activatable too and allow auto deactivation.
+     */
+    virtual void activate (bool status = true) override;
 
 	/**
 	 *  @brief  Sets the type of stacking this %Widget.

@@ -17,6 +17,7 @@
  */
 
 #include "Widget.hpp"
+#include "Supports/Activatable.hpp"
 #include "Supports/EventPassable.hpp"
 #include "Supports/PointerFocusable.hpp"
 #include "Supports/Linkable.hpp"
@@ -45,6 +46,7 @@ Widget::Widget (const double x, const double y, const double width, const double
 	EventMergeable(),
 	EventPassable(),
 	PointerFocusable(),
+	Activatable(),
 	urid_ (urid),
 	position_ (x, y),
 	stacking_ (StackingType::normal),
@@ -94,6 +96,7 @@ void Widget::copy (const Widget* that)
 	EventMergeable::operator= (*that);
 	EventPassable::operator= (*that);
 	PointerFocusable::operator= (*that);
+	Activatable::operator= (*that);
 	position_ = that->position_;
 	stacking_ = that->stacking_;
 	status_ = that->status_;
@@ -580,6 +583,32 @@ void Widget::setStatus (const BStyles::Status status)
 BStyles::Status Widget::getStatus () const 
 {
 	return status_;
+}
+
+inline void Widget::activate (bool status)
+{
+	if (isActivatable())
+	{
+		// Activate this
+		setStatus (status ? BStyles::Status::active : BStyles::Status::normal);
+
+		// And deactivate all other
+		if (status)
+		{
+			Widget* p = getParentWidget();
+			if (p)
+			{
+				for (Linkable* l : p->getChildren())
+				{
+					Widget* w = dynamic_cast<Widget*>(l);
+					if (w && (w != this) && w->isActivatable() && w->isAutoDeactivated() && (w->getStatus() == BStyles::Status::active))
+					{
+						w->deactivate();
+					}
+				}
+			}
+		}
+	}
 }
 
 void Widget::setStacking (const Widget::StackingType stacking) 
