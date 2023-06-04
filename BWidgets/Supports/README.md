@@ -22,6 +22,7 @@ Support
  |    ╰── ValidatableRange<T>
  ├── Messagable         < Callback
  ├── Visualizable       < Callback
+ ├── ValueVisualizable
  ├── Closable           < Callback
  ╰── Linkable
  
@@ -149,6 +150,12 @@ handler will request a host system expose event.
 
 If the main window (then) receives a host system expose event, the main window
 updates the visual content covered by this event.
+
+
+## ValueVisualizable
+
+Support of value visualization (incl. the value visualization position) in 
+composite Valueable widgets.
 
 
 ## Closable

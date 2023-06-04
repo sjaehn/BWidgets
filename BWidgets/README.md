@@ -641,7 +641,8 @@ elements, knob) and by the FgColors parameter (value).
 ![valuehslider](../suppl/ValueHSlider.png)
 
 `ValueHSlider` is a `HSlider` Widget with an additional editable label for
-displaying its value.
+displaying its value. The value display including its position is controlled
+by `ValueVisualizable`.
 
 
 ### HRangeScrollBar
@@ -676,7 +677,8 @@ to use non-line color gradients for display using gradient functions.
 ![valuevmeter](../suppl/ValueVMeter.png)
 
 `ValueVMeter` is a `VMeter` Widget with an additional label for
-displaying its value.
+displaying its value. The value display including its position is controlled
+by `ValueVisualizable`.
 
 
 ### VScale
@@ -715,7 +717,8 @@ elements, knob) and by the FgColors parameter (value).
 ![valuevslider](../suppl/ValueVSlider.png)
 
 `ValueVSlider` is a `VSlider` Widget with an additional editable label for
-displaying its value.
+displaying its value. The value display including its position is controlled
+by `ValueVisualizable`.
 
 
 ### VRangeScrollBar
@@ -750,7 +753,8 @@ to use non-line color gradients for display using gradient functions.
 ![valueradialmeter](../suppl/ValueRadialMeter.png)
 
 `ValueRadialMeter` is a `RadialMeter` Widget with an additional label for
-displaying its value.
+displaying its value. The value display including its position is controlled
+by `ValueVisualizable`.
 
 
 ### Dial
@@ -769,7 +773,8 @@ parameter (value).
 ![valuedial](../suppl/ValueDial.png)
 
 `ValueDial` is a `Dial` Widget with an additional editable label for
-displaying its value.
+displaying its value. The value display including its position is controlled
+by `ValueVisualizable`.
 
 
 ### ConditionalImage
