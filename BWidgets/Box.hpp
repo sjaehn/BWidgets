@@ -19,10 +19,17 @@
 #define BWIDGETS_BOX_HPP_
 
 #include "Frame.hpp"
+#include "Supports/Activatable.hpp"
+#include "Supports/Linkable.hpp"
+#include "TextButton.hpp"
+#include "../BDevices/Keys.hpp"
+#include "../BEvents/KeyEvent.hpp"
 #include "Supports/KeyPressable.hpp"
 #include "Supports/ValueableTyped.hpp"
-#include "TextButton.hpp"
 #include "Supports/Closeable.hpp"
+#include "Supports/Clickable.hpp"
+#include "Supports/Navigatable.hpp"
+#include "Widget.hpp"
 #include <algorithm>
 #include <cstddef>
 #include <initializer_list>
@@ -47,12 +54,17 @@ namespace BWidgets
  *  @brief  Composite widget with buttons.
  *
  *  %Box is a composite Widget based on Frame and contains TextButtons. It 
- *  also supports Valueable, KeyPressable and Closeable. The default value of
- *  the Box is 0 and changes upon pressing one of the containing text buttons.
- *  On pressing one of the buttons, the widget value is set to the button
- *  index (starting) with 1 and a CloseRequestEvent is emitted.
+ *  also supports Valueable, KeyPressable, Clickable and Closeable. The default 
+ *  value of the Box is 0 and changes upon pressing one of the containing text 
+ *  buttons. On pressing one of the buttons, the widget value is set to the 
+ *  button index (starting) with 1 and a CloseRequestEvent is emitted.
  */
-class Box : public Frame, public ValueableTyped<size_t>, public KeyPressable, public Closeable
+class Box :	public Frame, 
+			public ValueableTyped<size_t>, 
+			public KeyPressable, 
+			public Closeable, 
+			public Clickable,
+			public Navigatable
 {
 protected:
 	TextButton okButton_;
@@ -194,10 +206,54 @@ public:
 	 */
 	std::string getButtonText (const size_t index) const;
 
+	 /**
+     *  @brief  Sets the background colors Property.
+     *  @param colors  Background ColorMap.
+     *
+     *  Sets the base level background colors Property using the default 
+     *  background colors URID.
+     */
+    virtual void setBgColors (const BStyles::ColorMap& colors) override;
+
+	/**
+     *  @brief  Activates this object 
+     *  @param status  Optional, true for activation, false for de-activation
+	 *
+	 *  Sets the %Box status to BStyles::Status::active upon activation and
+	 *  BStyles::Status::normal upon de-activation if the %Box is Activatable.
+	 *  Takes over keyboard control for activation status is true. Also 
+	 *  de-activates all other Widgets at the same level (same parent) if they
+	 *  are Activatable too and allow auto deactivation. 
+     */
+    virtual void activate (bool status = true) override;
+
 	/**
      *  @brief  Method to be called following an object state change.
      */
     virtual void update () override;
+
+	/**
+     *  @brief  Method called when pointer button clicked (pressed and 
+     *  released).
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  pointer button cklicked. By default, it switches the %Box status 
+	 *  between `BStyles::Status::normal` and `BStyles::Status::active` and 
+	 *  calls its static callback function.
+     */
+	virtual void onButtonClicked (BEvents::Event* event) override;
+
+	/**
+     *  @brief  Method when a KeyEvent with the type keyPressEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Method called from the main window event scheduler if a
+     *  key is pressed. It activates the previous previous / next button and
+	 *  calls its static callback function.
+     */
+	virtual void onKeyPressed (BEvents::Event* event) override;
 
 
 protected:
@@ -227,15 +283,19 @@ inline Box::Box	(const double x, const double y, const double width, const doubl
 	ValueableTyped<size_t> (0),
 	KeyPressable(),
 	Closeable(),
+	Clickable(),
+	Navigatable(),
 	okButton_ ("OK", false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button")),
 	buttons_()
 {
-	setKeyPressable(false);	// Not implemented yet
+	setActivatable(true);
+	setKeyPressable(false);
 	if (buttonlabels.begin() != buttonlabels.end()) addButton (buttonlabels);
 
 	// Fallback default OK button
 	if (buttons_.empty())
 	{
+		okButton_.setActivatable(true);
 		okButton_.setCallbackFunction (BEvents::Event::EventType::valueChangedEvent, Box::buttonClickCallback);
 		buttons_.push_back (&okButton_);
 		add (&okButton_);
@@ -299,6 +359,8 @@ inline void Box::copy (const Box* that)
 		}
 	}
 
+	Navigatable::operator= (*that);
+	Clickable::operator= (*that);
 	Closeable::operator= (*that);
 	KeyPressable::operator=(*that);
 	ValueableTyped<size_t>::operator= (*that);
@@ -381,6 +443,7 @@ inline void Box::resize (const BUtilities::Point<> extends)
 inline void Box::addButton (const std::string& label)
 {
 	TextButton* b = new TextButton (label, false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (getUrid()) + "/button"));
+	b->setActivatable(true);
 	b->setCallbackFunction (BEvents::Event::EventType::buttonClickEvent, Box::buttonClickCallback);
 	buttons_.push_back (b);
 	add (b);
@@ -434,9 +497,38 @@ inline std::string Box::getButtonText (const size_t index) const
 	return buttons_[index - 1]->label.getText ();
 }
 
+inline void Box::setBgColors (const BStyles::ColorMap& colors)
+{
+	Widget::setBgColors(colors);
+	setBackground (BStyles::Fill(getBgColors()[getStatus()].illuminate (-0.75)));
+	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[getStatus()].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
+}
+
+inline void Box::activate (bool status)
+{
+	if (isActivatable())
+	{
+		Widget::activate(status);
+
+		if (status) 
+		{
+			setKeyPressable(true);
+			if (!isDeviceGrabbed(BDevices::Keys())) grabDevice (BDevices::Keys());
+		}
+
+		else 
+		{
+			setKeyPressable(false);
+			if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());
+		}
+	}
+}
+
 inline void Box::update ()
 {
 	// Update super widget first
+	setBackground (BStyles::Fill(getBgColors()[getStatus()].illuminate (-0.75)));
+	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[getStatus()].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
 	Frame::update ();
 
 	// Cleanup
@@ -487,6 +579,31 @@ inline void Box::update ()
 		b->moveTo (buttonxpos, getYOffset() + getEffectiveHeight() - BWIDGETS_DEFAULT_MENU_PADDING - BWIDGETS_DEFAULT_BUTTON_HEIGHT);
 		buttonxpos = buttonxpos + buttonspace + b->getWidth ();
 	}
+}
+
+inline void Box::onButtonClicked (BEvents::Event* event)
+{
+	if (getStatus() == BStyles::Status::normal) activate();
+	else if (getStatus() == BStyles::Status::active) activate (false);
+}
+
+inline void Box::onKeyPressed (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+
+	if
+	(
+		getMainWindow() &&
+		(kev->getWidget () == this) &&
+		isDeviceGrabbed(BDevices::Keys())
+	)
+	{
+		uint32_t key = kev->getKey ();
+		if (key == PUGL_KEY_LEFT) navigateBackward();
+		else if (key == PUGL_KEY_RIGHT) navigateForward();
+	}
+
 }
 
 inline void Box::buttonClickCallback (BEvents::Event* event)

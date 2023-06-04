@@ -13,6 +13,7 @@ Support
  ├── Scrollable         < Callback
  ├── KeyPressable       < Callback
  ├── Activatable
+ ├── Navigatable
  ├── Valueable          < Callback
  |    ╰── ValueableTyped<T>
  ├── ValueTransferable<T>
@@ -89,6 +90,11 @@ Supports keyboard key press and release events.
 ## Activatable
 
 Support of Widget activation by an user interaction.
+
+
+## Navigatable
+
+Support of navigation between Activatable child Widgets by an user interaction.
 
 
 ## Valueable

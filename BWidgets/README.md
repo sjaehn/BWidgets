@@ -872,11 +872,12 @@ additionally supports user interaction via `Clickable`, `Draggable`,
 
 ![box](../suppl/Box.png)
 
-`Box` is a composite Widget based on `Frame` and contains `TextButton`s. It 
-also supports `Valueable`, `KeyPressable` (to be implemented) and Closeable. The default value of the Box is 0
-and changes upon pressing one of the containing text buttons. On pressing
-one of the buttons, the widget value is set to the button index (starting)
-with 1 and a `CloseRequestEvent` is emitted.
+`Box` is a composite Widget based on `Frame` and contains `TextButton`s. `Box`
+supports `Navigatable` to navigate between its navigatable content (by default:
+all buttons). It also supports `Valueable`, `KeyPressable` and Closeable. The 
+default value of the Box is 0 and changes upon pressing one of the containing 
+text buttons. On pressing one of the buttons, the widget value is set to the 
+button index (starting) with 1 and a `CloseRequestEvent` is emitted.
 
 
 ### TextBox
