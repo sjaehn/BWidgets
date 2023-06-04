@@ -63,26 +63,32 @@ public:
     
     /**
      *  @brief  Navigates backward 
+     *  @return  Pointer to the Activatable object navigated to or @c nullptr
+     *  if not possible.
      * 
      *  Activates the previous Activatable child Widget. Activates the first
      *  Activatable child Widget if no Activatable child widget is activated
      *  yet.
      */
-    virtual void navigateBackward ();
+    virtual Activatable* navigateBackward ();
 
     /**
      *  @brief  Navigates forward 
+     *  @return  Pointer to the Activatable object navigated to or @c nullptr
+     *  if not possible.
      * 
      *  Activates the next Activatable child Widget. Activates the first
      *  Activatable child Widget if no Activatable child widget is activated
      *  yet.
      */
-    virtual void navigateForward ();
+    virtual Activatable* navigateForward ();
 
     /**
      *  @brief  Navigates to the first Activatable child Widget
+     *  @return  Pointer to the Activatable object navigated to or @c nullptr
+     *  if not possible.
      */
-    virtual void navigateToStart ();
+    virtual Activatable* navigateToStart ();
 
 protected:
 
@@ -106,9 +112,8 @@ inline void Navigatable::setNavigatable (const bool status) {setSupport(status);
 
 inline bool Navigatable::isNavigatable () const {return getSupport();}
 
-inline void Navigatable::navigateBackward() 
+inline Activatable* Navigatable::navigateBackward() 
 {
-    fprintf(stderr, "backward\n");
     if (isNavigatable())
     {
         Linkable* l = dynamic_cast<Linkable*>(this);
@@ -126,19 +131,22 @@ inline void Navigatable::navigateBackward()
                     if (a && (a->isActivatable())) 
                     {
                         a->activate();
-                        return;
+                        return a;
                     }
                 }
             }
+
+            return dynamic_cast<Activatable*>(present);
         }
 
-        else navigateToStart();
+        else return navigateToStart();
     }
+
+    return nullptr;
 }
 
-inline void Navigatable::navigateForward () 
+inline Activatable* Navigatable::navigateForward () 
 {
-    fprintf(stderr, "forward\n");
     if (isNavigatable())
     {
         
@@ -155,19 +163,22 @@ inline void Navigatable::navigateForward ()
                     if (a && (a->isActivatable())) 
                     {
                         a->activate();
-                        return;
+                        return a;
                     }
                 }
             }
+
+            return dynamic_cast<Activatable*>(present);
         }
 
-        else navigateToStart();
+        else return navigateToStart();
     }
+
+    return nullptr;
 }
 
-inline void Navigatable::navigateToStart () 
+inline Activatable* Navigatable::navigateToStart () 
 {
-    fprintf(stderr, "start\n");
     if (isNavigatable())
     {
         Linkable* l = dynamic_cast<Linkable*>(this);
@@ -179,11 +190,13 @@ inline void Navigatable::navigateToStart ()
                 if (a && (a->isActivatable()))
                 {
                     a->activate();
-                    return;
+                    return a;
                 }
             }
         }
     }
+
+    return nullptr;
 }
 
 inline Activatable* Navigatable::getFirstActivatedChild () const
