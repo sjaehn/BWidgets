@@ -251,6 +251,9 @@ void Window::addEventToQueue (BEvents::Event* event)
 			{
 				BEvents::Event* precursor = *rit;
 
+				// Don't add the same event pointer twice
+				if (precursor == event) return;
+
 				if ((static_cast<uint32_t>(precursor->getEventType()) & static_cast<uint32_t>(eventType)) && (event->getWidget () == precursor->getWidget ()))
 				{
 					// CONFIGURE_EVENT

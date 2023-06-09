@@ -169,9 +169,17 @@ public:
 	/**
 	 *  @brief  Queues an event until the next call of the @c handleEvents() 
 	 *  method.
-	 *  @param event  Event.
+	 *  @param event  Pointer to the event.
 	 *
-	 *  Add the @a event to the event queue. Also tries to merge the @a event
+	 *  Passes an @a event to the Window object and adds the @a event to 
+	 *  the event queue. From now on, the Window object controls the @a event
+	 *  object lifetime. If event handling is completed, the @a event is 
+	 *  destructed by calling @c delete. Thus, the @a event passed to the 
+	 *  Window object
+	 *  1. must be dynamicly allocated before by calling @c new, and
+	 *  2. must NOT be deleted outside once it is passed to the Window object.
+	 *
+	 *  Also tries to merge the @a event
 	 *  with the previous event of the queue if:
 	 *  1. Both events are the same type.
 	 *  2. The event type is eligible for merging.
