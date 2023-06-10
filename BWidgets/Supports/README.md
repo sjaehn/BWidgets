@@ -28,7 +28,8 @@ Support
  
 ()
  ├── EventMergeable
- ╰── EventPassable
+ ├── EventPassable
+ ╰── EventQueueable
 ```
 
 Supports can be switched on or off by calling its respective virtual setXXX 
@@ -183,3 +184,10 @@ the respective event. Otherwise it blocks this event.
 
 EventPassable supports passing events to subjacent widgets even if (or
 if not) the widget doesn't support the respective event type.
+
+
+## EventQueueable
+
+Ability of the class `BWidgets::Window`. Contains the event queue. And decides 
+whether an event may be added to the event queue or not. By default, all events 
+are able to be queued to the event queue.

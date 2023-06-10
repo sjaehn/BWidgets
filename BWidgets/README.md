@@ -1500,8 +1500,6 @@ And from B.Widgets itself, you need at least:
 
   path/to/BWidgets/BUtilities/Urid.cpp, \
   path/to/BWidgets/BUtilities/Dictionary.cpp \
-	path/to/BWidgets/BWidgets/Supports/Closeable.cpp, \
-  path/to/BWidgets/BWidgets/Supports/Messagable.cpp \
 	path/to/BWidgets/BWidgets/Window.cpp, and \
 	path/to/BWidgets/BWidgets/Widget.cpp.
 
