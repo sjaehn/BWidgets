@@ -90,6 +90,15 @@ public:
      */
     virtual Activatable* navigateToStart ();
 
+     /**
+     *  @brief  Navigates to an Activatable child Widget
+     *  @param act  Pointer to the Activatable child object.
+     *  @return  Pointer to the Activatable object navigated to or @c nullptr
+     *  if not possible.
+     */
+    virtual Activatable* navigateTo (Activatable* act);
+
+
 protected:
 
     /**
@@ -199,16 +208,32 @@ inline Activatable* Navigatable::navigateToStart ()
     return nullptr;
 }
 
+inline Activatable* Navigatable::navigateTo (Activatable* act)
+{
+    if (isNavigatable())
+    {
+        if (act && (act->isActivatable())) 
+        {
+            act->activate();
+            return act;
+        }
+    }
+    return getFirstActivatedChild();
+}
+
 inline Activatable* Navigatable::getFirstActivatedChild () const
 {
-    const Linkable* l = dynamic_cast<const Linkable*>(this);
-    if (l)
+    if (isNavigatable())
     {
-        for (std::list<Linkable*>::const_iterator it = l->getChildren().begin() ; it != l->getChildren().end() ; ++it)
+        const Linkable* l = dynamic_cast<const Linkable*>(this);
+        if (l)
         {
-            Widget* w = dynamic_cast<Widget*>(*it);
-            Activatable* a = dynamic_cast<Activatable*>(*it);
-            if (w && a && (a->isActivatable()) && (w->getStatus() == BStyles::Status::active)) return a;
+            for (std::list<Linkable*>::const_iterator it = l->getChildren().begin() ; it != l->getChildren().end() ; ++it)
+            {
+                Widget* w = dynamic_cast<Widget*>(*it);
+                Activatable* a = dynamic_cast<Activatable*>(*it);
+                if (w && a && (a->isActivatable()) && (w->getStatus() == BStyles::Status::active)) return a;
+            }
         }
     }
 	return nullptr;
