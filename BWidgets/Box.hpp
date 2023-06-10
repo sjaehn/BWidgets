@@ -614,26 +614,12 @@ inline void Box::onKeyPressed (BEvents::Event* event)
 			case PUGL_KEY_RIGHT:	navigateForward();
 									break;
 
-			case PUGL_KEY_ESCAPE:	// Deactivate all children and deactivate this
-									for (Linkable* l : getChildren())
-									{
-										Widget* w = dynamic_cast<Widget*>(l);
-										if (w && w->isActivatable() && w->isAutoDeactivated() && (w->getStatus() == BStyles::Status::active))
-										{
-											w->deactivate();
-										}
-									}
-									deactivate();
+			case PUGL_KEY_ESCAPE:	
+									if (isNavigated ()) resetNavigation();
+									else deactivate();
 									break;
 
-			case 13:				{
-										Activatable* a = getFirstActivatedChild();
-										if (a)
-										{
-											Enterable* e = dynamic_cast<Enterable*>(a);
-											if (e) e->enter();
-										}
-									}
+			case 13:				enterNavigated();
 									break;
 
 			default:				break;

@@ -21,6 +21,7 @@
 #include "../Widget.hpp"
 #include "Activatable.hpp"
 #include "Linkable.hpp"
+#include "Enterable.hpp"
 
 namespace BWidgets
 {
@@ -31,9 +32,6 @@ namespace BWidgets
  */
 class Navigatable : public Support
 {
-protected:
-    bool autoDeactivation_;
-
 public:
 
     /**
@@ -98,6 +96,24 @@ public:
      */
     virtual Activatable* navigateTo (Activatable* act);
 
+    /**
+     *  @brief  Enters the first activated Activatable child Widget.
+     */
+    virtual void enterNavigated ();
+
+    /**
+     *  @brief  De-activates all Activatable child widgets.
+     */
+    virtual void resetNavigation ();
+
+    /**
+     *  @brief  Checks if navigation has been performed.
+     * 
+     *  @return  True if this object is navigatable and at least one 
+     *  Activatable child Widget is activated. 
+     */
+    bool isNavigated();
+
 
 protected:
 
@@ -113,8 +129,7 @@ protected:
 inline Navigatable::Navigatable () : Support (true) {}
 
 inline Navigatable::Navigatable (const bool status) : 
-    Support (status),
-    autoDeactivation_(true) 
+    Support (status)
 {}
 
 inline void Navigatable::setNavigatable (const bool status) {setSupport(status);}
@@ -221,6 +236,40 @@ inline Activatable* Navigatable::navigateTo (Activatable* act)
     return getFirstActivatedChild();
 }
 
+inline void Navigatable::enterNavigated ()
+{
+    if (isNavigatable())
+    {
+        Activatable* a = getFirstActivatedChild();
+        if (a)
+        {
+            Enterable* e = dynamic_cast<Enterable*>(a);
+            if (e && e->isEnterable()) e->enter();
+        }
+    }
+}
+
+inline void Navigatable::resetNavigation ()
+{
+    if (isNavigatable())
+    {
+        const Linkable* l = dynamic_cast<const Linkable*>(this);
+        if (l)
+        {
+            for (std::list<Linkable*>::const_iterator it = l->getChildren().begin() ; it != l->getChildren().end() ; ++it)
+            {
+                Activatable* a = dynamic_cast<Activatable*>(*it);
+                if (a && a->isActivatable()) a->deactivate();
+            }
+        }
+    }
+}
+
+inline bool Navigatable::isNavigated()
+{
+    return (getFirstActivatedChild() != nullptr);
+}
+
 inline Activatable* Navigatable::getFirstActivatedChild () const
 {
     if (isNavigatable())
@@ -232,7 +281,7 @@ inline Activatable* Navigatable::getFirstActivatedChild () const
             {
                 Widget* w = dynamic_cast<Widget*>(*it);
                 Activatable* a = dynamic_cast<Activatable*>(*it);
-                if (w && a && (a->isActivatable()) && (w->getStatus() == BStyles::Status::active)) return a;
+                if (w && a && a->isActivatable() && (w->getStatus() == BStyles::Status::active)) return a;
             }
         }
     }
