@@ -16,6 +16,7 @@
  * Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include "Supports/EventQueueable.hpp"
 #include "Supports/Linkable.hpp"
 #include "Widget.hpp"
 #include <cairo/cairo.h>
@@ -56,9 +57,11 @@ Window::Window (const uint32_t urid, const std::string& title) :
 	Window (BWIDGETS_DEFAULT_WINDOW_WIDTH, BWIDGETS_DEFAULT_WINDOW_HEIGHT, 0, urid, title) {}
 
 Window::Window (const double width, const double height, PuglNativeView nativeWindow, 
-		uint32_t urid, std::string title, bool resizable,
-		PuglWorldType worldType, int worldFlag) :
+				uint32_t urid, std::string title, bool resizable,
+				PuglWorldType worldType, int worldFlag) :
 		Widget (0.0, 0.0, width, height, urid, title),
+		EventQueueable(),
+		Closeable(),
 		zoom_ (1.0),
 		world_ (NULL), 
 		worldType_ (worldType),
@@ -66,8 +69,7 @@ Window::Window (const double width, const double height, PuglNativeView nativeWi
 		nativeWindow_ (nativeWindow),
 		quit_ (false), 
 		focused_ (false), 
-		pointer_ (),
-		eventQueue_ ()
+		pointer_ ()
 {
 	main_ = this;
 	layer_ = BWIDGETS_DEFAULT_WINDOW_LAYER;
@@ -252,7 +254,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 				BEvents::Event* precursor = *rit;
 
 				// Don't add the same event pointer twice
-				if (precursor == event) return;
+				if (precursor == event)
 
 				if ((static_cast<uint32_t>(precursor->getEventType()) & static_cast<uint32_t>(eventType)) && (event->getWidget () == precursor->getWidget ()))
 				{
@@ -349,7 +351,7 @@ void Window::addEventToQueue (BEvents::Event* event)
 		}
 	}
 
-	eventQueue_.push_back (event);
+	EventQueueable::addEventToQueue (event);
 }
 
 void Window::handleEvents ()
@@ -359,8 +361,7 @@ void Window::handleEvents ()
 
 	while (!eventQueue_.empty ())
 	{
-		BEvents::Event* event = eventQueue_.front ();
-		eventQueue_.pop_front ();
+		BEvents::Event* event = popEvent();
 
 		if (event)
 		{
@@ -476,7 +477,8 @@ void Window::handleEvents ()
 				}
 
 			}
-			delete event;
+			
+			deleteEvent (event);
 		}
 	}
 }

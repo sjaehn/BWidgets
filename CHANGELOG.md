@@ -6,11 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [1.3.0] - 2023-06-09
+## [1.3.0] - 2023-06-10
 * Add class `BWidgets::Activatable` and implement in `BWidgets::Widget`
 * Add class `BWidgets::Navigatable` and implement in `BWidgets::Box`
 * Fix prevent twice addition of events to the event loop
 * Add `BEvents::Event::EventType::all`
+* Move event queue from `BWidgets::Windows` to `BWidgets::EventQueueable`,
+  inherit in `BWidgets::Windows`
 * Update documentation
 
 

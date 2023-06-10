@@ -25,6 +25,7 @@
 #include "Widget.hpp"
 #include "pugl/pugl.h"
 #include "Supports/Closeable.hpp"
+#include "Supports/EventQueueable.hpp"
 
 #ifndef BWIDGETS_DEFAULT_WINDOW_WIDTH
 #define BWIDGETS_DEFAULT_WINDOW_WIDTH 600
@@ -61,7 +62,7 @@ namespace BWidgets
  *
  *  Note: There should only be one %Window object!
  */
-class Window : public Widget, public Closeable
+class Window : public Widget, public EventQueueable, public Closeable
 {
 protected:
 	double zoom_;
@@ -72,7 +73,6 @@ protected:
 	bool quit_;
 	bool focused_;
 	BUtilities::Point<> pointer_;
-	std::list<BEvents::Event*> eventQueue_;
 
 public:
 
@@ -187,7 +187,7 @@ public:
 	 *  4. The emitting widget allows event merging for the respective event
 	 *     type (see @c EventMergeable::setEventMergeable() ).
 	 */
-	virtual void addEventToQueue (BEvents::Event* event);
+	virtual void addEventToQueue (BEvents::Event* event) override;
 
 	/**
 	 *  @brief  Main Event handler. 
