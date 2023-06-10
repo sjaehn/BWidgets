@@ -21,6 +21,9 @@
 #include "Callback.hpp"
 #include "Support.hpp"
 #include <string>
+#include "../Widget.hpp"
+#include "EventQueueable.hpp"
+#include "../../BEvents/MessageEvent.hpp"
 #include "../../BUtilities/Any.hpp"
 
 namespace BWidgets
@@ -51,7 +54,6 @@ public:
      */
     bool isMessagable () const;
 
-
     /**
      *  @brief  Emits a MessageEvent. 
      *  @param name  Event name.
@@ -70,6 +72,27 @@ public:
     virtual void onMessage (BEvents::Event* event);
 
 };
+
+inline void Messagable::setMessagable (const bool status) {setSupport (status);}
+
+inline bool Messagable::isMessagable () const {return getSupport();}
+
+inline void Messagable::postMessage (const std::string& name, const BUtilities::Any content)
+{
+    Widget* thisWidget = dynamic_cast<Widget*> (this);
+    if (!thisWidget) return;
+    Linkable* m = thisWidget->getMain();
+    if (!m) return;
+    EventQueueable* q = dynamic_cast<EventQueueable*>(m);
+
+    BEvents::MessageEvent* event = new BEvents::MessageEvent (thisWidget, name, content);
+	q->addEventToQueue (event);
+}
+
+inline void Messagable::onMessage (BEvents::Event* event)
+{
+    callback (BEvents::Event::EventType::messageEvent) (event);
+}
 
 }
 #endif /* BWIDGETS_MESSAGABLE_HPP_ */

@@ -1,6 +1,5 @@
 BUtilities/Urid.cpp 
 BUtilities/Dictionary.cpp 
 BWidgets/Supports/Closeable.cpp 
-BWidgets/Supports/Messagable.cpp 
 BWidgets/Window.cpp 
 BWidgets/Widget.cpp
