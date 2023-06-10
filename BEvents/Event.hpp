@@ -68,7 +68,8 @@ public:
         contentEvents           = valueChangedEvent + messageEvent,
         pointerFocusInEvent     = 0x2000,
         pointerFocusOutEvent    = 0x4000,
-        pointerFocusEvents      = pointerFocusInEvent + pointerFocusOutEvent
+        pointerFocusEvents      = pointerFocusInEvent + pointerFocusOutEvent,
+        all                     = 0xFFFF
     };
 
 protected:
