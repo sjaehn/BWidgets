@@ -13,6 +13,7 @@ Support
  ├── Scrollable         < Callback
  ├── KeyPressable       < Callback
  ├── Activatable
+ ├── Enterable
  ├── Navigatable
  ├── Valueable          < Callback
  |    ╰── ValueableTyped<T>
@@ -92,6 +93,13 @@ Supports keyboard key press and release events.
 ## Activatable
 
 Support of Widget activation by an user interaction.
+
+
+## Enterable
+
+Support to enter a Widget. Provides an overridable `enter()` method. By 
+default, it simulates a click into the middle of an `Enterable`, 
+`Clickable` widget.
 
 
 ## Navigatable

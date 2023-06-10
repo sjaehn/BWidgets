@@ -20,6 +20,7 @@
 
 #include "Frame.hpp"
 #include "Supports/Activatable.hpp"
+#include "Supports/Enterable.hpp"
 #include "Supports/Linkable.hpp"
 #include "TextButton.hpp"
 #include "../BDevices/Keys.hpp"
@@ -30,6 +31,7 @@
 #include "Supports/Clickable.hpp"
 #include "Supports/Navigatable.hpp"
 #include "Widget.hpp"
+#include "pugl/pugl.h"
 #include <algorithm>
 #include <cstddef>
 #include <initializer_list>
@@ -64,7 +66,8 @@ class Box :	public Frame,
 			public KeyPressable, 
 			public Closeable, 
 			public Clickable,
-			public Navigatable
+			public Navigatable,
+			public Enterable
 {
 protected:
 	TextButton okButton_;
@@ -285,6 +288,7 @@ inline Box::Box	(const double x, const double y, const double width, const doubl
 	Closeable(),
 	Clickable(),
 	Navigatable(),
+	Enterable(),
 	okButton_ ("OK", false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button")),
 	buttons_()
 {
@@ -359,6 +363,7 @@ inline void Box::copy (const Box* that)
 		}
 	}
 
+	Enterable::operator= (*that);
 	Navigatable::operator= (*that);
 	Clickable::operator= (*that);
 	Closeable::operator= (*that);
@@ -600,10 +605,40 @@ inline void Box::onKeyPressed (BEvents::Event* event)
 	)
 	{
 		uint32_t key = kev->getKey ();
-		if (key == PUGL_KEY_LEFT) navigateBackward();
-		else if (key == PUGL_KEY_RIGHT) navigateForward();
-	}
 
+		switch (key)
+		{
+			case PUGL_KEY_LEFT:		navigateBackward();
+									break;
+
+			case PUGL_KEY_RIGHT:	navigateForward();
+									break;
+
+			case PUGL_KEY_ESCAPE:	// Deactivate all children and deactivate this
+									for (Linkable* l : getChildren())
+									{
+										Widget* w = dynamic_cast<Widget*>(l);
+										if (w && w->isActivatable() && w->isAutoDeactivated() && (w->getStatus() == BStyles::Status::active))
+										{
+											w->deactivate();
+										}
+									}
+									deactivate();
+									break;
+
+			case 13:				{
+										Activatable* a = getFirstActivatedChild();
+										if (a)
+										{
+											Enterable* e = dynamic_cast<Enterable*>(a);
+											if (e) e->enter();
+										}
+									}
+									break;
+
+			default:				break;
+		}
+	}
 }
 
 inline void Box::buttonClickCallback (BEvents::Event* event)

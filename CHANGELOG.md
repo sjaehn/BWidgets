@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.0] - 2023-06-10
 * Add class `BWidgets::Activatable` and implement in `BWidgets::Widget`
 * Add class `BWidgets::Navigatable` and implement in `BWidgets::Box`
+* Add class `BWidgets::Enterable` and implement in `BWidgets::Box` and
+  `BWidgets::Button`
 * Add `BEvents::Event::EventType::all`
 * Move event queue from `BWidgets::Windows` to `BWidgets::EventQueueable`,
   inherit in `BWidgets::Windows`

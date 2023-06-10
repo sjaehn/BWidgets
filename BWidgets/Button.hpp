@@ -24,6 +24,7 @@
 #include "Supports/Clickable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Toggleable.hpp"
+#include "Supports/Enterable.hpp"
 #include "../BEvents/Event.hpp"
 #include <cairo/cairo.h>
 #include <iostream>
@@ -50,7 +51,12 @@ namespace BWidgets
  *  color itself is represented by the BgColor and is changed upon changing
  *  the %Button condition (on: highLighted, off: darkened).
  */
-class Button : public Widget, public Clickable, public KeyPressable, public ValueableTyped<bool>, public Toggleable
+class Button :	public Widget, 
+				public Clickable, 
+				public KeyPressable, 
+				public ValueableTyped<bool>, 
+				public Toggleable,
+				public Enterable
 {
 public:
 
@@ -200,7 +206,8 @@ inline Button::Button	(const double x, const double y, const double width, const
 	Clickable (),
 	KeyPressable(),
 	ValueableTyped<bool> (clicked),
-	Toggleable ()
+	Toggleable (),
+	Enterable()
 {
 	setKeyPressable (false),	// not implemented yet
 	setToggleable (toggleable);
@@ -224,6 +231,7 @@ inline void Button::copy (const Button* that)
 	Clickable::operator= (*that);
 	ValueableTyped<bool>::operator= (*that);
 	Toggleable::operator= (*that);
+	Enterable::operator= (*that);
     Widget::copy (that);
 }
 
