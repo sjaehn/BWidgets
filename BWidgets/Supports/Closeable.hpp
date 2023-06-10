@@ -20,6 +20,9 @@
 
 #include "Callback.hpp"
 #include "Support.hpp"
+#include "EventQueueable.hpp"
+#include "../Widget.hpp"
+#include "../../BEvents/WidgetEvent.hpp"
 
 namespace BWidgets
 {
@@ -73,6 +76,52 @@ public:
     virtual void onCloseRequest (BEvents::Event* event);
 
 };
+
+inline void Closeable::setCloseable (const bool status) 
+{
+    setSupport (status);
+}
+
+inline bool Closeable::isCloseable () const 
+{
+    return getSupport();
+}
+
+inline void Closeable::postCloseRequest () 
+{
+    Widget* thisWidget = dynamic_cast<Widget*> (this);
+    if (thisWidget)
+    {
+        Widget* main = dynamic_cast<Widget*>(thisWidget->getMain());
+        if (main) postCloseRequest (main);
+    }
+}
+
+inline void Closeable::postCloseRequest (Widget* handle)
+{
+    Widget* thisWidget = dynamic_cast<Widget*> (this);
+	if (thisWidget && handle)
+	{
+		BEvents::WidgetEvent* event = new BEvents::WidgetEvent (handle, thisWidget, BEvents::Event::EventType::closeRequestEvent);
+        EventQueueable* q = dynamic_cast<EventQueueable*>(thisWidget->getMain());
+		if (q && event) q->addEventToQueue (event);
+	}
+}
+
+inline void Closeable::onCloseRequest (BEvents::Event* event)
+{
+    callback (BEvents::Event::EventType::closeRequestEvent) (event);
+
+    Widget* thisWidget = dynamic_cast<Widget*> (this);
+    BEvents::WidgetEvent* widgetEvent = dynamic_cast<BEvents::WidgetEvent*> (event);
+
+	if ((thisWidget) && (widgetEvent) && (widgetEvent->getWidget () == thisWidget))
+	{
+		Widget* requestWidget = widgetEvent->getRequestWidget ();
+		Widget* parent = dynamic_cast<Widget*>(requestWidget ? requestWidget->getParent () : nullptr);
+		if (parent && parent->Linkable::contains (requestWidget)) thisWidget->release (requestWidget);
+	}
+}
 
 }
 #endif /* BWIDGETS_CLOSEABLE_HPP_ */

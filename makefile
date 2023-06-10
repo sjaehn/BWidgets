@@ -6,7 +6,7 @@ INCLUDEDIR ?= include
 
 # resources
 PUGL_C_FILES = pugl/src/common.c pugl/src/internal.c
-CORE_CPP_FILES = BUtilities/Urid.cpp BUtilities/Dictionary.cpp BWidgets/Supports/Closeable.cpp BWidgets/Window.cpp BWidgets/Widget.cpp
+CORE_CPP_FILES = BUtilities/Urid.cpp BUtilities/Dictionary.cpp BWidgets/Window.cpp BWidgets/Widget.cpp
 
 # pgk-config
 PKG_CONFIG ?= pkg-config
