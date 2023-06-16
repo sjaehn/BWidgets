@@ -27,7 +27,13 @@ namespace BWidgets
  *  @brief  Interface class for Support of Widget activation.
  *
  *  %Activatable is a hint for a widget to be able to get activated by an
- *  user interaction. Default is false (inactive)!
+ *  user interaction. Default is false (inactive)! Implementations of
+ *  %Activatable shall enable switching the Widget status between
+ *  @c BStyles::Status::normal and @c BStyles::Status::active . All other
+ *  @c BStyles::Status shall not be touched.
+ *  
+ *  %Activatable is (not exclusively) used by Navigalatble menu Widgets to
+ *  navigate through menu items.
  *
  *  @note: The Widget status can be forced to set at any
  *  time by `Widget::setStatus()` - independent from %Activatable.

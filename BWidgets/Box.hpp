@@ -19,9 +19,6 @@
 #define BWIDGETS_BOX_HPP_
 
 #include "Frame.hpp"
-#include "Supports/Activatable.hpp"
-#include "Supports/Enterable.hpp"
-#include "Supports/Linkable.hpp"
 #include "TextButton.hpp"
 #include "../BDevices/Keys.hpp"
 #include "../BEvents/KeyEvent.hpp"
@@ -66,8 +63,7 @@ class Box :	public Frame,
 			public KeyPressable, 
 			public Closeable, 
 			public Clickable,
-			public Navigatable,
-			public Enterable
+			public Navigatable
 {
 protected:
 	TextButton okButton_;
@@ -219,16 +215,20 @@ public:
     virtual void setBgColors (const BStyles::ColorMap& colors) override;
 
 	/**
-     *  @brief  Activates this object 
-     *  @param status  Optional, true for activation, false for de-activation
-	 *
-	 *  Sets the %Box status to BStyles::Status::active upon activation and
-	 *  BStyles::Status::normal upon de-activation if the %Box is Activatable.
-	 *  Takes over keyboard control for activation status is true. Also 
-	 *  de-activates all other Widgets at the same level (same parent) if they
-	 *  are Activatable too and allow auto deactivation. 
+     *  @brief  Enters this %Box.
+     *
+     *  Activates this %Box, takes over keyboard control, and calls to leave 
+	 *  all other widgets linked to the main Window to become the only entered 
+	 *  Widget.
      */
-    virtual void activate (bool status = true) override;
+    virtual void enter () override;
+
+	/**
+     *  @brief  Leaves this %Box
+     *
+     *  De-activates this %Box, resets navigation and release keyboard conrol.
+     */
+    virtual void leave () override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -241,8 +241,7 @@ public:
      *  @param event  Passed Event.
      *
      *  Overridable method called from the main window event scheduler when
-     *  pointer button cklicked. By default, it switches the %Box status 
-	 *  between `BStyles::Status::normal` and `BStyles::Status::active` and 
+     *  pointer button cklicked. By default, it enters this %Box and 
 	 *  calls its static callback function.
      */
 	virtual void onButtonClicked (BEvents::Event* event) override;
@@ -288,11 +287,11 @@ inline Box::Box	(const double x, const double y, const double width, const doubl
 	Closeable(),
 	Clickable(),
 	Navigatable(),
-	Enterable(),
 	okButton_ ("OK", false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button")),
 	buttons_()
 {
 	setActivatable(true);
+	setEnterable(true);
 	setKeyPressable(false);
 	if (buttonlabels.begin() != buttonlabels.end()) addButton (buttonlabels);
 
@@ -363,7 +362,6 @@ inline void Box::copy (const Box* that)
 		}
 	}
 
-	Enterable::operator= (*that);
 	Navigatable::operator= (*that);
 	Clickable::operator= (*that);
 	Closeable::operator= (*that);
@@ -449,6 +447,7 @@ inline void Box::addButton (const std::string& label)
 {
 	TextButton* b = new TextButton (label, false, false, BUtilities::Urid::urid (BUtilities::Urid::uri (getUrid()) + "/button"));
 	b->setActivatable(true);
+	b->setEnterable(true);
 	b->setCallbackFunction (BEvents::Event::EventType::buttonClickEvent, Box::buttonClickCallback);
 	buttons_.push_back (b);
 	add (b);
@@ -509,23 +508,24 @@ inline void Box::setBgColors (const BStyles::ColorMap& colors)
 	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[getStatus()].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
 }
 
-inline void Box::activate (bool status)
+inline void Box::enter () 
 {
-	if (isActivatable())
+	if (isEnterable())
 	{
-		Widget::activate(status);
+		setKeyPressable(true);
+		grabDevice (BDevices::Keys());
+		Widget::enter();
+	}
+}
 
-		if (status) 
-		{
-			setKeyPressable(true);
-			if (!isDeviceGrabbed(BDevices::Keys())) grabDevice (BDevices::Keys());
-		}
-
-		else 
-		{
-			setKeyPressable(false);
-			if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());
-		}
+inline void Box::leave () 
+{
+	if (isEnterable())
+	{
+		setKeyPressable(false);
+		if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());
+		resetNavigation();
+		Widget::leave();
 	}
 }
 
@@ -588,8 +588,9 @@ inline void Box::update ()
 
 inline void Box::onButtonClicked (BEvents::Event* event)
 {
-	if (getStatus() == BStyles::Status::normal) activate();
-	else if (getStatus() == BStyles::Status::active) activate (false);
+	if (getStatus() == BStyles::Status::normal) enter();
+	else if (getStatus() == BStyles::Status::active) leave();
+	Clickable::onButtonClicked(event);
 }
 
 inline void Box::onKeyPressed (BEvents::Event* event)
@@ -616,15 +617,17 @@ inline void Box::onKeyPressed (BEvents::Event* event)
 
 			case PUGL_KEY_ESCAPE:	
 									if (isNavigated ()) resetNavigation();
-									else deactivate();
+									else leave();
 									break;
 
-			case 13:				enterNavigated();
+			case 13 /* ENTER */:	enterNavigated();
 									break;
 
 			default:				break;
 		}
 	}
+
+	KeyPressable::onKeyPressed(event);
 }
 
 inline void Box::buttonClickCallback (BEvents::Event* event)

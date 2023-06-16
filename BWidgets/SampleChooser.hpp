@@ -422,6 +422,9 @@ inline void SampleChooser::resize (const BUtilities::Point<> extends)
 
 inline void SampleChooser::update ()
 {
+	setBackground (BStyles::Fill(getBgColors()[getStatus()].illuminate (-0.75)));
+	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[getStatus()].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
+
 	const double x0 = getXOffset();
 	const double y0 = getYOffset();
 	const double w = getEffectiveWidth();

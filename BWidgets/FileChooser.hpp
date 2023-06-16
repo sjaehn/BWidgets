@@ -26,9 +26,11 @@
 #include <sys/stat.h>
 #include "Box.hpp"
 #include "Frame.hpp"
+#include "Supports/Clickable.hpp"
 #include "Supports/KeyPressable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Closeable.hpp"
+#include "Supports/Navigatable.hpp"
 #include "Symbol.hpp"
 #include "TextButton.hpp"
 #include "EditLabel.hpp"
@@ -75,7 +77,12 @@ namespace BWidgets
  *  Clicking on "OK" / "Open" will set the widget value to path + filename 
  *  and a CloseRequestEvent is emitted.
  */
-class FileChooser : public Frame, public ValueableTyped<std::string>, public KeyPressable, public Closeable
+class FileChooser :	public Frame, 
+					public ValueableTyped<std::string>, 
+					public KeyPressable, 
+					public Clickable,
+					public Navigatable,
+					public Closeable
 {
 public:
 
@@ -236,9 +243,49 @@ public:
 	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
+     *  @brief  Enters this %FileChooser.
+     *
+     *  Activates this %FileChooses, takes over keyboard control, and calls to 
+	 *  leave all other widgets linked to the main Window to become the only 
+	 *  entered Widget.
+     */
+    virtual void enter () override;
+
+	/**
+     *  @brief  Leaves this %FileChooser.
+     *
+     *  De-activates this %FileChooser, resets navigation and release keyboard 
+	 *  conrol.
+     */
+    virtual void leave () override;
+
+	/**
      *  @brief  Method to be called following an object state change.
      */
     virtual void update () override;
+
+	/**
+     *  @brief  Method called when pointer button clicked (pressed and 
+     *  released).
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  pointer button cklicked. By default, it switches the %FileChooser 
+	 *  status between `BStyles::Status::normal` and `BStyles::Status::active`
+	 *  and calls its static callback function.
+     */
+	virtual void onButtonClicked (BEvents::Event* event) override;
+
+	/**
+     *  @brief  Method when a KeyEvent with the type keyPressEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Method called from the main window event scheduler if a
+     *  key is pressed. It activates the previous previous / next button and
+	 *  calls its static callback function.
+     */
+	virtual void onKeyPressed (BEvents::Event* event) override;
 
 protected:
 
@@ -283,6 +330,8 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 		Frame (x, y, width, height, urid, title),
 		ValueableTyped<std::string> (path),
 		KeyPressable(),
+		Clickable(),
+		Navigatable(),
 		Closeable (),
 		filters_ (),
 		dirs_ (),
@@ -310,6 +359,8 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 		createInput ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/textbox"), ""),
 		createError ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
 {
+	setActivatable(true);
+	setEnterable(true);
 	setKeyPressable(false);	// Not implemented yet
 	setPath (path);
 	enterDir();
@@ -340,6 +391,19 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 	}
 	filterComboBox.setValue (1);
 
+	pathNameBox.setActivatable(true);
+	pathNameBox.setEnterable(true);
+	fileListBox.setActivatable(true);
+	fileListBox.setEnterable(true);
+	fileNameLabel.setActivatable(true);
+	fileNameBox.setEnterable(true);
+	cancelButton.setActivatable(true);
+	cancelButton.setEnterable(true);
+	okButton.setActivatable(true);
+	okButton.setEnterable(true);
+	newFolderButton.setActivatable(true);
+	newFolderButton.setEnterable(true);
+
 	createBox.add (&createLabel);
 	createBox.add (&createInput);
 	createBox.add (&createError);
@@ -348,9 +412,9 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 	add (&fileListBox);
 	add (&fileNameLabel);
 	add (&fileNameBox);
+	add (&filterComboBox);
 	add (&cancelButton);
 	add (&okButton);
-	add (&filterComboBox);
 	add (&newFolderButton);
 }
 
@@ -391,6 +455,8 @@ inline void FileChooser::copy (const FileChooser* that)
 	createError.copy (&that->createError);
 
 	Closeable::operator= (*that);
+	Navigatable::operator= (*that);
+	Clickable::operator= (*that);
 	KeyPressable::operator=(*that);
 	ValueableTyped<std::string>::operator= (*that);
 	Frame::copy (that);
@@ -478,8 +544,32 @@ inline void FileChooser::resize (const BUtilities::Point<> extends)
 	Widget::resize (extends);
 }
 
+inline void FileChooser::enter () 
+{
+	if (isEnterable())
+	{
+		setKeyPressable(true);
+		grabDevice (BDevices::Keys());
+		Widget::enter();
+	}
+}
+
+inline void FileChooser::leave () 
+{
+	if (isEnterable())
+	{
+		setKeyPressable(false);
+		if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());
+		resetNavigation();
+		Widget::leave();
+	}
+}
+
 inline void FileChooser::update ()
 {
+	setBackground (BStyles::Fill(getBgColors()[getStatus()].illuminate (-0.75)));
+	setBorder (BStyles::Border  (BStyles::Line (getBgColors()[getStatus()].illuminate (BStyles::Color::highLighted), 1.0), 0.0, 0.0));
+
 	const double x0 = getXOffset();
 	const double y0 = getYOffset();
 	const double w = getEffectiveWidth();
@@ -576,6 +666,50 @@ inline void FileChooser::update ()
 	}
 
 	Widget::update();
+}
+
+inline void FileChooser::onButtonClicked (BEvents::Event* event)
+{
+	if (getStatus() == BStyles::Status::normal) enter();
+	else if (getStatus() == BStyles::Status::active) leave();
+	Clickable::onButtonClicked(event);
+}
+
+inline void FileChooser::onKeyPressed (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+
+	if
+	(
+		getMainWindow() &&
+		(kev->getWidget () == this) &&
+		isDeviceGrabbed(BDevices::Keys())
+	)
+	{
+		uint32_t key = kev->getKey ();
+
+		switch (key)
+		{
+			case PUGL_KEY_LEFT:		navigateBackward();
+									break;
+
+			case PUGL_KEY_RIGHT:	navigateForward();
+									break;
+
+			case PUGL_KEY_ESCAPE:	
+									if (isNavigated ()) resetNavigation();
+									else leave();
+									break;
+
+			case 13 /* ENTER */:	enterNavigated();
+									break;
+
+			default:				break;
+		}
+	}
+
+	KeyPressable::onKeyPressed(event);
 }
 
 inline void FileChooser::fileListBoxChangedCallback (BEvents::Event* event)

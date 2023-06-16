@@ -28,7 +28,15 @@ namespace BWidgets
 
 /**
  *  @brief  Interface class for Support of navigation between Activatable 
- *  child Widgets within a Widget.
+ *  child Widgets.
+ *
+ *  %Navigatable is an ability (not exclusively) used by menu widgets to
+ *  navigate through their %Activatable child widgets by activation or
+ *  de-activation of the respective widgets or by entering Enterable child 
+ *  widgets.
+ *
+ *  Implementations of %Navigatable shall provide a way of user interaction
+ *  for the navigation (e. g., keyboard interaction).
  */
 class Navigatable : public Support
 {
@@ -244,7 +252,13 @@ inline void Navigatable::enterNavigated ()
         if (a)
         {
             Enterable* e = dynamic_cast<Enterable*>(a);
-            if (e && e->isEnterable()) e->enter();
+            if (e && e->isEnterable()) 
+            {
+                e->enter();
+                resetNavigation();
+                Activatable* ta = dynamic_cast<Activatable*>(this);
+                if (ta && ta->isActivatable()) ta->deactivate();
+            }
         }
     }
 }

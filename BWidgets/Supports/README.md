@@ -97,14 +97,15 @@ Support of Widget activation by an user interaction.
 
 ## Enterable
 
-Support to enter a Widget. Provides an overridable `enter()` method. By 
-default, it simulates a click into the middle of an `Enterable`, 
-`Clickable` widget.
+Support to enter a Widget. The entered Widget is in a special focus (may be 
+highlighted, takes over keyboard control, depending on the implmentation). 
+Provides the overridable methods `enter()` and `leave()` method.
 
 
 ## Navigatable
 
 Support of navigation between Activatable child Widgets by an user interaction.
+May also call to enter an Enterable child widget.
 
 
 ## Valueable

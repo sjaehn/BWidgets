@@ -18,23 +18,25 @@
 #ifndef BWIDGETS_ENTERABLE_HPP_
 #define BWIDGETS_ENTERABLE_HPP_
 
-#include "Clickable.hpp"
-#include "EventQueueable.hpp"
-#include "../Widget.hpp"
-#include "../../BEvents/PointerEvent.hpp"
+#include "Linkable.hpp"
 
 namespace BWidgets
 {
 
 /**
  *  @brief  Interface class for Support to enter a widget.
+ *
+ *  %Enterable is a hint for a widget to get in a focus from a bigger
+ *  context (the whole user interface). Depending on the implementation,
+ *  entered widgets may get activated and/or take over keyboard control.
  */
 class Enterable : public Support
 {
 public:
 
     /**
-     *  @brief  Constructs a default %Enterable object.
+     *  @brief  Constructs a default %Enterable object with INACTIVE 
+     *  support.
      */
     Enterable ();
 
@@ -60,15 +62,22 @@ public:
     /**
      *  @brief  Enters this object
      *
-     *  Overridable virtual method. By default, it simulates clicking into
-     *  the middle of this object by emitting the respective events, if this
-     *  object is Clickable.
+     *  Overridable virtual method. By default, it only calls to leave all 
+     *  other objects linked to the same Linkable main object to become the
+     *  only entered object.
      */
     virtual void enter ();
 
+    /**
+     *  @brief  Leaves this object
+     *
+     *  Overridable empty virtual method.
+     */
+    virtual void leave ();
+
 };
 
-inline Enterable::Enterable () : Enterable (true) {}
+inline Enterable::Enterable () : Enterable (false) {}
 
 inline Enterable::Enterable (const bool status) : 
     Support (status)
@@ -86,50 +95,24 @@ inline bool Enterable::isEnterable () const
 
 inline void Enterable::enter () 
 {
-    Clickable* c = dynamic_cast<Clickable*>(this);
-    if (!c) return;
-    if (!c->isClickable()) return;
-    Widget* w = dynamic_cast<Widget*> (this);
-    if (!w) return;
-    Linkable* m = w->getMain();
+    // Don't do anything here
+
+    // But leave all other widgets
+    Linkable* l = dynamic_cast<Linkable*>(this);
+    if (!l) return;
+    Linkable* m = l->getMain();
     if (!m) return;
-    EventQueueable* q = dynamic_cast<EventQueueable*>(m);
+    m->forEachChild ([this] (Linkable* l)
+    {
+        Enterable* e = dynamic_cast<Enterable*>(l);
+        if (e && e->isEnterable() && (e != this)) e->leave();
+        return true;
+    });
+}
 
-    // Press
-    BEvents::PointerEvent* press = new BEvents::PointerEvent
-                                   (
-                                        w,
-                                        BEvents::Event::EventType::buttonPressEvent,
-                                        w->getPosition() * 0.5,
-                                        w->getPosition() * 0.5,
-                                        BUtilities::Point<> (),
-                                        BDevices::MouseButton::ButtonType::left
-                                   );
-	q->addEventToQueue (press);
-
-    // Release
-     BEvents::PointerEvent* release = new BEvents::PointerEvent
-                                      (
-                                        w,
-                                        BEvents::Event::EventType::buttonReleaseEvent,
-                                        w->getPosition() * 0.5,
-                                        w->getPosition() * 0.5,
-                                        BUtilities::Point<> (),
-                                        BDevices::MouseButton::ButtonType::left
-                                      );
-	q->addEventToQueue (release);
-
-    // Click
-     BEvents::PointerEvent* click = new BEvents::PointerEvent
-                                    (
-                                        w,
-                                        BEvents::Event::EventType::buttonClickEvent,
-                                        w->getPosition() * 0.5,
-                                        w->getPosition() * 0.5,
-                                        BUtilities::Point<> (),
-                                        BDevices::MouseButton::ButtonType::left
-                                    );
-	q->addEventToQueue (click);
+inline void Enterable::leave ()
+{
+    // Don't do anything here
 }
 
 }

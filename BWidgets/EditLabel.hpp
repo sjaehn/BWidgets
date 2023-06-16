@@ -189,6 +189,32 @@ public:
 	virtual void discardEdit ();
 
 	/**
+     *  @brief  Enters this %EditLabel.
+     *
+     *  Activates this %EditLabel, takes over keyboard control, switches on 
+	 *  editMode_ the and calls to leave all other widgets linked to the main 
+	 *  Window to become the only entered Widget.
+     */
+    virtual void enter () override;
+
+	/**
+     *  @brief  Leaves this %EditLabel.
+     *
+     *  De-activates this %EditLabel, applies text changes and release keyboard
+	 *  conrol.
+     */
+    virtual void leave () override;
+
+	/**
+     *  @brief  Leaves this %EditLabel.
+	 *  @param apply  True, if text changes shall be applied, otherwise false.
+     *
+     *  De-activates this %EditLabel, applies or discards text changes and 
+	 *  release keyboard conrol.
+     */
+    virtual void leave (const bool apply);
+
+	/**
      *  @brief  Method called when pointer button clicked (pressed and 
      *  released).
      *  @param event  Passed Event.
@@ -277,7 +303,8 @@ inline EditLabel::EditLabel (const double x, const double y, const double width,
 	cursorFrom_ (0),
 	cursorTo_ (0)
 {
-	
+	setActivatable(true);
+	setEnterable (true);
 }
 
 inline Widget* EditLabel::clone () const 
@@ -376,29 +403,45 @@ inline void EditLabel::discardEdit ()
 	setValue (getValue());
 }
 
+inline void EditLabel::enter () 
+{
+	if (isEnterable())
+	{
+		setKeyPressable(true);
+		grabDevice (BDevices::Keys());
+		setEditMode(true);
+		Widget::enter();
+	}
+}
+
+inline void EditLabel::leave () 
+{
+	leave (true);
+}
+
+inline void EditLabel::leave (const bool apply) 
+{
+	if (isEnterable())
+	{
+		if (apply) applyEdit();
+		else discardEdit();
+		Widget::leave();
+	}
+}
+
 inline void EditLabel::onButtonClicked (BEvents::Event* event)
 {
 	if 
 	(
 		isValueable() && 
+		isEnterable() &&
 		dynamic_cast<BEvents::PointerEvent*>(event) && 
 		(dynamic_cast<BEvents::PointerEvent*>(event)->getWidget () == this) && 
 		(dynamic_cast<BEvents::PointerEvent*>(event)->getPosition() == dynamic_cast<BEvents::PointerEvent*>(event)->getOrigin()) &&
 		dynamic_cast<Window*>(main_)
 	)
 	{
-		// Apply all other edits first (and remove their grabbed keys)
-		Window* main = dynamic_cast<Window*>(main_);
-		std::list<Widget*> gwidgets = main->listDeviceGrabbed (BDevices::Keys ());
-		for (Widget* widget : gwidgets)
-		{
-			EditLabel* e = dynamic_cast<EditLabel*>(widget);
-			if (e && (e != this)) e->applyEdit();
-		}
-
-		// Now grab the keyboard for new text entry
-		if (!isDeviceGrabbed(BDevices::Keys())) grabDevice (BDevices::Keys());
-		setEditMode (true);
+		enter();
 		size_t cursor = getCursorFromCoords (dynamic_cast<BEvents::PointerEvent*>(event)->getPosition ());
 		setCursor (cursor, cursor);
 	}
@@ -461,11 +504,11 @@ inline void EditLabel::onKeyPressed (BEvents::Event* event)
 									break;
 
 			// Enter
-			case 13:				applyEdit ();
+			case 13:				leave ();
 									break;
 
 			// Escape
-			case 27:				discardEdit ();
+			case 27:				leave (false);
 									break;
 
 			// Delete

@@ -24,8 +24,7 @@
 #include "Supports/Clickable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Toggleable.hpp"
-#include "Supports/Enterable.hpp"
-#include "../BEvents/Event.hpp"
+#include "../BEvents/PointerEvent.hpp"
 #include <cairo/cairo.h>
 #include <iostream>
 #include BWIDGETS_DEFAULT_DRAWBUTTON_PATH
@@ -55,8 +54,7 @@ class Button :	public Widget,
 				public Clickable, 
 				public KeyPressable, 
 				public ValueableTyped<bool>, 
-				public Toggleable,
-				public Enterable
+				public Toggleable
 {
 public:
 
@@ -139,6 +137,15 @@ public:
 	virtual void resize (const BUtilities::Point<> extends) override;
 
 	/**
+     *  @brief  Enters this %Button.
+     *
+     *  Activates this %Button, simulates a button click and calls to leave all
+	 *  other widgets linked to the main Window to become the only entered 
+	 *  Widget.
+     */
+    virtual void enter () override;
+
+	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -206,8 +213,7 @@ inline Button::Button	(const double x, const double y, const double width, const
 	Clickable (),
 	KeyPressable(),
 	ValueableTyped<bool> (clicked),
-	Toggleable (),
-	Enterable()
+	Toggleable ()
 {
 	setKeyPressable (false),	// not implemented yet
 	setToggleable (toggleable);
@@ -231,7 +237,6 @@ inline void Button::copy (const Button* that)
 	Clickable::operator= (*that);
 	ValueableTyped<bool>::operator= (*that);
 	Toggleable::operator= (*that);
-	Enterable::operator= (*that);
     Widget::copy (that);
 }
 
@@ -255,6 +260,61 @@ inline void Button::resize (const double width, const double height)
 inline void Button::resize (const BUtilities::Point<> extends) 
 {
 	Widget::resize (extends);
+}
+
+inline void Button::enter () 
+{
+	if (isEnterable())
+	{
+		// Step 1 : Simulate button click
+		Clickable* c = dynamic_cast<Clickable*>(this);
+		if (!c) return;
+		if (!c->isClickable()) return;
+		Widget* w = dynamic_cast<Widget*> (this);
+		if (!w) return;
+		Linkable* m = w->getMain();
+		if (!m) return;
+		EventQueueable* q = dynamic_cast<EventQueueable*>(m);
+
+		// Press
+		BEvents::PointerEvent* press = new BEvents::PointerEvent
+									(
+											w,
+											BEvents::Event::EventType::buttonPressEvent,
+											w->getPosition() * 0.5,
+											w->getPosition() * 0.5,
+											BUtilities::Point<> (),
+											BDevices::MouseButton::ButtonType::left
+									);
+		q->addEventToQueue (press);
+
+		// Release
+		BEvents::PointerEvent* release = new BEvents::PointerEvent
+										(
+											w,
+											BEvents::Event::EventType::buttonReleaseEvent,
+											w->getPosition() * 0.5,
+											w->getPosition() * 0.5,
+											BUtilities::Point<> (),
+											BDevices::MouseButton::ButtonType::left
+										);
+		q->addEventToQueue (release);
+
+		// Click
+		BEvents::PointerEvent* click = new BEvents::PointerEvent
+										(
+											w,
+											BEvents::Event::EventType::buttonClickEvent,
+											w->getPosition() * 0.5,
+											w->getPosition() * 0.5,
+											BUtilities::Point<> (),
+											BDevices::MouseButton::ButtonType::left
+										);
+		q->addEventToQueue (click);
+
+		// Step 2: Activate this widget and leave all other widgets
+		Widget::enter();
+	}
 }
 
 inline void Button::onButtonPressed (BEvents::Event* event)

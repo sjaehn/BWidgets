@@ -18,6 +18,7 @@
 
 #include "Widget.hpp"
 #include "Supports/Activatable.hpp"
+#include "Supports/Enterable.hpp"
 #include "Supports/EventPassable.hpp"
 #include "Supports/PointerFocusable.hpp"
 #include "Supports/Linkable.hpp"
@@ -47,6 +48,7 @@ Widget::Widget (const double x, const double y, const double width, const double
 	EventPassable(),
 	PointerFocusable(),
 	Activatable(),
+	Enterable(),
 	urid_ (urid),
 	position_ (x, y),
 	stacking_ (StackingType::normal),
@@ -97,6 +99,7 @@ void Widget::copy (const Widget* that)
 	EventPassable::operator= (*that);
 	PointerFocusable::operator= (*that);
 	Activatable::operator= (*that);
+	Enterable::operator= (*that);
 	position_ = that->position_;
 	stacking_ = that->stacking_;
 	status_ = that->status_;
@@ -608,6 +611,24 @@ inline void Widget::activate (bool status)
 				}
 			}
 		}
+	}
+}
+
+inline void Widget::enter () 
+{
+	if (isEnterable())
+	{
+		activate();
+		Enterable::enter();
+	}
+}
+
+inline void Widget::leave () 
+{
+	if (isEnterable())
+	{
+		deactivate();
+		Enterable::leave();
 	}
 }
 

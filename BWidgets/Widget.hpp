@@ -31,6 +31,7 @@
 #include "Supports/EventPassable.hpp"
 #include "Supports/PointerFocusable.hpp"
 #include "Supports/Activatable.hpp"
+#include "Supports/Enterable.hpp"
 #include "../BUtilities/Any.hpp"
 #include "../BStyles/Theme.hpp"
 #include "../BStyles/Status.hpp"
@@ -75,8 +76,9 @@ class Window;
  *  And it can take up other widgets as childs. The last added child is 
  *  displayed on the top.
  *
- *  The %Widget class supports Activatable (default: false). Once switched on,
- *  the widget can be activated by the user.
+ *  The %Widget class supports Activatable and Enterable (default: false). Once 
+ *  switched on, the widget can be activated or entered by the user, 
+ *  respectively.
  *
  *  Widgets also support EventMergeable and EventPassable. Thus, the main 
  *  Window event handler may merge events of the same type. And may pass events
@@ -101,7 +103,8 @@ class Widget :	public Linkable,
 				public EventMergeable, 
 				public EventPassable, 
 				public PointerFocusable,
-				public Activatable
+				public Activatable,
+				public Enterable
 {
 
 protected:
@@ -563,7 +566,7 @@ public:
 	BStyles::Status getStatus () const;
 
 	/**
-     *  @brief  Activates this object 
+     *  @brief  Activates this %Widget 
      *  @param status  Optional, true for activation, false for de-activation
 	 *
 	 *  Sets the %Widget status to BStyles::Status::active upon activation and
@@ -572,6 +575,21 @@ public:
 	 *  (same parent) if they are Activatable too and allow auto deactivation.
      */
     virtual void activate (bool status = true) override;
+
+	/**
+     *  @brief  Enters this %Widget.
+     *
+     *  Activates this %Widget and calls to leave all other widgets linked to 
+	 *  the main Window to become the only entered %Widget.
+     */
+    virtual void enter () override;
+
+	/**
+     *  @brief  Leaves this Widget
+     *
+     *  De-activates this %Widget.
+     */
+    virtual void leave () override;
 
 	/**
 	 *  @brief  Sets the type of stacking this %Widget.

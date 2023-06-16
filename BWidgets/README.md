@@ -355,6 +355,8 @@ All widgets support the features:
 * EventPassable (may pass events to the subjacent widget)
 * Activatable (be able to get activated by an user interaction, inactive by
   default)
+* Enterable (be able to be entered by an user interaction, inactive by
+  default)
 
 In addtion, widgets have got:
  * an *URID* to identify the widget,
