@@ -120,7 +120,7 @@ public:
      *  @return  True if this object is navigatable and at least one 
      *  Activatable child Widget is activated. 
      */
-    bool isNavigated();
+    virtual bool isNavigated();
 
 
 protected:
@@ -131,7 +131,7 @@ protected:
      *  @return  Pointer to the first activated Activatable child Widget
      *  or @c nullptr if no match. 
      */
-    Activatable* getFirstActivatedChild () const;
+    virtual Activatable* getFirstActivatedChild () const;
 };
 
 inline Navigatable::Navigatable () : Support (true) {}
