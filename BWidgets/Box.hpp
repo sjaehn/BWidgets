@@ -583,6 +583,9 @@ inline void Box::update ()
 		b->moveTo (buttonxpos, getYOffset() + getEffectiveHeight() - BWIDGETS_DEFAULT_MENU_PADDING - BWIDGETS_DEFAULT_BUTTON_HEIGHT);
 		buttonxpos = buttonxpos + buttonspace + b->getWidth ();
 	}
+
+	// Update, even if not resized !!!
+	for (TextButton* b : buttons_) b->update();
 }
 
 inline void Box::onButtonClicked (BEvents::Event* event)
