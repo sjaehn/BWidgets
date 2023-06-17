@@ -687,23 +687,22 @@ inline void SpinBox::onKeyPressed (BEvents::Event* event)
 		isDeviceGrabbed(BDevices::Keys())
 	)
 	{
-		uint32_t key = kev->getKey ();
-
+		BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
 		switch (key)
 		{
-			case PUGL_KEY_UP:		navigateBackward();
-									break;
+			case BDevices::Keys::KeyType::up:		navigateBackward();
+													break;
 
-			case PUGL_KEY_DOWN:		navigateForward();
-									break;
+			case BDevices::Keys::KeyType::down:	navigateForward();
+													break;
 
-			case PUGL_KEY_ESCAPE:	leave();
-									break;
+			case BDevices::Keys::KeyType::escape:	leave();
+													break;
 
-			case 13 /* ENTER */:	leave();
-									break;
+			case BDevices::Keys::KeyType::enter:	leave();
+													break;
 
-			default:				break;
+			default:								enterByKey(key);
 		}
 	}
 

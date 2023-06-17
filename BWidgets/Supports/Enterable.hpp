@@ -19,6 +19,7 @@
 #define BWIDGETS_ENTERABLE_HPP_
 
 #include "Linkable.hpp"
+#include "../../BDevices/Keys.hpp"
 
 namespace BWidgets
 {
@@ -32,6 +33,10 @@ namespace BWidgets
  */
 class Enterable : public Support
 {
+protected:
+
+    std::list<BDevices::Keys::KeyType> enterHotKeys_;
+
 public:
 
     /**
@@ -75,6 +80,24 @@ public:
      */
     virtual void leave ();
 
+    /**
+     *  @brief  Adds a key to the list of hot keys to enter this object.
+     *  @param key  Key code
+     */
+    virtual void addHotKey (const BDevices::Keys::KeyType key);
+
+    /**
+     *  @brief  Removes a key from the list of hot keys to enter this object.
+     *  @param key  Key code
+     */
+    virtual void removeHotKey (const BDevices::Keys::KeyType key);
+
+    /**
+     *  @brief  Checks if a key in the list of hot keys to enter this object.
+     *  @param key  Key code
+     */
+    bool containsHotKey (const BDevices::Keys::KeyType key);
+
 };
 
 inline Enterable::Enterable () : Enterable (false) {}
@@ -113,6 +136,22 @@ inline void Enterable::enter ()
 inline void Enterable::leave ()
 {
     // Don't do anything here
+}
+
+inline void Enterable::addHotKey (const BDevices::Keys::KeyType key)
+{
+    if (std::find (enterHotKeys_.begin(), enterHotKeys_.end(), key) == enterHotKeys_.end()) enterHotKeys_.push_back(key);
+}
+
+inline void Enterable::removeHotKey (const BDevices::Keys::KeyType key)
+{
+    std::list<BDevices::Keys::KeyType>::const_iterator it = std::find (enterHotKeys_.begin(), enterHotKeys_.end(), key);
+    if (it != enterHotKeys_.cend()) enterHotKeys_.erase(it);
+}
+
+inline bool Enterable::containsHotKey (const BDevices::Keys::KeyType key)
+{
+    return (std::find (enterHotKeys_.begin(), enterHotKeys_.end(), key) != enterHotKeys_.end());
 }
 
 }

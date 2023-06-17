@@ -110,6 +110,16 @@ public:
     virtual void enterNavigated ();
 
     /**
+     *  @brief  Enters an Activatable child Widgets via its hot key(s).
+     *  @param key  Key code
+     * 
+     *  Performs a search in all Activatable child widgets for the first
+     *  Enterable object containing a hot key (enterHotKeys_) matching the
+     *  @a key parameter.
+     */
+    virtual void enterByKey (const BDevices::Keys::KeyType key);
+
+    /**
      *  @brief  De-activates all Activatable child widgets.
      */
     virtual void resetNavigation ();
@@ -263,6 +273,28 @@ inline void Navigatable::enterNavigated ()
     }
 }
 
+inline void Navigatable::enterByKey (const BDevices::Keys::KeyType key)
+{
+    if (isNavigatable())
+    {
+        const Linkable* l = dynamic_cast<const Linkable*>(this);
+        if (l)
+        {
+            for (std::list<Linkable*>::const_iterator it = l->getChildren().cbegin() ; it != l->getChildren().cend() ; ++it)
+            {
+                Activatable* a = dynamic_cast<Activatable*>(*it);
+                Enterable* e = dynamic_cast<Enterable*>(*it);
+                if (a && a->isActivatable() && e && e->isEnterable() && e->containsHotKey(key)) 
+                {
+                    navigateTo(a);
+                    enterNavigated();
+                    return;
+                }
+            }
+        }
+    }
+}
+
 inline void Navigatable::resetNavigation ()
 {
     if (isNavigatable())
@@ -291,7 +323,7 @@ inline Activatable* Navigatable::getFirstActivatedChild () const
         const Linkable* l = dynamic_cast<const Linkable*>(this);
         if (l)
         {
-            for (std::list<Linkable*>::const_iterator it = l->getChildren().begin() ; it != l->getChildren().end() ; ++it)
+            for (std::list<Linkable*>::const_iterator it = l->getChildren().cbegin() ; it != l->getChildren().cend() ; ++it)
             {
                 Widget* w = dynamic_cast<Widget*>(*it);
                 Activatable* a = dynamic_cast<Activatable*>(*it);

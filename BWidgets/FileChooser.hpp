@@ -361,7 +361,7 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 {
 	setActivatable(true);
 	setEnterable(true);
-	setKeyPressable(false);	// Not implemented yet
+	setKeyPressable(false);
 	setPath (path);
 	enterDir();
 
@@ -687,25 +687,24 @@ inline void FileChooser::onKeyPressed (BEvents::Event* event)
 		isDeviceGrabbed(BDevices::Keys())
 	)
 	{
-		uint32_t key = kev->getKey ();
-
+		BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
 		switch (key)
 		{
-			case PUGL_KEY_LEFT:		navigateBackward();
-									break;
+			case BDevices::Keys::KeyType::left:		navigateBackward();
+													break;
 
-			case PUGL_KEY_RIGHT:	navigateForward();
-									break;
+			case BDevices::Keys::KeyType::right:	navigateForward();
+													break;
 
-			case PUGL_KEY_ESCAPE:	
-									if (isNavigated ()) resetNavigation();
-									else leave();
-									break;
+			case BDevices::Keys::KeyType::escape:	
+													if (isNavigated ()) resetNavigation();
+													else leave();
+													break;
 
-			case 13 /* ENTER */:	enterNavigated();
-									break;
+			case BDevices::Keys::KeyType::enter:	enterNavigated();
+													break;
 
-			default:				break;
+			default:								enterByKey(key);
 		}
 	}
 

@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.2] - 2023-06-17
 * Enable uint16_t for `BDevices::Keys::KeyType`
 * Add Enable uint16_t for `BDevices::Keys::KeyType::enter`
+* Add hot keys and methods to `BWidgets::Enterable`
+* Add enter by hot key method in `BWidgets::Navigatable`
+* Implement enter by hot key in widgets
 
 
 ## [1.3.1] - 2023-06-17

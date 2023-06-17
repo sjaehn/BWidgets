@@ -28,7 +28,6 @@
 #include "Supports/Clickable.hpp"
 #include "Supports/Navigatable.hpp"
 #include "Widget.hpp"
-#include "pugl/pugl.h"
 #include <algorithm>
 #include <cstddef>
 #include <initializer_list>
@@ -299,6 +298,7 @@ inline Box::Box	(const double x, const double y, const double width, const doubl
 	if (buttons_.empty())
 	{
 		okButton_.setActivatable(true);
+		okButton_.setEnterable(true);
 		okButton_.setCallbackFunction (BEvents::Event::EventType::valueChangedEvent, Box::buttonClickCallback);
 		buttons_.push_back (&okButton_);
 		add (&okButton_);
@@ -605,25 +605,24 @@ inline void Box::onKeyPressed (BEvents::Event* event)
 		isDeviceGrabbed(BDevices::Keys())
 	)
 	{
-		uint32_t key = kev->getKey ();
-
+		BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
 		switch (key)
 		{
-			case PUGL_KEY_LEFT:		navigateBackward();
-									break;
+			case BDevices::Keys::KeyType::left:		navigateBackward();
+													break;
 
-			case PUGL_KEY_RIGHT:	navigateForward();
-									break;
+			case BDevices::Keys::KeyType::right:	navigateForward();
+													break;
 
-			case PUGL_KEY_ESCAPE:	
-									if (isNavigated ()) resetNavigation();
-									else leave();
-									break;
+			case BDevices::Keys::KeyType::escape:	
+													if (isNavigated ()) resetNavigation();
+													else leave();
+													break;
 
-			case 13 /* ENTER */:	enterNavigated();
-									break;
+			case BDevices::Keys::KeyType::enter:	enterNavigated();
+													break;
 
-			default:				break;
+			default:								enterByKey(key);
 		}
 	}
 
