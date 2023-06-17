@@ -22,10 +22,14 @@
 #include "Label.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/KeyPressable.hpp"
+#include "Supports/Navigatable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Scrollable.hpp"
+#include "../BDevices/Keys.hpp"
+#include "../BEvents/KeyEvent.hpp"
 #include "../BEvents/WheelEvent.hpp"
 #include "Widget.hpp"
+#include "pugl/pugl.h"
 #include <cstddef>
 #include <initializer_list>
 #include <limits>
@@ -66,7 +70,12 @@ namespace BWidgets
  *  @todo  Resize()
  *  @todo  Import item widgets.
  */
-class SpinBox : public Widget, public ValueableTyped<size_t>, public Clickable, public Scrollable, public KeyPressable
+class SpinBox :	public Widget, 
+				public ValueableTyped<size_t>, 
+				public Clickable, 
+				public Scrollable, 
+				public KeyPressable,
+				public Navigatable
 {
 protected:
 	Widget* button_;
@@ -235,11 +244,100 @@ public:
 	 *  and the item height.
 	 */
 	virtual void resizeItems();
+	
+	/**
+     *  @brief  Navigates backward 
+     *  @return  Pointer to the selected item to or @c nullptr if unselected.
+     */
+    virtual Activatable* navigateBackward () override;
+
+    /**
+     *  @brief  Navigates forward 
+     *  @return  Pointer to the selected item to or @c nullptr if unselected.
+     */
+    virtual Activatable* navigateForward () override;
+
+    /**
+     *  @brief  Navigates to the first item
+     *  @return  Pointer to the selected item to or @c nullptr if unselected.
+     */
+    virtual Activatable* navigateToStart () override;
+
+     /**
+     *  @brief  Navigates to an item
+     *  @param act  Pointer to the item.
+     *  @return  Pointer to the selected item to or @c nullptr if not possible.
+     */
+    virtual Activatable* navigateTo (Activatable* act) override;
+
+    /**
+     *  @brief  Overrides Navigatable::resetNavigation by doing noting.
+     */
+    virtual void resetNavigation () override;
+
+    /**
+     *  @brief  Checks if navigation has been performed.
+     * 
+     *  @return  True if this object is navigatable and an item has been
+	 *  selected. 
+     */
+    bool isNavigated() override;
+
+
+protected:
+
+    /**
+     *  @brief  Gets the first activated Activatable child Widget.
+     * 
+     *  @return  Pointer to the first activated Activatable child Widget
+     *  or @c nullptr if no match. 
+     */
+    Activatable* getFirstActivatedChild () const override;
+
+public:
+
+	/**
+     *  @brief  Enters this %SpinBox.
+     *
+     *  Activates this %SpinBox, takes over keyboard control, and calls to 
+	 *  leave all other widgets linked to the main Window to become the only 
+	 *  entered Widget.
+     */
+    virtual void enter () override;
+
+	/**
+     *  @brief  Leaves this %SpinBox
+     *
+     *  De-activates this %SpinBox, resets navigation and release keyboard 
+	 *  conrol.
+     */
+    virtual void leave () override;
 
 	/**
      *  @brief  Method to be called following an object state change.
      */
     virtual void update () override;
+	
+	/**
+     *  @brief  Method called when pointer button pressed.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler when
+     *  pointer button pressed. By default, it enters this %SpinBox and 
+	 *  calls its static callback function.
+     */
+	virtual void onButtonPressed (BEvents::Event* event) override;
+
+	/**
+     *  @brief  Method when a KeyEvent with the type keyPressEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Method called from the main window event scheduler if a
+     *  key is pressed. It activates the previous previous / next item and
+	 *  calls its static callback function.
+     */
+	virtual void onKeyPressed (BEvents::Event* event) override;
 
 	/**
      *  @brief  Method called upon (mouse) wheel scroll.
@@ -276,15 +374,20 @@ inline SpinBox::SpinBox	(const double x, const double y, const double width, con
 	Clickable(),
 	Scrollable(),
 	KeyPressable(),
+	Navigatable(),
 	button_ (new SpinButton (x + width - height, y, height, height, 0, BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/button"))),
 	items_ ({new Label (0, 0, getWidth() - getHeight(), getHeight(), "")}),	// Init with Null item
 	top_ (0),
 	itemHeight_ (std::max (height - 2.0, 0.0)),
 	buttonWidth_ (BWIDGETS_DEFAULT_SPINBOX_BUTTON_WIDTH)
 {
-	setKeyPressable(false);	// Not supported yet
+	setKeyPressable(false);
+	setActivatable(true);
+	setEnterable(true);
+	// Null item
 	items_.front()->setEventPassable(BEvents::Event::EventType::wheelScrollEvent | BEvents::Event::EventType::buttonPressEvent);
 	add (items_.front());
+
 	addItem (items);
 	if (getValue() >= items_.size()) setValue (0);
 	else setValue (value_);
@@ -336,6 +439,7 @@ inline void SpinBox::copy (const SpinBox* that)
 	itemHeight_ = that->itemHeight_;
 	buttonWidth_ = that->buttonWidth_;
 
+	Navigatable::operator=(*that);
 	KeyPressable::operator=(*that);
 	Scrollable::operator= (*that);
 	Clickable::operator= (*that);
@@ -368,6 +472,7 @@ inline void SpinBox::addItem (const std::string item, size_t pos)
 	else if (pos <= 1) items_.insert(std::next (items_.begin(), 1), l);
 	else items_.insert(std::next (items_.begin(), pos), l);
 	l->setBorder(BStyles::Border (BStyles::noLine, 3.0));
+	l->setActivatable(true);
 	l->setEventPassable(BEvents::Event::EventType::wheelScrollEvent | BEvents::Event::EventType::buttonPressEvent);
 	add (l);
 	if (getValue() >= pos) setValue (getValue() + 1);
@@ -466,6 +571,79 @@ inline void SpinBox::resizeItems ()
 	update();
 }
 
+inline Activatable* SpinBox::navigateBackward ()
+{
+	if (isNavigatable() && (getValue() > 1)) setValue (getValue() - 1); 
+	return getItem(getValue());
+}
+
+inline Activatable* SpinBox::navigateForward ()
+{
+	if (isNavigatable() && (getValue() + 1 < items_.size())) setValue (getValue() + 1);
+	return getItem(getValue());
+}
+
+inline Activatable* SpinBox::navigateToStart ()
+{
+	if (isNavigatable() && (!items_.empty())) setValue (1);
+	return getItem(getValue());
+}
+
+inline Activatable* SpinBox::navigateTo (Activatable* act)
+{
+	if (isNavigatable())
+	{
+		unsigned int idx = 0;
+		for (const Widget* w : items_)
+		{
+			++idx;
+			if (w == act)
+			{
+				setValue(idx);
+				break;
+			}
+		}
+	}
+	
+	return getItem(getValue());
+}
+
+inline void SpinBox::resetNavigation ()
+{
+	/* Empty override */
+}
+
+inline bool SpinBox::isNavigated()
+{
+	return (isNavigatable() && (getValue() != 0));
+}
+
+inline Activatable* SpinBox::getFirstActivatedChild () const
+{
+	return getItem(getValue());
+}
+
+inline void SpinBox::enter () 
+{
+	if (isEnterable())
+	{
+		setKeyPressable(true);
+		grabDevice (BDevices::Keys());
+		Widget::enter();
+	}
+}
+
+inline void SpinBox::leave () 
+{
+	if (isEnterable())
+	{
+		setKeyPressable(false);
+		if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());
+		resetNavigation();
+		Widget::leave();
+	}
+}
+
 inline void SpinBox::update ()
 {
 	size_t count = 0;
@@ -473,8 +651,13 @@ inline void SpinBox::update ()
 	{
 		if (w)
 		{
-			if (getValue() == count) w->show();
+			if (getValue() == count) 
+			{
+				w->activate();
+				w->show();
+			}
 			else w->hide();
+			
 			w->moveTo (getXOffset(), getYOffset());
 			w->resize (getEffectiveWidth() - buttonWidth_, getEffectiveHeight());
 		}
@@ -483,6 +666,48 @@ inline void SpinBox::update ()
 	button_->moveTo (getEffectiveWidth() + getXOffset() - buttonWidth_, getYOffset());
 	button_->resize (buttonWidth_, getEffectiveHeight());
 	Widget::update();
+}
+
+inline void SpinBox::onButtonPressed (BEvents::Event* event)
+{
+	if (getStatus() == BStyles::Status::normal) enter();
+	else if (getStatus() == BStyles::Status::active) leave();
+	Clickable::onButtonPressed(event);
+}
+
+inline void SpinBox::onKeyPressed (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+
+	if
+	(
+		getMainWindow() &&
+		(kev->getWidget () == this) &&
+		isDeviceGrabbed(BDevices::Keys())
+	)
+	{
+		uint32_t key = kev->getKey ();
+
+		switch (key)
+		{
+			case PUGL_KEY_UP:		navigateBackward();
+									break;
+
+			case PUGL_KEY_DOWN:		navigateForward();
+									break;
+
+			case PUGL_KEY_ESCAPE:	leave();
+									break;
+
+			case 13 /* ENTER */:	leave();
+									break;
+
+			default:				break;
+		}
+	}
+
+	KeyPressable::onKeyPressed(event);
 }
 
 inline void SpinBox::onWheelScrolled (BEvents::Event* event)
@@ -510,8 +735,8 @@ inline void SpinBox::valueChangedCallback (BEvents::Event* event)
 	if (!p) return;
 
 	if	((w == p->button_) &&
-		 ((p->getValue() > 1) || (w->getValue() > 0)) &&
-		 ((p->getValue() + 1 < p->items_.size()) || (w->getValue() < 0)))
+		 ((p->getValue() > 1) || (w->getValue() < 0)) &&
+		 ((p->getValue() + 1 < p->items_.size()) || (w->getValue() > 0)))
 	{
 		p->setValue (p->getValue() + w->getValue());
 	}

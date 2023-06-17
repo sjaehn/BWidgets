@@ -24,6 +24,7 @@
 #include "SymbolButton.hpp"
 #include "Widget.hpp"
 #include <cstddef>
+#include <cstdio>
 #include <initializer_list>
 
 #ifndef BWIDGETS_DEFAULT_COMBOBOX_WIDTH
@@ -192,6 +193,28 @@ public:
 	 *  @return  ListBox extends. 
 	 */
 	BUtilities::Point<> getListBoxExtends () const;
+
+	/**
+     *  @brief  Enters this %ComboBox.
+     *
+     *  Activates this %ComboBox, takes over keyboard control, and calls to 
+	 *  leave all other widgets linked to the main Window to become the only 
+	 *  entered Widget.
+     */
+    virtual void enter () override;
+
+	/**
+     *  @brief  Leaves this %ComboBox
+     *
+     *  De-activates this %ComboBox, resets navigation and release keyboard 
+	 *  conrol.
+     */
+    virtual void leave () override;
+	
+	/**
+     *  @brief  Method to be called following an object state change.
+     */
+    virtual void update () override;
 	
 	/**
      *  @brief  Method called when pointer button pressed.
@@ -223,8 +246,8 @@ protected:
 
 	/**
 	 *  @brief  Callback function which handles and forwards 
-	 *  VALUE_CHANGED_EVENTs from the listBox.
-	 *  @param event  Event of the type ValueChangedEvent .
+	 *  buttonPressEvents from the listBox.
+	 *  @param event  Event of the type ButtonPressEvent .
 	 */
 	static void listBoxChangedCallback (BEvents::Event* event);
 };
@@ -293,7 +316,7 @@ inline void ComboBox::setValue (const size_t& value)
 {
 	if (value == getValue()) return;
 
-	if (listBox_)  
+	if (listBox_ && (listBox_->getStatus() != BStyles::Status::active))  
 	{
 		delete listBox_;
 		listBox_ = nullptr;
@@ -340,11 +363,33 @@ inline BUtilities::Point<> ComboBox::getListBoxExtends () const
 	return listBoxArea_.getExtends();
 }
 
-inline void ComboBox::onButtonPressed (BEvents::Event* event)
+inline void ComboBox::enter () 
+{
+	SpinBox::enter();
+	if (!listBox_) showListbox();	
+}
+
+inline void ComboBox::leave () 
 {
 	if (listBox_) hideListbox();
-	else showListbox();
-	Clickable::onButtonPressed (event);
+	SpinBox::leave();
+}
+
+inline void ComboBox::update()
+{
+	ListBox* l = dynamic_cast<ListBox*>(listBox_);
+	if (l)
+	{
+		l->setValue(getValue());
+	}
+	SpinBox::update();
+}
+
+inline void ComboBox::onButtonPressed (BEvents::Event* event)
+{
+	//if (listBox_) hideListbox();
+	//else showListbox();
+	SpinBox::onButtonPressed (event);
 }
 
 inline void ComboBox::showListbox()
@@ -366,7 +411,9 @@ inline void ComboBox::showListbox()
 				}
 			}
 		}
-		l->setCallbackFunction(BEvents::Event::EventType::valueChangedEvent, ComboBox::listBoxChangedCallback);
+		l->setAutoDeactivate(false);
+		l->activate();
+		l->setCallbackFunction(BEvents::Event::EventType::buttonPressEvent, ComboBox::listBoxChangedCallback);
 		l->setStacking (StackingType::escape);
 		l->setValue (getValue());
 		l->setTop(getValue() == 0 ? 0 : 1);
@@ -398,16 +445,20 @@ inline void ComboBox::buttonChangedCallback (BEvents::Event* event)
 
 inline void ComboBox::listBoxChangedCallback (BEvents::Event* event)
 {
-	BEvents::ValueChangeTypedEvent<size_t>* vev = dynamic_cast<BEvents::ValueChangeTypedEvent<size_t>*>(event);
-	if (!vev) return;
-	ListBox* w = dynamic_cast<ListBox*>(vev->getWidget());
+	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*>(event);
+	if (!pev) return;
+	ListBox* w = dynamic_cast<ListBox*>(pev->getWidget());
 	if (!w) return;
 	ComboBox* p = dynamic_cast<ComboBox*>(w->getParentWidget());
 	if (!p) return;
 	if (w != p->listBox_) return;
 
-	p->setValue (w->getValue());
-	// No furter calls of w or p->listBox_ from here as setValue may delete the listBox_! 
+	p->setValue (w->getValue()); 
+	// Warning w / p->listBox_ may be deleted in setValue(),
+	// thus always check for validity of w / p->listBox_
+	if (p->listBox_) p->listBox_->leave();
+	p->hideListbox();
+	p->leave();
 }
 
 

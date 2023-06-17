@@ -261,14 +261,11 @@ inline void ListBox::update ()
 
 			if (getValue() == count) 
 			{
-				w->setStatus (BStyles::Status::active);
-				w->setBackground (BStyles::Fill (getBgColors()[BStyles::Status::normal].illuminate (BStyles::Color::darkened)));
+				w->activate();
+				w->setBackground (BStyles::Fill (getBgColors()[getStatus()].illuminate (BStyles::Color::darkened)));
 			}
-			else 
-			{
-				w->setStatus (BStyles::Status::normal);
-				w->setBackground (BStyles::noFill);
-			}
+
+			else w->setBackground (BStyles::noFill);
 		}
 		++count;
 	}
@@ -292,6 +289,8 @@ inline void ListBox::update ()
 
 inline void ListBox::onButtonPressed (BEvents::Event* event)
 {
+	if (getStatus() == BStyles::Status::normal) enter();
+
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*>(event);
 	if (!pev) return;
 	if (pev->getWidget() != this) return;
@@ -312,6 +311,8 @@ inline void ListBox::onButtonPressed (BEvents::Event* event)
 		
 		++count;
 	}
+
+	Clickable::onButtonPressed(event);
 }
 
 inline void ListBox::onWheelScrolled (BEvents::Event* event)

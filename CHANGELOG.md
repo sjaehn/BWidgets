@@ -6,13 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [1.3.1] - 2023-06-16
+## [1.3.1] - 2023-06-17
 * Add `Navigatable::enterNavigated()`, `Navigatable::resetNavigation()`,
   `Navigatable::isNavigated()`
 * Remove unused `Navigatable::autoDeactivation_`
 * Change implementation of `BWidgets::Enterable`, now at `BWidgets::Widget`
   level.
-* Furter extend implementation of `BWidgets::Enterable`
+* Furter extend implementation of `BWidgets::Enterable` in 
+  `BWidgets::FileChooser`, `BWidgets::SampleChooser`, `BWidgets::EditLabel`,
+  `BWidgets::SpinBox`, `BWidgets::ListBox`, `BWidgets::ComboBox`
+
 
 ## [1.3.0] - 2023-06-10
 * Add class `BWidgets::Activatable` and implement in `BWidgets::Widget`
