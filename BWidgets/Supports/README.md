@@ -99,13 +99,16 @@ Support of Widget activation by an user interaction.
 
 Support to enter a Widget. The entered Widget is in a special focus (may be 
 highlighted, takes over keyboard control, depending on the implmentation). 
-Provides the overridable methods `enter()` and `leave()` method.
+Provides the overridable methods `enter()` and `leave()`. And methods to 
+define, change or check for hot keys to enter a Widget: `addHotKey()`,
+`removeHotKey()` and `containsHotKey()`.
 
 
 ## Navigatable
 
 Support of navigation between Activatable child Widgets by an user interaction.
-May also call to enter an Enterable child widget.
+May also call to enter an Enterable child widget, either by entering an active
+Widgets or using a hot key. 
 
 
 ## Valueable

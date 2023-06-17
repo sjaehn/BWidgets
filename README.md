@@ -192,7 +192,7 @@ Software projects using this toolkit:
 ### Until 1.4
 
 - [x] Dialog/menu widget navigation
-- [ ] Support keyboard shortcuts in dialogs/menus
+- [x] Support keyboard shortcuts in dialogs/menus
 
 
 ### Until 1.6
