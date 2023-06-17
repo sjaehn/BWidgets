@@ -35,10 +35,11 @@ public:
 	 *
 	 * Also see pugl @a PuglKey.
 	 */
-	enum class KeyType
+	enum class KeyType : uint16_t
 	{
 		any 		= 0,
 		backspace	= 0x08,
+		enter		= 0x0D,
 		escape		= 0x1B,
 		del			= 0x7F,
 		f1 			= 0xE000,
