@@ -22,10 +22,6 @@
 #include "Supports/Clickable.hpp"
 #include "../BEvents/PointerEvent.hpp"
 #include "VScrollBar.hpp"
-#include "Widget.hpp"
-#include <cstddef>
-#include <iterator>
-#include <limits>
 
 #ifndef BWIDGETS_DEFAULT_LISTBOX_WIDTH
 #define BWIDGETS_DEFAULT_LISTBOX_WIDTH 80.0

@@ -27,7 +27,6 @@
 #include "Supports/Closeable.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/Navigatable.hpp"
-#include "Widget.hpp"
 #include <algorithm>
 #include <cstddef>
 #include <initializer_list>

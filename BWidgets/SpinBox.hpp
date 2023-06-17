@@ -28,11 +28,6 @@
 #include "../BDevices/Keys.hpp"
 #include "../BEvents/KeyEvent.hpp"
 #include "../BEvents/WheelEvent.hpp"
-#include "Widget.hpp"
-#include "pugl/pugl.h"
-#include <cstddef>
-#include <initializer_list>
-#include <limits>
 
 #ifndef BWIDGETS_DEFAULT_SPINBOX_WIDTH
 #define BWIDGETS_DEFAULT_SPINBOX_WIDTH 80.0

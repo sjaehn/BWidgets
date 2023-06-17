@@ -25,7 +25,6 @@
 #include "Supports/ValueableTyped.hpp"
 #include "../BDevices/Keys.hpp"
 #include "../BEvents/KeyEvent.hpp"
-#include "Widget.hpp"
 #include "Window.hpp"
 #include <cstdio>
 #include <locale>

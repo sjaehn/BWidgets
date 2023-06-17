@@ -18,14 +18,8 @@
 #ifndef BWIDGETS_COMBOBOX_HPP_
 #define BWIDGETS_COMBOBOX_HPP_
 
-#include "SpinBox.hpp"
 #include "ListBox.hpp"
-#include "Symbol.hpp"
 #include "SymbolButton.hpp"
-#include "Widget.hpp"
-#include <cstddef>
-#include <cstdio>
-#include <initializer_list>
 
 #ifndef BWIDGETS_DEFAULT_COMBOBOX_WIDTH
 #define BWIDGETS_DEFAULT_COMBOBOX_WIDTH BWIDGETS_DEFAULT_SPINBOX_WIDTH

@@ -18,15 +18,12 @@
 #ifndef BWIDGETS_BUTTON_HPP_
 #define BWIDGETS_BUTTON_HPP_
 
-#include "Widget.hpp"
 #include "Label.hpp"
 #include "Supports/KeyPressable.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/Toggleable.hpp"
 #include "../BEvents/PointerEvent.hpp"
-#include <cairo/cairo.h>
-#include <iostream>
 #include BWIDGETS_DEFAULT_DRAWBUTTON_PATH
 
 #ifndef BWIDGETS_DEFAULT_BUTTON_WIDTH
