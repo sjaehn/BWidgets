@@ -7,7 +7,7 @@ project. This toolkit includes widgets, styles, event handling, device support,
 and internationalization. B.Widgets also takes care about the special needs for
 user interaction elements in music production. B.Widgets uses the PlUgin Graphics Library ([pugl](https://github.com/lv2/pugl)) portability layer.
 
-**Current version:** 1.3.2
+**Current version:** 1.4.0
 
 ![widgetgallery](suppl/widgetgallery.png)
 
@@ -157,6 +157,7 @@ Software projects using this toolkit:
   - [x] Additional messages by supporting `Messageable` 
   - [x] Navigation between widgets by supporting `Activatable`, `Enterable`,
         and `Navigatable`
+  - [x] Support keyboard shortcuts in dialogs/menus
   - [x] Widget visibility control by supporting `Closeable`
   - [x] Display a (functional) hover text by supporting `PointerFocusable`
   - [x] Enable re-definition of widget default sizes at compile time
@@ -188,12 +189,6 @@ Software projects using this toolkit:
 
 
 ## TODO
-
-### Until 1.4
-
-- [x] Dialog/menu widget navigation
-- [x] Support keyboard shortcuts in dialogs/menus
-
 
 ### Until 1.6
 

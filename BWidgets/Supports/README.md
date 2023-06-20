@@ -92,7 +92,7 @@ Supports keyboard key press and release events.
 
 ## Activatable
 
-Support of Widget activation by an user interaction.
+Support of Widget activation (status change) by an user interaction.
 
 
 ## Enterable

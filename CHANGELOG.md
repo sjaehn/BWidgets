@@ -6,9 +6,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [1.4.0] - 2023-06-20
+* Merge 1.3.0 - 1.3.2, in brief:
+  * Move event queue from `BWidgets::Windows` to `BWidgets::EventQueueable`,
+    inherit in `BWidgets::Windows`
+  * Make `BWidgets::Messagable` and `BWidgets::Closeable` header only
+  * Add `BEvents::Event::EventType::all`
+  * Enable uint16_t for `BDevices::Keys::KeyType`
+  * Add `BDevices::Keys::KeyType::enter`
+  * Add class `BWidgets::Activatable` for user driven widget status change
+  * Add class `BWidgets::Enterable` for entering a widget
+  * Add class `BWidgets::Navigatable` to navigate between child widgets
+  * Add hot keys and methods to `BWidgets::Enterable`
+  * Add enter by hot key method in `BWidgets::Navigatable`
+  * Implement `BWidgets::Activatable`, `BWidgets::Enterable`, and / or
+    `BWidgets::Navigatable` in `BWidgets::FileChooser`, 
+    `BWidgets::SampleChooser`, `BWidgets::EditLabel`, `BWidgets::SpinBox`, 
+    `BWidgets::ListBox`, `BWidgets::ComboBox`, `BWidgets::Box` and
+    `BWidgets::Button`
+  * Fix prevent twice addition of events to the event loop
+  * Fix issue #6 by always updating child widgets in `BWidgets::Box`
+  * Update documentation
+
+
 ## [1.3.2] - 2023-06-18
 * Enable uint16_t for `BDevices::Keys::KeyType`
-* Add Enable uint16_t for `BDevices::Keys::KeyType::enter`
+* Add `BDevices::Keys::KeyType::enter`
 * Add hot keys and methods to `BWidgets::Enterable`
 * Add enter by hot key method in `BWidgets::Navigatable`
 * Implement enter by hot key in widgets
