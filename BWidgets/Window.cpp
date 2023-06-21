@@ -495,7 +495,18 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 			if ((puglEvent->key.key >= PUGL_KEY_F1) && (puglEvent->key.key <= PUGL_KEY_PAUSE))
 			{
 				uint32_t key = puglEvent->key.key;
-				std::list<Widget*> gwidgets = w->listDeviceGrabbed(BDevices::Keys());
+
+				// First check for specified key
+				std::list<Widget*> gwidgets = w->listDeviceGrabbed(BDevices::Keys(static_cast<BDevices::Keys::KeyType>(key)));
+
+				// Then check for ANY key and append (if not present yet)
+				std::list<Widget*> gwidgets2 = w->listDeviceGrabbed(BDevices::Keys());
+				for (Widget* gw2: gwidgets2)
+				{
+					if (std::find (gwidgets.begin(), gwidgets.end(), gw2) == gwidgets.end()) gwidgets.push_back(gw2);
+				}
+
+				// Create events and add to the event queue
 				for (Widget* gw : gwidgets)
 				{
 					if (gw && gw->is<KeyPressable>())
@@ -512,7 +523,18 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 			if ((puglEvent->key.key >= PUGL_KEY_F1) && (puglEvent->key.key <= PUGL_KEY_PAUSE))
 			{
 				uint32_t key = puglEvent->key.key;
-				std::list<Widget*> gwidgets = w->listDeviceGrabbed(BDevices::Keys());
+
+				// First check for specified key
+				std::list<Widget*> gwidgets = w->listDeviceGrabbed(BDevices::Keys(static_cast<BDevices::Keys::KeyType>(key)));
+
+				// Then check for ANY key and append (if not present yet)
+				std::list<Widget*> gwidgets2 = w->listDeviceGrabbed(BDevices::Keys());
+				for (Widget* gw2: gwidgets2)
+				{
+					if (std::find (gwidgets.begin(), gwidgets.end(), gw2) == gwidgets.end()) gwidgets.push_back(gw2);
+				}
+
+				// Create events and add to the event queue
 				for (Widget* gw : gwidgets)
 				{
 					if (gw && gw->is<KeyPressable>())
@@ -527,7 +549,18 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 		case PUGL_TEXT:
 			{
 				uint32_t key = puglEvent->text.character;
-				std::list<Widget*> gwidgets = w->listDeviceGrabbed(BDevices::Keys());
+
+				// First check for specified key
+				std::list<Widget*> gwidgets = w->listDeviceGrabbed(BDevices::Keys(static_cast<BDevices::Keys::KeyType>(key)));
+
+				// Then check for ANY key and append (if not present yet)
+				std::list<Widget*> gwidgets2 = w->listDeviceGrabbed(BDevices::Keys());
+				for (Widget* gw2: gwidgets2)
+				{
+					if (std::find (gwidgets.begin(), gwidgets.end(), gw2) == gwidgets.end()) gwidgets.push_back(gw2);
+				}
+
+				// Create events and add to the event queue
 				for (Widget* gw : gwidgets)
 				{
 					if (gw && gw->is<KeyPressable>())

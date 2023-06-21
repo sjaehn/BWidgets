@@ -32,12 +32,11 @@ All other event classes are derived from this class.
 ## Keys
 
 A Keys device object is responsible the keyboard interaction. A Keys device
-object can be responsible for all keys (parameter type KEY_ANY) or (TODO) 
-selected keys.
+object can be responsible for selected keys or all keys (`KeyType::any`).
 
-A Keys object of the parameter type KEY_ANY is grabbed by the widget
-`EditLabel` upon clicking on it to make all keyboard entries to be passed
-to this widget.
+A Keys object of the `KeyType::any` is grabbed by the widget `EditLabel` and
+may be gabbed by `BWidgets::Navigatable` widgets upon clicking on it to make 
+all keyboard entries to be passed to the respective widget.
 
 
 ## MouseButton
