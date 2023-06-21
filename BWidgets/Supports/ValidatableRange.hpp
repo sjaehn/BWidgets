@@ -24,6 +24,10 @@
 #include "ValueTransferable.hpp"
 #include "Visualizable.hpp"
 
+#ifndef BWIDGETS_DEFAULT_NR_SUBSTEPS
+#define BWIDGETS_DEFAULT_NR_SUBSTEPS 9
+#endif
+
 namespace BWidgets
 {
 
@@ -32,7 +36,7 @@ namespace BWidgets
  *  @tparam T  Value type.
  *
  *  @a T MUST support the comparison operators and MUST be comparable with 0.0
- *  and 1.0. 
+ *  and 1.0. Also MUST support the standard arithmetic operators.
  */
 template <class T>
 class ValidatableRange : public Validatable<T>
@@ -41,6 +45,7 @@ protected:
     T min_;
     T max_;
     T step_;
+    int nrSubs_;
 
 public:
 
@@ -92,7 +97,7 @@ public:
 
     /**
      *  @brief  Sets the range step size.
-     *  @param min  Step size.
+     *  @param step  Step size.
      */
     virtual void setStep (const T& step);
 
@@ -102,6 +107,25 @@ public:
      * 
      */
     virtual T getStep () const;
+
+    /**
+     *  @brief  Sets the number of substeps.
+     *  @param nrSubs  Non-negative number of substeps.
+     */
+    virtual void setNrSubs (const int nrSubs);
+
+    /**
+     *  @brief  Gets the number of substeps (ticks).
+     *  @return  Number of substeps.
+     */
+    virtual int getNrSubs () const;
+
+    /**
+     *  @brief  Gets the substep size.
+     *  @return  Substep size.
+     * 
+     */
+    virtual T getSubStep () const;
 
     /**
      *  @brief  Sets the value range.
@@ -152,7 +176,8 @@ public:
  *  operations.
  *
  *  @a T1 and @a T2 MUST support the standard comparison operators and the
- *  standard arithmetic operators. 
+ *  standard arithmetic operators. Also MUST support the standard arithmetic 
+ *  operators.
  */
 template <class T1, class T2>
 class ValidatableRange<std::pair<T1, T2>> : public Validatable<std::pair<T1, T2>>
@@ -161,6 +186,7 @@ protected:
     std::pair<T1, T2> min_;
     std::pair<T1, T2> max_;
     std::pair<T1, T2> step_;
+    int nrSubs_;
 
 public:
 
@@ -224,6 +250,25 @@ public:
     virtual std::pair<T1, T2> getStep () const;
 
     /**
+     *  @brief  Sets the number of substeps.
+     *  @param nrSubs  Non-negative number of substeps.
+     */
+    virtual void setNrSubs (const int nrSubs);
+
+    /**
+     *  @brief  Gets the number of substeps (ticks).
+     *  @return  Number of substeps.
+     */
+    virtual int getNrSubs () const;
+
+    /**
+     *  @brief  Gets the substep size.
+     *  @return  Substep size.
+     * 
+     */
+    virtual std::pair<T1, T2> getSubStep () const;
+
+    /**
      *  @brief  Sets the value range.
      *  @param min  Lower limit.
      *  @param max  Upper limit.
@@ -265,7 +310,8 @@ template <class T>
 ValidatableRange<T>::ValidatableRange () :
     min_ (T()),
     max_ (T() + 1.0),
-    step_ (T())
+    step_ (T()),
+    nrSubs_(0)
 {
 
 }
@@ -274,7 +320,8 @@ template <class T>
 ValidatableRange<T>::ValidatableRange (const T& min, const T& max) :
     min_ (min),
     max_ (max),
-    step_ (T())
+    step_ (T()),
+    nrSubs_(0)
 {
 
 }
@@ -283,7 +330,8 @@ template <class T>
 ValidatableRange<T>::ValidatableRange (const T& min, const T& max, const T& step) :
     min_ (min),
     max_ (max),
-    step_ (step)
+    step_ (step),
+    nrSubs_(0)
 {
     
 }
@@ -341,7 +389,7 @@ void ValidatableRange<T>::setStep (const T& step)
 {
     if (step_ != step)
     {
-        // Change limits
+        // Change step size
         step_ = step;
 
         // Re-calculate value
@@ -358,6 +406,37 @@ template <class T>
 T ValidatableRange<T>::getStep () const
 {
     return step_;
+}
+
+template <class T>
+void ValidatableRange<T>::setNrSubs (const int nrSubs)
+{
+    if (nrSubs_ != nrSubs)
+    {
+        // Change number of subs
+        nrSubs_ = (nrSubs >= 0 ? nrSubs : 0);
+
+        // Re-calculate value
+        ValueableTyped<T>* v = dynamic_cast<ValueableTyped<T>*>(this);
+        if (v) v->setValue (v->getValue()); 
+
+        // Update
+        Visualizable* w = dynamic_cast<Visualizable*>(this);
+        if (w) w->update();
+    }
+    
+}
+
+template <class T>
+int ValidatableRange<T>::getNrSubs () const
+{
+    return nrSubs_;
+}
+
+template <class T>
+T ValidatableRange<T>::getSubStep () const
+{
+    return getStep() / (static_cast<T>(getNrSubs()) + 1.0);
 }
 
 template <class T>
@@ -390,11 +469,12 @@ template <class T>
 T ValidatableRange<T>::validate (const T& value) 
 {
     if (!Validatable<T>::isValidatable()) return value;
-    
-    if (getStep() && (getMax() >= getMin()))
+
+    const T subStep = getSubStep();
+    if (subStep && (getMax() >= getMin()))
     {
-        if (getStep() > 0) return std::min (std::max (getMin() + round ((value - getMin()) / getStep()) * getStep(), getMin()), getMax());
-        return std::min (std::max (getMax() - round ((getMax() - value) / getStep()) * getStep(), getMin()), getMax());
+        if (subStep > 0) return std::min (std::max (getMin() + round ((value - getMin()) / subStep) * subStep, getMin()), getMax());
+        return std::min (std::max (getMax() - round ((getMax() - value) / subStep) * subStep, getMin()), getMax());
     }
 
     return std::min (std::max (value, getMin()), getMax());
@@ -423,7 +503,8 @@ template <class T1, class T2>
 ValidatableRange<std::pair<T1, T2>>::ValidatableRange () :
     min_ (std::pair<T1, T2>()),
     max_ (std::pair<T1, T2>(T1() + 1.0, T2() + 1.0)),
-    step_ (std::pair<T1, T2>())
+    step_ (std::pair<T1, T2>()),
+    nrSubs_(0)
 {
 
 }
@@ -432,7 +513,8 @@ template <class T1, class T2>
 ValidatableRange<std::pair<T1, T2>>::ValidatableRange (const std::pair<T1, T2>& min, const std::pair<T1, T2>& max) :
     min_ (min),
     max_ (max),
-    step_ (std::pair<T1, T2>())
+    step_ (std::pair<T1, T2>()),
+    nrSubs_(0)
 {
 
 }
@@ -441,7 +523,8 @@ template <class T1, class T2>
 ValidatableRange<std::pair<T1, T2>>::ValidatableRange (const std::pair<T1, T2>& min, const std::pair<T1, T2>& max, const std::pair<T1, T2>& step) :
     min_ (min),
     max_ (max),
-    step_ (step)
+    step_ (step),
+    nrSubs_(0)
 {
     
 }
@@ -499,7 +582,7 @@ void ValidatableRange<std::pair<T1, T2>>::setStep (const std::pair<T1, T2>& step
 {
     if (step_ != step)
     {
-        // Change limits
+        // Change step size
         step_ = step;
 
         // Re-calculate value
@@ -516,6 +599,37 @@ template <class T1, class T2>
 std::pair<T1, T2> ValidatableRange<std::pair<T1, T2>>::getStep () const
 {
     return step_;
+}
+
+template <class T1, class T2>
+void ValidatableRange<std::pair<T1, T2>>::setNrSubs (const int nrSubs)
+{
+    if (nrSubs != nrSubs_)
+    {
+        // Change number of subs
+        nrSubs_ = (nrSubs >= 0 ? nrSubs : 0);
+
+        // Re-calculate value
+        ValueableTyped<std::pair<T1, T2>>* v = dynamic_cast<ValueableTyped<std::pair<T1, T2>>*>(this);
+        if (v) v->setValue (v->getValue()); 
+
+        // Update
+        Visualizable* w = dynamic_cast<Visualizable*>(this);
+        if (w) w->update();
+    }
+}
+
+template <class T1, class T2>
+int ValidatableRange<std::pair<T1, T2>>::getNrSubs () const
+{
+    return nrSubs_;
+}
+
+template <class T1, class T2>
+std::pair<T1, T2> ValidatableRange<std::pair<T1, T2>>::getSubStep () const
+{
+    return std::pair<T1, T2>    (getStep().first / (static_cast<T1>(getNrSubs()) + 1.0),
+                                 getStep().second / (static_cast<T2>(getNrSubs()) + 1.0));
 }
 
 template <class T1, class T2>
@@ -550,17 +664,17 @@ std::pair<T1, T2> ValidatableRange<std::pair<T1, T2>>::validate (const std::pair
     if (!Validatable<std::pair<T1, T2>>::isValidatable()) return value;
 
     std::pair<T1, T2> result = value;
-    
-    if (getStep().first && (getMax().first >= getMin().first))
+    const std::pair<T1, T2> subStep = getSubStep();
+    if (subStep.first && (getMax().first >= getMin().first))
     {
-        if (getStep().first > 0) result.first = getMin().first + round ((value.first - getMin().first) / getStep().first) * getStep().first;
-        else result.first =  getMax().first - round ((getMax().first - value.first) / getStep().first) * getStep().first;
+        if (subStep.first > 0) result.first = getMin().first + round ((value.first - getMin().first) / subStep.first) * subStep.first;
+        else result.first =  getMax().first - round ((getMax().first - value.first) / subStep.first) * subStep.first;
     }
 
-    if (getStep().second && (getMax().second >= getMin().second))
+    if (subStep.second && (getMax().second >= getMin().second))
     {
-        if (getStep().second > 0) result.second = getMin().second + round ((value.second - getMin().second) / getStep().second) * getStep().second;
-        else result.second =  getMax().second - round ((getMax().second - value.second) / getStep().second) * getStep().second;
+        if (subStep.second > 0) result.second = getMin().second + round ((value.second - getMin().second) / subStep.second) * subStep.second;
+        else result.second =  getMax().second - round ((getMax().second - value.second) / subStep.second) * subStep.second;
     }
 
     return std::pair<T1, T2>    (std::min (std::max (result.first, getMin().first), getMax().first), 

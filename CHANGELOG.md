@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.0] - 2023-06-21
 * Implement emit key events to widgets which grabbed selected keys
+* Add substeps to `BWidgets::ValidatableRange`
 
 
 ## [1.4.0] - 2023-06-20
