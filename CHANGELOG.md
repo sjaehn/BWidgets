@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.5.0] - 2023-06-23
 * Implement emit key events to widgets which grabbed selected keys
 * Add substeps to `BWidgets::ValidatableRange`
+* Implement substep scrolling and dragging if shift key pressed in (image-) 
+  dial, scale, and scrollbar widgets
 * Fix documentation
 
 

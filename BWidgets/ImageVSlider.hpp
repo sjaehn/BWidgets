@@ -24,6 +24,7 @@
 #include "Supports/Scrollable.hpp"
 #include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
+#include "../BEvents/KeyEvent.hpp"
 
 #ifndef BWIDGETS_DEFAULT_IMAGEVSLIDER_WIDTH
 #define BWIDGETS_DEFAULT_IMAGEVSLIDER_WIDTH BWIDGETS_DEFAULT_IMAGEVMETER_WIDTH
@@ -50,6 +51,11 @@ class ImageVSlider :	public ImageVMeter,
 						public Scrollable,
 						public KeyPressable
 {
+
+protected:
+
+	bool fineTuned_;
+
 public:
 
 	/**
@@ -161,6 +167,15 @@ public:
 	void copy (const ImageVSlider* that);
 
 	/**
+     *  @brief  Sets the range step size.
+     *  @param step  Step size.
+	 *
+	 *  Also sets the number of sub steps to BWIDGETS_DEFAULT_NR_SUBSTEPS if 
+	 *  step size is 0.0.
+     */
+    virtual void setStep (const double& step) override;
+
+	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -189,6 +204,27 @@ public:
 	 *  widget static callback function.
      */
     virtual void onWheelScrolled (BEvents::Event* event) override;
+
+	/**
+     *  @brief  Method when a KeyEvent with the type keyPressEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler if a
+     *  key is pressed. By default, it calls its static callback function.
+     */
+    virtual void onKeyPressed (BEvents::Event* event) override;
+
+    /**
+     *  @brief  Method when a KeyEvent with the type keyReleaseEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler if a
+     *  key is released. By default, it calls its static callback function.
+     */
+    virtual void onKeyReleased (BEvents::Event* event) override;
+
 };
 
 inline ImageVSlider::ImageVSlider () :
@@ -245,9 +281,13 @@ inline ImageVSlider::ImageVSlider	(const double  x, const double y, const double
 		Clickable(),
 		Draggable(),
 		Scrollable(),
-		KeyPressable()
+		KeyPressable(), 
+		fineTuned_(false)
 {
-	setKeyPressable(false);	// Not supported yet
+	setKeyPressable(true);
+	grabDevice(BDevices::Keys(BDevices::Keys::KeyType::shiftL));
+	grabDevice(BDevices::Keys(BDevices::Keys::KeyType::shiftR));
+	if (step == 0.0) setNrSubs(BWIDGETS_DEFAULT_NR_SUBSTEPS);
 }
 
 inline Widget* ImageVSlider::clone () const 
@@ -259,11 +299,18 @@ inline Widget* ImageVSlider::clone () const
 
 inline void ImageVSlider::copy (const ImageVSlider* that)
 {
+	fineTuned_ = that->fineTuned_;
 	KeyPressable::operator=(*that);
 	Scrollable::operator= (*that);
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);
 	ImageVMeter::copy (that);
+}
+
+inline void ImageVSlider::setStep (const double &step)
+{
+	ValidatableRange<double>::setStep(step);
+	if (step == 0.0) setNrSubs(BWIDGETS_DEFAULT_NR_SUBSTEPS);
 }
 
 inline void ImageVSlider::onButtonPressed (BEvents::Event* event)
@@ -314,8 +361,13 @@ inline void ImageVSlider::onPointerDragged (BEvents::Event* event)
 			{
 				const double szs = ((w / ws < h / hs) ? (w / ws) : (h / hs));
 
-				if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-				else setValue (getValueFromRatio (getRatioFromValue (getValue()) + pev->getDelta().y / ((staticAnchors_.second.y - staticAnchors_.first.y) * szs)));
+				if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
+				else 
+				{
+					const double step = (fineTuned_ ?	1.0 / ((static_cast<double>(getNrSubs() + 1.0)) * ((staticAnchors_.second.y - staticAnchors_.first.y) * szs)) :
+														1.0 / ((staticAnchors_.second.y - staticAnchors_.first.y) * szs));
+					setValue (getValueFromRatio (getRatioFromValue (getValue()) + pev->getDelta().y * step));
+				}
 			}
 		}
 	}
@@ -337,12 +389,35 @@ inline void ImageVSlider::onWheelScrolled (BEvents::Event* event)
 		{
 			const double szs = ((w / ws < h / hs) ? (w / ws) : (h / hs));
 
-			if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-			else setValue (getValueFromRatio (getRatioFromValue(getValue()) + wev->getDelta().y / ((staticAnchors_.second.y - staticAnchors_.first.y) * szs)));
+			if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
+			else 
+			{
+				const double step = (fineTuned_ ?	1.0 / ((static_cast<double>(getNrSubs() + 1.0)) * ((staticAnchors_.second.y - staticAnchors_.first.y) * szs)) :
+												1.0 / ((staticAnchors_.second.y - staticAnchors_.first.y) * szs));
+				setValue (getValueFromRatio (getRatioFromValue (getValue()) + wev->getDelta().y * step));
+			}
 		}
 	}
 
 	Scrollable::onWheelScrolled (event);
+}
+
+inline void ImageVSlider::onKeyPressed (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+	if (kev->getWidget() == this) fineTuned_ = true;
+	
+	KeyPressable::onKeyPressed(event);
+}
+
+inline void ImageVSlider::onKeyReleased (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+	if (kev->getWidget() == this) fineTuned_ = false;
+
+	KeyPressable::onKeyReleased(event);
 }
 
 }

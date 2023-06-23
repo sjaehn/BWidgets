@@ -24,10 +24,10 @@
 #include "Supports/Scrollable.hpp"
 #include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
+#include "../BEvents/KeyEvent.hpp"
 #include BWIDGETS_DEFAULT_DRAWARC_PATH
 #include BWIDGETS_DEFAULT_DRAWKNOB_PATH
 #include BWIDGETS_DEFAULT_DRAWARCHANDLE_PATH
-#include <cairo/cairo.h>
 
 #ifndef BWIDGETS_DEFAULT_DIAL_WIDTH
 #define BWIDGETS_DEFAULT_DIAL_WIDTH 40.0
@@ -55,6 +55,11 @@ class Dial :	public RadialMeter,
 				public Scrollable,
 				public KeyPressable
 {
+
+protected:
+
+	bool fineTuned_;
+
 public:
 
 	/**
@@ -125,6 +130,15 @@ public:
 	void copy (const Dial* that);
 
 	/**
+     *  @brief  Sets the range step size.
+     *  @param step  Step size.
+	 *
+	 *  Also sets the number of sub steps to BWIDGETS_DEFAULT_NR_SUBSTEPS if 
+	 *  step size is 0.0.
+     */
+    virtual void setStep (const double& step) override;
+
+	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -153,6 +167,26 @@ public:
 	 *  widget static callback function.
      */
     virtual void onWheelScrolled (BEvents::Event* event) override;
+
+	/**
+     *  @brief  Method when a KeyEvent with the type keyPressEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler if a
+     *  key is pressed. By default, it calls its static callback function.
+     */
+    virtual void onKeyPressed (BEvents::Event* event) override;
+
+    /**
+     *  @brief  Method when a KeyEvent with the type keyReleaseEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler if a
+     *  key is released. By default, it calls its static callback function.
+     */
+    virtual void onKeyReleased (BEvents::Event* event) override;
 
 protected:
 	/**
@@ -212,9 +246,13 @@ inline Dial::Dial	(const double  x, const double y, const double width, const do
 		Clickable(),
 		Draggable(),
 		Scrollable(),
-		KeyPressable()
+		KeyPressable(), 
+		fineTuned_(false)
 {
-	setKeyPressable(false);	// Not supported yet
+	setKeyPressable(true);
+	grabDevice(BDevices::Keys(BDevices::Keys::KeyType::shiftL));
+	grabDevice(BDevices::Keys(BDevices::Keys::KeyType::shiftR));
+	if (step == 0.0) setNrSubs(BWIDGETS_DEFAULT_NR_SUBSTEPS);
 }
 
 inline Widget* Dial::clone () const 
@@ -226,12 +264,18 @@ inline Widget* Dial::clone () const
 
 inline void Dial::copy (const Dial* that)
 {
-	scale_ = that->scale_;
+	fineTuned_ = that->fineTuned_;
 	KeyPressable::operator=(*that);
 	Scrollable::operator= (*that);
 	Draggable::operator= (*that);
 	Clickable::operator= (*that);
 	RadialMeter::copy (that);
+}
+
+inline void Dial::setStep (const double &step)
+{
+	ValidatableRange<double>::setStep(step);
+	if (step == 0.0) setNrSubs(BWIDGETS_DEFAULT_NR_SUBSTEPS);
 }
 
 inline void Dial::onButtonPressed (BEvents::Event* event)
@@ -255,7 +299,7 @@ inline void Dial::onButtonPressed (BEvents::Event* event)
 			if (ang <= BWIDGETS_DEFAULT_DRAWARC_END)
 			{
 				const double rval = (ang - BWIDGETS_DEFAULT_DRAWARC_START) / BWIDGETS_DEFAULT_DRAWARC_SIZE;
-				if (step_ >= 0) setValue (getValueFromRatio (rval));
+				if (getStep() >= 0) setValue (getValueFromRatio (rval));
 				else setValue (getValueFromRatio (1.0 - rval));
 			}
 		}
@@ -272,8 +316,14 @@ inline void Dial::onPointerDragged (BEvents::Event* event)
 		if (!pev) return;
 		if (scale_.getWidth() > 0) 
 		{
-			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * getStep ());
-			else setValue (getValueFromRatio (getRatioFromValue (getValue()) - pev->getDelta().y / (0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE)));
+			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
+			else 
+			{
+				const double step = (fineTuned_ ?	1.0 /	((static_cast<double>(getNrSubs() + 1.0)) * 
+															 0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE) :
+													1.0 /	(0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE));
+				setValue (getValueFromRatio	(getRatioFromValue (getValue()) - pev->getDelta().y * step));
+			}
 		}
 	}
 	Draggable::onPointerDragged (event);
@@ -285,12 +335,34 @@ inline void Dial::onWheelScrolled (BEvents::Event* event)
 	if (!wev) return;
 	if (scale_.getWidth() > 0) 
 	{
-		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-
-		else setValue (getValueFromRatio (getRatioFromValue (getValue()) - wev->getDelta().y / (0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE)));
-		
+		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
+		else 
+		{
+			const double step = (fineTuned_ ?	1.0 /	((static_cast<double>(getNrSubs() + 1.0)) * 
+														 0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE) :
+												1.0 /	(0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE));
+			setValue (getValueFromRatio	(getRatioFromValue (getValue()) - wev->getDelta().y * step));
+		}
 	}
 	Scrollable::onWheelScrolled (event);
+}
+
+inline void Dial::onKeyPressed (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+	if (kev->getWidget() == this) fineTuned_ = true;
+
+	KeyPressable::onKeyPressed(event);
+}
+
+inline void Dial::onKeyReleased (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+	if (kev->getWidget() == this) fineTuned_ = false;
+
+	KeyPressable::onKeyReleased(event);
 }
 
 inline void Dial::draw ()
