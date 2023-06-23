@@ -84,7 +84,7 @@ public:
 
     /**
      *  @brief  Sets the range upper limit.
-     *  @param min  Upper limit.
+     *  @param max  Upper limit.
      */
     virtual void setMax (const T& max);
 
@@ -225,7 +225,7 @@ public:
 
     /**
      *  @brief  Sets the range upper limit.
-     *  @param min  Upper limit.
+     *  @param max  Upper limit.
      */
     virtual void setMax (const std::pair<T1, T2>& max);
 
@@ -238,7 +238,7 @@ public:
 
     /**
      *  @brief  Sets the range step size.
-     *  @param min  Step size.
+     *  @param step  Step size.
      */
     virtual void setStep (const std::pair<T1, T2>& step);
 
