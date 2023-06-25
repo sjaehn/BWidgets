@@ -404,7 +404,7 @@ inline void EditLabel::discardEdit ()
 
 inline void EditLabel::enter () 
 {
-	if (isEnterable())
+	if (isEnterable() && (!isEntered()))
 	{
 		setKeyPressable(true);
 		grabDevice (BDevices::Keys());
@@ -420,7 +420,7 @@ inline void EditLabel::leave ()
 
 inline void EditLabel::leave (const bool apply) 
 {
-	if (isEnterable())
+	if (isEnterable() && isEntered())
 	{
 		if (apply) applyEdit();
 		else discardEdit();

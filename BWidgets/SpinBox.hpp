@@ -620,7 +620,7 @@ inline Activatable* SpinBox::getFirstActivatedChild () const
 
 inline void SpinBox::enter () 
 {
-	if (isEnterable())
+	if (isEnterable() && (!isEntered()))
 	{
 		setKeyPressable(true);
 		grabDevice (BDevices::Keys());
@@ -630,7 +630,7 @@ inline void SpinBox::enter ()
 
 inline void SpinBox::leave () 
 {
-	if (isEnterable())
+	if (isEnterable() && isEntered())
 	{
 		setKeyPressable(false);
 		if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());

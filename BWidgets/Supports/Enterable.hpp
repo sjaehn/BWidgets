@@ -35,6 +35,7 @@ class Enterable : public Support
 {
 protected:
 
+    bool entered_;
     std::list<BDevices::Keys::KeyType> enterHotKeys_;
 
 public:
@@ -81,6 +82,12 @@ public:
     virtual void leave ();
 
     /**
+     *  @brief  Information if the widget has been entered or not. 
+     *  @return  True if the widget has been entered otherwise false.
+     */
+    bool isEntered();
+
+    /**
      *  @brief  Adds a key to the list of hot keys to enter this object.
      *  @param key  Key code
      */
@@ -103,6 +110,7 @@ public:
 inline Enterable::Enterable () : Enterable (false) {}
 
 inline Enterable::Enterable (const bool status) : 
+    entered_(false),
     Support (status)
 {}
 
@@ -118,7 +126,7 @@ inline bool Enterable::isEnterable () const
 
 inline void Enterable::enter () 
 {
-    // Don't do anything here
+    if (isEnterable()) entered_ = true;
 
     // But leave all other widgets
     Linkable* l = dynamic_cast<Linkable*>(this);
@@ -135,7 +143,12 @@ inline void Enterable::enter ()
 
 inline void Enterable::leave ()
 {
-    // Don't do anything here
+    entered_ = false;
+}
+
+inline bool Enterable::isEntered()
+{
+    return entered_;
 }
 
 inline void Enterable::addHotKey (const BDevices::Keys::KeyType key)

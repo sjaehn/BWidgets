@@ -261,7 +261,7 @@ inline void Button::resize (const BUtilities::Point<> extends)
 
 inline void Button::enter () 
 {
-	if (isEnterable())
+	if (isEnterable() && (!isEntered()))
 	{
 		// Step 1 : Simulate button click
 		Clickable* c = dynamic_cast<Clickable*>(this);

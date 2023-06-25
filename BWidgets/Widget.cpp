@@ -616,7 +616,7 @@ inline void Widget::activate (bool status)
 
 inline void Widget::enter () 
 {
-	if (isEnterable())
+	if (isEnterable() && (!isEntered()))
 	{
 		activate();
 		Enterable::enter();
@@ -625,7 +625,7 @@ inline void Widget::enter ()
 
 inline void Widget::leave () 
 {
-	if (isEnterable())
+	if (isEnterable() && isEntered())
 	{
 		deactivate();
 		Enterable::leave();

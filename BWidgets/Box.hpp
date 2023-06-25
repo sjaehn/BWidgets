@@ -509,7 +509,7 @@ inline void Box::setBgColors (const BStyles::ColorMap& colors)
 
 inline void Box::enter () 
 {
-	if (isEnterable())
+	if (isEnterable() && (!isEntered()))
 	{
 		setKeyPressable(true);
 		grabDevice (BDevices::Keys());
@@ -519,7 +519,7 @@ inline void Box::enter ()
 
 inline void Box::leave () 
 {
-	if (isEnterable())
+	if (isEnterable() && isEntered())
 	{
 		setKeyPressable(false);
 		if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());

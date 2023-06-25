@@ -546,7 +546,7 @@ inline void FileChooser::resize (const BUtilities::Point<> extends)
 
 inline void FileChooser::enter () 
 {
-	if (isEnterable())
+	if (isEnterable() && (!isEntered()))
 	{
 		setKeyPressable(true);
 		grabDevice (BDevices::Keys());
@@ -556,7 +556,7 @@ inline void FileChooser::enter ()
 
 inline void FileChooser::leave () 
 {
-	if (isEnterable())
+	if (isEnterable() && isEntered())
 	{
 		setKeyPressable(false);
 		if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());
