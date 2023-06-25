@@ -7,7 +7,7 @@ project. This toolkit includes widgets, styles, event handling, device support,
 and internationalization. B.Widgets also takes care about the special needs for
 user interaction elements in music production. B.Widgets uses the PlUgin Graphics Library ([pugl](https://github.com/lv2/pugl)) portability layer.
 
-**Current version:** 1.5.0
+**Current version:** 1.5.1
 
 ![widgetgallery](suppl/widgetgallery.png)
 
@@ -192,9 +192,9 @@ Software projects using this toolkit:
 
 ### Until 1.6
 
-- [ ] Add keyboard modifiers to pointer events
-- [ ] Support fine adjustment for dials and sliders
-- [ ] Add keyboard control to dials and sliders
+- [x] Add keyboard modifiers to pointer events
+- [x] Support fine adjustment for dials and sliders
+- [x] Add keyboard control to dials and sliders
 
 
 ### Until 1.8

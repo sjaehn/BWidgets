@@ -139,6 +139,22 @@ public:
     virtual void setStep (const double& step) override;
 
 	/**
+     *  @brief  Enters this %Dial.
+     *
+     *  Activates this %Dial, takes over keyboard control, and calls to leave 
+	 *  all other widgets linked to the main Window to become the only entered 
+	 *  Widget.
+     */
+    virtual void enter () override;
+
+	/**
+     *  @brief  Leaves this %Dial
+     *
+     *  De-activates this %Dial and release keyboard conrol.
+     */
+    virtual void leave () override;
+
+	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -249,6 +265,8 @@ inline Dial::Dial	(const double  x, const double y, const double width, const do
 		KeyPressable(), 
 		fineTuned_(false)
 {
+	setActivatable(true);
+	setEnterable(true);
 	setKeyPressable(true);
 	grabDevice(BDevices::Keys(BDevices::Keys::KeyType::shiftL));
 	grabDevice(BDevices::Keys(BDevices::Keys::KeyType::shiftR));
@@ -278,10 +296,30 @@ inline void Dial::setStep (const double &step)
 	if (step == 0.0) setNrSubs(BWIDGETS_DEFAULT_NR_SUBSTEPS);
 }
 
+inline void Dial::enter () 
+{
+	if (isEnterable() && (!isEntered()))
+	{
+		grabDevice (BDevices::Keys());
+		Widget::enter();
+	}
+}
+
+inline void Dial::leave () 
+{
+	if (isEnterable() && isEntered())
+	{
+		if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());
+		Widget::leave();
+	}
+}
+
 inline void Dial::onButtonPressed (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
+
+	enter();
 	if (scale_.getWidth() > 0) 
 	{
 		const double xc = scale_.getX() + 0.5 * scale_.getWidth();
@@ -314,6 +352,8 @@ inline void Dial::onPointerDragged (BEvents::Event* event)
 	{
 		BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 		if (!pev) return;
+
+		enter();
 		if (scale_.getWidth() > 0) 
 		{
 			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
@@ -351,7 +391,34 @@ inline void Dial::onKeyPressed (BEvents::Event* event)
 {
 	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
 	if (!kev) return;
-	if (kev->getWidget() == this) fineTuned_ = true;
+	if (kev->getWidget() != this) return; 
+	
+	BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
+	switch (key)
+	{
+		case BDevices::Keys::KeyType::shiftL:
+		case BDevices::Keys::KeyType::shiftR:	fineTuned_ = true;
+												break;
+
+		case BDevices::Keys::KeyType::down:
+		case BDevices::Keys::KeyType::left:		{
+													BEvents::WheelEvent wev = BEvents::WheelEvent(this, BEvents::Event::EventType::wheelScrollEvent, 0.5 * getWidth(), 0.5 * getHeight(), 0, 1);
+													onWheelScrolled(&wev);
+												}
+												break;
+
+		case BDevices::Keys::KeyType::up:
+		case BDevices::Keys::KeyType::right:	{
+													BEvents::WheelEvent wev = BEvents::WheelEvent(this, BEvents::Event::EventType::wheelScrollEvent, 0.5 * getWidth(), 0.5 * getHeight(), 0, -1);
+													onWheelScrolled(&wev);
+												}
+												break;
+
+		case BDevices::Keys::KeyType::escape:	leave();
+												break;
+
+		default:								break;
+	}
 
 	KeyPressable::onKeyPressed(event);
 }
@@ -360,7 +427,17 @@ inline void Dial::onKeyReleased (BEvents::Event* event)
 {
 	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
 	if (!kev) return;
-	if (kev->getWidget() == this) fineTuned_ = false;
+	if (kev->getWidget() != this) return;
+
+	BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
+	switch (key)
+	{
+		case BDevices::Keys::KeyType::shiftL:
+		case BDevices::Keys::KeyType::shiftR:	fineTuned_ = false;
+												break;
+
+		default:								break;
+	}
 
 	KeyPressable::onKeyReleased(event);
 }

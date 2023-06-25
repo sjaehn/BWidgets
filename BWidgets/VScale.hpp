@@ -137,6 +137,22 @@ public:
     virtual void setStep (const double& step) override;
 
 	/**
+     *  @brief  Enters this %VScale.
+     *
+     *  Activates this %VScale, takes over keyboard control, and calls to leave 
+	 *  all other widgets linked to the main Window to become the only entered 
+	 *  Widget.
+     */
+    virtual void enter () override;
+
+	/**
+     *  @brief  Leaves this %VScale
+     *
+     *  De-activates this %VScale and release keyboard conrol.
+     */
+    virtual void leave () override;
+
+	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -247,6 +263,8 @@ inline VScale::VScale	(const double  x, const double y, const double width, cons
 		KeyPressable(), 
 		fineTuned_(false)
 {
+	setActivatable(true);
+	setEnterable(true);
 	setKeyPressable(true);
 	grabDevice(BDevices::Keys(BDevices::Keys::KeyType::shiftL));
 	grabDevice(BDevices::Keys(BDevices::Keys::KeyType::shiftR));
@@ -276,10 +294,30 @@ inline void VScale::setStep (const double &step)
 	if (step == 0.0) setNrSubs(BWIDGETS_DEFAULT_NR_SUBSTEPS);
 }
 
+inline void VScale::enter () 
+{
+	if (isEnterable() && (!isEntered()))
+	{
+		grabDevice (BDevices::Keys());
+		Widget::enter();
+	}
+}
+
+inline void VScale::leave () 
+{
+	if (isEnterable() && isEntered())
+	{
+		if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());
+		Widget::leave();
+	}
+}
+
 inline void VScale::onButtonPressed (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
+
+	enter();
 	if (scale_.getHeight()) 
 	{
 		if (step_ >= 0) setValue (getValueFromRatio ((scale_.getHeight() - (pev->getPosition().y - scale_.getY())) / scale_.getHeight()));
@@ -295,6 +333,8 @@ inline void VScale::onPointerDragged (BEvents::Event* event)
 	{
 		BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 		if (!pev) return;
+
+		enter();
 		if (scale_.getHeight()) 
 		{
 			if (getStep() != 0.0) setValue (getValue() - pev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
@@ -330,8 +370,35 @@ inline void VScale::onKeyPressed (BEvents::Event* event)
 {
 	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
 	if (!kev) return;
-	if (kev->getWidget() == this) fineTuned_ = true;
+	if (kev->getWidget() != this) return; 
 	
+	BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
+	switch (key)
+	{
+		case BDevices::Keys::KeyType::shiftL:
+		case BDevices::Keys::KeyType::shiftR:	fineTuned_ = true;
+												break;
+
+		case BDevices::Keys::KeyType::down:
+		case BDevices::Keys::KeyType::left:		{
+													BEvents::WheelEvent wev = BEvents::WheelEvent(this, BEvents::Event::EventType::wheelScrollEvent, 0.5 * getWidth(), 0.5 * getHeight(), 0, 1);
+													onWheelScrolled(&wev);
+												}
+												break;
+
+		case BDevices::Keys::KeyType::up:
+		case BDevices::Keys::KeyType::right:	{
+													BEvents::WheelEvent wev = BEvents::WheelEvent(this, BEvents::Event::EventType::wheelScrollEvent, 0.5 * getWidth(), 0.5 * getHeight(), 0, -1);
+													onWheelScrolled(&wev);
+												}
+												break;
+
+		case BDevices::Keys::KeyType::escape:	leave();
+												break;
+
+		default:								break;
+	}
+
 	KeyPressable::onKeyPressed(event);
 }
 
@@ -339,7 +406,17 @@ inline void VScale::onKeyReleased (BEvents::Event* event)
 {
 	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
 	if (!kev) return;
-	if (kev->getWidget() == this) fineTuned_ = false;
+	if (kev->getWidget() != this) return;
+
+	BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
+	switch (key)
+	{
+		case BDevices::Keys::KeyType::shiftL:
+		case BDevices::Keys::KeyType::shiftR:	fineTuned_ = false;
+												break;
+
+		default:								break;
+	}
 
 	KeyPressable::onKeyReleased(event);
 }
