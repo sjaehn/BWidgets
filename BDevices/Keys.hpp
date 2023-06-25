@@ -19,6 +19,7 @@
 #define BWIDGETS_KEYS_HPP_
 
 #include "Device.hpp"
+#include <cstdint>
 
 namespace BDevices 
 {
@@ -92,12 +93,19 @@ public:
      */
 	Keys () : Keys (KeyType::any) {}
 
-	/**s
+	/**
      * @brief  Construct a new Keys device object for a specified key.
 	 *
-	 * @param key  Key type (code)
+	 * @param key  Key type
      */
 	explicit Keys (const KeyType key) : Device(DeviceType::keys), key_(key) {}
+
+	/**
+     * @brief  Construct a new Keys device object for a specified key.
+	 *
+	 * @param key  Key code
+     */
+	explicit Keys (const uint16_t key) : Device(DeviceType::keys), key_(static_cast<KeyType> (key)) {}
 
 	/**
      * @brief  Creates a clone of this object.
