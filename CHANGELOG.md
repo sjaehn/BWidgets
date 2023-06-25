@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.1] - 2023-06-25
 * Add the flag `entered_` to mark entered widgets
-* Add keyboard control to dials and sliders
+* Add keyboard control to dials, sliders, and scrollbars
 * Add concept to documentation
 
 

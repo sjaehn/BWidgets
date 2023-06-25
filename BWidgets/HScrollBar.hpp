@@ -232,12 +232,16 @@ inline void HScrollBar::onButtonPressed (BEvents::Event* event)
 {
 	// Bypass HScale::onButtonPressed()
 	Clickable::onButtonPressed (event);
+
+	enter();
 }
 
 inline void HScrollBar::onPointerDragged (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
+
+	enter();
 	if (scale_.getWidth()) 
 	{
 		if (getStep() != 0.0) setValue (getValue() + pev->getDelta().x * getStep ());

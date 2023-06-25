@@ -233,12 +233,16 @@ inline void VScrollBar::onButtonPressed (BEvents::Event* event)
 {
 	// Bypass VScale::onButtonPressed()
 	Clickable::onButtonPressed (event);
+
+	enter();
 }
 
 inline void VScrollBar::onPointerDragged (BEvents::Event* event)
 {
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
+
+	enter();
 	if (scale_.getHeight()) 
 	{
 		if (getStep() != 0.0) setValue (getValue() + pev->getDelta().y * getStep ());
