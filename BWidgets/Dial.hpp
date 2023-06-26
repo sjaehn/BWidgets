@@ -394,30 +394,37 @@ inline void Dial::onKeyPressed (BEvents::Event* event)
 	if (kev->getWidget() != this) return; 
 	
 	BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
-	switch (key)
+	switch (kev->getKey ())
 	{
-		case BDevices::Keys::KeyType::shiftL:
-		case BDevices::Keys::KeyType::shiftR:	fineTuned_ = true;
-												break;
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::shiftL):
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::shiftR):	
+			fineTuned_ = true;
+			break;
 
-		case BDevices::Keys::KeyType::down:
-		case BDevices::Keys::KeyType::left:		{
-													BEvents::WheelEvent wev = BEvents::WheelEvent(this, BEvents::Event::EventType::wheelScrollEvent, 0.5 * getWidth(), 0.5 * getHeight(), 0, 1);
-													onWheelScrolled(&wev);
-												}
-												break;
+		case '-':
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::down):
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::left):		
+			{
+				BEvents::WheelEvent wev = BEvents::WheelEvent(this, BEvents::Event::EventType::wheelScrollEvent, 0.5 * getWidth(), 0.5 * getHeight(), 0, 1);
+				onWheelScrolled(&wev);
+			}
+			break;
 
-		case BDevices::Keys::KeyType::up:
-		case BDevices::Keys::KeyType::right:	{
-													BEvents::WheelEvent wev = BEvents::WheelEvent(this, BEvents::Event::EventType::wheelScrollEvent, 0.5 * getWidth(), 0.5 * getHeight(), 0, -1);
-													onWheelScrolled(&wev);
-												}
-												break;
+		case '+':
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::up):
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::right):	
+			{
+				BEvents::WheelEvent wev = BEvents::WheelEvent(this, BEvents::Event::EventType::wheelScrollEvent, 0.5 * getWidth(), 0.5 * getHeight(), 0, -1);
+				onWheelScrolled(&wev);
+			}
+			break;
 
-		case BDevices::Keys::KeyType::escape:	leave();
-												break;
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::escape):	
+			leave();
+			break;
 
-		default:								break;
+		default:								
+			break;
 	}
 
 	KeyPressable::onKeyPressed(event);

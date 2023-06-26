@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.2] - 2023-06-26
 * Add static converters for `BDevices::Keys::KeyType` and key code (`uint32_t`)
+* Add '+'/'-' keyboard controls to dials and sliders
 * Fix `BDevices::Keys::KeyType` based on `uint32_t`
 
 
