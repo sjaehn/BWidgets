@@ -116,10 +116,23 @@ public:
 
 	/**
 	 * @brief  Get the key of the Keys object.
-	 * 
-	 * @return KeyType  Key code.
+	 * @return KeyType.
 	 */
 	KeyType getKey() const {return key_;}
+
+	/**
+	 * @brief  Get the KeyType for a provided key code.
+	 * @param keyCode  Key code.
+	 * @return KeyType.
+	 */
+	constexpr static KeyType key (const uint32_t keyCode) {return static_cast<KeyType>(keyCode);}
+
+	/**
+	 * @brief  Get the KeyCode for a provided key.
+	 * @param key  KeyType.
+	 * @return  Key code.
+	 */
+	constexpr static uint32_t keyCode (const KeyType key) {return static_cast<uint32_t>(key);}
 
 	/**
      * @brief Compares this and another device object.
