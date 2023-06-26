@@ -36,7 +36,7 @@ public:
 	 *
 	 * Also see pugl @a PuglKey.
 	 */
-	enum class KeyType : uint16_t
+	enum class KeyType : uint32_t
 	{
 		any 		= 0,
 		backspace	= 0x08,
@@ -105,7 +105,7 @@ public:
 	 *
 	 * @param key  Key code
      */
-	explicit Keys (const uint16_t key) : Device(DeviceType::keys), key_(static_cast<KeyType> (key)) {}
+	explicit Keys (const uint32_t key) : Device(DeviceType::keys), key_(static_cast<KeyType> (key)) {}
 
 	/**
      * @brief  Creates a clone of this object.

@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.5.2] - 2023-06-26
-* Add static converters for `BDevices::Keys::KeyType` and key code
+* Add static converters for `BDevices::Keys::KeyType` and key code (`uint32_t`)
+* Fix `BDevices::Keys::KeyType` based on `uint32_t`
 
 
 ## [1.5.1] - 2023-06-25
