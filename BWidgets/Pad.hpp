@@ -19,7 +19,6 @@
 #define BWIDGETS_PAD_HPP_
 
 #include "Widget.hpp"
-#include "Label.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/Scrollable.hpp"
 #include "Supports/ValueableTyped.hpp"
@@ -28,8 +27,8 @@
 #include "Supports/KeyPressable.hpp"
 #include "../BEvents/WheelEvent.hpp"
 #include "../BEvents/PointerEvent.hpp"
+#include "../BEvents/KeyEvent.hpp"
 #include BWIDGETS_DEFAULT_DRAWPAD_PATH
-#include <string>
 
 #ifndef BWIDGETS_DEFAULT_PAD_WIDTH
 #define BWIDGETS_DEFAULT_PAD_WIDTH 20
@@ -69,6 +68,7 @@ class Pad : public Widget,
 
 protected:
 	T storedValue_;
+	bool fineTuned_;
 
 public:
 
@@ -140,6 +140,31 @@ public:
 	void copy (const Pad* that);
 
 	/**
+     *  @brief  Sets the range step size.
+     *  @param step  Step size.
+	 *
+	 *  Also sets the number of sub steps to BWIDGETS_DEFAULT_NR_SUBSTEPS if 
+	 *  step size is 0.0.
+     */
+    virtual void setStep (const double& step) override;
+
+	/**
+     *  @brief  Enters this %Pad.
+     *
+     *  Activates this %Pad, takes over keyboard control, and calls to leave 
+	 *  all other widgets linked to the main Window to become the only entered 
+	 *  Widget.
+     */
+    virtual void enter () override;
+
+	/**
+     *  @brief  Leaves this %Pad
+     *
+     *  De-activates this %Pad and release keyboard conrol.
+     */
+    virtual void leave () override;
+
+	/**
      *  @brief  Method called when pointer button pressed.
      *  @param event  Passed Event.
      *
@@ -148,6 +173,26 @@ public:
      *  function.
      */
     virtual void onButtonPressed (BEvents::Event* event) override;
+
+	/**
+     *  @brief  Method when a KeyEvent with the type keyPressEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler if a
+     *  key is pressed. By default, it calls its static callback function.
+     */
+    virtual void onKeyPressed (BEvents::Event* event) override;
+
+    /**
+     *  @brief  Method when a KeyEvent with the type keyReleaseEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler if a
+     *  key is released. By default, it calls its static callback function.
+     */
+    virtual void onKeyReleased (BEvents::Event* event) override;
 
 	/**
      *  @brief  Optimizes the widget extends.
@@ -246,9 +291,15 @@ inline Pad<T>::Pad	(const double x, const double y, const double width, const do
 	Clickable(),
 	Scrollable(),
 	KeyPressable(),
-	storedValue_ (value == min ? max : min)
+	storedValue_ (value == min ? max : min),
+	fineTuned_(false)
 {
-	setKeyPressable(false);	// Not supported yet
+	setActivatable(true);
+	setEnterable(true);
+	setKeyPressable(true);
+	grabDevice(BDevices::Keys(BDevices::Keys::KeyType::shiftL));
+	grabDevice(BDevices::Keys(BDevices::Keys::KeyType::shiftR));
+	if (step == 0.0) ValidatableRange<T>::setNrSubs(BWIDGETS_DEFAULT_NR_SUBSTEPS);
 	setFocusText([](const Widget* w) {return	w->getTitle() + 
 												": " + 
 												(dynamic_cast<const Pad<T>*> (w) ? 
@@ -267,6 +318,7 @@ inline Widget* Pad<T>::clone () const
 template <class T>
 inline void Pad<T>::copy (const Pad* that)
 {
+	fineTuned_ = that->fineTuned_;
 	storedValue_ = that->storedValue_;
 	Scrollable::operator= (*that);
 	Clickable::operator= (*that);
@@ -275,6 +327,33 @@ inline void Pad<T>::copy (const Pad* that)
 	ValueableTyped<T>::operator= (*that);
 	KeyPressable::operator=(*that);
 	Widget::copy (that);
+}
+
+template <class T>
+inline void Pad<T>::setStep (const double &step)
+{
+	ValidatableRange<T>::setStep(step);
+	if (step == 0.0) ValidatableRange<T>::setNrSubs(BWIDGETS_DEFAULT_NR_SUBSTEPS);
+}
+
+template <class T>
+inline void Pad<T>::enter () 
+{
+	if (isEnterable() && (!isEntered()))
+	{
+		grabDevice (BDevices::Keys());
+		Widget::enter();
+	}
+}
+
+template <class T>
+inline void Pad<T>::leave () 
+{
+	if (isEnterable() && isEntered())
+	{
+		if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());
+		Widget::leave();
+	}
 }
 
 template <class T>
@@ -308,6 +387,7 @@ inline void Pad<T>::onButtonPressed (BEvents::Event* event)
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*> (event);
 	if (!pev) return;
 	
+	enter();
 	if (this->getValue() == this->getMin()) this->setValue (storedValue_);
 	else
 	{
@@ -324,10 +404,79 @@ inline void Pad<T>::onWheelScrolled (BEvents::Event* event)
 	if (!wev) return;
 	if (getHeight()) 
 	{
-		if (this->getStep() != T()) this->setValue (this->getValue() - wev->getDelta().y * this->getStep ());
-		else this->setValue (this->getValueFromRatio (this->getRatioFromValue (this->getValue()) - wev->getDelta().y / getHeight()));
+		if (this->getStep() != T()) this->setValue (this->getValue() - wev->getDelta().y * (fineTuned_ ? this->getSubStep() : this->getStep()));
+		else 
+		{
+			const double step = (fineTuned_ ?	1.0 / ((static_cast<double>(this->getNrSubs() + 1.0)) * this->getHeight()) :
+												1.0 / this->getHeight());
+			this->setValue (this->getValueFromRatio	(this->getRatioFromValue (this->getValue()) - wev->getDelta().y * step));
+		}
 	}
 	Scrollable::onWheelScrolled (event);
+}
+
+template <class T>
+inline void Pad<T>::onKeyPressed (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+	if (kev->getWidget() != this) return; 
+	
+	BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
+	switch (kev->getKey ())
+	{
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::shiftL):
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::shiftR):	
+			fineTuned_ = true;
+			break;
+
+		case '-':
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::down):
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::left):		
+			{
+				BEvents::WheelEvent wev = BEvents::WheelEvent(this, BEvents::Event::EventType::wheelScrollEvent, 0.5 * getWidth(), 0.5 * getHeight(), 0, 1);
+				onWheelScrolled(&wev);
+			}
+			break;
+
+		case '+':
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::up):
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::right):	
+			{
+				BEvents::WheelEvent wev = BEvents::WheelEvent(this, BEvents::Event::EventType::wheelScrollEvent, 0.5 * getWidth(), 0.5 * getHeight(), 0, -1);
+				onWheelScrolled(&wev);
+			}
+			break;
+
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::escape):	
+			leave();
+			break;
+
+		default:								
+			break;
+	}
+
+	KeyPressable::onKeyPressed(event);
+}
+
+template <class T>
+inline void Pad<T>::onKeyReleased (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+	if (kev->getWidget() != this) return;
+
+	BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
+	switch (key)
+	{
+		case BDevices::Keys::KeyType::shiftL:
+		case BDevices::Keys::KeyType::shiftR:	fineTuned_ = false;
+												break;
+
+		default:								break;
+	}
+
+	KeyPressable::onKeyReleased(event);
 }
 
 template <class T>

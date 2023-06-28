@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.3] - 2023-06-28
 * Add keyboard control to `BWidgets::Pattern<T>`
+* Add keyboard control to `BWidgets::Pad<T>`
 
 
 ## [1.5.2] - 2023-06-26
