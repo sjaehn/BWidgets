@@ -8,7 +8,7 @@ and internationalization. B.Widgets also takes care about the special needs for
 user interaction elements in music production. B.Widgets uses the PlUgin 
 Graphics Library ([pugl](https://github.com/lv2/pugl)) portability layer.
 
-**Current version:** 1.5.1
+**Current version:** 1.6.0
 
 ![widgetgallery](suppl/widgetgallery.png)
 
@@ -68,7 +68,8 @@ pointer clicking support), `BWidgets::KeyPressable` (for keyboard interaction),
 - [x] Devices
   - [x] Keyboard support
   - [x] Mouse support
-  - [x] Take control (grab) or release control (free) over devices
+  - [x] Device listening: Take control (grab) or release control (free) over 
+        devices
   - [x] Implement to support dragging, clicking, enter text
 - [x] Events
   - [x] Base events (expose, close, ...)
@@ -166,6 +167,10 @@ git clone --recurse-submodules https://github.com/sjaehn/BWidgets
 will create a folder called `BWidgets` which contains all the files including
 the pugl submodule and the examples.
 
+Note: Ensure to use the submodule version linked in this repository. Especially
+pugl doesn't have got a stable API yet. Thus, older and/or newer submodules 
+than linked in this repository may be not compatible!
+
 
 ### Build B.Widgets
 
@@ -222,13 +227,6 @@ the same as in the include subdirectory.
 
 
 ## TODO
-
-### Until 1.6
-
-- [x] Add keyboard modifiers to pointer events
-- [x] Support fine adjustment for dials and sliders
-- [x] Add keyboard control to dials and sliders
-
 
 ### Until 1.8
 

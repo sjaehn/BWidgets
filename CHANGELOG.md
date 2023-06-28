@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2023-06-28
+* Merge 1.5.0 - 1.5.3, in brief:
+  * Add `BDevices::Keys` constructor by key code
+  * Fix `BDevices::Keys::KeyType` based on `uint32_t`
+  * Add static converters for `BDevices::Keys::KeyType` and key code 
+    (`uint32_t`)
+  * Implement emit key events to widgets which grabbed selected keys
+  * Add the flag `entered_` to mark entered widgets
+  * Add substeps to `BWidgets::ValidatableRange`
+  * Implement substep scrolling and dragging if shift key pressed in (image-) 
+    dial, scale, scrollbar widgets, and pads
+  * Add keyboard control (cursor keys, +/-) to dials, sliders, scrollbars, pad, 
+    and pattern
+  * Update documentation
+  
+
 ## [1.5.3] - 2023-06-28
 * Add keyboard control to `BWidgets::Pattern<T>`
 * Add keyboard control to `BWidgets::Pad<T>`
