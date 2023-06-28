@@ -28,6 +28,7 @@
 #include "../BEvents/PointerEvent.hpp"
 #include <cairo/cairo.h>
 #include <cstddef>
+#include <cstdio>
 #include <string>
 #include <utility>
 
@@ -68,6 +69,15 @@ namespace BWidgets
  *  delete, swap), pressing the left mouse button or dragging will mark the 
  *  respective pad instead and the action of the 
  *  selected EditMode will be applied after the button release.
+ *
+ *  Pattern is an Enterable Widget. Once entered (e.g., by clicking on it),
+ *  keyboard control is enabled:
+ *  * Cursor keys for navigation
+ *  * SHIFT + cursor keys for dragging (only in select mode)
+ *  * CTRL + A to select all (only in select mode)
+ *  * +/- to increase or decrease the recent pad value
+ *  * ENTER to apply action
+ *  * ESCAPE to leave this Pattern.
  *
  *  The value of the %Pattern is a 2D vector of @c std::pair with the repective 
  *  pad extends (default: BUtilities::Point<size_t>(0, 0)) as the first and 
@@ -196,7 +206,10 @@ protected:
 	size_t rows_;
 	std::vector<std::vector<Widget*>> pads_;
 	BUtilities::Area<size_t> selection_;
+	BUtilities::Point<size_t> selectionP1_;
+	BUtilities::Point<size_t> selectionP2_;
 	bool selected_;
+	bool drag_;
 	EditMode editMode_;
 	bool allowYMerge_;
 	value_type clipBoard_;
@@ -360,6 +373,22 @@ public:
 	 *  @param extends  New widget extends.
 	 */
 	virtual void resize (const BUtilities::Point<> extends) override;
+	
+	/**
+     *  @brief  Enters this %Pattern.
+     *
+     *  Activates this %Pattern, takes over keyboard control, and calls to leave 
+	 *  all other widgets linked to the main Window to become the only entered 
+	 *  Widget.
+     */
+    virtual void enter () override;
+
+	/**
+     *  @brief  Leaves this %Pattern
+     *
+     *  De-activates this %Pattern and release keyboard conrol.
+     */
+    virtual void leave () override;
 
 	/**
      *  @brief  Method to be called following an object state change.
@@ -395,6 +424,26 @@ public:
 	 *  widget static callback function.
      */
     virtual void onPointerDragged (BEvents::Event* event) override;
+
+	/**
+     *  @brief  Method when a KeyEvent with the type keyPressEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler if a
+     *  key is pressed. By default, it calls its static callback function.
+     */
+    virtual void onKeyPressed (BEvents::Event* event) override;
+
+    /**
+     *  @brief  Method when a KeyEvent with the type keyReleaseEvent is 
+     *  received.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler if a
+     *  key is released. By default, it calls its static callback function.
+     */
+    virtual void onKeyReleased (BEvents::Event* event) override;
 
 protected:
 
@@ -537,13 +586,18 @@ inline Pattern<T>::Pattern	(const double x, const double y, const double width, 
 	rows_(rows),
 	pads_ (),
 	selection_(),
+	selectionP1_(),
+	selectionP2_(),
 	selected_ (false),
+	drag_ (false),
 	editMode_ (EditMode::edit),
 	allowYMerge_ (false),
 	clipBoard_(),
 	padOn__ (false)
 {
-	setKeyPressable(false);	// Not supported yet
+	setActivatable(true);
+	setEnterable(true);
+	setKeyPressable(false);
 	pads.setValue (1.0);
 	for (size_t r = 0; r < rows_; ++r)
 	{
@@ -553,6 +607,8 @@ inline Pattern<T>::Pattern	(const double x, const double y, const double width, 
 		for (size_t c = 0; c < columns_; ++c)
 		{
 			T* w = new T(BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/pad"), "(" + std::to_string(c) + ", " + std::to_string(r) + ")");
+			w->setActivatable(false);
+			w->setEnterable(false);
 			w->setCallbackFunction (BEvents::Event::EventType::valueChangedEvent, padChangedCallback);
 			w->setClickable (false);
 			w->setEventPassable(BEvents::Event::EventType::buttonEvents | BEvents::Event::EventType::pointerDragEvent);
@@ -625,7 +681,10 @@ inline void Pattern<T>::copy (const Pattern<T>* that)
 	}
 
 	selection_ = that->selectionPos_;
+	selectionP1_ = that->selectionP1_;
+	selectionP2_ = that->selectionP2_;
 	selected_ = that->selected_;
+	drag_ = that->drag_;
 	editMode_ = that->editMode_;
 	allowYMerge_ = that->allowYMerge_;
 	clipBoard_ = that->clipBoard_;
@@ -643,6 +702,8 @@ void Pattern<T>::setEditMode (const EditMode editMode)
 {
 	editMode_ = editMode;
 	selection_ = BUtilities::Area<size_t>();
+	selectionP1_ = BUtilities::Point<size_t>();
+	selectionP2_ = BUtilities::Point<size_t>();
 	selected_ = false;
 	update();
 }
@@ -656,7 +717,9 @@ typename Pattern<T>::EditMode Pattern<T>::getEditMode() const
 template <class T>
 void Pattern<T>::select (const BUtilities::Point<size_t> p1, const BUtilities::Point<size_t> p2)
 {
-	selection_ = BUtilities::Area<size_t> (p1, p2) * BUtilities::Area<size_t>(0, 0, (columns_ > 0 ? columns_ - 1 : 0), (rows_ > 0 ? rows_ - 1 : 0));
+	selectionP1_ = BUtilities::Point<size_t>(std::min (p1.x, (columns_ > 0 ? columns_ - 1 : 0)), std::min (p1.y, (rows_ > 0 ? rows_ - 1 : 0)));
+	selectionP2_ = BUtilities::Point<size_t>(std::min (p2.x, (columns_ > 0 ? columns_ - 1 : 0)), std::min (p2.y, (rows_ > 0 ? rows_ - 1 : 0)));
+	selection_ = BUtilities::Area<size_t> (selectionP1_, selectionP2_);
 	selected_ = true;
 	update();
 }
@@ -679,7 +742,7 @@ void Pattern<T>::action (const EditMode mode, const BUtilities::Area<size_t> sel
 		case EditMode::paste:	pasteValues (selection.getPosition());
 								break;
 
-		case EditMode::del:	deleteValues (selection);
+		case EditMode::del:		deleteValues (selection);
 								break;
 
 		case EditMode::xflip:	xflipValues (selection);
@@ -816,6 +879,28 @@ inline void Pattern<T>::resize (const BUtilities::Point<> extends)
 }
 
 template <class T>
+inline void Pattern<T>::enter () 
+{
+	if (isEnterable() && (!isEntered()))
+	{
+		setKeyPressable(true);
+		grabDevice (BDevices::Keys());
+		Widget::enter();
+	}
+}
+
+template <class T>
+inline void Pattern<T>::leave () 
+{
+	if (isEnterable() && isEntered())
+	{
+		setKeyPressable(false);
+		if (isDeviceGrabbed(BDevices::Keys())) freeDevice(BDevices::Keys ());
+		Widget::leave();
+	}
+}
+
+template <class T>
 inline void Pattern<T>::update ()
 {
 	for (size_t r = 0; r < rows_; ++r)
@@ -852,17 +937,32 @@ inline void Pattern<T>::onButtonPressed (BEvents::Event* event)
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*>(event);
 	if (!pev) return;
 
+	// Enter
+	enter();
+
 	// Calculate position
 	const BUtilities::Point<size_t> p = getPadIndex (pev->getPosition().x, pev->getPosition().y);
 
 	// Pick mode:
-	if (editMode_ == EditMode::pick || (pev->getButton() == BDevices::MouseButton::ButtonType::right)) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
+	if (editMode_ == EditMode::pick || (pev->getButton() == BDevices::MouseButton::ButtonType::right)) 
+	{
+		pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
+		if (isEnterable() && isEntered()) select (p, p);
+	}
 
 	// Paste mode:
-	else if (editMode_ == EditMode::paste) pasteValues (p);
+	else if (editMode_ == EditMode::paste)
+	{
+		pasteValues (p);
+		if (isEnterable() && isEntered()) select (p, p);
+	}
 
 	// Selection mode:
-	else if (isSelectMode()) select (p, p);
+	else if (isSelectMode()) 
+	{
+		if (isEnterable() && isEntered() & selected_ & drag_) select (selectionP1_, p);
+		else select (p, p);
+	}
 
 	// Default: Invert pad value
 	else
@@ -871,6 +971,7 @@ inline void Pattern<T>::onButtonPressed (BEvents::Event* event)
 		typename T::value_type v = pads.getValue();
 		padOn__ = (w->getValue() != v);
 		w->setValue (padOn__ ? v : w->getMin());
+		if (isEnterable() && isEntered()) select (p, p);
 	}
 
 	Clickable::onButtonPressed (event);
@@ -882,8 +983,12 @@ inline void Pattern<T>::onButtonReleased (BEvents::Event* event)
 	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*>(event);
 	if (!pev) return;
 
+	// Calculate position
+	const BUtilities::Point<size_t> p = getPadIndex (pev->getPosition().x, pev->getPosition().y);
+
 	if (selected_ && isSelectMode() && (pev->getButton() == BDevices::MouseButton::ButtonType::left)) action (getEditMode(), selection_);
-	selected_ = false;
+	if (isEnterable() && isEntered() && selected_) select (p, p);
+	else selected_ = false;
 	update();
 	Clickable::onButtonReleased (event);
 }
@@ -918,9 +1023,142 @@ inline void Pattern<T>::onPointerDragged (BEvents::Event* event)
 
 			// Default: Set or unset pad
 			else w->setValue (padOn__ ? pads.getValue() : w->getMin());
+
+			if (isEnterable() && isEntered()) select (p, p);
 		}
 	}
 	Draggable::onPointerDragged (event);
+}
+
+template <class T>
+inline void Pattern<T>::onKeyPressed (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+	if (kev->getWidget() != this) return; 
+	
+	switch (kev->getKey ())
+	{
+		case 1 /* CTRL A*/:
+			if (isEnterable() && isEntered() & isSelectMode()) 
+			{
+				select	(BUtilities::Point<size_t> (0, 0), 
+						 BUtilities::Point<size_t> (columns_ > 0 ? columns_ - 1 : 0, rows_ > 0 ? rows_ - 1 : 0));
+			}
+			break;
+
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::shiftL):
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::shiftR):
+			drag_ = true;
+			break;
+
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::left):
+			if (selected_ && (selection_.getX() > 0))
+			{
+				const BUtilities::Point<size_t> p = BUtilities::Point<size_t> (selectionP2_.x > 0 ? selectionP2_.x - 1 : 0, selectionP2_.y);
+				if (isEnterable() && isEntered() & selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
+				else select(p, p);
+			}
+			break;
+
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::right):	
+			if (selected_ && (selection_.getX() + 1 < columns_))
+			{
+				const BUtilities::Point<size_t> p = BUtilities::Point<size_t> (selectionP2_.x + 1, selectionP2_.y);
+				if (isEnterable() && isEntered() & selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
+				else select(p, p);
+			}
+			break;
+
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::up):
+			if (selected_ && (selection_.getY() > 0))
+			{
+				const BUtilities::Point<size_t> p = BUtilities::Point<size_t> (selectionP2_.x, selectionP2_.y > 0 ? selectionP2_.y - 1 : 0);
+				if (isEnterable() && isEntered() & selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
+				else select(p, p);
+			}
+			break;
+
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::down):		
+			if (selected_ && (selection_.getY() + 1 < rows_))
+			{
+				const BUtilities::Point<size_t> p = BUtilities::Point<size_t> (selectionP2_.x, selectionP2_.y + 1);
+				if (isEnterable() && isEntered() & selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
+				else select(p, p);
+			}
+			break;
+
+		case '+':	
+			{
+				T* w = dynamic_cast<T*>(pads_[selectionP2_.y][selectionP2_.x]);
+				if (w)
+				{
+					BEvents::WheelEvent wev = BEvents::WheelEvent(w, BEvents::Event::EventType::wheelScrollEvent, 0.5 * w->getWidth(), 0.5 * w->getHeight(), 0, -1);
+					w->onWheelScrolled(&wev);
+				}
+			}
+			break;
+
+		case '-':	
+			{
+				T* w = dynamic_cast<T*>(pads_[selectionP2_.y][selectionP2_.x]);
+				if (w)
+				{
+					BEvents::WheelEvent wev = BEvents::WheelEvent(w, BEvents::Event::EventType::wheelScrollEvent, 0.5 * w->getWidth(), 0.5 * w->getHeight(), 0, 1);
+					w->onWheelScrolled(&wev);
+				}
+			}
+			break;
+
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::enter):	
+			if (selected_)
+			{
+				const BUtilities::Point<size_t> p = selection_.getPosition();
+				if (editMode_ == EditMode::edit) 
+				{
+					T* w = dynamic_cast<T*>(pads_[p.y][p.x]);
+					typename T::value_type v = pads.getValue();
+					padOn__ = (w->getValue() != v);
+					w->setValue (padOn__ ? v : w->getMin());
+				}
+				else if (editMode_ == EditMode::pick) pads.setValue (dynamic_cast<T*>(pads_[p.y][p.x])->getValue());
+				else if (editMode_ == EditMode::paste) pasteValues (p);
+				else action (getEditMode(), selection_);
+
+				select (p, p);
+			}
+			break;
+
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::escape):	
+			selected_ = false;
+			leave();
+			break;
+
+		default:								
+			break;
+	}
+
+	KeyPressable::onKeyPressed(event);
+}
+
+template <class T>
+inline void Pattern<T>::onKeyReleased (BEvents::Event* event)
+{
+	BEvents::KeyEvent* kev = dynamic_cast<BEvents::KeyEvent*>(event);
+	if (!kev) return;
+	if (kev->getWidget() != this) return;
+
+	BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
+	switch (key)
+	{
+		case BDevices::Keys::KeyType::shiftL:
+		case BDevices::Keys::KeyType::shiftR:	drag_ = false;
+												break;
+
+		default:								break;
+	}
+
+	KeyPressable::onKeyReleased(event);
 }
 
 template <class T>
@@ -1021,7 +1259,7 @@ inline void Pattern<T>::draw (const BUtilities::Area<>& area)
 				const double w = getEffectiveWidth ();
 				const double h = getEffectiveHeight ();
 
-				if (selected_ && isSelectMode())
+				if (selected_ /*&& isSelectMode()*/)
 				{
 					for (size_t r = 0; r < rows_; ++r)
 					{

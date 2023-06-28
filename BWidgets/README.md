@@ -568,6 +568,15 @@ delete, swap), pressing the left mouse button or dragging will mark the
 respective pad instead and the action of the 
 selected EditMode will be applied after the button release.
 
+Pattern is an `Enterable` Widget. Once entered (e.g., by clicking on it),
+keyboard control is enabled:
+* Cursor keys for navigation
+* SHIFT + cursor keys for dragging (only in select mode)
+* CTRL + A to select all (only in select mode)
+* +/- to increase or decrease the recent pad value
+* ENTER to apply action
+* ESCAPE to leave this Pattern.
+
 The value of the Pattern is a 2D vector of `std::pair` with the repective 
 pad extends (default: `BUtilities::Point<size_t>(0, 0)`) as the first and 
 the respective pad value as the second type.
