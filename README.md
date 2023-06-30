@@ -158,7 +158,7 @@ the parameter in the makefile.
 ## Installation
 ### Get B.Widgets
 
-Clone or copy this repository including its submodules.
+a) Clone or copy this repository including its submodules.
 
 ```
 git clone --recurse-submodules https://github.com/sjaehn/BWidgets
@@ -167,6 +167,11 @@ git clone --recurse-submodules https://github.com/sjaehn/BWidgets
 will create a folder called `BWidgets` which contains all the files including
 the pugl submodule and the examples.
 
+b) Download the latest stable (even minor and micro version numbers in the 
+main / master branch) or unstable release (odd minor and/or micro version 
+numbers). Then, you also may download the
+submodules.
+
 Note: Ensure to use the submodule version linked in this repository. Especially
 pugl doesn't have got a stable API yet. Thus, older and/or newer submodules 
 than linked in this repository may be not compatible!
@@ -174,8 +179,8 @@ than linked in this repository may be not compatible!
 
 ### Build B.Widgets
 
-From the repository you copied or clones you can build three libraries 
-(cairoplus, pugl, and bwidgetscore) and optionally the provided examples.
+From the repository you copied or cloned you can build three libraries 
+(cairoplus, pugl, and bwidgetscore) and (optionally) the provided examples.
 
 To build all, simply call
 ```
@@ -270,3 +275,4 @@ the same as in the include subdirectory.
 - [ ] Import dictionary from TTL
 - [ ] Import dictionary from JSON(-LD)
 - [ ] Functional widget drawing option
+- [ ] Enable merge pads in Pattern<T>
