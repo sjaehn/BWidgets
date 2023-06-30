@@ -1129,9 +1129,19 @@ inline void Pattern<T>::onKeyPressed (BEvents::Event* event)
 			}
 			break;
 
-		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::escape):	
-			selected_ = false;
-			leave();
+		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::escape):
+			// Area selected: reset selection to last point
+			if (selected_ & isSelectMode() && (selectionP1_ != selectionP2_)) 
+			{
+				select (selectionP2_, selectionP2_);
+			}
+
+			// Otherwise: Leave
+			else
+			{
+				selected_ = false;
+				leave();
+			}
 			break;
 
 		default:								
