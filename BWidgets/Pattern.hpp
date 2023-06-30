@@ -24,13 +24,7 @@
 #include "Supports/ValidatableRange.hpp"
 #include "Supports/ValueTransferable.hpp"
 #include "Supports/KeyPressable.hpp"
-#include "Supports/ValueableTyped.hpp"
 #include "../BEvents/PointerEvent.hpp"
-#include <cairo/cairo.h>
-#include <cstddef>
-#include <cstdio>
-#include <string>
-#include <utility>
 
 #ifndef BWIDGETS_DEFAULT_PATTERN_WIDTH
 #define BWIDGETS_DEFAULT_PATTERN_WIDTH 400
