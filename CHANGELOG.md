@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.6.1] - 2023-06-30
 * Escape selection before leave in `BWidgets::Pattern<T>`
+* Code optimization
 
 
 ## [1.6.0] - 2023-06-28

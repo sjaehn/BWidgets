@@ -1040,7 +1040,7 @@ inline void Pattern<T>::onKeyPressed (BEvents::Event* event)
 	switch (kev->getKey ())
 	{
 		case 1 /* CTRL A*/:
-			if (isEnterable() && isEntered() & isSelectMode()) 
+			if (isSelectMode()) 
 			{
 				select	(BUtilities::Point<size_t> (0, 0), 
 						 BUtilities::Point<size_t> (columns_ > 0 ? columns_ - 1 : 0, rows_ > 0 ? rows_ - 1 : 0));
@@ -1056,7 +1056,7 @@ inline void Pattern<T>::onKeyPressed (BEvents::Event* event)
 			if (selected_ && (selection_.getX() > 0))
 			{
 				const BUtilities::Point<size_t> p = BUtilities::Point<size_t> (selectionP2_.x > 0 ? selectionP2_.x - 1 : 0, selectionP2_.y);
-				if (isEnterable() && isEntered() & selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
+				if (selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
 				else select(p, p);
 			}
 			break;
@@ -1065,7 +1065,7 @@ inline void Pattern<T>::onKeyPressed (BEvents::Event* event)
 			if (selected_ && (selection_.getX() + 1 < columns_))
 			{
 				const BUtilities::Point<size_t> p = BUtilities::Point<size_t> (selectionP2_.x + 1, selectionP2_.y);
-				if (isEnterable() && isEntered() & selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
+				if (selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
 				else select(p, p);
 			}
 			break;
@@ -1074,7 +1074,7 @@ inline void Pattern<T>::onKeyPressed (BEvents::Event* event)
 			if (selected_ && (selection_.getY() > 0))
 			{
 				const BUtilities::Point<size_t> p = BUtilities::Point<size_t> (selectionP2_.x, selectionP2_.y > 0 ? selectionP2_.y - 1 : 0);
-				if (isEnterable() && isEntered() & selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
+				if (selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
 				else select(p, p);
 			}
 			break;
@@ -1083,7 +1083,7 @@ inline void Pattern<T>::onKeyPressed (BEvents::Event* event)
 			if (selected_ && (selection_.getY() + 1 < rows_))
 			{
 				const BUtilities::Point<size_t> p = BUtilities::Point<size_t> (selectionP2_.x, selectionP2_.y + 1);
-				if (isEnterable() && isEntered() & selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
+				if (selected_ & drag_ & isSelectMode()) select (selectionP1_, p);
 				else select(p, p);
 			}
 			break;
