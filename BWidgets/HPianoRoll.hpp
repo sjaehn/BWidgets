@@ -184,10 +184,11 @@ public:
 	uint8_t getEnd () const;
 
 	/**
-	 *  @brief  Activates (or inactivates) all keys. 
+	 *  @brief  Activates (or inactivates) this widget (if activatable)
+	 *  and all keys (independent from activatable). 
 	 *  @param active  True if active (default), otherwise false.
 	 */
-	virtual void activate (bool active = true);
+	virtual void activate (bool active = true) override;
 
 	/**
 	 *  @brief  Activates (or inactivates) a single key and keeps the 
@@ -486,6 +487,8 @@ inline uint8_t HPianoRoll::getEnd () const
 
 inline void HPianoRoll::activate (bool active)
 {
+	Widget::activate(active);
+
 	std::map<uint8_t, uint8_t> keys = getValue();
 	for (uint8_t i = startMidiKey_; i <= endMidiKey_; ++i)
 	{
