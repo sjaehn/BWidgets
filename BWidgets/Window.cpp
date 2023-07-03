@@ -172,7 +172,13 @@ void Window::setZoom (const double zoom)
 	if (zoom != zoom_)
 	{
 		zoom_ = zoom;
-		update();
+		Visualizable::resize (getExtends(), zoom);
+		forEachChild([zoom] (Linkable* l)
+		{
+			Widget* c = dynamic_cast<Widget*>(l);
+			if (c) c->Visualizable::resize (c->getExtends(), zoom);
+			return c;
+		});
 	}
 }
 
@@ -780,7 +786,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 			if (crw && (cairo_status (crw) == CAIRO_STATUS_SUCCESS))
 			{
 				// Create a temporary window surface
-				cairo_surface_t* windowSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w->getWidth() , w->getHeight());
+				cairo_surface_t* windowSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, w->getWidth() * w->getZoom(), w->getHeight() * w->getZoom());
 				if (windowSurface && (cairo_surface_status (windowSurface) == CAIRO_STATUS_SUCCESS))
 				{
 					//Get access to the temporary window surface
@@ -789,7 +795,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 					{
 						// Get a map of layered surfaces for the selected area
 						std::map<int,cairo_surface_t*> storageSurfaces;
-						w->display (storageSurfaces, BUtilities::Point<> (w->getWidth(), w->getHeight()), area);
+						w->display (storageSurfaces, BUtilities::Point<> (w->getWidth() * w->getZoom(), w->getHeight() * w->getZoom()), area);
 
 						// Write all layered surfaces to the temporary window surface from back to front
 						for (std::map<int,cairo_surface_t*>::reverse_iterator rit = storageSurfaces.rbegin(); rit != storageSurfaces.rend(); ++rit)
@@ -810,7 +816,6 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 
 					// Write temporary window surface to the host provided surface
 					cairo_save (crw);
-					cairo_scale (crw, w->getZoom(), w->getZoom());
 					cairo_set_source_surface (crw, windowSurface, 0.0, 0.0);
 					cairo_paint (crw);
 					cairo_restore (crw);

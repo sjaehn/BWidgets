@@ -191,6 +191,19 @@ public:
 	 */
 	virtual void resize (const BUtilities::Point<> extends);
 
+     /**
+	 *  @brief  Resizes the object surface extends.
+	 *  @param extends  New object extends.
+     *  @param zoom  Surface scale factor
+     *
+     *  Creates a new RGBA surface with the new extends, sets the surface
+     *  scale factor, copies and scales the surface data from the previous 
+     *  surface, and calls @c update() .
+	 */
+    virtual void resize (const BUtilities::Point<> extends, const double zoom);
+
+public:
+
     /**
 	 *  @brief  Gets the surface extends of an object.
 	 *  @return  Point<> data containing width and height.
@@ -406,6 +419,51 @@ inline void Visualizable::resize (const double width, const double height)
     resize (BUtilities::Point<> (width, height));
 }
 
+inline void Visualizable::resize (const BUtilities::Point<> extends)
+{
+    resize (extends, 1.0);
+}
+
+inline void Visualizable::resize (const BUtilities::Point<> extends, const double zoom)
+{
+    const BUtilities::Point<> newExtends = BUtilities::Point<> (std::max (extends.x, 0.0), std::max (extends.y, 0.0));
+    if ((newExtends != extends_) || (surface_.scale != zoom))
+    {
+        extends_ = newExtends;
+
+        // Create new surface
+        cairo_surface_t* newSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends_.x * zoom, extends_.y * zoom);
+
+        // Copy surface
+		if (newSurface && (cairo_surface_status (newSurface) == CAIRO_STATUS_SUCCESS))
+		{
+            cairo_t* cr = cairo_create (newSurface);
+			if (cr && (cairo_status (cr) == CAIRO_STATUS_SUCCESS))
+			{
+                const double s = zoom / surface_.scale;
+                cairo_scale (cr, s, s);
+				cairo_set_source_surface (cr, cairoSurface(), 0, 0);
+				cairo_paint (cr);
+				cairo_destroy (cr);
+			}
+		}
+
+        // Delete old surface
+        cairo_surface_destroy (cairoSurface());
+
+        // Copy new surface pointer
+        surface_.surface = newSurface;
+        surface_.scale = zoom;
+
+        update();
+    }
+}
+
+inline BUtilities::Point<> Visualizable::getExtends () const 
+{
+    return extends_;
+}
+
 inline void Visualizable::setLayer (const int layer)
 {
     if (layer != layer_)
@@ -418,42 +476,6 @@ inline void Visualizable::setLayer (const int layer)
 inline int Visualizable::getLayer() const
 {
     return layer_;
-}
-
-inline void Visualizable::resize (const BUtilities::Point<> extends)
-{
-    if ((extends.x != extends_.x) || (extends.y != extends_.y))
-    {
-        extends_ = BUtilities::Point<> (std::max (extends.x, 0.0), std::max (extends.y, 0.0));
-
-        // Create new surface
-        cairo_surface_t* new_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, extends_.x, extends_.y);
-
-        // Copy surface
-		if (new_surface && (cairo_surface_status (new_surface) == CAIRO_STATUS_SUCCESS))
-		{
-            cairo_t* cr = cairo_create (new_surface);
-			if (cr && (cairo_status (cr) == CAIRO_STATUS_SUCCESS))
-			{
-				cairo_set_source_surface (cr, cairoSurface(), 0, 0);
-				cairo_paint (cr);
-				cairo_destroy (cr);
-			}
-		}
-
-        // Delete old surface
-        cairo_surface_destroy (cairoSurface());
-
-        // Copy new surface pointer
-        surface_.surface = new_surface;
-
-        update();
-    }
-}
-
-inline BUtilities::Point<> Visualizable::getExtends () const 
-{
-    return extends_;
 }
 
 inline void Visualizable::update ()

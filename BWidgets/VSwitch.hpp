@@ -263,6 +263,8 @@ inline void VSwitch::draw (const BUtilities::Area<>& area)
 
 		if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 		{
+			cairo_scale (cr, surface_.scale, surface_.scale);
+			
 			// Limit cairo-drawing area
 			cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 			cairo_clip (cr);

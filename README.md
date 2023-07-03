@@ -8,7 +8,7 @@ and internationalization. B.Widgets also takes care about the special needs for
 user interaction elements in music production. B.Widgets uses the PlUgin 
 Graphics Library ([pugl](https://github.com/lv2/pugl)) portability layer.
 
-**Current version:** 1.6.2
+**Current version:** 1.7.0
 
 ![widgetgallery](suppl/widgetgallery.png)
 
@@ -235,8 +235,8 @@ the same as in the include subdirectory.
 
 ### Until 1.8
 
-- [ ] Enable scale (zoom) for all widgets
-- [ ] Vector-based zoom
+- ~~[] Enable scale (zoom) for all widgets~~ (discarded: too complicated, too slow)
+- [x] Vector-based zoom
 
 
 ### Until 1.10

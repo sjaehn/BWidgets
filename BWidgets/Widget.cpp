@@ -114,6 +114,10 @@ void Widget::copy (const Widget* that)
 	pushStyle_ = that->pushStyle_;
 
 	// Don't copy devices
+
+	// TODO resize
+
+	// TODO push styles ?
 	
 	update();
 }
@@ -173,7 +177,23 @@ std::list<Linkable*>::iterator Widget::add (Linkable* child, std::function<void 
 		{
 			Widget* w = dynamic_cast<Widget*>(l);
 			addfunc (l);
-			if (w) w->update ();
+			if (w) 
+			{
+				// Resize surface_ for this widget and all of its children
+				Window* m = w->getMainWindow();
+				if (m)
+				{
+					const double z = m->getZoom();
+					w->Visualizable::resize (w->getExtends(), z);
+					w->forEachChild([z] (Linkable* l)
+					{
+						Widget* c = dynamic_cast<Widget*>(l);
+						if (c) c->Visualizable::resize (c->getExtends(), z);
+						return c;
+					});
+				}
+				w->update ();
+			}
 
 			// TODO Stacking
 		}
@@ -467,7 +487,7 @@ void Widget::resize (const double width, const double height)
 
 void Widget::resize (const BUtilities::Point<> extends)
 {
-	Visualizable::resize (extends);
+	Visualizable::resize (extends, (getMainWindow() ? getMainWindow()->getZoom() : 1.0));
 }
 
 void Widget::moveTo (const double x, const double y) {moveTo (BUtilities::Point<> (x, y));}
@@ -970,8 +990,9 @@ void Widget::display (std::map<int, cairo_surface_t*>& surfaces, const BUtilitie
 
 			cairo_surface_t* s =  surfaces[getLayer()];
 			cairo_t* cr = cairo_create (s);
-			cairo_set_source_surface (cr, cairoSurface(), thisArea.getX(), thisArea.getY());
-			cairo_rectangle (cr, a.getX (), a.getY (), a.getWidth (), a.getHeight ());
+			const double z = (getMainWindow() ? getMainWindow()->getZoom() : 1.0);
+			cairo_set_source_surface (cr, cairoSurface(), thisArea.getX() * z, thisArea.getY() * z);
+			cairo_rectangle (cr, a.getX () * z, a.getY () * z, a.getWidth () * z, a.getHeight () * z);
 			cairo_fill (cr);
 			cairo_destroy (cr);
 		}
@@ -1004,6 +1025,8 @@ void Widget::draw (const BUtilities::Area<>& area)
 
 	if (cairo_status (cr) == CAIRO_STATUS_SUCCESS)
 	{
+		cairo_scale (cr, surface_.scale, surface_.scale);
+
 		// Limit cairo-drawing area
 		cairo_rectangle (cr, area.getX (), area.getY (), area.getWidth (), area.getHeight ());
 		cairo_clip (cr);
