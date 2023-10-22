@@ -462,7 +462,7 @@ inline void SpinBox::setValue (const std::string& item)
 
 inline void SpinBox::addItem (const std::string item, size_t pos)
 {
-	Label* l = new Label (0, 0, getEffectiveWidth() - buttonWidth_, itemHeight_, item);
+	Label* l = new Label (0, 0, getEffectiveWidth() - buttonWidth_, itemHeight_, item, BUtilities::Urid::urid(BUtilities::Urid::uri(urid_) + "/label"));
 	if (pos >= items_.size()) items_.push_back (l);
 	else if (pos <= 1) items_.insert(std::next (items_.begin(), 1), l);
 	else items_.insert(std::next (items_.begin(), pos), l);
