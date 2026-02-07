@@ -372,7 +372,7 @@ inline void VScale::onKeyPressed (BEvents::Event* event)
 	if (!kev) return;
 	if (kev->getWidget() != this) return; 
 	
-	BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
+	//BDevices::Keys::KeyType key = static_cast<BDevices::Keys::KeyType>(kev->getKey ());
 	switch (kev->getKey ())
 	{
 		case BDevices::Keys::keyCode(BDevices::Keys::KeyType::shiftL):
