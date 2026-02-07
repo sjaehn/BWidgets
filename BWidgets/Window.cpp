@@ -588,6 +588,8 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 						position - widget->getAbsolutePosition (),
 						position - widget->getAbsolutePosition (),
 						BUtilities::Point<> (),
+						position,
+						position,
 						static_cast<BDevices::MouseButton::ButtonType>(puglEvent->button.button + 1)
 					)
 				);
@@ -615,7 +617,7 @@ PuglStatus Window::translatePuglEvent (PuglView* view, const PuglEvent* puglEven
 						widget,
 						BEvents::Event::EventType::buttonReleaseEvent,
 						position - widget->getAbsolutePosition (),
-						origin,
+						origin - widget->getAbsolutePosition (),
 						BUtilities::Point<> (),
 						button
 					)

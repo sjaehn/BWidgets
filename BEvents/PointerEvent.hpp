@@ -36,7 +36,7 @@ namespace BEvents
 class PointerEvent : public Event
 {
 protected:
-	BUtilities::Point<> point_, origin_, delta_;
+	BUtilities::Point<> point_, origin_, delta_, absolutePoint_, absoluteOrigin_;
 	BDevices::MouseButton::ButtonType button_;
 
 public:
@@ -45,13 +45,14 @@ public:
      *  @brief  Creates an empty %PointerEvent.
      */
 	PointerEvent () :
-		PointerEvent (nullptr, EventType::none, 0, 0, 0, 0, 0, 0, BDevices::MouseButton::ButtonType::none) 
+		PointerEvent (nullptr, EventType::none, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, BDevices::MouseButton::ButtonType::none) 
     {
 
     }
 
     /**
      *  @brief  Creates a %PointerEvent.
+	 *
 	 *  @param widget  Pointer to the widget which caused the %Event.
      *  @param type  EventType.
      *  @param x  Present pointer x coordinate relative to the widget origin.
@@ -69,7 +70,51 @@ public:
                      const double xOrigin, const double yOrigin,
 			         const double deltaX, const double deltaY, 
                      const BDevices::MouseButton::ButtonType button) :
-		PointerEvent (widget, type, BUtilities::Point<> (x, y), BUtilities::Point<> (xOrigin, yOrigin), BUtilities::Point<> (deltaX, deltaY), button) 
+		PointerEvent	(widget, 
+						 type, 
+						 BUtilities::Point<> (x, y), 
+						 BUtilities::Point<> (xOrigin, yOrigin), 
+						 BUtilities::Point<> (deltaX, deltaY), 
+						 BUtilities::Point<>(), // TODO Initialize with widget position
+                         BUtilities::Point<>(), // TODO Initialize with widget position
+						 button) 
+    {
+
+    }
+
+	/**
+     *  @brief  Creates a %PointerEvent.
+	 *  @param widget  Pointer to the widget which caused the %Event.
+     *  @param type  EventType.
+     *  @param x  Present pointer x coordinate relative to the widget origin.
+     *  @param y  Present pointer y coordinate relative to the widget origin.
+     *  @param xOrigin  Original pointer x coordinate relative to the widget
+     *  origin.
+     *  @param yOrigin  Original pointer y coordinate relative to the widget 
+     *  origin.
+     *  @param deltaX  Pointer movement x coordinate.
+     *  @param deltaY  Pointer movement y coordinate.
+     *  @param absoluteX  Present pointer absolute x coordinate.
+     *  @param absoluteY  Present pointer absolute y coordinate.
+     *  @param absoluteXOrigin  Original pointer absolute x coordinate.
+     *  @param absoluteYOrigin  Original pointer absolute y coordinate.
+     *  @param button  ButtonCode.
+     */
+	PointerEvent    (BWidgets::Widget* widget, const EventType type,
+			         const double x, const double y, 
+                     const double xOrigin, const double yOrigin,
+			         const double deltaX, const double deltaY,
+					 const double absoluteX, const double absoluteY,
+                     const double absoluteXOrigin, const double absoluteYOrigin, 
+                     const BDevices::MouseButton::ButtonType button) :
+		PointerEvent    (widget, 
+                         type, 
+                         BUtilities::Point<> (x, y), 
+                         BUtilities::Point<> (xOrigin, yOrigin), 
+                         BUtilities::Point<> (deltaX, deltaY), 
+                         BUtilities::Point<>(absoluteX, absoluteY),
+                         BUtilities::Point<>(absoluteXOrigin, absoluteYOrigin),
+                         button) 
     {
 
     }
@@ -90,11 +135,49 @@ public:
 			         const BUtilities::Point<>& origin, 
                      const BUtilities::Point<>& delta,
 			         const BDevices::MouseButton::ButtonType button) :
+		PointerEvent    (widget, 
+                         type, 
+                         point, 
+                         origin, 
+                         delta, 
+                         BUtilities::Point<>() /* TODO Initialize with widget position */, 
+                         BUtilities::Point<>() /* TODO Initialize with widget position */,
+                         button)
+	{
+
+	}
+
+	/**
+     *  @brief  Creates a %PointerEvent.
+	 *
+	 *  @param widget  Pointer to the widget which caused the %Event.
+     *  @param type  EventType.
+     *  @param point  Present pointer coordinates relative to the widget 
+     *  origin.
+     *  @param origin  Original pointer coordinates relative to the widget
+     *  origin.
+     *  @param delta  Pointer movement coordinates.
+     *  @param absolutePoint  Present pointer absolute position.
+     *  @param absoluteOrigin  Original pointer absolute position.
+     *  @param button  ButtonCode.
+     */
+	PointerEvent    (BWidgets::Widget* widget, const EventType type, 
+                     const BUtilities::Point<>& point,
+			         const BUtilities::Point<>& origin, 
+                     const BUtilities::Point<>& delta,
+					 const BUtilities::Point<>& absolutePoint,
+                     const BUtilities::Point<>& absoluteOrigin,
+			         const BDevices::MouseButton::ButtonType button) :
 		Event (widget, type), 
         point_ (point), 
         origin_ (origin), 
-        delta_ (delta), 
-        button_ (button) {}
+        delta_ (delta),
+		absolutePoint_(absolutePoint),
+        absoluteOrigin_(absoluteOrigin),
+        button_ (button) 
+	{
+		
+	}
 
 	/**
 	 *  @brief  Redefines the pointer coordinates of the %PointerEvent.
@@ -153,6 +236,45 @@ public:
 	BUtilities::Point<> getDelta () const
 	{
         return delta_;
+    }
+
+    /**
+	 *  @brief  Redefines the absolute pointer coordinates of the 
+     *  %PointerEvent.
+	 *  @param point  Absolute pointer coordinate.
+	 */
+	virtual void setAbsolutePosition (const BUtilities::Point<>& coords)
+ 	{
+        absolutePoint_ = coords;
+    }
+
+	/**
+	 *  @brief  Gets the absolute pointer coordinates of the %PointerEvent.
+	 *  @return  Absolute pointer coordinate relative.
+	 */
+	BUtilities::Point<> getAbsolutePosition () const
+	{
+        return absolutePoint_;
+    }
+
+    /**
+	 *  @brief  Redefines the absolute position where the button was initially
+     *  pressed.
+	 *  @param origin  Absolute original pointer coordinate.
+	 */
+	virtual void setAbsoluteOrigin (const BUtilities::Point<>& coords)
+	{
+        absoluteOrigin_ = coords;
+    }
+
+	/**
+	 *  @brief  Gets the absolute position where the respective button was 
+     *  initially pressed.
+	 *  @return  Absolute position coordinate.
+	 */
+	BUtilities::Point<> getAbsoluteOrigin () const
+	{
+        return absoluteOrigin_;
     }
 
 	/**

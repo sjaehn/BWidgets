@@ -59,6 +59,11 @@ public:
      * 
      * @param but  Button type code
      * @param pos  Position (x, y)
+     *
+     * Although it is allowed to create %MouseButton objects with any real or
+     * fictive position @a pos , @a pos should be passed as an absolute 
+     * position as provided by the host system (not relative to a widget 
+     * origin).
      */
 	MouseButton (const ButtonType but, const BUtilities::Point<>& pos);
 
@@ -97,6 +102,11 @@ public:
      * at now.
      * 
      * @param pos  Position (x, y)
+     *
+     * Although it is allowed to set %MouseButton objects with any real or
+     * fictive position @a pos , @a pos should be passed as an absolute 
+     * position as provided by the host system (not relative to a widget 
+     * origin).
      */
     virtual void setPosition (const BUtilities::Point<>& pos);
 
@@ -105,6 +115,11 @@ public:
      * 
      * @param pos  Position (x, y)
      * @param time  Time of action
+     *
+     * Although it is allowed to set %MouseButton objects with any real or
+     * fictive position @a pos , @a pos should be passed as an absolute 
+     * position as provided by the host system (not relative to a widget 
+     * origin).
      */
     virtual void setPosition (const BUtilities::Point<>& pos, const std::chrono::steady_clock::time_point& time);
 

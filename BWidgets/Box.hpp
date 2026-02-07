@@ -590,8 +590,11 @@ inline void Box::update ()
 
 inline void Box::onButtonClicked (BEvents::Event* event)
 {
+	BEvents::PointerEvent* pev = dynamic_cast<BEvents::PointerEvent*>(event);
+	if (!pev) return;
+
 	if (getStatus() == BStyles::Status::normal) enter();
-	else if (getStatus() == BStyles::Status::active) leave();
+	else if ((getStatus() == BStyles::Status::active) && (pev->getDelta() == BUtilities::Point<>())) leave();
 	Clickable::onButtonClicked(event);
 }
 
