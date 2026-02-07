@@ -80,7 +80,11 @@ public:
 		home,
 		load,
 		save,
-		newFolder
+		newFolder,
+		checkmark,
+		checkbox,
+		checkbox_checkmark,
+		checkbox_xmark
 	};
 
 protected:
@@ -730,6 +734,41 @@ inline void Symbol::draw (const BUtilities::Area<>& area)
 											cairo_stroke (cr);
 										}
 										break;
+
+				case SymbolType::checkmark:	cairo_move_to(cr, xc - 0.3 * ext, yc - 0.05 * ext);
+											cairo_line_to(cr, xc - 0.1, yc + 0.15 * ext);
+											cairo_line_to(cr, xc + 0.3 * ext, yc - 0.25 * ext);
+											cairo_set_line_width (cr, 0.1 * ext);
+											cairo_stroke (cr);
+											break;
+
+				case SymbolType::checkbox:	cairo_rectangle(cr, xc - 0.45 * ext, yc - 0.45 * ext, 0.9 * ext, 0.9 * ext);
+											cairo_set_line_width (cr, 0.05 * ext);
+											cairo_stroke (cr);
+											break;
+
+				case SymbolType::checkbox_checkmark:	
+											cairo_rectangle(cr, xc - 0.45 * ext, yc - 0.45 * ext, 0.9 * ext, 0.9 * ext);
+											cairo_set_line_width (cr, 0.05 * ext);
+											cairo_stroke (cr);
+											cairo_move_to(cr, xc - 0.3 * ext, yc - 0.05 * ext);
+											cairo_line_to(cr, xc - 0.1, yc + 0.15 * ext);
+											cairo_line_to(cr, xc + 0.3 * ext, yc - 0.25 * ext);
+											cairo_set_line_width (cr, 0.1 * ext);
+											cairo_stroke (cr);
+											break;
+
+				case SymbolType::checkbox_xmark:	
+											cairo_rectangle(cr, xc - 0.45 * ext, yc - 0.45 * ext, 0.9 * ext, 0.9 * ext);
+											cairo_set_line_width (cr, 0.05 * ext);
+											cairo_stroke (cr);
+											cairo_move_to(cr, xc - 0.3 * ext, yc - 0.3 * ext);
+											cairo_line_to(cr, xc + 0.3 * ext, yc + 0.3 * ext);
+											cairo_move_to(cr, xc + 0.3 * ext, yc - 0.3 * ext);
+											cairo_line_to(cr, xc - 0.3 * ext, yc + 0.3 * ext);
+											cairo_set_line_width (cr, 0.1 * ext);
+											cairo_stroke (cr);
+											break;
 
                 default:                break;
 		}
