@@ -476,7 +476,7 @@ inline void SpinBox::addItem (const std::string item, size_t pos)
 
 inline void SpinBox::addItem (const std::initializer_list<const std::string> items, size_t pos)
 {
-	for (const std::string s : items)
+	for (const std::string& s : items)
 	{
 		addItem (s, pos);
 		if (pos != std::numeric_limits<size_t>::max()) ++pos;
