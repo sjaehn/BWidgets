@@ -110,8 +110,8 @@ public:
 inline Enterable::Enterable () : Enterable (false) {}
 
 inline Enterable::Enterable (const bool status) : 
-    entered_(false),
-    Support (status)
+    Support (status),
+    entered_(false)
 {}
 
 inline void Enterable::setEnterable (const bool status)
