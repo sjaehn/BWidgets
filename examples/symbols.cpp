@@ -25,8 +25,8 @@ int main ()
 {
     Window window (660, 440, 0, BUTILITIES_URID_UNKNOWN_URID, "B.Widgets Symbols");
 
-    std::array<std::unique_ptr<Symbol>, static_cast<int>(Symbol::SymbolType::checkbox_xmark) + 1> symbols;
-    for (int i = 0; i <= static_cast<int>(Symbol::SymbolType::checkbox_xmark); ++i)
+    std::array<std::unique_ptr<Symbol>, static_cast<int>(Symbol::SymbolType::setup) + 1> symbols;
+    for (int i = 0; i <= static_cast<int>(Symbol::SymbolType::setup); ++i)
     {
         symbols[i] = std::unique_ptr<Symbol> (new Symbol (10 + 40 * (i % 16), 10 + 40 * int (i / 16), 32, 32, Symbol::SymbolType(i)));
         window.add (symbols[i].get());

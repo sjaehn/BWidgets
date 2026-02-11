@@ -158,8 +158,8 @@ int main ()
     window.add (&textLabel);
 
     // Symbols
-    std::array<std::unique_ptr<Symbol>, static_cast<int>(Symbol::SymbolType::checkbox_xmark) + 1> symbols;
-    for (int i = 0; i <= static_cast<int>(Symbol::SymbolType::checkbox_xmark); ++i)
+    std::array<std::unique_ptr<Symbol>, static_cast<int>(Symbol::SymbolType::setup) + 1> symbols;
+    for (int i = 0; i <= static_cast<int>(Symbol::SymbolType::setup); ++i)
     {
         symbols[i] = std::unique_ptr<Symbol> (new Symbol (410 + 18 * (i % 16), 10 + 18 * int (i / 16), 12, 12, Symbol::SymbolType(i)));
         symbols[i]->setTitle ("Symbol " + std::to_string(i));
