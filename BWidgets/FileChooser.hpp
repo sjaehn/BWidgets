@@ -117,6 +117,9 @@ public:
 	EditLabel createInput;
 	Label createError;
 
+	bool confirmIfExists;
+	bool confirmIfNotExists;
+
 	/**
 	 *  @brief  Constructs a default FileChooser object.
 	 * 
@@ -357,7 +360,10 @@ inline FileChooser::FileChooser	(const double x, const double y, const double wi
 					 BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/box"), ""),
 		createLabel ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), ""),
 		createInput ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/textbox"), ""),
-		createError ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), "")
+		createError ("", BUtilities::Urid::urid (BUtilities::Urid::uri (urid) + "/label"), ""),
+
+		confirmIfExists(true),
+		confirmIfNotExists(true)
 {
 	setActivatable(true);
 	setEnterable(true);
@@ -499,7 +505,7 @@ inline void FileChooser::setFilter (const std::map<Filter::first_type, Filter::s
 	this->filters_ = filters;
 
 	filterComboBox.deleteItem();
-	for (const Filter& f : filters) filterComboBox.addItem (f.first);
+	for (Filter f : filters) filterComboBox.addItem (f.first);
 	filterComboBox.setValue (1);
 
 	enterDir();
@@ -814,15 +820,11 @@ inline void FileChooser::confirmClickedCallback (BEvents::Event* event)
 
 	const size_t button = fc->confirmBox.getValue();
 
-	// Cancel
-	if (button == 1.0)
-	{
-		w->setValue (0.0);
-		fc->release (&fc->confirmBox);
-	}
+	w->setValue (0.0);
+	fc->release (&fc->confirmBox);
 
 	// OK
-	else if (button == 2.0)
+	if (button == 2.0)
 	{
 		w->setValue (0.0);
 		fc->setValue (fc->getPath() + PATH_SEPARATOR + fc->getFileName());
@@ -972,7 +974,7 @@ inline void FileChooser::processFileSelected()
 	const bool fileExists = (stat (fileName.c_str(), &buffer) == 0);
 
 	// Open file exists dialog
-	if (fileExists)
+	if (fileExists && confirmIfExists)
 	{
 		confirmBox.text.setText (BUtilities::Dictionary::get ("File already exists") + ". " + BUtilities::Dictionary::get ("Overwrite") + "?");
 		update();
@@ -980,7 +982,7 @@ inline void FileChooser::processFileSelected()
 	}
 
 	// Open file not exists dialog
-	else if (!fileExists)
+	else if ((!fileExists) && confirmIfNotExists)
 	{
 		confirmBox.text.setText (BUtilities::Dictionary::get ("File not found") + ".");
 		update();
