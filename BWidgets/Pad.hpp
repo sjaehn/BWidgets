@@ -404,12 +404,12 @@ inline void Pad<T>::onWheelScrolled (BEvents::Event* event)
 	if (!wev) return;
 	if (getHeight()) 
 	{
-		if (this->getStep() != T()) this->setValue (this->getValue() - wev->getDelta().y * (fineTuned_ ? this->getSubStep() : this->getStep()));
+		if (this->getStep() != T()) this->setValue (this->getValue() + wev->getDelta().y * (fineTuned_ ? this->getSubStep() : this->getStep()));
 		else 
 		{
 			const double step = (fineTuned_ ?	1.0 / ((static_cast<double>(this->getNrSubs() + 1.0)) * this->getHeight()) :
 												1.0 / this->getHeight());
-			this->setValue (this->getValueFromRatio	(this->getRatioFromValue (this->getValue()) - wev->getDelta().y * step));
+			this->setValue (this->getValueFromRatio	(this->getRatioFromValue (this->getValue()) + wev->getDelta().y * step));
 		}
 	}
 	Scrollable::onWheelScrolled (event);

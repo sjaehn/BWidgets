@@ -230,7 +230,7 @@ inline void VSwitch::onWheelScrolled (BEvents::Event* event)
 {
 	BEvents::WheelEvent* wev = dynamic_cast<BEvents::WheelEvent*> (event);
 	if (!wev) return;
-	if (wev->getDelta().y != 0) setValue (wev->getDelta().y < 0);
+	if (wev->getDelta().y != 0) setValue (wev->getDelta().y > 0);
 	Scrollable::onWheelScrolled (event);
 }
 

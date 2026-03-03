@@ -430,13 +430,13 @@ inline void ImageDial::onWheelScrolled (BEvents::Event* event)
 
 	if ((staticMinAngle_ != staticMaxAngle_) && (r >= 1.0))
 	{
-		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
+		if (getStep() != 0.0) setValue (getValue() + wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
 		else 
 		{
 			const double step = (fineTuned_ ?	1.0 /	((static_cast<double>(getNrSubs() + 1.0)) * 
 															((staticMaxAngle_ - staticMinAngle_) * r)) :
 												1.0 /	((staticMaxAngle_ - staticMinAngle_) * r));
-			setValue (getValueFromRatio (getRatioFromValue(getValue()) - wev->getDelta().y * step));
+			setValue (getValueFromRatio (getRatioFromValue(getValue()) + wev->getDelta().y * step));
 		}
 	}
 

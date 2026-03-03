@@ -428,13 +428,13 @@ inline void ImageHSlider::onWheelScrolled (BEvents::Event* event)
 		{
 			const double szs = ((w / ws < h / hs) ? (w / ws) : (h / hs));
 
-			if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
+			if (getStep() != 0.0) setValue (getValue() + wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
 			else 
 			{
 				const double step = (fineTuned_ ?	1.0 / 	((static_cast<double>(getNrSubs() + 1.0)) * 
 															 ((staticAnchors_.second.x - staticAnchors_.first.x) * szs)) :
 													1.0 / 	((staticAnchors_.second.x - staticAnchors_.first.x) * szs));
-				setValue (getValueFromRatio (getRatioFromValue(getValue()) - wev->getDelta().y * step));
+				setValue (getValueFromRatio (getRatioFromValue(getValue()) + wev->getDelta().y * step));
 			}
 		}
 	}

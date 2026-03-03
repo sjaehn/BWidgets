@@ -18,7 +18,6 @@
 #ifndef BWIDGETS_BUTTON_HPP_
 #define BWIDGETS_BUTTON_HPP_
 
-#include "Label.hpp"
 #include "Supports/KeyPressable.hpp"
 #include "Supports/Clickable.hpp"
 #include "Supports/ValueableTyped.hpp"

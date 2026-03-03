@@ -146,6 +146,16 @@ public:
 	 *  function.
      */
     virtual void onPointerDragged (BEvents::Event* event) override;
+	
+	/**
+     *  @brief  Method called upon (mouse) wheel scroll.
+     *  @param event  Passed Event.
+     *
+     *  Overridable method called from the main window event scheduler upon
+     *  a (mouse) wheel scroll. Increases or decreases the value and calls the
+	 *  widget static callback function.
+     */
+    virtual void onWheelScrolled (BEvents::Event* event) override;
 
 protected:
 	/**
@@ -249,6 +259,25 @@ inline void VScrollBar::onPointerDragged (BEvents::Event* event)
 		else setValue (getValueFromRatio (getRatioFromValue(getValue()) + pev->getDelta().y / scale_.getHeight()));
 	}
 	Draggable::onPointerDragged (event);
+}
+
+inline void VScrollBar::onWheelScrolled (BEvents::Event* event)
+{
+	// VScrollBar has got the opposite orientation (top to bottom) compared to all other VScale widgets.
+	// Thus, wheel scolling must also be in the opposite direction.
+	BEvents::WheelEvent* wev = dynamic_cast<BEvents::WheelEvent*> (event);
+	if (!wev) return;
+	if (scale_.getHeight()) 
+	{
+		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
+		else 
+		{
+			const double step = (fineTuned_ ?	1.0 / ((static_cast<double>(getNrSubs() + 1.0)) * scale_.getHeight()) :
+												1.0 / scale_.getHeight());
+			setValue (getValueFromRatio	(getRatioFromValue (getValue()) - wev->getDelta().y * step));
+		}
+	}
+	Scrollable::onWheelScrolled (event);
 }
 
 inline void VScrollBar::draw ()

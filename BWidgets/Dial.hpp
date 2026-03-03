@@ -375,13 +375,13 @@ inline void Dial::onWheelScrolled (BEvents::Event* event)
 	if (!wev) return;
 	if (scale_.getWidth() > 0) 
 	{
-		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
+		if (getStep() != 0.0) setValue (getValue() + wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
 		else 
 		{
 			const double step = (fineTuned_ ?	1.0 /	((static_cast<double>(getNrSubs() + 1.0)) * 
 														 0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE) :
 												1.0 /	(0.5 * scale_.getWidth() * BWIDGETS_DEFAULT_DRAWARC_SIZE));
-			setValue (getValueFromRatio	(getRatioFromValue (getValue()) - wev->getDelta().y * step));
+			setValue (getValueFromRatio	(getRatioFromValue (getValue()) + wev->getDelta().y * step));
 		}
 	}
 	Scrollable::onWheelScrolled (event);

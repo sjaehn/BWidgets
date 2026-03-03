@@ -25,7 +25,6 @@
 #include "VScrollBar.hpp"
 #include "Frame.hpp"
 #include "Symbol.hpp"
-#include "Supports/Validatable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/ValidatableRange.hpp"
 #include "Supports/ValueTransferable.hpp"
@@ -543,11 +542,11 @@ inline void VRangeScrollBar::onWheelScrolled (BEvents::Event* event)
 		value_type v = getValue();
 		const double step = (fineTuned_ ?	1.0 / ((static_cast<double>(getNrSubs() + 1.0)) * getEffectiveHeight()) :
 											1.0 / getEffectiveHeight());
-		if (getStep().first != 0.0) v.first += wev->getDelta().y * (fineTuned_ ? getSubStep ().first : getStep ().first);
-		else v.first = getValueFromRatio (value_type (getRatioFromValue (v).first + wev->getDelta().y * step, v.second)).first;
+		if (getStep().first != 0.0) v.first -= wev->getDelta().y * (fineTuned_ ? getSubStep ().first : getStep ().first);
+		else v.first = getValueFromRatio (value_type (getRatioFromValue (v).first - wev->getDelta().y * step, v.second)).first;
 
-		if (getStep().second != 0.0) v.second -= wev->getDelta().y * (fineTuned_ ? getSubStep ().second : getStep ().second);
-		else v.second = getValueFromRatio (value_type (v.first, getRatioFromValue (v).second - wev->getDelta().y * step)).second;
+		if (getStep().second != 0.0) v.second += wev->getDelta().y * (fineTuned_ ? getSubStep ().second : getStep ().second);
+		else v.second = getValueFromRatio (value_type (v.first, getRatioFromValue (v).second + wev->getDelta().y * step)).second;
 		
 		const value_type vr = getRatioFromValue (v);
 		if (vr.first <= vr.second) setValue (v);

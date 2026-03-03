@@ -355,12 +355,12 @@ inline void VScale::onWheelScrolled (BEvents::Event* event)
 	if (!wev) return;
 	if (scale_.getHeight()) 
 	{
-		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
+		if (getStep() != 0.0) setValue (getValue() + wev->getDelta().y * (fineTuned_ ?	getSubStep() : getStep()));
 		else 
 		{
 			const double step = (fineTuned_ ?	1.0 / ((static_cast<double>(getNrSubs() + 1.0)) * scale_.getHeight()) :
 												1.0 / scale_.getHeight());
-			setValue (getValueFromRatio	(getRatioFromValue (getValue()) - wev->getDelta().y * step));
+			setValue (getValueFromRatio	(getRatioFromValue (getValue()) + wev->getDelta().y * step));
 		}
 	}
 	Scrollable::onWheelScrolled (event);

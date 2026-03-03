@@ -19,10 +19,7 @@
 #define BWIDGETS_IMAGECONDITIONAL_HPP_
 
 #include "Widget.hpp"
-#include "Label.hpp"
-#include <algorithm>
 #include <cairo/cairo.h>
-#include "Supports/Validatable.hpp"
 #include "Supports/ValueableTyped.hpp"
 #include "Supports/ValidatableRange.hpp"
 #include "Supports/ValueTransferable.hpp"
@@ -510,8 +507,8 @@ inline void ConditionalImage::onWheelScrolled (BEvents::Event* event)
 	const double h = getEffectiveHeight();
 	if (h >= 1.0)
 	{
-		if (getStep() != 0.0) setValue (getValue() - wev->getDelta().y * getStep ());
-		else setValue (getValueFromRatio (getRatioFromValue(getValue()) - wev->getDelta().y / (h)));
+		if (getStep() != 0.0) setValue (getValue() + wev->getDelta().y * getStep ());
+		else setValue (getValueFromRatio (getRatioFromValue(getValue()) + wev->getDelta().y / (h)));
 	}
 
 	Scrollable::onWheelScrolled (event);

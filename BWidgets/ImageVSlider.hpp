@@ -432,7 +432,7 @@ inline void ImageVSlider::onWheelScrolled (BEvents::Event* event)
 			{
 				const double step = (fineTuned_ ?	1.0 / ((static_cast<double>(getNrSubs() + 1.0)) * ((staticAnchors_.second.y - staticAnchors_.first.y) * szs)) :
 												1.0 / ((staticAnchors_.second.y - staticAnchors_.first.y) * szs));
-				setValue (getValueFromRatio (getRatioFromValue (getValue()) + wev->getDelta().y * step));
+				setValue (getValueFromRatio (getRatioFromValue (getValue()) - wev->getDelta().y * step));
 			}
 		}
 	}
